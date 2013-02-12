@@ -20,7 +20,40 @@ movies={'Marcel Caraciolo': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
 
 
 
+
 from math import sqrt
+import sys, os
+
+if __name__ == "__main__":
+	p = os.path.abspath(os.path.dirname(__file__))
+	if(os.path.abspath(p+"/..") not in sys.path):
+		sys.path.append(os.path.abspath(p+"/.."))
+	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "recommender.settings")
+
+from models import *
+
+data = {}
+raw_data = Prefs.objects.all().values()
+for d in raw_data:
+	great_together = d['great_together']
+	ok_together = d['ok_together']
+	not_ok_together = d['not_ok_together']
+	do_not_know = d['do_not_know']
+	paper_id = d['paper_id']
+	name = d['name']
+	temp = {}
+	for g in great_together.split(','):
+		temp[g] = 10 
+	for o in ok_together.split(','):
+		temp[o] = 7 
+	for d in do_not_know.split(','):
+		temp[d] = 3 
+	for n in not_ok_together.split(','):
+		temp[n] = 0 
+		
+	data[paper_id]= temp
+
+#print data
 
 
 
@@ -102,7 +135,7 @@ def top_matches(prefs, person, n=10, similarity=sim_pearson):
 '''
 gets recommendations for a person by using a weighted average of every other user's rankings
 '''
-def get_recommendations(person, prefs=movies, similarity=sim_pearson):
+def get_recommendations(person, prefs=data, similarity=sim_pearson):
 	totals = {}
 	simSums = {}
 
@@ -165,7 +198,8 @@ def test():
 
 
 def main():
-	res = get_recommendations(params['person'])
+	#print data
+	res = get_recommendations('pn1460')
 	print res
 	
 
