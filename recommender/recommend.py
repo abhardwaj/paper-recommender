@@ -165,7 +165,7 @@ def test():
 
 
 def main():
-	res = get_recommendations(movies,params['person'])
+	res = get_recommendations(movies ,params['person'])
 	print res
 	
 

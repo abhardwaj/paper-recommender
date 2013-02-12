@@ -14,7 +14,7 @@ def index(request):
 @csrf_exempt	
 def recommend(request):
 	if(request.POST):
-		res = get_recommendations(movies,request.POST['person'])
+		res = get_recommendations(request.POST['person'])
 		return HttpResponse(json.dumps(res), mimetype="application/json")
 	else:
 		return HttpResponse("invalid request type")		
