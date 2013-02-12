@@ -102,7 +102,7 @@ def top_matches(prefs, person, n=10, similarity=sim_pearson):
 '''
 gets recommendations for a person by using a weighted average of every other user's rankings
 '''
-def get_recommendations(prefs,person,similarity=sim_pearson):
+def get_recommendations(person, prefs=movies, similarity=sim_pearson):
 	totals = {}
 	simSums = {}
 
@@ -165,7 +165,7 @@ def test():
 
 
 def main():
-	res = get_recommendations(movies ,params['person'])
+	res = get_recommendations(params['person'])
 	print res
 	
 
