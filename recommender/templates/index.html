@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>CHI 2013 Recommender</h1>
+<hr />
+<table>
+<tr>
+<td>
+<input type="text" id="person" style="width:200px;" value="Leopoldo Pires"></input> 
+<br />
+<input type="button" id="get_reco" value="Get Recommendation" />
+</td>
+</tr>
+</table>
+<br /> <br />
+<div id= "output">
+</div>
+<div id= "body">
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#output").html("")
+	$("#get_reco").click(function(){
+		$("#output").html("Getting recommendations...")
+		$.post('recommend', {'person':$("#person").val()}, 
+			function(res){
+				$("#output").html(JSON.stringify(res));				
+			}
+		);
+	});
+	
+	
+	
+	
+
+});
+</script>
+{% endblock %}
