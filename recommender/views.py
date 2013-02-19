@@ -2,7 +2,7 @@ from django.http import *
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 import json, sys, re
-from recommend import *
+from recommend-simple import *
 '''
 @author: Anant Bhardwaj
 @date: Feb 12, 2012
