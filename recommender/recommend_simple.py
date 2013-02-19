@@ -26,7 +26,7 @@ def load_data():
 		for g in great_together.split(','):
 			temp[g] = 5.0
 		for o in ok_together.split(','):
-			temp[o] = 4.0
+			temp[o] = 3.0
 		for d in do_not_know.split(','):
 			temp[d] = 1.0
 		
@@ -217,7 +217,7 @@ def main():
 	#res = get_user_based_recommendations('pn1566', data)
 	#print res
 	#print "=============================="
-	res = get_item_based_recommendations('pn951', data, similar_items)
+	res = get_item_based_recommendations('pn1566', data, similar_items)
 	print res
 
 
