@@ -26,7 +26,7 @@ def load_data():
 		for g in great_together.split(','):
 			temp[g] = 5.0
 		for o in ok_together.split(','):
-			temp[o] = 3.0
+			temp[o] = 2.0
 		for d in do_not_know.split(','):
 			temp[d] = 1.0
 		
@@ -136,7 +136,7 @@ def get_user_based_recommendations(person, prefs, similarity=sim_pearson, n=10):
 		sim = similarity(prefs,person,other)
 		#print sim, person, other
 		# ignore non-corelated users
-		if sim < 0.7: 
+		if sim <= 0: 
 			continue
 		for item in prefs[other]:
 			# only score items you haven't seen yet
@@ -176,7 +176,7 @@ def get_item_based_recommendations(person, prefs, similar_items, similarity=sim_
 			# ignore if this user has already rated this item
 			if item2 in ratings:
 				continue
-			if(similarity<0.7):
+			if(similarity<0.3):
 				continue
 			# weighted sum of rating times similarity
 			totals.setdefault(item2,0)
@@ -187,7 +187,7 @@ def get_item_based_recommendations(person, prefs, similar_items, similarity=sim_
 
 	normalized = {}
 	for item,total in totals.items():
-		normalized[item] = total/sim_sum[item]
+		normalized[item] = total
 
 	rankings = sorted(normalized.iteritems(), key=operator.itemgetter(1), reverse=True)
 	#print rankings
@@ -217,7 +217,7 @@ def main():
 	#res = get_user_based_recommendations('pn1566', data)
 	#print res
 	#print "=============================="
-	res = get_item_based_recommendations('pn1566', data, similar_items)
+	res = get_item_based_recommendations('pn1460', data, similar_items)
 	print res
 
 
