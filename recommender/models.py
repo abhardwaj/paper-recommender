@@ -25,4 +25,4 @@ class Prefs(models.Model):
 	
 	class Meta:
 		db_table = "prefs"
-		app_label = 'paper_recommender'
+		app_label = 'recommender'
