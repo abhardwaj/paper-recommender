@@ -8,20 +8,17 @@ import org.grouplens.lenskit.transform.normalize.*
 
 import edu.mit.csail.ExtendedItemUserMeanPredictor
 
-def ml100k = crossfold {
+def chi2013 = crossfold {
    source csvfile("${config.dataDir}/chi2013/data.txt") {
       delimiter "\t"
       domain {
          minimum 1.0
          maximum 5.0
-         precision 1.0
+         precision 0.25
       }
    }
    test "${config.dataDir}/chi2013-crossfold/test.%d.csv"
    train "${config.dataDir}/chi2013-crossfold/train.%d.csv" 
-   order RandomOrder
-   holdout 10
-   partitions 5
 }
 
 def itemitem = algorithm("ItemItem") {
@@ -47,7 +44,7 @@ def useruser = algorithm("UserUser") {
     bind VectorNormalizer to MeanVarianceNormalizer
 
     // use 30 neighbors for predictions
-    set NeighborhoodSize to 30
+    set NeighborhoodSize to 5
 
     // override normalizer within the neighborhood finder
     // this makes it use a different normalizer (subtract user mean) for computing
@@ -74,7 +71,7 @@ dumpGraph {
 }
 
 trainTest {
-	dataset ml100k
+	dataset chi2013
 
 	// Three different types of output for analysis.
 	output "${config.analysisDir}/eval-results.csv"

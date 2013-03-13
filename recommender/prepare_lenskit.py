@@ -23,7 +23,7 @@ script for preparing data in lenskit format
 
 # insert data
 def prepare():
-	f = open('data.txt','w')
+	f = open('data_lenskit.txt','w')
 	prefs = Prefs.objects.all()
 	for p in prefs:
 		f.write("%s\t%s\t%s\t%s\tu'%s\t%s\t%s\n" %(p.author.id, p.paper.id, p.rating, 98765, \

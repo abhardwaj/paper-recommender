@@ -1,37 +1,5 @@
 from math import sqrt
-import sys, os, operator
-
-if __name__ == "__main__":
-	p = os.path.abspath(os.path.dirname(__file__))
-	if(os.path.abspath(p+"/..") not in sys.path):
-		sys.path.append(os.path.abspath(p+"/.."))
-	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "recommender.settings")
-
-from models import *
-
-
-
-def load_data():
-	data = {}
-	raw_data = Prefs.objects.all().values()
-	for d in raw_data:
-		great_together = d['great_together']
-		ok_together = d['ok_together']
-		not_ok_together = d['not_ok_together']
-		do_not_know = d['do_not_know']
-		paper_id = d['paper_id']
-		name = d['name']
-		temp = {}
-		temp[paper_id] = 5.0
-		for g in great_together.split(','):
-			temp[g] = 5.0
-		for o in ok_together.split(','):
-			temp[o] = 2.0
-		for d in do_not_know.split(','):
-			temp[d] = 1.0
-		
-		data[paper_id]= temp
-	return data
+import sys, os, operator, json
 
 
 
@@ -212,7 +180,8 @@ def transform_prefs(prefs):
 
 
 def main():
-	data = load_data()
+	f = open('data_simple.txt')
+	data = json.loads(f.read())
 	similar_items = get_similar_items(data)
 	#res = get_user_based_recommendations('pn1566', data)
 	#print res
