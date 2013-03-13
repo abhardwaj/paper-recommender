@@ -142,7 +142,7 @@
                     </goals>
                     <configuration>
                         <tasks>
-                            <copy file="../data.txt" todir="${lenskit.eval.dataDir}/chi2013/"/>
+                            <copy file="../data_lenskit.txt" todir="${lenskit.eval.dataDir}/chi2013/"/>
                           </tasks>
                     </configuration>
                 </execution>

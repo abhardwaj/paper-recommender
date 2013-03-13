@@ -9,7 +9,7 @@ import org.grouplens.lenskit.transform.normalize.*
 import edu.mit.csail.ExtendedItemUserMeanPredictor
 
 def chi2013 = crossfold {
-   source csvfile("${config.dataDir}/chi2013/data.txt") {
+   source csvfile("${config.dataDir}/chi2013/data_lenskit.txt") {
       delimiter "\t"
       domain {
          minimum 1.0
