@@ -9,7 +9,7 @@ import org.grouplens.lenskit.transform.normalize.*
 import edu.mit.csail.ExtendedItemUserMeanPredictor
 
 def ml100k = crossfold {
-   source csvfile("${config.dataDir}/ml100k/u.data") {
+   source csvfile("${config.dataDir}/chi2013/data.txt") {
       delimiter "\t"
       domain {
          minimum 1.0
@@ -17,8 +17,8 @@ def ml100k = crossfold {
          precision 1.0
       }
    }
-   test "${config.dataDir}/ml100k-crossfold/test.%d.csv"
-   train "${config.dataDir}/ml100k-crossfold/train.%d.csv" 
+   test "${config.dataDir}/chi2013-crossfold/test.%d.csv"
+   train "${config.dataDir}/chi2013-crossfold/train.%d.csv" 
    order RandomOrder
    holdout 10
    partitions 5
@@ -31,8 +31,8 @@ def itemitem = algorithm("ItemItem") {
     bind UserVectorNormalizer to BaselineSubtractingUserVectorNormalizer
 
     // retain 500 neighbors in the model, use 30 for prediction
-    set ModelSize to 500
-    set NeighborhoodSize to 30
+    set ModelSize to 10
+    set NeighborhoodSize to 5
 
     // apply some Bayesian smoothing to the mean values
     within(ItemUserMeanPredictor) {

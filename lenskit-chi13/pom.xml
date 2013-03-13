@@ -75,9 +75,12 @@
           <target>1.6</target>
         </configuration>
       </plugin>
+        
+    
 
       <!-- This use of the ant plugin first creates the data directory and 
         then fetches the ml-100k dataset. -->
+      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
@@ -112,7 +115,39 @@
           </execution>
         </executions>
       </plugin>
-
+       -->
+        
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+                <execution>
+                    <id>create-dirs</id>
+                    <phase>lenskit-pre-eval</phase>
+                    <configuration>
+                        <tasks>
+                            <mkdir dir="${lenskit.eval.dataDir}/chi2013/" />
+                        </tasks>
+                    </configuration>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>copy-data</id>
+                    <phase>lenskit-pre-eval</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                    <configuration>
+                        <tasks>
+                            <copy file="../data.txt" todir="${lenskit.eval.dataDir}/chi2013/"/>
+                          </tasks>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
       <!-- Run the lenskit eval plugin that does the work of evaluating the 
         recommenders you are comparing, by running your Groovy script. -->
       <plugin>
@@ -130,6 +165,7 @@
       <!-- This plugin executes the R data analysis to produce the graphs 
         from our runs. We use an execution so we can tie this plugin to the appropriate 
         phase of the lenskit lifecycle. -->
+      <!--
       <plugin>
         <artifactId>exec-maven-plugin</artifactId>
         <groupId>org.codehaus.mojo</groupId>
@@ -151,7 +187,7 @@
           </execution>
         </executions>
       </plugin>
-
+       -->
     </plugins>
   </build>
 </project>

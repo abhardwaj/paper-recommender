@@ -9,20 +9,38 @@ CHI2013 Recommender Models
 
 class Prefs(models.Model):
 	id = models.AutoField(primary_key=True)
-	author_id = models.CharField(max_length=20, unique=True, null = True)
-	name = models.TextField()
-	paper_id = models.CharField(max_length=20)
-	presenter = models.TextField()
-	options = models.TextField()
-	great_together = models.TextField()
-	ok_together = models.TextField()
-	not_ok_together = models.TextField()
-	do_not_know = models.TextField()
-	interested_in = models.TextField()
+	author = models.ForeignKey('Author')
+	paper = models.ForeignKey('Paper')
+	rating=models.FloatField()
 
 	def __unicode__(self):
 		return self.name
 	
 	class Meta:
 		db_table = "prefs"
+		app_label = 'recommender'
+
+
+class Paper(models.Model):
+	id = models.AutoField(primary_key=True)
+	p_id = models.TextField()
+
+	def __unicode__(self):
+		return self.name
+	
+	class Meta:
+		db_table = "papers"
+		app_label = 'recommender'
+
+
+
+class Author(models.Model):
+	id = models.AutoField(primary_key=True)
+	name = models.TextField()
+	paper = models.ForeignKey('Paper')
+	def __unicode__(self):
+		return self.name
+	
+	class Meta:
+		db_table = "authors"
 		app_label = 'recommender'
