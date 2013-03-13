@@ -1,10 +1,8 @@
 package edu.mit.csail;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import org.grouplens.lenskit.ItemRecommender;
-import org.grouplens.lenskit.ItemScorer;
 import org.grouplens.lenskit.RatingPredictor;
 import org.grouplens.lenskit.Recommender;
 import org.grouplens.lenskit.RecommenderBuildException;
@@ -16,17 +14,14 @@ import org.grouplens.lenskit.core.LenskitRecommenderEngineFactory;
 import org.grouplens.lenskit.data.dao.SimpleFileRatingDAO;
 import org.grouplens.lenskit.knn.item.ItemItemRatingPredictor;
 import org.grouplens.lenskit.knn.item.ItemItemRecommender;
-import org.grouplens.lenskit.knn.item.ItemItemScorer;
 import org.grouplens.lenskit.knn.item.NeighborhoodScorer;
-import org.grouplens.lenskit.knn.item.SimilaritySumNeighborhoodScorer;
 import org.grouplens.lenskit.knn.item.WeightedAverageNeighborhoodScorer;
-import org.grouplens.lenskit.knn.params.NeighborhoodSize;
-import org.grouplens.lenskit.knn.user.SimpleNeighborhoodFinder;
+
 import org.grouplens.lenskit.transform.normalize.BaselineSubtractingUserVectorNormalizer;
 import org.grouplens.lenskit.transform.normalize.UserVectorNormalizer;
 
 public class Predictor {
-	@SuppressWarnings("unchecked")
+	
 	public static void main(String[] args){
 		try {
 			LenskitRecommenderEngineFactory factory = new LenskitRecommenderEngineFactory();
