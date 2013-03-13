@@ -7,7 +7,8 @@ from recommend_simple import *
 @author: Anant Bhardwaj
 @date: Feb 12, 2012
 '''
-data = load_data()
+f = open('data_simple.txt')
+data = json.loads(f.read())
 similar_items = get_similar_items(data)
 
 def index(request):
