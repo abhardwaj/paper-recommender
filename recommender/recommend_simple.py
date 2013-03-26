@@ -1,6 +1,9 @@
 from math import sqrt
 import sys, os, operator, json
 
+from paper_db import *;
+adb = AuthorSourceDatabase()
+
 
 
 '''
@@ -159,7 +162,7 @@ def get_item_based_recommendations(person, prefs, similar_items, similarity=sim_
 
 	rankings = sorted(normalized.iteritems(), key=operator.itemgetter(1), reverse=True)
 	#print rankings
-	res = [{'item':item, 'score':score} for item,score in rankings]
+	res = [{'item':item, 'score':score, 'authors': adb.get_author_data(item)} for item,score in rankings]
 	return res[0:n]
 
 

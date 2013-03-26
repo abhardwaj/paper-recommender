@@ -19,11 +19,9 @@ class AuthorSourceDatabase:
 
 	def get_author_data(self, id):
 		self.cursor.execute("select authors, title from entity where id='%s'" %(id))
-		data = self.cursor.fetchall()
+		data = self.cursor.fetchone()
 		if data == None:
 		       	return None
-		for row in data:
-			print row
-
-adb = AuthorSourceDatabase()
-adb.get_author_data('pn1566')
+		else:
+			#print data
+			return data
