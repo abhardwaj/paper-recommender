@@ -14,14 +14,23 @@ import org.grouplens.lenskit.core.LenskitRecommenderEngineFactory;
 import org.grouplens.lenskit.data.dao.SimpleFileRatingDAO;
 import org.grouplens.lenskit.knn.item.ItemItemRatingPredictor;
 import org.grouplens.lenskit.knn.item.ItemItemRecommender;
+import org.grouplens.lenskit.knn.item.ItemSimilarity;
 import org.grouplens.lenskit.knn.item.NeighborhoodScorer;
+import org.grouplens.lenskit.knn.item.SimilaritySumNeighborhoodScorer;
 import org.grouplens.lenskit.knn.item.WeightedAverageNeighborhoodScorer;
+import org.grouplens.lenskit.knn.params.NeighborhoodSize;
 
+import org.grouplens.lenskit.params.Damping;
 import org.grouplens.lenskit.transform.normalize.BaselineSubtractingUserVectorNormalizer;
+import org.grouplens.lenskit.transform.normalize.MeanVarianceNormalizer;
 import org.grouplens.lenskit.transform.normalize.UserVectorNormalizer;
+import org.grouplens.lenskit.transform.normalize.VectorNormalizer;
+import org.grouplens.lenskit.vectors.similarity.PearsonCorrelation;
+import org.grouplens.lenskit.vectors.similarity.VectorSimilarity;
 
 public class Predictor {
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args){
 		try {
 			LenskitRecommenderEngineFactory factory = new LenskitRecommenderEngineFactory();
@@ -34,13 +43,15 @@ public class Predictor {
 			       .to(ItemUserMeanPredictor.class);
 			factory.bind(RatingPredictor.class).to(ItemItemRatingPredictor.class);
 			//factory.bind(NeighborhoodScorer.class).to(SimilaritySumNeighborhoodScorer.class);
+			//factory.set(NeighborhoodSize.class).to(30);
+			//factory.bind(VectorSimilarity.class).to(PearsonCorrelation.class);
 			factory.bind(NeighborhoodScorer.class).to(WeightedAverageNeighborhoodScorer.class);
 			factory.bind(ItemRecommender.class).to(ItemItemRecommender.class);
 			RecommenderEngine engine = factory.create();
 			/* get the and use the recommender */
 			Recommender rec = engine.open();
 			ItemRecommender irec = rec.getItemRecommender();
-			ScoredLongList recommendations = irec.recommend(122, 10);
+			ScoredLongList recommendations = irec.recommend(252, 10);
 			long items[] = new long[10];
 			double scores[] = new double[10];
 			recommendations.getElements(0, items, scores, 0, 10);

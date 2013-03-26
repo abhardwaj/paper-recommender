@@ -1,13 +1,16 @@
 {% extends "base.html" %}
+{% block headlink-right %}
+<a href="#" data-dropdown="#dropdown-nav">{{ user }} ▾ </a>
+{% endblock %}
 {% block content %}
-<h1>CHI 2013 Recommender</h1>
+<h1>Search Paper</h1>
 <hr />
 <table>
 <tr>
 <td>
 <input type="text" id="person" style="width:200px;" value="pn1566"></input> 
 <br />
-<input type="button" id="get_reco" value="Get Recommendation" />
+<input type="button" id="get_reco" value="Show Similar Papers" />
 </td>
 </tr>
 </table>
