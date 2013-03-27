@@ -1,5 +1,13 @@
 #!/usr/bin/python
-import os, sys, MySQLdb, json
+import os, sys, json
+
+
+if __name__ == "__main__":
+	p = os.path.abspath(os.path.dirname(__file__))
+	if(os.path.abspath(p+"/..") not in sys.path):
+		sys.path.append(os.path.abspath(p+"/.."))
+	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
+from django.db import connection
 
 '''
 @author: anant bhardwaj
@@ -16,8 +24,7 @@ class Entity:
 		self.__load__()
 
 	def __load__(self):
-		conn = MySQLdb.connect(host="mysql.csail.mit.edu", user="cobi", passwd="su4Biha", db="cobiDev")
-		cursor = conn.cursor()
+		cursor = connection.cursor()
 		cursor.execute("SELECT id , authors, title FROM entity;")
 		data = self.cursor.fetchall()
 		for row in data:

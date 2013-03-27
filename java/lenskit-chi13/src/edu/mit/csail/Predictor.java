@@ -44,14 +44,14 @@ public class Predictor {
 			factory.bind(RatingPredictor.class).to(ItemItemRatingPredictor.class);
 			//factory.bind(NeighborhoodScorer.class).to(SimilaritySumNeighborhoodScorer.class);
 			//factory.set(NeighborhoodSize.class).to(30);
-			//factory.bind(VectorSimilarity.class).to(PearsonCorrelation.class);
+			factory.bind(VectorSimilarity.class).to(PearsonCorrelation.class);
 			factory.bind(NeighborhoodScorer.class).to(WeightedAverageNeighborhoodScorer.class);
 			factory.bind(ItemRecommender.class).to(ItemItemRecommender.class);
 			RecommenderEngine engine = factory.create();
 			/* get the and use the recommender */
 			Recommender rec = engine.open();
 			ItemRecommender irec = rec.getItemRecommender();
-			ScoredLongList recommendations = irec.recommend(252, 10);
+			ScoredLongList recommendations = irec.recommend(55551460L, 10);
 			long items[] = new long[10];
 			double scores[] = new double[10];
 			recommendations.getElements(0, items, scores, 0, 10);
