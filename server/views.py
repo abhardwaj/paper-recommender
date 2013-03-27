@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.core.context_processors import csrf
 
-from algorithm.recommend_simple import *
+from algorithm.recommend import *
 
 
 '''
@@ -68,6 +68,7 @@ def similar_papers(request, paper_id):
 def recommend(request):
 	if(request.POST):
 		res = r.get_item_based_recommendations(request.POST['person'])
+		print res
 		return HttpResponse(json.dumps(res), mimetype="application/json")
 	else:
 		return HttpResponse("invalid request type")
