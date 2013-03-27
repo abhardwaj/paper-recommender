@@ -12,13 +12,13 @@ load entities
 class Entity:
 
 	def __init__(self):
-		self.conn = MySQLdb.connect(host="mysql.csail.mit.edu", user="cobi", passwd="su4Biha", db="cobiDev")
-		self.cursor = self.conn.cursor()
 		self.entities = {}
 		self.__load__()
 
 	def __load__(self):
-		self.cursor.execute("SELECT id , authors, title FROM entity;")
+		conn = MySQLdb.connect(host="mysql.csail.mit.edu", user="cobi", passwd="su4Biha", db="cobiDev")
+		cursor = conn.cursor()
+		cursor.execute("SELECT id , authors, title FROM entity;")
 		data = self.cursor.fetchall()
 		for row in data:
 			if(row[0]!=''):

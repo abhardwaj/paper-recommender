@@ -13,16 +13,16 @@ load prefs
 class Prefs:
 
 	def __init__(self):
-		self.conn = MySQLdb.connect(host="mysql.csail.mit.edu", user="cobi", passwd="su4Biha", db="cobiDev")
-		self.cursor = self.conn.cursor()
 		self.author_prefs = {}
 		self.paper_prefs = {}
 		self.author_likes = {}
 		self.__load__()
 
 	def __load__(self):
-		self.cursor.execute("SELECT authorId , id, great, ok, notsure, notok, interested FROM authorsourcing;")
-		data = self.cursor.fetchall()
+		conn = MySQLdb.connect(host="mysql.csail.mit.edu", user="cobi", passwd="su4Biha", db="cobiDev")
+		cursor = conn.cursor()
+		cursor.execute("SELECT authorId , id, great, ok, notsure, notok, interested FROM authorsourcing;")
+		data = cursor.fetchall()
 		for row in data:
 			author_prefs = {}
 			# rate his own paper as great
