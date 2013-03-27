@@ -1,17 +1,11 @@
 #!/usr/bin/python
 import os, sys, MySQLdb, json
 
-if __name__ == "__main__":
-	p = os.path.abspath(os.path.dirname(__file__))
-	if(os.path.abspath(p+"/..") not in sys.path):
-		sys.path.append(os.path.abspath(p+"/.."))
-	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
-
 '''
 @author: anant bhardwaj
 @date: Feb 12, 2013
 
-load prefs
+load entities
 '''
 
 

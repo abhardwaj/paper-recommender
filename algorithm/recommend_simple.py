@@ -1,10 +1,13 @@
 from math import sqrt
 import sys, os, operator, json
 
+if __name__ == "__main__":
+	p = os.path.abspath(os.path.dirname(__file__))
+	if(os.path.abspath(p+"/..") not in sys.path):
+		sys.path.append(os.path.abspath(p+"/.."))
+
 from db.entity import *;
-adb = AuthorSourceDatabase()
-
-
+from db.prefs import *
 
 '''
 returns a distance-base similarity score for person1 and person2
@@ -162,7 +165,7 @@ def get_item_based_recommendations(person, prefs, similar_items, similarity=sim_
 
 	rankings = sorted(normalized.iteritems(), key=operator.itemgetter(1), reverse=True)
 	#print rankings
-	res = [{'item':item, 'score':score, 'authors': adb.get_author_data(item)} for item,score in rankings]
+	res = [{'item':item, 'score':score} for item,score in rankings]
 	return res[0:n]
 
 
@@ -183,8 +186,8 @@ def transform_prefs(prefs):
 
 
 def main():
-	f = open('data_simple.txt')
-	data = json.loads(f.read())
+	p = Prefs()
+	data = p.get_paper_prefs()
 	similar_items = get_similar_items(data)
 	#res = get_user_based_recommendations('pn1566', data)
 	#print res
