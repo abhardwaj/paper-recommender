@@ -10,6 +10,7 @@ if __name__ == "__main__":
 from db.entity import *;
 from db.prefs import *
 
+
 '''
 returns a distance-base similarity score for person1 and person2
 '''
@@ -131,7 +132,7 @@ def get_user_based_recommendations(person, prefs, similarity=sim_pearson, n=10):
 	
 	rankings = sorted(normalized.iteritems(), key=operator.itemgetter(1), reverse=True)
 	#print rankings
-	res = [{'item':item, 'score':score} for item,score in rankings]
+	res = [{'item':get_string_id(item), 'score':score} for item,score in rankings]
 	return res[0:n]
 	
 
@@ -166,7 +167,7 @@ def get_item_based_recommendations(person, prefs, similar_items, similarity=sim_
 
 	rankings = sorted(normalized.iteritems(), key=operator.itemgetter(1), reverse=True)
 	#print rankings
-	res = [{'item':item, 'score':score} for item,score in rankings]
+	res = [{'item':get_string_id(item), 'score':score} for item,score in rankings]
 	return res[0:n]
 
 
@@ -183,17 +184,23 @@ def transform_prefs(prefs):
 			results[item][p] = prefs[p][item]
 	return results
 
+class Recommender:
+	def __init__(self):
+		p = Prefs()
+		self.prefs = p.get_paper_prefs()
+		self.similar_items = get_similar_items(self.prefs)
+
+	def get_item_based_recommendations(self, paper_id):
+		return get_item_based_recommendations(get_long_id(paper_id), self.prefs, self.similar_items)
+
+	def get_user_based_recommendations(self, paper_id):
+		return get_user_based_recommendations(get_long_id(paper_id), self.prefs, self.similar_items)
 
 
 
 def main():
-	p = Prefs()
-	data = p.get_paper_prefs()
-	similar_items = get_similar_items(data)
-	#res = get_user_based_recommendations('pn1566', data)
-	#print res
-	#print "=============================="
-	res = get_item_based_recommendations('pn1460', data, similar_items)
+	r = Recommender()
+	res = r.get_item_based_recommendations('pn1460')
 	print res
 
 

@@ -15,9 +15,7 @@ from algorithm.recommend_simple import *
 '''
 
 
-f = open('data/data_simple.txt')
-data = json.loads(f.read())
-similar_items = get_similar_items(data)
+r = Recommender()
 
 
 SESSION_KEY = 'USER'
@@ -63,13 +61,13 @@ def index(request):
 
 	
 def similar_papers(request, paper_id):	
-	res = get_item_based_recommendations(paper_id, data, similar_items)
+	res = r.get_item_based_recommendations(paper_id)
 	return render_to_response("paper.html", {'data': res})
 
 @csrf_exempt	
 def recommend(request):
 	if(request.POST):
-		res = get_item_based_recommendations(request.POST['person'], data, similar_items)
+		res = r.get_item_based_recommendations(request.POST['person'])
 		return HttpResponse(json.dumps(res), mimetype="application/json")
 	else:
 		return HttpResponse("invalid request type")
