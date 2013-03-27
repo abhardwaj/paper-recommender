@@ -163,7 +163,7 @@ def get_item_based_recommendations(person, prefs, similar_items, similarity=sim_
 
 	normalized = {}
 	for item,total in totals.items():
-		normalized[item] = total
+		normalized[item] = total/sim_sum[item]
 
 	rankings = sorted(normalized.iteritems(), key=operator.itemgetter(1), reverse=True)
 	#print rankings
