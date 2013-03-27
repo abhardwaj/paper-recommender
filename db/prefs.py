@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import os, sys, csv, re
+import os, sys, MySQLdb
 
 if __name__ == "__main__":
 	p = os.path.abspath(os.path.dirname(__file__))
@@ -7,81 +7,58 @@ if __name__ == "__main__":
 		sys.path.append(os.path.abspath(p+"/.."))
 	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
 
-from models import *
-
 '''
 @author: anant bhardwaj
 @date: Feb 12, 2013
 
-script for inserting the prefs data in postgres db
+load prefs
 '''
 
 
-connection = None
-cursor = None 
-papers = []
-names = []
+class Prefs:
 
-def get_author(author_name, p_id):
-	author = None
-	paper = get_paper(p_id)
-	try:
-		author = Author.objects.get(name=author_name, paper= paper)		
-	except Author.DoesNotExist:
-		author = Author(name=author_name, paper=paper)
-		author.save()
-	return author
+	def __init__(self):
+		self.conn = MySQLdb.connect(host="mysql.csail.mit.edu", user="cobi", passwd="su4Biha", db="cobiDev")
+		self.cursor = self.conn.cursor()
+		self.author_prefs = {}
+		self.paper_prefs = {}
+		self.author_likes = {}
+		self.__load__()
 
-def get_paper(p_id):
-	paper = None
-	try:
-		paper = Paper.objects.get(p_id=p_id)		
-	except Paper.DoesNotExist:
-		paper = Paper(p_id=p_id)
-		paper.save()
-	return paper
+	def __load__(self):
+		self.cursor.execute("SELECT authorId , id, great, ok, notsure, notok, interested FROM authorsourcing;")
+		data = self.cursor.fetchall()
+		for row in data:
+			author_prefs = {}
+			# rate his own paper as great
+			if(row[1]!=''):
+				self.paper_prefs[row[1]] = {}
+				author_prefs.update({row[1]:5.0})
+			# great: 5, ok: 3.0, not_sure: 2.0, not_ok: 1.0
+			if(row[2]!=''):
+				author_prefs.update({p:5.0 for p in row[2].split(',')})
+			if(row[3]!=''):
+				author_prefs.update({p:3.0 for p in row[3].split(',')})
+			if(row[4]!=''):
+				author_prefs.update({p:2.0 for p in row[4].split(',')})
+			if(row[5]!=''):
+				author_prefs.update({p:1.0 for p in row[5].split(',')})
 
-def insert_data(author, paper, rating):
-	prefs = Prefs(author=author, paper=paper, rating = rating)
-	prefs.save()
+			if(row[0]!='' and row[6]!=''):
+				self.author_likes[row[0]] = row[6].split(',')
+			if(row[1]!=''):
+				self.paper_prefs[row[1]].update(author_prefs)
 
+	def get_paper_prefs(self):
+		return self.paper_prefs
 
-# insert data
-def load_data():
-	path = os.path.dirname(os.path.abspath(__file__))
-	data_file = csv.reader(open( path + "/../data/prefs.csv", "rb"))
-	data_file.next()
-	for row in data_file:
-		#print row
-		author = get_author(row[2].strip(), row[3].strip())
-		for x in re.split(',',row[6]):			
-			paper = get_paper(x.strip())
-			insert_data(author, paper, 5)
-		for x in re.split(',',row[7]):
-			paper = get_paper(x.strip())
-			insert_data(author, paper, 3)
-		for x in re.split(',',row[9]):
-			paper = get_paper(x.strip())
-			insert_data(author, paper, 1)
-	
-
-# delete data
-def setup():
-	Prefs.objects.all().delete()
-	Author.objects.all().delete()
-	Paper.objects.all().delete()
-	load_data();
-	
-	
+	def get_author_likes(self):
+		return self.author_likes
 
 def main():
-  print "setting up the table..."
-  res = setup()
-  if(res):
-  	print "inserting the data..."
-  	insert_data()
-	connection.close()
-  print "done."
+  p = Prefs()
+  print p.get_author_likes()
+  print p.get_paper_prefs()
   
 
 if __name__ == '__main__':

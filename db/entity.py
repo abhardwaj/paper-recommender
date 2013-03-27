@@ -1,5 +1,5 @@
-import os, re, sys, json
-import MySQLdb
+#!/usr/bin/python
+import os, sys, MySQLdb, json
 
 if __name__ == "__main__":
 	p = os.path.abspath(os.path.dirname(__file__))
@@ -7,37 +7,41 @@ if __name__ == "__main__":
 		sys.path.append(os.path.abspath(p+"/.."))
 	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
 
+'''
+@author: anant bhardwaj
+@date: Feb 12, 2013
 
-class AuthorSourceDatabase:
+load prefs
+'''
+
+
+class Entity:
 
 	def __init__(self):
 		self.conn = MySQLdb.connect(host="mysql.csail.mit.edu", user="cobi", passwd="su4Biha", db="cobiDev")
 		self.cursor = self.conn.cursor()
-		print (self.conn)
+		self.entities = {}
+		self.__load__()
 
-
-	def get_all(self):
-		self.cursor.execute("SELECT authorId , interested FROM authorsourcing;")
+	def __load__(self):
+		self.cursor.execute("SELECT id , authors, title FROM entity;")
 		data = self.cursor.fetchall()
-		if data == None:
-		       	return None
 		for row in data:
-			print row
+			if(row[0]!=''):
+				self.entities[row[0]]={}
+				self.entities[row[0]]['title']=row[2]
+				self.entities[row[0]]['authors']=json.loads(row[1])
 
-	def get_author_data(self, id):
-		self.cursor.execute("select authors, title from entity where id='%s'" %(id))
-		data = self.cursor.fetchone()
-		if data == None:
-		       	return None
-		else:
-			data =  json.loads(data[0])
-			return data
 
+	def get_entities(self):
+		return self.entities
+
+	
 
 def main():
-  pass
+  e = Entity()
+  print e.get_entities()
   
 
 if __name__ == '__main__':
     main()
-
