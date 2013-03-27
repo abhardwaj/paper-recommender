@@ -58,6 +58,10 @@ def index(request):
 		return HttpResponseRedirect('login')
 
 
+	
+def similar_papers(request, paper_id):	
+	res = get_item_based_recommendations(paper_id, data, similar_items)
+	return render_to_response("paper.html", {'data': res})
 
 @csrf_exempt	
 def recommend(request):

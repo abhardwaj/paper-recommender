@@ -1,5 +1,12 @@
-import os, re, sys
+import os, re, sys, json
 import MySQLdb
+
+if __name__ == "__main__":
+	p = os.path.abspath(os.path.dirname(__file__))
+	if(os.path.abspath(p+"/..") not in sys.path):
+		sys.path.append(os.path.abspath(p+"/.."))
+	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "recommender.settings")
+
 
 class AuthorSourceDatabase:
 
@@ -10,7 +17,7 @@ class AuthorSourceDatabase:
 
 
 	def get_all(self):
-		self.cursor.execute("""SELECT authorId , interested FROM authorsourcing;""")
+		self.cursor.execute("SELECT authorId , interested FROM authorsourcing;")
 		data = self.cursor.fetchall()
 		if data == None:
 		       	return None
@@ -23,5 +30,14 @@ class AuthorSourceDatabase:
 		if data == None:
 		       	return None
 		else:
-			#print data
+			data =  json.loads(data[0])
 			return data
+
+
+def main():
+  pass
+  
+
+if __name__ == '__main__':
+    main()
+

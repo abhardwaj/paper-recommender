@@ -27,7 +27,14 @@ $(document).ready(function(){
 		$("#output").html("Getting recommendations...")
 		$.post('recommend', {'person':$("#person").val()}, 
 			function(res){
-				$("#output").html(JSON.stringify(res));				
+				$("#output").append('<ul>')
+				for (var i=0; i< res.length; i++){
+					$("#output").append('<li>')
+					$("#output").append(res[i]['item'])
+					$("#output").append('</li>')
+				}
+				$("#output").append('</ul>')
+								
 			}
 		);
 	});

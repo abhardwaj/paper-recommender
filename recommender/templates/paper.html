@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block headlink-right %}
+<a href="#" data-dropdown="#dropdown-nav">{{ user }} ▾ </a>
+{% endblock %}
+{% block content %}
+<script type="text/javascript">
+
+	function load_paper (paper_name) {
+		window.location.href = "/paper/"+paper_name;
+	}
+
+	
+	
+</script>
+
+
+<div id="content">
+	
+	
+	<h3><span class="gray">Similar Papers</span></h3>
+	<br />
+	print {{data}}
+</div>
+{% endblock %}
