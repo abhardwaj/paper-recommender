@@ -13,8 +13,11 @@ from py4j.java_gateway import JavaGateway
 
 class Recommender:
 	def __init__(self):
-		p = Prefs()
+		self.prefs = Prefs()
 		self.gateway = JavaGateway()
+
+	def get_prefs():
+		return self.prefs
 
 	def get_item_based_recommendations(self, paper_id):
 		recs = self.gateway.entry_point.recommend(str(encode_paper_id(paper_id)))

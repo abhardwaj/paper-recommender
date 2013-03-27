@@ -88,7 +88,7 @@ class Prefs:
 
 	def __load__(self):
 		cursor = connection.cursor()
-		cursor.execute("SELECT id, authorId, great, ok, notsure, notok, interested FROM authorsourcing;")
+		cursor.execute("SELECT id, authorId, great, ok, notsure, notok, interested, name FROM authorsourcing;")
 		data = cursor.fetchall()
 		for row in data:
 			paper_id = encode_author_id(row[0].strip(), row[1].strip())
@@ -110,7 +110,7 @@ class Prefs:
 
 			# update author_likes
 			if(row[1]!='' and row[6]!=''):
-				self.author_likes[row[1].strip()] = [p.strip() for p in row[6].split(',')]
+				self.author_likes[row[1].strip()] = {'name': row[7].strip(), 'likes':[p.strip() for p in row[6].split(',')]}
 			
 				
 

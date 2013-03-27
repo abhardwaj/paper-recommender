@@ -1,48 +1,49 @@
 {% extends "base.html" %}
 {% block headlink-right %}
-<a href="#" data-dropdown="#dropdown-nav">{{ user }} ▾ </a>
+<a href="#" data-dropdown="#dropdown-nav">{{ user.name }} ▾ </a>
 {% endblock %}
+
+
 {% block content %}
-<h1>Search Paper</h1>
-<hr />
-<table>
-<tr>
-<td>
-<input type="text" id="person" style="width:200px;" value="pn1566"></input> 
-<br />
-<input type="button" id="get_reco" value="Show Similar Papers" />
-</td>
-</tr>
-</table>
-<br /> <br />
-<div id= "output">
-</div>
-<div id= "body">
-</div>
-
 <script type="text/javascript">
-$(document).ready(function(){
-	$("#output").html("")
-	$("#get_reco").click(function(){
-		$("#output").html("Getting recommendations...")
-		$.post('recommend', {'person':$("#person").val()}, 
-			function(res){
-				$("#output").append('<ul>')
-				for (var i=0; i< res.length; i++){
-					$("#output").append('<li>')
-					$("#output").append(res[i]['id'])
-					$("#output").append('</li>')
-				}
-				$("#output").append('</ul>')
-								
-			}
-		);
-	});
-	
-	
-	
+
+	function load_paper (paper_id) {
+		window.location.href = "/paper/" + paper_id;
+	}
+
 	
 
-});
+	$(document).ready(function(){	
+
+		var papers = $('#papers').dataTable({
+			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+			"bPaginate": false,
+			"bFilter": true,
+			"sWidth": "100%",
+			"aoColumns": [                 
+				{"sWidth": "100%"}
+			]
+			
+		});
+
+	});
 </script>
+<div id="content">
+<h3><span class="gray">Papers You Like</span></h3>
+	<br />
+	<table id="papers">
+		<thead>
+		<tr>
+			<th>Paper Title</th>
+		</tr>
+		</thead>
+		<tbody>
+			{% for like in user.likes %}
+				<tr onclick='load_paper("{{like}}")'>
+				<td class="strong">{{like}}</td>
+				</tr>
+			{% endfor %}		
+		</tbody>
+	</table>
+</div>
 {% endblock %}
