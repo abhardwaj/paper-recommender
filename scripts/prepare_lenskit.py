@@ -26,7 +26,7 @@ def prepare(prefs):
 	f = open('data/data_lenskit.txt','w')	
 	for k,v in prefs.iteritems():
 		for p, r in v.iteritems():
-			f.write("%s\t%s\t%s\t%s\n" %(hash(k), hash(p), r, 98765))
+			f.write("%s\t%s\t%s\n" %(k, p, r))
 
 
 
