@@ -14,6 +14,7 @@ def main():
 	data = p.get_paper_prefs()
 	f = open('data/data_simple.txt','w')
 	f.write(json.dumps(data))
+	print "done"
 
 
 if __name__ == "__main__":
