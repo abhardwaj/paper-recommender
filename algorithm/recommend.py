@@ -14,6 +14,7 @@ from py4j.java_gateway import JavaGateway
 class Recommender:
 	def __init__(self):
 		self.prefs = Prefs()
+		self.entity = Entity()
 		self.gateway = JavaGateway()
 
 	def get_prefs():
@@ -24,7 +25,9 @@ class Recommender:
 		res=[]
 		for rec in recs:
 			r = rec.split(',')
-			res.append({'id': decode_paper_id(long(r[0])), 'score': float(r[1])})
+			paper_id = decode_paper_id(long(r[0]))
+			title = self.entity.entities[paper_id]
+			res.append({'id': paper_id, 'title':title, 'score': float(r[1])})
 		return res
 
 

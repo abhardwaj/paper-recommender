@@ -27,7 +27,6 @@ def init_session(email):
 def login_form(request):
 	c = {}
 	c.update(csrf(request))
-	c.update({'author_names':r.prefs.author_names})
 	return render_to_response('login.html', c)
 
 def login(request, redirect_url='index'):
@@ -65,15 +64,7 @@ def index(request):
 def similar_papers(request, paper_id):	
 	res = r.get_item_based_recommendations(paper_id)
 	user = request.session[SESSION_KEY]
-	return render_to_response("paper.html", {'data': res, 'user': r.prefs.author_likes[user]})
+	return render_to_response("paper.html", {'data': res, 'p_id':paper_id, 'user': r.prefs.author_likes[user] , 'u':user} )
 
-@csrf_exempt	
-def recommend(request):
-	if(request.POST):
-		res = r.get_item_based_recommendations(request.POST['person'])
-		print res
-		return HttpResponse(json.dumps(res), mimetype="application/json")
-	else:
-		return HttpResponse("invalid request type")
 
 

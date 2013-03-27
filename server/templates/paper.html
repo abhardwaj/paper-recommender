@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block headlink-right %}
-<a href="#" data-dropdown="#dropdown-nav">{{ user }} ▾ </a>
+<a href="#" data-dropdown="#dropdown-nav">{{ u}} ▾ </a>
 {% endblock %}
 {% block content %}
 <script type="text/javascript">
@@ -27,7 +27,7 @@
 	});
 </script>
 <div id="content">
-<h3><span class="gray">Papers Similar To</span></h3>
+<h3><span class="gray">People who liked {{p_id}} also liked</span></h3>
 	<br />
 	<table id="papers">
 		<thead>
