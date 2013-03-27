@@ -26,12 +26,10 @@ class Entity:
 	def __load__(self):
 		cursor = connection.cursor()
 		cursor.execute("SELECT id , authors, title FROM entity;")
-		data = self.cursor.fetchall()
+		data = cursor.fetchall()
 		for row in data:
 			if(row[0]!=''):
-				self.entities[row[0]]={}
-				self.entities[row[0]]['title']=row[2]
-				self.entities[row[0]]['authors']=json.loads(row[1])
+				self.entities[row[0]]={'authors': json.loads(row[1]), 'title': row[2]}
 
 
 	def get_entities(self):
