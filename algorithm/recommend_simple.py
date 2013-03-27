@@ -1,7 +1,7 @@
 from math import sqrt
 import sys, os, operator, json
 
-from paper_db import *;
+from db.entity import *;
 adb = AuthorSourceDatabase()
 
 

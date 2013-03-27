@@ -1,11 +1,11 @@
 from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
-	url(r'^$','recommender.views.index'),
-	url(r'^index', 'recommender.views.index'),
-    url(r'^recommend', 'recommender.views.recommend'),
-    url(r'^paper/(\w+)$', 'recommender.views.similar_papers'),
+	url(r'^$','server.views.index'),
+	url(r'^index', 'server.views.index'),
+    url(r'^recommend', 'server.views.recommend'),
+    url(r'^paper/(\w+)$', 'server.views.similar_papers'),
 
-    url(r'^login', 'recommender.views.login'),
-	url(r'^logout', 'recommender.views.logout'),
+    url(r'^login', 'server.views.login'),
+	url(r'^logout', 'server.views.logout'),
 )

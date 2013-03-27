@@ -1,9 +1,12 @@
+import json, sys, re
+
+
 from django.http import *
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
-import json, sys, re
-from recommend_simple import *
 from django.core.context_processors import csrf
+
+from algorithm.recommend_simple import *
 
 
 '''
@@ -12,7 +15,7 @@ from django.core.context_processors import csrf
 '''
 
 
-f = open('data_simple.txt')
+f = open('data/data_simple.txt')
 data = json.loads(f.read())
 similar_items = get_similar_items(data)
 
