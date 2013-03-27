@@ -17,10 +17,6 @@ script for preparing data in lenskit format
 '''
 
 
-
-
-
-
 # insert data
 def prepare(prefs):
 	f = open('data/data_lenskit.txt','w')	

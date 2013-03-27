@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.context_processors import csrf
 
 from algorithm.recommend import *
+from db.prefs import *
+from db.entity import *
 
 
 '''
@@ -16,6 +18,8 @@ from algorithm.recommend import *
 
 
 r = Recommender()
+e = Entity()
+p = Prefs()
 
 
 
@@ -55,7 +59,7 @@ def logout(request):
 def index(request):
 	try:
 		user = request.session[SESSION_KEY]
-		return render_to_response("index.html", {'user': r.prefs.author_likes[user]})
+		return render_to_response("index.html", {'user': p.author_likes[user]})
 	except KeyError:
 		return HttpResponseRedirect('login')
 
@@ -64,7 +68,7 @@ def index(request):
 def similar_papers(request, paper_id):	
 	res = r.get_item_based_recommendations(paper_id)
 	user = request.session[SESSION_KEY]
-	return render_to_response("paper.html", {'data': res, 'p_id':paper_id, 'user': r.prefs.author_likes[user] , 'u':user} )
+	return render_to_response("paper.html", {'data': res, 'p_id':paper_id, 'user': p.author_likes[user] , 'u':user} )
 
 
 

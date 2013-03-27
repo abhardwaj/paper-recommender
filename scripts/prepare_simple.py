@@ -9,6 +9,7 @@ if __name__ == "__main__":
 from db.prefs import *
 
 
+
 def main():
 	p = Prefs()
 	data = p.get_paper_prefs()
