@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block headlink-right %}
+<a href="#" data-dropdown="#dropdown-nav">{{ login }} ▾ </a>
+{% endblock %}
+{% block content %}
+<script type="text/javascript">
+
+	function load_user (author_id) {
+		window.location.href = "/user/" + author_id;
+	}
+
+	
+
+	$(document).ready(function(){	
+
+		var authors = $('#authors').dataTable({
+			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+			"bPaginate": false,
+			"bFilter": true,
+			"sWidth": "100%",
+			"aoColumns": [                 
+				{"sWidth": "100%"}
+			]
+			
+		});
+
+	});
+</script>
+<div id="content">
+	<h3><span class="gray">Authors List</span></h3>
+	<br />
+	<table id="authors">
+		<thead>
+		<tr>
+			<th>Name</th>
+		</tr>
+		</thead>
+		<tbody>
+			{% for user in users %}
+				<tr onclick='load_user("{{user.id}}")'>
+				<td class="strong">{{user.name}}</td>
+				</tr>
+			{% endfor %}		
+		</tbody>
+	</table>
+</div>
+{% endblock %}
