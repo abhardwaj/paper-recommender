@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block headlink-right %}
-<a href="#" data-dropdown="#dropdown-nav">{{ user.name }} ▾ </a>
+<a href="#" data-dropdown="#dropdown-nav">{{ user }} ▾ </a>
 {% endblock %}
 
 
@@ -20,6 +20,7 @@
 			"bPaginate": false,
 			"bFilter": true,
 			"sWidth": "100%",
+			"aaSorting": [],
 			"aoColumns": [                 
 				{"sWidth": "100%"}
 			]
@@ -38,9 +39,9 @@
 		</tr>
 		</thead>
 		<tbody>
-			{% for like in user.likes %}
-				<tr onclick='load_paper("{{like}}")'>
-				<td class="strong">{{like}}</td>
+			{% for rec in recs %}
+				<tr onclick='load_paper("{{rec.id}}")'>
+				<td class="strong">{{rec.title}}</td>
 				</tr>
 			{% endfor %}		
 		</tbody>

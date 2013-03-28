@@ -59,7 +59,14 @@ def logout(request):
 def index(request):
 	try:
 		user = request.session[SESSION_KEY]
-		return render_to_response("index.html", {'user': p.author_likes[user]})
+		recs = []
+		for like in p.author_likes[user]['likes']:
+			d = {}
+			d['id']=like
+			d['title']= e.entities[like]['title']
+			recs.append(d)
+		#print recs
+		return render_to_response("index.html", {'user': user, 'recs':recs})
 	except KeyError:
 		return HttpResponseRedirect('login')
 
