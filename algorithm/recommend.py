@@ -7,6 +7,7 @@ if __name__ == "__main__":
 	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
 
 from py4j.java_gateway import JavaGateway
+from py4j.java_collections import ListConverter
 from utils import *
 
 
@@ -15,8 +16,10 @@ class Recommender:
 		self.gateway = JavaGateway()
 
 
-	def get_item_based_recommendations(self, paper_id):
-		recs = self.gateway.entry_point.recommend(str(encode_paper_id(paper_id)))
+	def get_item_based_recommendations(self, paper_id_list):
+		encoded_id_list = [str(encode_paper_id(id)) for id in paper_id_list]
+		j_id_list = ListConverter().convert(encoded_id_list, self.gateway._gateway_client)
+		recs = self.gateway.entry_point.recommend(j_id_list)
 		res=[]
 		for rec in recs:
 			r = rec.split(',')
@@ -29,7 +32,7 @@ class Recommender:
 
 def main():
 	r = Recommender()
-	res = r.get_item_based_recommendations('pn1460')
+	res = r.get_item_based_recommendations(['pn1460'])
 	print res
 
 

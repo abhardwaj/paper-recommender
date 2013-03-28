@@ -42,11 +42,12 @@ public class PaperRecommender {
 		grec = rec.getGlobalItemRecommender();
 	}
 	
-	public ArrayList<String> recommend(String item_str){
-		long item = Long.parseLong(item_str);
+	public ArrayList<String> recommend(ArrayList<String> i_items){
 		Set<Long> input_items = new HashSet<Long>();
+		for (String i : i_items){ 
+          input_items.add(Long.valueOf(i)); 
+        }
 		ArrayList<String> ret = new ArrayList<String>();
-		input_items.add(item);
 		ScoredLongList recommendations = this.grec.globalRecommend(input_items, 10);
 		long items[] = new long[10];
 		double scores[] = new double[10];
