@@ -60,11 +60,13 @@ def index(request):
 	try:
 		user = request.session[SESSION_KEY]
 		recs = []
-		for like in p.author_likes[user]['likes']:
-			d = {}
-			d['id']=like
-			d['title']= e.entities[like]['title']
-			recs.append(d)
+		items = p.author_likes[user]['likes']
+		for item in items:
+			rec = {}
+			id = item
+			rec['id']=id
+			rec['title']= e.entities[id]['title']
+			recs.append(rec)
 		#print recs
 		return render_to_response("index.html", {'user': user, 'recs':recs})
 	except KeyError:
@@ -73,9 +75,17 @@ def index(request):
 
 	
 def similar_papers(request, paper_id):	
-	res = r.get_item_based_recommendations(paper_id)
+	items = r.get_item_based_recommendations(paper_id)
 	user = request.session[SESSION_KEY]
-	return render_to_response("paper.html", {'data': res, 'p_id':paper_id, 'user': p.author_likes[user] , 'u':user} )
+	recs = []
+	paper_title =e.entities[paper_id]['title']
+	for item in items:
+		rec = {}
+		id = item['id']
+		rec['id']=id
+		rec['title']= e.entities[id]['title']
+		recs.append(rec)
+	return render_to_response("paper.html", {'user': user, 'id':paper_id, 'title': paper_title, 'recs':recs})
 
 
 
