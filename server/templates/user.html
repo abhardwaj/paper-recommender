@@ -2,6 +2,8 @@
 {% block headlink-right %}
 <a href="#" data-dropdown="#dropdown-nav">{{ login }} ▾ </a>
 {% endblock %}
+
+
 {% block content %}
 <script type="text/javascript">
 
@@ -13,11 +15,24 @@
 
 	$(document).ready(function(){	
 
-		var papers = $('#papers').dataTable({
+		var likes = $('#likes').dataTable({
 			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 			"bPaginate": false,
 			"bFilter": true,
 			"sWidth": "100%",
+			"aaSorting": [],
+			"aoColumns": [                 
+				{"sWidth": "100%"}
+			]
+			
+		});
+
+		var recs = $('#recs').dataTable({
+			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+			"bPaginate": false,
+			"bFilter": true,
+			"sWidth": "100%",
+			"aaSorting": [],
 			"aoColumns": [                 
 				{"sWidth": "100%"}
 			]
@@ -27,13 +42,27 @@
 	});
 </script>
 <div id="content">
-	<div class="form">
-	<span class="strong">{{title}}</span>
-	</div>
+<h3><span class="gray">Papers {{user}} Liked</span></h3>
 	<br />
-	<h3><span class="gray">People who liked this paper also liked the following paper:</span></h3>
+	<table id="likes">
+		<thead>
+		<tr>
+			<th>Paper Title</th>
+		</tr>
+		</thead>
+		<tbody>
+			{% for like in likes %}
+				<tr onclick='load_paper("{{like.id}}")'>
+				<td class="strong">{{like.title}}</td>
+				</tr>
+			{% endfor %}		
+		</tbody>
+	</table>
+</div>
+<div id="content">
+<h3><span class="gray">Papers Recommended for {{user}}</span></h3>
 	<br />
-	<table id="papers">
+	<table id="recs">
 		<thead>
 		<tr>
 			<th>Paper Title</th>
