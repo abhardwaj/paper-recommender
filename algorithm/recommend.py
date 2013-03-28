@@ -20,8 +20,10 @@ class Recommender:
 		res=[]
 		for rec in recs:
 			r = rec.split(',')
-			paper_id = decode_paper_id(long(r[0]))
-			res.append({'id': paper_id, 'score': float(r[1])})
+			id = long(r[0])
+			if(id!=0):
+				paper_id = decode_paper_id(id)
+				res.append({'id': paper_id, 'score': float(r[1])})
 		return res
 
 
