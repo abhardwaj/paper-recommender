@@ -81,6 +81,14 @@ def index(request):
 		return HttpResponseRedirect('login')
 
 
+def users(request):	
+	user = request.session[SESSION_KEY]
+	users = []
+	for u in p.author_likes:
+		users.append({'id':u, 'name': p.author_likes[u]['name']})
+	return render_to_response("users.html", {'login': user, 'users':users})
+
+
 def user(request, author_id):
 	try:
 		user = author_id
