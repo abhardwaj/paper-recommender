@@ -6,19 +6,45 @@
 
 
 <script type="text/javascript">
-	/*
-	$("#login_author").autocomplete({
-			source:Object.keys(JSON.parse({{author_names}}))
-		  select: function(e, ui) { 
 
-			  $("#input_word").val(ui.item.value)
-			  
+$(document).ready(function(){
+	text = $('<div />').html('{{users}}').text()
+	var j_users = JSON.parse(text)
+	$("#login_author_name").autocomplete({
+		   source:Object.keys(j_users),
+		  select: function(e, ui) { 
+		  	var name = ui.item.value
+			$("#login_author_name").val(name)
+			var id = j_users[name]
+			 $("#login_author").val(id)
 		   }
 	 });
 
-	*/
+
+	$(".default-text").focus(function(srcc)
+	{
+	    if ($(this).val() == $(this)[0].title)
+	    {
+	        $(this).removeClass("default-text-active");
+	        $(this).val("");
+	    }
+	});
+    
+	$(".default-text").blur(function()
+	{
+	    if ($(this).val() == "")
+	    {
+	        $(this).addClass("default-text-active");
+	        $(this).val($(this)[0].title);
+	    }
+	});
+
+	$(".default-text").blur();
+
+});	
 	
 </script>
+
 
 
 <form method="POST" action="login">
@@ -26,7 +52,9 @@
 	<h3>CHI 2013 Login</h3>
 	<hr />
 	<label for="login_author">Name</label><br />
-	<input type="text" name="login_author" id="login_author" value= "auth8964"/><br /><br />
+	{{error}}
+	<input type="hidden" name="login_author" id="login_author" />
+	<input type="text" name="login_author_name" class="default-text" id="login_author_name" title="enter your name"/><br /><br />
 	<input type="submit" value="Log In" />
 </form>
 {% endblock %}

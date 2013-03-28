@@ -265,4 +265,13 @@ table.dataTable tbody tr:hover{
 	resize: vertical;
 }
 
+.default-text {
+}
+
+.default-text-active { 
+	color: #a1a1a1; 
+	font-style: italic;
+}
+
+
 
