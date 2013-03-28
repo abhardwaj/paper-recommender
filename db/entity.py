@@ -29,7 +29,7 @@ class Entity:
 		data = cursor.fetchall()
 		for row in data:
 			if(row[0]!=''):
-				self.entities[row[0]]={'authors': json.loads(row[1]), 'title': row[2], 'c_and_b': row[3], 'keywords': row[4]}
+				self.entities[row[0]]={'authors': json.loads(row[1]), 'title': row[2].strip('"'), 'c_and_b': row[3].strip('"'), 'keywords': row[4].strip('"')}
 
 
 	def get_entities(self):

@@ -33,7 +33,7 @@ class Prefs:
 		cursor.execute("SELECT id, authorId, great, ok, notsure, notok, interested, name FROM authorsourcing;")
 		data = cursor.fetchall()
 		for row in data:
-			if(row[0].startswith('crs')):
+			if(row[0].strip()==''):
 				continue
 			paper_id = encode_author_id(row[0].strip(), row[1].strip())
 
@@ -41,6 +41,8 @@ class Prefs:
 			author_prefs = {encode_paper_id(row[0].strip()):5.0}
 						
 			# great: 5, ok: 3.0, not_sure: 2.0, not_ok: 1.0
+			if(row[6]!=''):
+				author_prefs.update({encode_paper_id(p.strip()):5.0 for p in row[6].split(',')})
 			if(row[2]!=''):
 				author_prefs.update({encode_paper_id(p.strip()):5.0 for p in row[2].split(',')})
 			if(row[3]!=''):

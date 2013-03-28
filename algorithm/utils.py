@@ -11,7 +11,7 @@ some utils
 def encode_author_id(paper_id, authorId):
 	ret = 0
 	author_id = 0
-	if(authorId!=''):
+	if(len(authorId) > 4 and authorId.startswith('auth')):
 		author_id = int(authorId[4:])
 	if(paper_id.startswith('alt')):
 		ret= '1%05d%06d' %(int(paper_id[3:]), author_id)
