@@ -33,6 +33,8 @@ class Prefs:
 		cursor.execute("SELECT id, authorId, great, ok, notsure, notok, interested, name FROM authorsourcing;")
 		data = cursor.fetchall()
 		for row in data:
+			if(row[0].startswith('crs')):
+				continue
 			paper_id = encode_author_id(row[0].strip(), row[1].strip())
 
 			# rate his own paper as great
