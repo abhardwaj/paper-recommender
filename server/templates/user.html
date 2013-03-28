@@ -15,18 +15,6 @@
 
 	$(document).ready(function(){	
 
-		var likes = $('#likes').dataTable({
-			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
-			"bPaginate": false,
-			"bFilter": true,
-			"sWidth": "100%",
-			"aaSorting": [],
-			"aoColumns": [                 
-				{"sWidth": "100%"}
-			]
-			
-		});
-
 		var recs = $('#recs').dataTable({
 			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 			"bPaginate": false,
@@ -43,37 +31,27 @@
 </script>
 <div id="content">
 <h3><span class="gray">Papers {{user}} Liked</span></h3>
-	<br />
-	<table id="likes">
-		<thead>
-		<tr>
-			<th>Favorite Papers</th>
-		</tr>
-		</thead>
-		<tbody>
-			{% for like in likes %}
-				<tr onclick='load_paper("{{like.id}}")'>
-				<td>
-				 <ul>
-				 	<li class="strong">{{like.title}}</li>
-				 	<li>{{like.c_and_b}}</li>
-				
-					<li class="blue">
-					{% for author in like.authors %}
-						{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
-					{% endfor %}
-					</li>
-					<li class='gray'>
-					{{like.keywords}}
-					</li>
-				</ul>
-				</td>
-				</tr>
-			{% endfor %}		
-		</tbody>
-	</table>
-</div>
-<div id="content">
+	
+{% for like in likes %}
+	<div class="form" style="margin-top:10px;cursor:pointer;" onclick='load_paper("{{like.id}}")'>
+	<span class="strong">{{like.title}}</span> <br />
+	<span class="blue">
+		{% for author in like.authors %}
+			{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
+		{% endfor %}
+	</span>
+	<hr />
+	<ul >
+	<li>{{like.c_and_b}}</li>	
+	<li class='gray'>
+	{{like.keywords}}
+	</li>
+	</ul>
+	</div>
+{% endfor %}		
+
+<br />
+<br />
 <h3><span class="gray">Papers Recommended for {{user}}</span></h3>
 	<br />
 	<table id="recs">
