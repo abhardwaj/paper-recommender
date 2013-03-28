@@ -67,13 +67,13 @@ def index(request):
 			rec = {}
 			id=item['id']
 			rec['id']=id
-			rec['title']= e.entities[id]['title']
+			rec.update(e.entities[id])
 			recs.append(rec)
 		for like in papers_liked:
 			l = {}
 			id=like
 			l['id']=id
-			l['title']= e.entities[id]['title']
+			l.update(e.entities[id])
 			likes.append(l)
 		#print recs
 		return render_to_response("index.html", {'login': p.author_likes[user]['name'], 'recs':recs, 'likes':likes})
@@ -101,13 +101,13 @@ def user(request, author_id):
 			rec = {}
 			id=item['id']
 			rec['id']=id
-			rec['title']= e.entities[id]['title']
+			rec.update(e.entities[id])
 			recs.append(rec)
 		for like in papers_liked:
 			l = {}
 			id=like
 			l['id']=id
-			l['title']= e.entities[id]['title']
+			l.update(e.entities[id])
 			likes.append(l)
 		#print recs
 		return render_to_response("user.html", {'login': p.author_likes[login]['name'], 'user': p.author_likes[user]['name'], 'recs':recs, 'likes':likes})
@@ -120,14 +120,14 @@ def paper(request, paper_id):
 	items = r.get_item_based_recommendations([paper_id])
 	user = request.session[SESSION_KEY]
 	recs = []
-	paper_title =e.entities[paper_id]['title']
+	paper = e.entities[paper_id]
 	for item in items:
 		rec = {}
 		id = item['id']
 		rec['id']=id
-		rec['title']= e.entities[id]['title']
+		rec.update(e.entities[id])
 		recs.append(rec)
-	return render_to_response("paper.html", {'login': p.author_likes[user]['name'], 'id':paper_id, 'title': paper_title, 'recs':recs})
+	return render_to_response("paper.html", {'login': p.author_likes[user]['name'], 'id':paper_id, 'paper': paper, 'recs':recs})
 
 
 

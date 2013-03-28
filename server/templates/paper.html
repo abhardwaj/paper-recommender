@@ -27,22 +27,48 @@
 	});
 </script>
 <div id="content">
-	<div class="form">
-	<span class="strong">{{title}}</span>
+	<h3><span class="gray">Selected Paper</span></h3>
+	<div class="form" style="margin-top:10px;">
+	<span class="strong">{{paper.title}}</span><br />
+	<span class="blue">
+		{% for author in paper.authors %}
+			{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
+		{% endfor %}
+	</span>
+	<hr />
+	<ul>			 	
+	 	<li>{{paper.c_and_b}}</li>		
+		<li class='gray'>
+		{{paper.keywords}}
+		</li>
+	</ul>
 	</div>
 	<br />
-	<h3><span class="gray">People who liked this paper also liked the following paper:</span></h3>
+	<h3><span class="gray">People who liked this paper also liked the following.</span></h3>
 	<br />
 	<table id="papers">
 		<thead>
 		<tr>
-			<th>Paper Title</th>
+			<th>Paper Liked by Others</th>
 		</tr>
 		</thead>
 		<tbody>
 			{% for rec in recs %}
 				<tr onclick='load_paper("{{rec.id}}")'>
-				<td class="strong">{{rec.title}}</td>
+				<td>
+				 <ul>
+				 	<li class="strong">{{rec.title}}</li>
+				 	<li>{{rec.c_and_b}}</li>
+					<li class="blue">
+					{% for author in rec.authors %}
+						{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
+					{% endfor %}
+					</li>
+					<li class='gray'>
+					{{rec.keywords}}
+					</li>
+				</ul>
+				</td>
 				</tr>
 			{% endfor %}		
 		</tbody>
