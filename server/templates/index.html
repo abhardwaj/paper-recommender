@@ -15,7 +15,19 @@
 
 	$(document).ready(function(){	
 
-		var papers = $('#papers').dataTable({
+		var likes = $('#likes').dataTable({
+			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+			"bPaginate": false,
+			"bFilter": true,
+			"sWidth": "100%",
+			"aaSorting": [],
+			"aoColumns": [                 
+				{"sWidth": "100%"}
+			]
+			
+		});
+
+		var recs = $('#recs').dataTable({
 			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 			"bPaginate": false,
 			"bFilter": true,
@@ -30,9 +42,26 @@
 	});
 </script>
 <div id="content">
+<h3><span class="gray">Papers You Liked</span></h3>
+	<br />
+	<table id="likes">
+		<thead>
+		<tr>
+			<th>Paper Title</th>
+		</tr>
+		</thead>
+		<tbody>
+			{% for like in likes %}
+				<tr onclick='load_paper("{{like.id}}")'>
+				<td class="strong">{{like.title}}</td>
+				</tr>
+			{% endfor %}		
+		</tbody>
+	</table>
+	<br />
 <h3><span class="gray">Papers Recommended for You</span></h3>
 	<br />
-	<table id="papers">
+	<table id="recs">
 		<thead>
 		<tr>
 			<th>Paper Title</th>

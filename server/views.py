@@ -60,22 +60,30 @@ def index(request):
 	try:
 		user = request.session[SESSION_KEY]
 		recs = []
-		items = p.author_likes[user]['likes']
+		likes = []
+		papers_liked = p.author_likes[user]['likes']
+		items = r.get_item_based_recommendations(papers_liked)
 		for item in items:
 			rec = {}
-			id = item
+			id=item['id']
 			rec['id']=id
 			rec['title']= e.entities[id]['title']
 			recs.append(rec)
+		for like in papers_liked:
+			l = {}
+			id=like
+			l['id']=id
+			l['title']= e.entities[id]['title']
+			likes.append(l)
 		#print recs
-		return render_to_response("index.html", {'user': user, 'recs':recs})
+		return render_to_response("index.html", {'user': user, 'recs':recs, 'likes':likes})
 	except KeyError:
 		return HttpResponseRedirect('login')
 
 
 	
 def similar_papers(request, paper_id):	
-	items = r.get_item_based_recommendations(paper_id)
+	items = r.get_item_based_recommendations([paper_id])
 	user = request.session[SESSION_KEY]
 	recs = []
 	paper_title =e.entities[paper_id]['title']
