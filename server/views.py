@@ -76,7 +76,7 @@ def index(request):
 			l['title']= e.entities[id]['title']
 			likes.append(l)
 		#print recs
-		return render_to_response("index.html", {'login': user, 'recs':recs, 'likes':likes})
+		return render_to_response("index.html", {'login': p.author_likes[user]['name'], 'recs':recs, 'likes':likes})
 	except KeyError:
 		return HttpResponseRedirect('login')
 
@@ -86,7 +86,7 @@ def users(request):
 	users = []
 	for u in p.author_likes:
 		users.append({'id':u, 'name': p.author_likes[u]['name']})
-	return render_to_response("users.html", {'login': user, 'users':users})
+	return render_to_response("users.html", {'login': p.author_likes[user]['name'], 'users':users})
 
 
 def user(request, author_id):
@@ -110,7 +110,7 @@ def user(request, author_id):
 			l['title']= e.entities[id]['title']
 			likes.append(l)
 		#print recs
-		return render_to_response("user.html", {'login': login, 'user': user, 'recs':recs, 'likes':likes})
+		return render_to_response("user.html", {'login': p.author_likes[login]['name'], 'user': p.author_likes[user]['name'], 'recs':recs, 'likes':likes})
 	except KeyError:
 		return HttpResponseRedirect('login')	
 
@@ -127,7 +127,7 @@ def paper(request, paper_id):
 		rec['id']=id
 		rec['title']= e.entities[id]['title']
 		recs.append(rec)
-	return render_to_response("paper.html", {'login': user, 'id':paper_id, 'title': paper_title, 'recs':recs})
+	return render_to_response("paper.html", {'login': p.author_likes[user]['name'], 'id':paper_id, 'title': paper_title, 'recs':recs})
 
 
 
