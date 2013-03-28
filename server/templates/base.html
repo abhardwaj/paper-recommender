@@ -25,23 +25,17 @@
 </head>
 
 <body>
-	<div id="dropdown-nav" class="dropdown-menu has-tip">
-	    <ul>
-	        <li><a href="/users">Users</a></li>
-	        <li class="divider"></li>
-	        <li><a href="/logout">Logout</a></li>
-	    </ul>
-	</div>
 	<div id="header">
 		<div id="wrap">
 		<span id="headlink-left">
 		{% block headlink-left %}<a id="logo" href="/">CHI 2013 Recommendation System</a>{% endblock %}
 		</span>
 		<span id="headlink-right">
-		{% block headlink-right %}{% endblock %}
+			{% block headlink-right %}{% endblock %}
 		</span>
 		</div>
 	</div>
+
 	<div id="page">
 	{% block content %}{% endblock %}
 	</div>

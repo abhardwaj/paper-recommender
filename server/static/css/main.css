@@ -74,7 +74,12 @@ button, input[type="button"], input[type="submit"]{
 	border-color: #3b6e22 #3b6e22 #2c5115;
 	padding:5px 10px 5px 10px;
 	border-radius: 5px;
+	text-decoration: none;
+	color: #fff;
 }
+
+
+
 
 
 textarea { 
@@ -110,20 +115,21 @@ body {
 #wrap{
 	position: relative;
 	margin:0 auto;
+	padding: 0;
 	width: 1024px;
 }
 
 #headlink-right{
 	position:absolute;
 	top: 10px;
-	right:20px;
+	right:0px;
 	color: #FFF;
 }
 
 #headlink-left{
 	position:absolute;
 	top: 10px;
-	left:20px;
+	left:0px;
 	color: #FFF;
 }
 
@@ -272,6 +278,4 @@ table.dataTable tbody tr:hover{
 	color: #a1a1a1; 
 	font-style: italic;
 }
-
-
 

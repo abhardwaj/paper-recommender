@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block headlink-right %}
-<a href="#" data-dropdown="#dropdown-nav">{{ login }} ▾ </a>
+Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
+<a class="button" href="/index">Home</a>
+<a class="button" href="/users">Authors List</a>
+<a class="button" href="/logout">Log out!</a>
 {% endblock %}
 {% block content %}
 <script type="text/javascript">
