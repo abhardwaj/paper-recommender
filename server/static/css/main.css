@@ -269,6 +269,16 @@ table.dataTable tbody tr:hover{
 	background-color: #D7ECFA;
 }
 
+.ui-dialog,.ui-dialog,.ui-widget, .ui-widget-content, .ui-corner-all, .foo, .ui-draggable, .ui-resizable {
+	background:#fff !important;
+
+	}​
+
+.ui-dialog-titlebar, .ui-widget-header{
+	border-radius: 0px;
+	border:none;
+	
+}
 
 
 #table-input {

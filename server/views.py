@@ -140,8 +140,9 @@ def paper(request, paper_id):
 
 def schedule(request):	
 	user = request.session[SESSION_KEY]
-	papers = s.sessions
-	for paper in papers:
-		papers[paper].update(e.entities[paper])
-	return render_to_response("schedule.html", {'login': p.author_likes[user]['name'], 'papers':papers})
+	sessions = s.sessions
+	for session in sessions:
+		for submission in sessions[session]['submissions']:
+			sessions[session]['submissions'][submission].update(e.entities[submission])
+	return render_to_response("schedule.html", {'login': p.author_likes[user]['name'], 'sessions':sessions})
 

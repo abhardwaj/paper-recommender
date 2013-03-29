@@ -9,29 +9,41 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 {% block content %}
 <style>
 
-#tabs{
-	margin:0;
-	padding:0;
-	border:none;
-}
 
-#tabs {
-}
-
-#paper-view, #session-view{
-	margin: 0;
-	padding: 0;
-}
-
-#tabs ul.ui-tabs-nav{
-	border-top: none;
-	border-left: none;
-	border-right: none;
+.ui-widget, .ui-widget-content{
 	border-radius: 0px;
-	padding-left: 10px;
-	background: #fff;
-	margin-bottom: 20px;
+	font-family: Calibri, "Gill Sans", "Gill Sans MT", "Lucida Grande", Lucida, Verdana, sans-serif;
+	font-size:10pt;
+	background: #f0f4f9 !important;
+	
+
+}​
+.ui-corner-all, .ui-draggable, .ui-resizable{
+	box-shadow: 1px 0px 10px #666;
+	background: #f0f4f9 !important;
 }
+.ui-dialog{
+	
+	border-radius: 0px;
+	background: #f0f4f9 !important;
+}​
+
+.ui-dialog-titlebar, .ui-widget-header{
+	border-radius: 0px;
+	border:none;
+	background: #f0f4f9 !important;
+}
+
+
+ul.dialog-list {
+	background: #f0f4f9;
+}
+
+ul.dialog-list:hover {
+	background-color: #D7ECFA;
+	cursor: pointer;
+}
+
 
 #schedule{
 	border-spacing: 0px;
@@ -46,13 +58,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	border-right: 1px solid #ccc;
 }
 
-.col1, .col3{
-	width:30%;
-}
 
-.col2, .col4{
-	width:20%;
-}
 
 
 #schedule td table{
@@ -83,25 +89,37 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		window.location.href = "/paper/" + paper_id;
 	}
 
+
+	function load_session (s_id) {
+		$('#'+s_id).dialog(
+			{width: 800,
+			height:600,
+			resizable: false
+		});
+	}
+
 	$(document).ready(function(){	
 		
-		$("#tabs").tabs()
-		$("#tabs").tabs("select", 0);
-		$("#tabs").removeClass('ui-widget');
-		$("#tabs").removeClass('ui-widget-header');
-		$("#tabs").removeClass('ui-widget-content');
+		
+
+
 		var papers = $('#papers').dataTable({
 			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 			"bPaginate": false,
 			"bFilter": true,
 			"bInfo": false,
 			"sWidth": "100%",
-			"aaSorting": [],
+			"aaSorting": [[0,'asc'], [1,'asc']],
 			"aoColumns": [                 
-				{"sWidth": "100%"}
+				{"sWidth": "10%"},
+				{"sWidth": "10%"},
+				{"sWidth": "10%"},
+				{"sWidth": "70%"}
 			]
 			
 		});
+
+
 
 	  	$('input:checkbox').live('change', function(){
 	  		var days_checked = $("input:checked.day")
@@ -179,12 +197,6 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 </script>
 
 <div id="content">
-<div id="tabs">
-<ul>
-    <li><a href="#paper-view">Paper View</a></li>
-    <li><a href="#session-view">Session View</a></li>
- </ul>
-<div id="paper-view">
 <h3><span class="gray">Schedule Filter Options</span> <a class="button filter" href="#" style="font-size:small; display:none;">SHOW</a> <a class="button filter" href="#" style="font-size:small;">HIDE</a></h3> <br />
 <div id ="schedule_filter">
 <span class="strong">Please check the filter options below</span><br />
@@ -265,16 +277,44 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <table id="papers">
 	<thead>
 		<tr>
-			<th>Papers matching the criteria</th>
+			<th>Date</th>
+			<th>Time</th>
+			<th>Room</th>
+			<th>Sessions matching the criteria</th>
 		</tr>
 	</thead>
 	<tbody>
-		{% for id, paper in papers.items %}
-			<tr class="all {{paper.date}} t{{paper.time|slice:":2"}} {{paper.venue}} {{paper.personas|slice:":2"}}" style="border-bottom:1px solid #ccc; padding:10px;" onclick='load_paper("{{id}}")'>
+	{% for s_id, session in sessions.items %}
+		<tr class="all {{session.date}} t{{session.time|slice:":2"}} {{session.venue}} {{session.personas|slice:":2"}}" style="border-bottom:1px solid #ccc; padding:10px;" onclick='load_session("{{s_id}}")'>
+			<td>
+				{{session.date}}
+			</td>
+			<td>
+				 {{session.time}}
+			</td>
+			<td>
+				 {{session.room}}
+			</td>
 			<td>
 			<ul>
+			<li class="strong">{{session.s_title}}</li> 
+			<li class="gray">{{session.venue}}, {{session.personas}}</li>
+			</ul>
+			<div id="{{s_id}}" class="dialog" title="{{session.s_title}}" style="display:none;">
+			<ul class="form" style="margin-top:0px;">
+			<li class="strong">Session Schedule</li>
+			<li class="gray"><span class="strong">Date: </span>{{session.date}}</li>
+			<li class="gray"><span class="strong">Time: </span>{{session.time}}</li>
+			<li class="gray"><span class="strong">Room: </span>{{session.room}}</li>
+			<li class="gray"><span class="strong">Venue: </span>{{session.venue}}</li>
+			<li class="gray"><span class="strong">Persona: </span>{{session.personas}}</li>
+			</ul>
+			<br />
+			<h3><span class="gray">Papers in this session:</span></h3> 
+			<br />
+		{% for id, paper in session.submissions.items %}		
+			<ul class='dialog-list' style="border-bottom:1px solid #ccc; padding:10px;" onclick='load_paper("{{id}}")'>
 			<li class="strong">{{paper.title}}</li>
-			<li>Day: {{paper.date}}, Time: {{paper.time}}, Room: {{paper.room}}. Venue: {{paper.venue}}, Persona: {{paper.personas}}</li>
 			<li>{{paper.c_and_b}}</li>
 			<li class="blue">
 				{% for author in paper.authors %}
@@ -284,15 +324,13 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			<li class='gray'>
 			{{paper.keywords}}
 			</li>
-			</ul>
-			</td>
-			</tr>
-		{% endfor %}	
+			</ul>			
+		{% endfor %}
+		</div>
+		</td>	
+	</tr>
+	{% endfor %}
 	</tbody>
 </table>
-</div>
-<div id="session-view">
-</div>
-</div>
 </div>
 {% endblock %}

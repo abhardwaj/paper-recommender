@@ -29,7 +29,8 @@ class Session:
 		data = cursor.fetchall()
 		for row in data:
 			if(row[1]!=''):
-				submissions = [unicode(p).strip().lower() for p in row[1].split(',')]
+				id = unicode(row[0]).strip()
+				submissions = {unicode(p).strip().lower():{} for p in row[1].split(',')}
 				s_id = unicode(row[0]).strip()
 				date = unicode(row[2]).strip()
 				t = unicode(row[3]).strip()
@@ -38,9 +39,8 @@ class Session:
 				room = unicode(row[4]).strip()
 				personas = unicode(row[5]).strip()
 				venue = unicode(row[6]).strip()
-				title = unicode(row[7]).strip()
-				for submission in submissions:				
-					self.sessions[submission]={'date': date, 'time': t, 'room': room, 'personas': personas, 'venue':venue, 'title':title}
+				title = unicode(row[8]).strip()				
+				self.sessions[id]={'date': date, 'time': t, 'room': room, 'personas': personas, 'venue':venue, 's_title':title, 'submissions':submissions}
 
 
 	def get_sessions(self):
