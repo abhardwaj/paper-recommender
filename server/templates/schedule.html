@@ -407,7 +407,8 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 {% for id, paper in papers.items %}
 	<ul class="all {{paper.date}} t{{paper.time|slice:":2"}} {{paper.venue}} {{paper.personas|slice:":2"}}" style="border-bottom:1px solid #ccc; padding:10px;" onclick='load_paper("{{id}}")'>
 	<li class="strong">{{paper.title}}</li>
-	<li>{{paper.date}}, {{paper.time}}</li>
+	<li>Day: {{paper.date}}, Time: {{paper.time}}, Room: {{paper.room}}. Venue: {{paper.venue}}, Persona: {{paper.personas}}</li>
+	<li>{{paper.c_and_b}}</li>
 	<li class="blue">
 		{% for author in paper.authors %}
 			{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
