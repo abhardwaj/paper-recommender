@@ -400,7 +400,10 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		</td>
 	</tr>
 </table>
-<div id="papers" style="margin-top:10px;cursor:pointer; padding:0px;">
+<br />
+<br />
+<h3><span class="gray">Papers matching the criteria</span></h3> <br />
+<div id="papers" style="margin-top:10px;cursor:pointer; padding:0px; border:1px solid #ccc;">
 {% for id, paper in papers.items %}
 	<ul class="all {{paper.date}} t{{paper.time|slice:":2"}} {{paper.venue}} {{paper.personas|slice:":2"}}" style="border-bottom:1px solid #ccc; padding:10px;" onclick='load_paper("{{id}}")'>
 	<li class="strong">{{paper.title}}</li>

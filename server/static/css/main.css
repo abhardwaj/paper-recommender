@@ -269,6 +269,11 @@ table.dataTable tbody tr:hover{
 	background-color: #D7ECFA;
 }
 
+
+#papers ul:hover {
+	background-color: #D7ECFA;
+}
+
 #table-input {
 	display: block;
 	height: 200px;
