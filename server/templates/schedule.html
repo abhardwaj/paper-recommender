@@ -111,10 +111,11 @@ ul.dialog-list:hover {
 			"sWidth": "100%",
 			"aaSorting": [[0,'asc'], [1,'asc']],
 			"aoColumns": [                 
-				{"sWidth": "10%"},
-				{"sWidth": "10%"},
-				{"sWidth": "10%"},
-				{"sWidth": "70%"}
+				{"sWidth": "12%"},
+				{"sWidth": "12%"},
+				{"sWidth": "12%"},
+				{"sWidth": "14%"},
+				{"sWidth": "50%"}
 			]
 			
 		});
@@ -280,6 +281,7 @@ ul.dialog-list:hover {
 			<th>Day</th>
 			<th>Time</th>
 			<th>Room</th>
+			<th>Venue</th>
 			<th>Sessions matching the criteria</th>
 		</tr>
 	</thead>
@@ -294,6 +296,9 @@ ul.dialog-list:hover {
 			</td>
 			<td>
 				 {{session.room}}
+			</td>
+			<td>
+				 {{session.venue}}
 			</td>
 			<td>
 			<ul>
