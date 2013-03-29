@@ -9,6 +9,25 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 {% block content %}
 <style>
 
+#tabs{
+	margin:0;
+	padding:0;
+	border:none;
+}
+
+#tabs {
+}
+
+#tabs ul.ui-tabs-nav{
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-radius: 0px;
+	padding-left: 10px;
+	background: #fff;
+	margin-bottom: 20px;
+}
+
 #schedule{
 	border-spacing: 0px;
 	border: 1px solid #ccc;
@@ -61,7 +80,11 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 	$(document).ready(function(){	
 		
-
+		$("#tabs").tabs()
+		$("#tabs").tabs("select", 0);
+		$("#tabs").removeClass('ui-widget');
+		$("#tabs").removeClass('ui-widget-header');
+		$("#tabs").removeClass('ui-widget-content');
 		var papers = $('#papers').dataTable({
 			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 			"bPaginate": false,
@@ -151,6 +174,12 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 </script>
 
 <div id="content">
+<div id="tabs">
+<ul>
+    <li><a href="#paper-view">Paper View</a></li>
+    <li><a href="#session-view">Session View</a></li>
+ </ul>
+<div id="paper-view">
 <h3><span class="gray">Schedule Filter Options</span> <a class="button filter" href="#" style="font-size:small; display:none;">SHOW</a> <a class="button filter" href="#" style="font-size:small;">HIDE</a></h3> <br />
 <div id ="schedule_filter">
 <span class="strong">Please check the filter options below</span><br />
@@ -228,7 +257,6 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 </div>
 <br />
 <br />
-
 <table id="papers">
 	<thead>
 		<tr>
@@ -256,7 +284,10 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			</tr>
 		{% endfor %}	
 	</tbody>
-</table>	
-
+</table>
+</div>
+<div id="session-view">
+</div>
+</div>
 </div>
 {% endblock %}
