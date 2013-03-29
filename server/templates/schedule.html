@@ -1,0 +1,420 @@
+{% extends "base.html" %}
+{% block headlink-right %}
+Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
+<a class="button" href="/index">Home</a>
+<a class="button" href="/users">Authors List</a>
+<a class="button" href="/schedule">Schedule</a>
+<a class="button" href="/logout">Log out!</a>
+{% endblock %}
+{% block content %}
+<style>
+
+#schedule{
+	border-spacing: 0px;
+	border: 1px solid #ccc;
+}
+#schedule td{
+	padding: 0;
+	margin: 0;
+	text-align: left;
+	vertical-align: top;
+	border-top: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+
+
+#schedule td table{
+	padding: 0;
+	margin: 0;
+	text-align: left;
+	vertical-align: top;
+}
+
+#schedule td table tr td{
+	padding: 5px;
+	text-align: left;
+	vertical-align: top;
+	border:none;
+}
+
+#schedule th{
+	padding: 5px;
+	text-align: left;
+	vertical-align: top;
+	border-right: 1px solid #ccc;
+}
+</style>
+<script type="text/javascript">
+
+	function load_paper (paper_id) {
+		window.location.href = "/paper/" + paper_id;
+	}
+
+	$(document).ready(function(){	
+		$('.all').hide()
+
+	  	$('input:checkbox').live('change', function(){
+	  		$('.all').hide()
+	  		var days_checked = $("input:checked.day")
+	  		var times_checked = $("input:checked.time")
+	  		var venues_checked = $("input:checked.venue")
+	  		var personas_checked = $("input:checked.persona")
+	  		var day_classes = ''
+		    for(var i=0; i< days_checked.length; i++){
+		    	var c = days_checked[i].title		    	
+		    	day_classes  += '.'+c + ','    	
+		    }
+		    day_classes = day_classes.substr(0, day_classes.length-1)
+		    console.log(day_classes)
+		    time_classes=''
+		    for(var i=0; i< times_checked.length; i++){
+		    	var c = times_checked[i].title
+		    	time_classes += '.'+c + ',';
+		    }
+
+		    time_classes = time_classes.substr(0, time_classes.length-1)
+		    console.log(time_classes)
+		    personas_classes = '';
+		    for(var i=0; i< personas_checked.length; i++){
+		    	var c = personas_checked[i].title
+		    	personas_classes +=  '.' + c + ',';
+		    }
+
+		    personas_classes = personas_classes.substr(0, personas_classes.length-1)
+		    console.log(personas_classes)
+		    venues_classes = ''
+		    for(var i=0; i< venues_checked.length; i++){
+		    	var c = venues_checked[i].title
+		    	venues_classes += '.' + c + ',';
+		    }
+
+		    venues_classes = venues_classes.substr(0, venues_classes.length-1)
+		    console.log(venues_classes)
+
+
+		    var select_class = null
+		    if(day_classes != ''){
+		    	select_class = $(day_classes)
+		    }
+		    
+		    if(time_classes!=''){
+		    	if(select_class == null){
+		    		select_class = $(time_classes)
+		    	}else{
+		    		select_class = select_class.filter(time_classes)
+		    	}
+		    }
+
+		    if(personas_classes!=''){
+		    	if(select_class == null){
+		    		select_class = $(personas_classes)
+		    	}else{
+		    		select_class = select_class.filter(personas_classes)
+		    	}
+		    }
+
+		    if(venues_classes!=''){
+		    	if(select_class == null){
+		    		select_class = $(venues_classes)
+		    	}else{
+		    		select_class = select_class.filter(venues_classes)
+		    	}
+		    }
+		  
+		   select_class.show();
+		    
+		});
+
+	  	
+	  		
+	});
+
+	
+
+
+</script>
+
+<div id="content">
+<h3><span class="gray">Schedule</span></h3> <br />
+<span class="strong">Please check all which apply</span><br />
+<span class="gray">For all checked selections - first logical OR is applied within each column and then logical AND is applied across the columns.</span>
+<br />
+<table id="schedule" style="width:100%">
+	<tr>
+		<th>
+			Day
+		</th>
+		<th>
+			Time
+		</th>
+		<th>
+			Persona
+		</th>
+		<th>
+			Venue
+		</th>
+	</tr>
+	<tr>
+		<td>
+			<table>
+			<tr>
+			<td>
+				<span class="gray">Monday</span>
+			</td>
+			<td> 
+				<input type="checkbox" title="Monday" class="day"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Tuesday</span>
+			</td>
+			<td>
+				<input type="checkbox" title="Tuesday" class="day"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Wednesday</span>
+			</td>
+			<td>
+				<input type="checkbox" title="Wednesday" class="day"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Thursday</span>
+			</td>
+			<td>
+				<input type="checkbox" title="Thursday" class="day"/>
+			</td>
+			</tr>
+			</table>
+		</td>
+		<td>
+			<table>
+			<tr>
+			<td>
+				<span class="gray">09:00-10:20</span>
+			</td>
+			<td> 
+				<input type="checkbox" title="t09" class="time"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">11:00-12:20</span>
+			</td>
+			<td>
+				<input type="checkbox" title="t11" class="time"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">14:00-15:20</span>
+			</td>
+			<td>
+				<input type="checkbox" title="t14" class="time"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">16:00-17:20</span>
+			</td>
+			<td>
+				<input type="checkbox" title="t16" class="time"/>
+			</td>
+			</tr>
+			</table>
+			
+		</td>
+		<td>
+			<table>
+			<tr>
+			<td>
+				<span class="gray">Online social communities &amp; crowdsourcing</span>
+			</td>
+			<td> 
+				<input type="checkbox" title="On" class="persona"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Design</span>
+			</td>
+			<td>
+				<input type="checkbox" title="De" class="persona"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">UIST</span>
+			</td>
+			<td>
+				<input type="checkbox" title="UI" class="persona"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Visualization</span>
+			</td>
+			<td>
+				<input type="checkbox" title="Vi" class="persona"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Engagement</span>
+			</td>
+			<td> 
+				<input type="checkbox" title="En" class="persona"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">IO</span>
+			</td>
+			<td>
+				<input type="checkbox" title="IO" class="persona"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">For a cause</span>
+			</td>
+			<td>
+				<input type="checkbox" title="fo" class="persona"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Misc</span>
+			</td>
+			<td>
+				<input type="checkbox" title="Mi" class="persona"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Security and privacy</span>
+			</td>
+			<td>
+				<input type="checkbox" title="Se" class="persona"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Ethics</span>
+			</td>
+			<td>
+				<input type="checkbox" title="Et" class="persona"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Kids and learning </span>
+			</td>
+			<td>
+				<input type="checkbox" title="Ki" class="persona"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Health</span>
+			</td>
+			<td>
+				<input type="checkbox" title="He" class="persona"/>
+			</td>
+			</tr>
+			</table>
+			
+		</td>
+		<td>
+			<table>
+			<tr>
+			<td>
+				<span class="gray">Course</span>
+			</td>
+			<td> 
+				<input type="checkbox" title="course" class="venue"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Panel</span>
+			</td>
+			<td>
+				<input type="checkbox" title="panel" class="venue"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">SIG</span>
+			</td>
+			<td>
+				<input type="checkbox" title="SIG" class="venue"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Alt CHI</span>
+			</td>
+			<td>
+				<input type="checkbox" title="altchi" class="venue"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Case Study</span>
+			</td>
+			<td>
+				<input type="checkbox" title="casestudy" class="venue"/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+				<span class="gray">Paper</span>
+			</td>
+			<td>
+				<input type="checkbox" title="paper" class="venue"/>
+			</td>
+			</tr>
+				<tr>
+			<td>
+				<span class="gray">Special</span>
+			</td>
+			<td>
+				<input type="checkbox" title="special" class="venue"/>
+			</td>
+			</tr>
+
+			<tr>
+			<td>
+				<span class="gray">BOF</span>
+			</td>
+			<td>
+				<input type="checkbox" title="bof" class="venue"/>
+			</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<div id="papers" style="margin-top:10px;cursor:pointer; padding:0px;">
+{% for id, paper in papers.items %}
+	<ul class="all {{paper.date}} t{{paper.time|slice:":2"}} {{paper.venue}} {{paper.personas|slice:":2"}}" style="border-bottom:1px solid #ccc; padding:10px;" onclick='load_paper("{{id}}")'>
+	<li class="strong">{{paper.title}}</li>
+	<li>{{paper.date}}, {{paper.time}}</li>
+	<li class="blue">
+		{% for author in paper.authors %}
+			{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
+		{% endfor %}
+	</li>	
+	<li class='gray'>
+	{{paper.keywords}}
+	</li>
+	</ul>
+{% endfor %}		
+</div>
+</div>
+{% endblock %}
