@@ -3,6 +3,7 @@
 Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <a class="button" href="/index">Home</a>
 <a class="button" href="/users">Authors List</a>
+<a class="button" href="/schedule">Schedule</a>
 <a class="button" href="/logout">Log out!</a>
 {% endblock %}
 {% block content %}
@@ -42,7 +43,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	</span>
 	<hr />
 	<ul>			 	
-	 	<li>{{paper.c_and_b}}</li>		
+	 	<li>{{paper.abstract}}</li>		
 		<li class='gray'>
 		{{paper.keywords}}
 		</li>

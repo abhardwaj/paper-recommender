@@ -9,6 +9,7 @@ from django.core.context_processors import csrf
 from algorithm.recommend import *
 from db.prefs import *
 from db.entity import *
+from db.session import *
 
 
 '''
@@ -20,6 +21,7 @@ from db.entity import *
 r = Recommender()
 e = Entity()
 p = Prefs()
+s = Session()
 
 
 
@@ -135,4 +137,11 @@ def paper(request, paper_id):
 	return render_to_response("paper.html", {'login': p.author_likes[user]['name'], 'id':paper_id, 'paper': paper, 'recs':recs})
 
 
+
+def schedule(request):	
+	user = request.session[SESSION_KEY]
+	papers = s.sessions
+	for paper in papers:
+		papers[paper].update(e.entities[paper])
+	return render_to_response("schedule.html", {'login': p.author_likes[user]['name'], 'papers':papers})
 

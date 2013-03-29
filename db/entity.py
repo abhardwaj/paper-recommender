@@ -25,7 +25,7 @@ class Entity:
 
 	def __load__(self):
 		cursor = connection.cursor()
-		cursor.execute("SELECT id , authors, title, cAndB, keywords FROM entity;")
+		cursor.execute("SELECT id , authors, title, cAndB, keywords, abstract FROM entity;")
 		data = cursor.fetchall()
 		for row in data:
 			if(row[0]!=''):
@@ -33,7 +33,8 @@ class Entity:
 				title = unicode(row[2]).strip('"')
 				c_and_b = unicode(row[3]).strip('"')
 				keywords = unicode(row[4]).strip('"')
-				self.entities[row[0]]={'authors': authors, 'title': title, 'c_and_b': c_and_b, 'keywords': keywords}
+				abstract = unicode(row[5]).strip('"')
+				self.entities[row[0]]={'authors': authors, 'title': title, 'c_and_b': c_and_b, 'keywords': keywords, 'abstract':abstract}
 
 
 	def get_entities(self):
