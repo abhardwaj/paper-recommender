@@ -262,6 +262,13 @@ table.dataTable tbody tr:hover{
 	}
 
 
+#likes ul {
+	background: #f0f4f9;
+}
+#likes ul:hover {
+	background-color: #D7ECFA;
+}
+
 #table-input {
 	display: block;
 	height: 200px;
