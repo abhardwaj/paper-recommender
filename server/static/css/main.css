@@ -336,6 +336,10 @@ table.dataTable tbody tr:hover{
 }
 
 
+.paper-container:hover{
+	background-color: #fff7ce;
+}
+
 .clickable:hover{
 	background-color: #fff7ce;
 	cursor: pointer;
