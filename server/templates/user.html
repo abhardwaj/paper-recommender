@@ -51,9 +51,12 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <div id="content">
 <h3><span class="gray"></span>
 <h3 class="click-subtitle" id="likes_toggle"><span class="arrow">▾</span> Papers {{user}} liked.</h3>	
-<div id="likes" class="form" style="margin-top:0px;cursor:pointer; padding:0px;">
+<div id="likes">
 {% for like in likes %}
-	<ul style="border-bottom:1px solid #ccc; padding:10px;" onclick='load_paper("{{like.id}}")'>
+	<table class="likes-container">
+	<tr class="clickable">
+	<td class="content" onclick='load_paper("{{like.id}}")'>	
+	<ul>
 
 	<li class="strong">{{like.title}}</li>
 	<li>{{like.c_and_b}}</li>
@@ -66,6 +69,13 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	{{like.keywords}}
 	</li>
 	</ul>
+	</td>
+	<td class="metadata">
+		<div class="ui-state-default ui-corner-all" title="{{id}}">
+				<span class="ui-icon ui-icon-star"></span>
+		</div>
+	</td>
+	</tr></table>
 {% endfor %}		
 </div>
 	
