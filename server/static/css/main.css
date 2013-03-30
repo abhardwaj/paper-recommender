@@ -329,7 +329,7 @@ table.dataTable tbody tr:hover{
 .paper-container{
 	width:100%;
 	border-spacing: 0;
-	border-top:1px solid #ccc;
+	border-bottom:1px solid #ccc;
 	background-color: #fff;
 	padding:0;
 	margin:0;
