@@ -126,6 +126,21 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				}
 
 			});
+
+		$('.paper-container').click(function(event){
+			event.stopPropagation();
+		});
+
+		
+		$('.ui-state-default').hover(
+			function(){ $(this).addClass('ui-state-hover'); }, 
+			function(){ $(this).removeClass('ui-state-hover'); }
+		);
+		$('.ui-state-default').click(function(event){ 
+			$(this).toggleClass('ui-state-active'); 
+		});
+	
+	
 	
 	  		
 });
@@ -270,7 +285,8 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	</ul>
 	<div id="{{s_id}}"  style="display:none;">		
 	{% for id, paper in session.submissions.items %}
-		<table class="clickable-paper" onclick='load_paper("{{id}}")'><tr><td class="content">		
+		<table class="paper-container"><tr>
+		<td class="content clickable" onclick='load_paper("{{id}}")'>		
 		<ul>
 		<li class="strong">{{paper.title}}</li>
 		<li>{{paper.c_and_b}}</li>
@@ -281,7 +297,12 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		</li>	
 		<li class='gray'>{{paper.keywords}}</li>
 		</ul>
-		</td><td class="metadata"></td>
+		</td>
+		<td class="metadata">
+			<div class="ui-state-default ui-corner-all" title="{{id}}">
+				<span class="ui-icon ui-icon-star"></span>
+			</div>
+		</td>
 		</tr></table>			
 	{% endfor %}
 	</div>

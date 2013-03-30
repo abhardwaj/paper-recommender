@@ -51,7 +51,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	<h3 class="click-subtitle" id="recs_toggle"><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
 	<div id="recs">		
 		{% for rec in recs %}
-			<table class="clickable-paper" onclick='load_paper("{{rec.id}}")'><tr><td class="content">	
+			<table class="paper-container"><tr><td class="content clickable" onclick='load_paper("{{id}}")'>	
 			 <ul>
 			 	<li class="strong">{{rec.title}}</li>
 			 	<li>{{rec.c_and_b}}</li>

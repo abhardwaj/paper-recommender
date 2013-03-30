@@ -286,6 +286,8 @@ table.dataTable tbody tr:hover{
 
 .metadata{
 	width:50px;
+	vertical-align: middle;
+
 }
 
 .all {
@@ -313,18 +315,34 @@ table.dataTable tbody tr:hover{
 }
 
 
-.clickable-paper:hover{
-	background-color: #fff7ce;
-	cursor: pointer;
+.ui-state-default, .ui-state-active{
+	margin:0 auto;
+	max-width:20px;
+	max-height: 20px;
+	padding:8px;
 }
 
-.clickable-paper{
+.ui-icon{
+	margin:0 auto;
+}
+
+.paper-container{
 	width:100%;
 	border-spacing: 0;
 	border-top:1px solid #ccc;
 	background-color: #fff;
 	padding:0;
 	margin:0;
+}
+
+
+.clickable:hover{
+	background-color: #fff7ce;
+	cursor: pointer;
+}
+
+.clickable{	
+	background-color: #fff;
 }
 
 
