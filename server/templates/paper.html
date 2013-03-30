@@ -61,7 +61,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		{% for rec in recs %}
 			<table class="paper-container">
 			<tr class="clickable">
-			<td class="content" onclick='load_paper("{{id}}")'>	
+			<td class="content" onclick='load_paper("{{rec.id}}")'>	
 			 <ul>
 			 	<li class="strong">{{rec.title}}</li>
 			 	<li>{{rec.c_and_b}}</li>
