@@ -266,11 +266,12 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	<div class="all {{session.date}} t{{session.time|slice:":2"}} {{session.venue}} {{session.personas|slice:":2"}}" title="{{s_id}}">	
 	<ul style="border-top:1px solid #ccc; padding:10px;">	
 		<li class="strong"><span class="arrow">▸</span> {{session.s_title}}</li>
-		<li class="gray">Room: {{session.room}}</li>
+		<li class="gray">Room: {{session.room}}, Venue: {{session.venue}}, Persona: {{session.personas}}</li>
 	</ul>
 	<div id="{{s_id}}"  style="display:none;">		
-	{% for id, paper in session.submissions.items %}		
-		<ul class='clickable-paper' style="border-top:1px solid #ccc; padding:10px;" onclick='load_paper("{{id}}")'>
+	{% for id, paper in session.submissions.items %}
+		<table class="clickable-paper" onclick='load_paper("{{id}}")'><tr><td class="content">		
+		<ul>
 		<li class="strong">{{paper.title}}</li>
 		<li>{{paper.c_and_b}}</li>
 		<li class="blue">
@@ -279,7 +280,9 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			{% endfor %}
 		</li>	
 		<li class='gray'>{{paper.keywords}}</li>
-		</ul>			
+		</ul>
+		</td><td class="metadata"></td>
+		</tr></table>			
 	{% endfor %}
 	</div>
 	</div>

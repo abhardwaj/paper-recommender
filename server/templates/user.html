@@ -68,8 +68,9 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <h3 class="click-subtitle" id="recs_toggle"><span class="arrow">▾</span> Papers recommended for {{user}}.</h3>
 	<div id="recs">		
 		{% for rec in recs %}
-			<ul class='clickable-paper' style="border-top:1px solid #ccc; padding:10px;" onclick='load_paper("{{rec.id}}")'>
-			 	<li class="strong">{{rec.title}}</li>
+			<table class="clickable-paper" onclick='load_paper("{{rec.id}}")'><tr><td class="content">	
+			 <ul>
+			  	<li class="strong">{{rec.title}}</li>
 			 	<li>{{rec.c_and_b}}</li>
 				<li class="blue">
 				{% for author in rec.authors %}
@@ -79,7 +80,9 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				<li class='gray'>
 				{{rec.keywords}}
 				</li>
-			</ul>			
+			</ul>
+			</td><td class="metadata"></td>
+			</tr></table>				
 		{% endfor %}		
 	</div>
 </div>
