@@ -49,6 +49,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	  		var times_checked = $("input:checked.time")
 	  		var venues_checked = $("input:checked.venue")
 	  		var personas_checked = $("input:checked.persona")
+			var star = $("input:checked.fav")
 	  		var day_classes = ''
 		    for(var i=0; i< days_checked.length; i++){
 		    	var c = days_checked[i].title		    	
@@ -100,8 +101,20 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		    }
 		   $('.all').hide();
 		   select_class.show();
+
 		    
-		});  
+		});
+
+
+		function highlight_starred(){		   
+	   		$( ".all" ).each(function(index) {
+				if($(this).find('.ui-state-active').length > 0){
+					$(this).css('background-color','#fff7ce');
+				}
+			});
+		   
+		}
+
 
 		
 		$('.all').click(
@@ -144,20 +157,21 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				$.get('/like/' + t.attr('title') +'/unlike', function(res) {
 				  if(res.status == 'ok'){
 				  	t.toggleClass('ui-state-active');
+				  	highlight_starred();
 				  }
 				});
 			}else{
 				$.get('/like/' + t.attr('title') +'/like', function(res) {
 				  if(res.status == 'ok'){
 				  	t.toggleClass('ui-state-active');
+				  	highlight_starred();
 				  }
 				});
 
 			}
 		});
 	
-	
-	  		
+		highlight_starred();	  		
 });
 
 	
@@ -241,6 +255,19 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <div class="col2">
 <h3><span class="gray">Filter Options</span></h3>
 <br />
+<h4>Venue</h4>	
+<div id ="venue_filter">				
+	<input type="checkbox" title="course" class="venue"/> <span class="gray">Course</span><br />	
+	<input type="checkbox" title="panel" class="venue"/> <span class="gray">Panel</span><br />		
+	<input type="checkbox" title="SIG" class="venue"/> <span class="gray">SIG</span><br />	
+	<input type="checkbox" title="altchi" class="venue"/> <span class="gray">Alt CHI</span><br />	
+
+	<input type="checkbox" title="casestudy" class="venue"/><span class="gray">Case Study</span><br />
+	<input type="checkbox" title="paper" class="venue"/><span class="gray">Paper</span><br />
+	<input type="checkbox" title="special" class="venue"/> <span class="gray">Special</span><br />		
+	<input type="checkbox" title="bof" class="venue"/> <span class="gray">BOF</span><br />
+</div>
+
 <h4>Day</h4>
 <div id ="day_filter">		
 	<input type="checkbox" title="Monday" class="day" /> <span class="gray">Monday</span><br />		
@@ -257,18 +284,6 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	<input type="checkbox" title="t16" class="time"/> <span class="gray">16:00-17:20</span><br />
 </div>
 
-<h4>Venue</h4>	
-<div id ="venue_filter">				
-	<input type="checkbox" title="course" class="venue"/> <span class="gray">Course</span><br />	
-	<input type="checkbox" title="panel" class="venue"/> <span class="gray">Panel</span><br />		
-	<input type="checkbox" title="SIG" class="venue"/> <span class="gray">SIG</span><br />	
-	<input type="checkbox" title="altchi" class="venue"/> <span class="gray">Alt CHI</span><br />	
-
-	<input type="checkbox" title="casestudy" class="venue"/><span class="gray">Case Study</span><br />
-	<input type="checkbox" title="paper" class="venue"/><span class="gray">Paper</span><br />
-	<input type="checkbox" title="special" class="venue"/> <span class="gray">Special</span><br />		
-	<input type="checkbox" title="bof" class="venue"/> <span class="gray">BOF</span><br />
-</div>
 
 <h4>Persona</h4>
 <div id ="persona_filter">
@@ -287,6 +302,8 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	<input type="checkbox" title="Ki" class="persona"/> <span class="gray">Kids and learning </span><br />	
 	<input type="checkbox" title="He" class="persona"/> <span class="gray">Health</span><br />	
 </div>
+
+
 
 </div>
 </div>
