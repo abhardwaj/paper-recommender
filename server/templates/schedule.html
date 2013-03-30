@@ -103,10 +103,18 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		    
 		});  
 
-		load_session = function(s_id){		
-			$('#'+s_id).toggle();			
-		};
+		
+		$('.all').click(
+			function(event){
+				$('#'+this.title).toggle();
+				if($('#'+this.title).is(':visible')){
+					$(this).find('.arrow').html('▾');
+				}else{
+					$(this).find('.arrow').html('▸');
+				}
+			});
 
+		
 
 		$('.click-subtitle').click(
 			function(event){
@@ -117,8 +125,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 					$(this).find('.arrow').html('▸');
 				}
 
-
-		});
+			});
 	
 	  		
 });
@@ -256,10 +263,10 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 <div class="hidden" style="display:none">
 	{% for s_id, session in sessions.items %}
-	<div class="all {{session.date}} t{{session.time|slice:":2"}} {{session.venue}} {{session.personas|slice:":2"}}" onclick='load_session("{{s_id}}")' title="{{s_id}}">	
+	<div class="all {{session.date}} t{{session.time|slice:":2"}} {{session.venue}} {{session.personas|slice:":2"}}" title="{{s_id}}">	
 	<ul style="border-top:1px solid #ccc; padding:10px;">	
-		<li class="strong">{{session.s_title}}</li>
-		<li class="gray">{{session.date}} {{session.time}}, {{session.room}}</li>
+		<li class="strong"><span class="arrow">▸</span> {{session.s_title}}</li>
+		<li class="gray">Room: {{session.room}}</li>
 	</ul>
 	<div id="{{s_id}}"  style="display:none;">		
 	{% for id, paper in session.submissions.items %}		
