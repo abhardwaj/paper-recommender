@@ -285,8 +285,8 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	</ul>
 	<div id="{{s_id}}"  style="display:none;">		
 	{% for id, paper in session.submissions.items %}
-		<table class="paper-container"><tr>
-		<td class="content clickable" onclick='load_paper("{{id}}")'>		
+		<table class="paper-container"><tr class="clickable">
+		<td class="content" onclick='load_paper("{{id}}")'>		
 		<ul>
 		<li class="strong">{{paper.title}}</li>
 		<li>{{paper.c_and_b}}</li>

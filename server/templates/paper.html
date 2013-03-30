@@ -26,6 +26,14 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			}
   		});
 
+  		$('.ui-state-default').hover(
+			function(){ $(this).addClass('ui-state-hover'); }, 
+			function(){ $(this).removeClass('ui-state-hover'); }
+		);
+		$('.ui-state-default').click(function(event){ 
+			$(this).toggleClass('ui-state-active'); 
+		});
+
 
 
 	});
@@ -51,7 +59,9 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	<h3 class="click-subtitle" id="recs_toggle"><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
 	<div id="recs">		
 		{% for rec in recs %}
-			<table class="paper-container"><tr><td class="content clickable" onclick='load_paper("{{id}}")'>	
+			<table class="paper-container">
+			<tr class="clickable">
+			<td class="content" onclick='load_paper("{{id}}")'>	
 			 <ul>
 			 	<li class="strong">{{rec.title}}</li>
 			 	<li>{{rec.c_and_b}}</li>
@@ -64,7 +74,13 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				{{rec.keywords}}
 				</li>
 			</ul>
-			</td><td class="metadata"></td>
+			</td>
+			<td class="metadata">
+				<div class="ui-state-default ui-corner-all" title="{{id}}">
+				<span class="ui-icon ui-icon-star"></span>
+				</div>
+			</td>
+
 			</tr></table>	
 		{% endfor %}
 	</div>	
