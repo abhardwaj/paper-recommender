@@ -9,81 +9,58 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 {% block content %}
 <style>
 
-
-.ui-widget, .ui-widget-content{
-	border-radius: 0px;
-	font-family: Calibri, "Gill Sans", "Gill Sans MT", "Lucida Grande", Lucida, Verdana, sans-serif;
-	font-size:10pt;
-	background: #fff !important;
-	
-
-}​
-.ui-corner-all, .ui-draggable, .ui-resizable{
-	box-shadow: 1px 0px 10px #666;
-	background: #fff !important;
-}
-.ui-dialog{
-	border-radius: 0px;
-	border:none;
-}​
-
-
-.ui-dialog-titlebar, .ui-widget-header{
-	border-radius: 0px;
-	border:none;
-	background: #3D7AA6 !important;
-	font-size:large;
-	color:#fff;
+.col1{
+	width:70%;
 }
 
+.col2{
+	width:25%;
+	float:right;
+	position: absolute;
+	top:20px;
+	right: 0;
+}
 
-ul.dialog-list {
+.all {
 	background: #f0f4f9;
-}
-
-ul.dialog-list:hover {
-	background-color: #D7ECFA;
 	cursor: pointer;
 }
 
+.all:hover {
+	background-color: #D7ECFA;
+}
 
-#schedule{
-	border-spacing: 0px;
+.click-title{
+	background-color:#3D7AA6;
+	border: 1px solid #f0f4f9;
+	display:block;
+	color: #fff;
+	padding: 10px;
+
+}
+
+
+.click-subtitle{
+	background-color:#a4e388;
 	border: 1px solid #ccc;
-}
-#schedule td{
-	padding: 5px;
-	margin: 0;
-	text-align: left;
-	vertical-align: top;
-	border-top: 1px solid #ccc;
-	border-right: 1px solid #ccc;
+	display:block;
+	color: #fff;
+	padding: 10px;
+	cursor: pointer;
+
 }
 
-
-
-
-#schedule td table{
-	padding: 0;
-	margin: 0;
-	text-align: left;
-	vertical-align: top;
-	width:100%;
+.clickable-paper:hover{
+	background-color: #fff7ce;
 }
 
-#schedule td table tr td{
-	text-align: left;
-	vertical-align: top;
-	border:none;
-	padding: 0px;
+.clickable-paper{
+	background-color: #fff;
 }
 
-#schedule th{
-	padding: 5px;
-	text-align: left;
-	vertical-align: top;
-	border-right: 1px solid #ccc;
-}
+
+
+
 </style>
 <script type="text/javascript">
 
@@ -92,36 +69,34 @@ ul.dialog-list:hover {
 	}
 
 
-	function load_session (s_id) {
-		$('#'+s_id).dialog(
-			{width: 800,
-			height:600,
-			resizable: false
-		});
-	}
+	
 
-	$(document).ready(function(){	
+	$(document).ready(function(){
+
+		var mon = $('.all').filter('.Monday');
+		mon.filter('.t09').appendTo("#Mondayt09");
+		mon.filter('.t11').appendTo("#Mondayt11");
+		mon.filter('.t14').appendTo("#Mondayt14");
+		mon.filter('.t16').appendTo("#Mondayt16");
 		
-		
 
+		var tue = $('.all').filter('.Tuesday');
+		tue.filter('.t09').appendTo("#Tuesdayt09");
+		tue.filter('.t11').appendTo("#Tuesdayt11");
+		tue.filter('.t14').appendTo("#Tuesdayt14");
+		tue.filter('.t16').appendTo("#Tuesdayt16");
 
-		var papers = $('#papers').dataTable({
-			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
-			"bPaginate": false,
-			"bFilter": true,
-			"bInfo": false,
-			"sWidth": "100%",
-			"aaSorting": [[0,'asc'], [1,'asc']],
-			"aoColumns": [                 
-				{"sWidth": "12%"},
-				{"sWidth": "12%"},
-				{"sWidth": "12%"},
-				{"sWidth": "14%"},
-				{"sWidth": "50%"}
-			]
-			
-		});
+		var wed = $('.all').filter('.Wednesday');
+		wed.filter('.t09').appendTo("#Wednesdayt09");
+		wed.filter('.t11').appendTo("#Wednesdayt11");
+		wed.filter('.t14').appendTo("#Wednesdayt14");
+		wed.filter('.t16').appendTo("#Wednesdayt16");
 
+		var thu = $('.all').filter('.Thursday');
+		thu.filter('.t09').appendTo("#Thursdayt09");
+		thu.filter('.t11').appendTo("#Thursdayt11");
+		thu.filter('.t14').appendTo("#Thursdayt14");
+		thu.filter('.t16').appendTo("#Thursdayt16");
 
 
 	  	$('input:checkbox').live('change', function(){
@@ -178,166 +153,185 @@ ul.dialog-list:hover {
 		    if(venues_classes!=''){		    	
 		    	select_class = select_class.filter(venues_classes)		    	
 		    }
-		   $('.all').hide()
+		   $('.all').hide();
 		   select_class.show();
 		    
+		});  
+
+		load_session = function(s_id){		
+			$('#'+s_id).toggle();			
+		};
+
+		$('.click-subtitle').click(
+			function(event){
+				var id = $(event.target);
+				$('#'+id.attr("title")).toggle();
+				if($('#'+id.attr("title")).is(':visible')){
+					id.find('.arrow').html('▾');
+				}else{
+					id.find('.arrow').html('▸');
+				}
+
+
 		});
-
-
-		
-		$(".filter").click(function(){
-    		$("#schedule_filter").toggle();
-    		$('.filter').toggle();
-  		});
-
-	  	
+	
 	  		
-	});
+});
 
 	
 
 
 </script>
 
-<div id="content">
-<h3><span class="gray">Schedule Filter Options</span> <a class="button filter" href="#" style="font-size:small; display:none;">SHOW</a> <a class="button filter" href="#" style="font-size:small;">HIDE</a></h3> <br />
-<div id ="schedule_filter">
-<span class="strong">Please check the filter options below</span><br />
-<span class="gray">For all checked selections - first logical OR is applied within each column and then logical AND is applied across the columns. For filtering on other options (like filter by session titles, keywords, room, etc.) you can put the search keywords in the search box.</span>
+<div id="content" style="padding:0; position:relative; padding-top:20px; box-shadow:none;">
+<div class="col1">
+<h3><span class="gray">CHI 2013 Program</span></h3>
 <br />
-<table id="schedule" style="width:100%">
-	<tr>
-		<th>
-			Day
-		</th>
-		<th>
-			Time
-		</th>
-		<th>
-			Persona
-		</th>
-		<th>
-			Venue
-		</th>
-	</tr>
-	<tr>
-		<td>
-		
-			<input type="checkbox" title="Monday" class="day"/> <span class="gray">Monday</span><br />		
-			<input type="checkbox" title="Tuesday" class="day"/> <span class="gray">Tuesday</span><br />		
-			<input type="checkbox" title="Wednesday" class="day"/> <span class="gray">Wednesday</span><br />	
-			<input type="checkbox" title="Thursday" class="day"/> <span class="gray">Thursday</span><br />
-		
-			
-		</td>
-	
-		<td>
-		
-			<input type="checkbox" title="t09" class="time"/> <span class="gray">09:00-10:20</span><br />		
-			<input type="checkbox" title="t11" class="time"/> <span class="gray">11:00-12:20</span><br />	
-			<input type="checkbox" title="t14" class="time"/> <span class="gray">14:00-15:20</span><br />		
-			<input type="checkbox" title="t16" class="time"/> <span class="gray">16:00-17:20</span><br />
-		
-		</td>
-	
-		<td>
-		
-			<input type="checkbox" title="On" class="persona"/> <span class="gray">Online social communities &amp; crowdsourcing</span><br />
-			<input type="checkbox" title="De" class="persona"/> <span class="gray">Design</span><br />			
-			<input type="checkbox" title="UI" class="persona"/> <span class="gray">UIST</span><br />		
-			<input type="checkbox" title="Vi" class="persona"/> <span class="gray">Visualization</span><br />
-				
-			<input type="checkbox" title="En" class="persona"/> <span class="gray">Engagement</span><br />	
-			<input type="checkbox" title="IO" class="persona"/> <span class="gray">IO</span><br />	
-			<input type="checkbox" title="fo" class="persona"/> <span class="gray">For a cause</span><br />	
-			<input type="checkbox" title="Mi" class="persona"/> <span class="gray">Misc</span><br />	
-			
-			<input type="checkbox" title="Se" class="persona"/> <span class="gray">Security and privacy</span><br />	
-			<input type="checkbox" title="Et" class="persona"/> <span class="gray">Ethics</span><br />		
-			<input type="checkbox" title="Ki" class="persona"/> <span class="gray">Kids and learning </span><br />	
-			<input type="checkbox" title="He" class="persona"/> <span class="gray">Health</span><br />	
-				
-		</td>
-	
-		<td>
-					
-			<input type="checkbox" title="course" class="venue"/> <span class="gray">Course</span><br />	
-			<input type="checkbox" title="panel" class="venue"/> <span class="gray">Panel</span><br />		
-			<input type="checkbox" title="SIG" class="venue"/> <span class="gray">SIG</span><br />	
-			<input type="checkbox" title="altchi" class="venue"/> <span class="gray">Alt CHI</span><br />	
-		
-			<input type="checkbox" title="casestudy" class="venue"/><span class="gray">Case Study</span><br />
-			<input type="checkbox" title="paper" class="venue"/><span class="gray">Paper</span><br />
-			<input type="checkbox" title="special" class="venue"/> <span class="gray">Special</span><br />		
-			<input type="checkbox" title="bof" class="venue"/> <span class="gray">BOF</span><br />
-					
-		</td>
-	</tr>
-</table>
+<div id="program">
+	<div id = "Monday">
+	<!--
+	<h3 class="click-subtitle">Monday, 09:00-10:20</h3> -->
+	<div id = "Mondayt09">
+	</div>
+	<h3 class="click-subtitle" title="Mondayt11"><span class="arrow">▾</span> Monday, 11:00-12:20</h3>
+	<div id = "Mondayt11">
+	</div>
+	<h3 class="click-subtitle" title="Mondayt14"><span class="arrow">▾</span> Monday, 14:00-15:20</h3>
+	<div id = "Mondayt14">
+	</div>
+	<h3 class="click-subtitle" title="Mondayt16"><span class="arrow">▾</span> Monday, 16:00-17:20</h3>
+	<div id = "Mondayt16">
+	</div>
+	</div>
+
+
+	<div id="Tuesday">
+	<h3 class="click-subtitle" title="Tuesdayt09"><span class="arrow">▾</span> Tuesday, 09:00-10:20</h3>
+	<div id = "Tuesdayt09">
+	</div>
+	<h3 class="click-subtitle" title="Tuesdayt11"><span class="arrow">▾</span> Tuesday, 11:00-12:20</h3>
+	<div id = "Tuesdayt11">
+	</div>
+	<h3 class="click-subtitle" title="Tuesdayt14"><span class="arrow">▾</span> Tuesday, 14:00-15:20</h3>
+	<div id = "Tuesdayt14">
+	</div>
+	<h3 class="click-subtitle" title="Tuesdayt16"><span class="arrow">▾</span> Tuesday, 16:00-17:20</h3>
+	<div id = "Tuesdayt16">
+	</div>
+	</div>
+
+
+	<div id = "Wednesday">
+	<h3 class="click-subtitle" title="Wednesdayt09"><span class="arrow">▾</span> Wednesday, 09:00-10:20</h3>
+	<div id = "Wednesdayt09">
+	</div>
+	<h3 class="click-subtitle" title="Wednesdayt11"><span class="arrow">▾</span> Wednesday, 11:00-12:20</h3>
+	<div id = "Wednesdayt11">
+	</div>
+	<h3 class="click-subtitle" title="Wednesdayt14"><span class="arrow">▾</span> Wednesday, 14:00-15:20</h3>
+	<div id = "Wednesdayt14">
+	</div>
+	<h3 class="click-subtitle" title="Wednesdayt16"><span class="arrow">▾</span> Wednesday, 16:00-17:20</h3>
+	<div id = "Wednesdayt16">
+	</div>
+	</div>
+
+
+
+	<div id = "Thursday">
+<!-- h3 class="click-subtitle">Thursday, 09:00-10:20</h3> -->
+	<div id = "Thursdayt09">
+	</div>
+	<h3 class="click-subtitle" title="Thursdayt11"><span class="arrow">▾</span> Thursday, 11:00-12:20</h3>
+	<div id = "Thursdayt11">
+	</div>
+	<h3 class="click-subtitle" title="Thursdayt14"><span class="arrow">▾</span> Thursday, 14:00-15:20</h3>
+	<div id = "Thursdayt14">
+	</div>
+	<h3 class="click-subtitle" title="Thursdayt16"><span class="arrow">▾</span> Thursday, 16:00-17:20</h3>
+	<div id = "Thursdayt16">
+	</div>
+	</div>
+
 </div>
+</div>
+
+<div class="col2">
+<h3><span class="gray">Filter Options</span></h3>
 <br />
-<br />
-<table id="papers">
-	<thead>
-		<tr>
-			<th>Day</th>
-			<th>Time</th>
-			<th>Room</th>
-			<th>Venue</th>
-			<th>Session Details</th>
-		</tr>
-	</thead>
-	<tbody>
+<h4>Day</h4>
+<div id ="day_filter">		
+	<input type="checkbox" title="Monday" class="day" /> <span class="gray">Monday</span><br />		
+	<input type="checkbox" title="Tuesday" class="day"/> <span class="gray">Tuesday</span><br />		
+	<input type="checkbox" title="Wednesday" class="day"/> <span class="gray">Wednesday</span><br />	
+	<input type="checkbox" title="Thursday" class="day"/> <span class="gray">Thursday</span><br />
+</div>
+
+<h4>Time</h4>
+<div id ="time_filter">
+	<input type="checkbox" title="t09" class="time"/> <span class="gray">09:00-10:20</span><br />		
+	<input type="checkbox" title="t11" class="time"/> <span class="gray">11:00-12:20</span><br />	
+	<input type="checkbox" title="t14" class="time"/> <span class="gray">14:00-15:20</span><br />		
+	<input type="checkbox" title="t16" class="time"/> <span class="gray">16:00-17:20</span><br />
+</div>
+
+<h4>Venue</h4>	
+<div id ="venue_filter">				
+	<input type="checkbox" title="course" class="venue"/> <span class="gray">Course</span><br />	
+	<input type="checkbox" title="panel" class="venue"/> <span class="gray">Panel</span><br />		
+	<input type="checkbox" title="SIG" class="venue"/> <span class="gray">SIG</span><br />	
+	<input type="checkbox" title="altchi" class="venue"/> <span class="gray">Alt CHI</span><br />	
+
+	<input type="checkbox" title="casestudy" class="venue"/><span class="gray">Case Study</span><br />
+	<input type="checkbox" title="paper" class="venue"/><span class="gray">Paper</span><br />
+	<input type="checkbox" title="special" class="venue"/> <span class="gray">Special</span><br />		
+	<input type="checkbox" title="bof" class="venue"/> <span class="gray">BOF</span><br />
+</div>
+
+<h4>Persona</h4>
+<div id ="persona_filter">
+	<input type="checkbox" title="On" class="persona"/> <span class="gray">Online social communities &amp; crowdsourcing</span><br />
+	<input type="checkbox" title="De" class="persona"/> <span class="gray">Design</span><br />			
+	<input type="checkbox" title="UI" class="persona"/> <span class="gray">UIST</span><br />		
+	<input type="checkbox" title="Vi" class="persona"/> <span class="gray">Visualization</span><br />
+		
+	<input type="checkbox" title="En" class="persona"/> <span class="gray">Engagement</span><br />	
+	<input type="checkbox" title="IO" class="persona"/> <span class="gray">IO</span><br />	
+	<input type="checkbox" title="fo" class="persona"/> <span class="gray">For a cause</span><br />	
+	<input type="checkbox" title="Mi" class="persona"/> <span class="gray">Misc</span><br />	
+
+	<input type="checkbox" title="Se" class="persona"/> <span class="gray">Security and privacy</span><br />	
+	<input type="checkbox" title="Et" class="persona"/> <span class="gray">Ethics</span><br />		
+	<input type="checkbox" title="Ki" class="persona"/> <span class="gray">Kids and learning </span><br />	
+	<input type="checkbox" title="He" class="persona"/> <span class="gray">Health</span><br />	
+</div>
+
+</div>
+</div>
+
+<div class="hidden" style="display:none">
 	{% for s_id, session in sessions.items %}
-		<tr class="all {{session.date}} t{{session.time|slice:":2"}} {{session.venue}} {{session.personas|slice:":2"}}" style="border-bottom:1px solid #ccc; padding:10px;" onclick='load_session("{{s_id}}")'>
-			<td>
-				{{session.date}}
-			</td>
-			<td>
-				 {{session.time}}
-			</td>
-			<td>
-				 {{session.room}}
-			</td>
-			<td>
-				 {{session.venue}}
-			</td>
-			<td>
-			<ul>
-			<li class="strong">{{session.s_title}}</li> 
-			<li class="gray">{{session.venue}}, {{session.personas}}</li>
-			</ul>
-			<div id="{{s_id}}" class="dialog" title="{{session.s_title}}" style="display:none;">
-			<ul class="form" style="margin-top:10px; padding:10px;">
-			<li class="strong">Session Schedule</li>
-			<li class="gray"><span class="strong">Date: </span>{{session.date}}</li>
-			<li class="gray"><span class="strong">Time: </span>{{session.time}}</li>
-			<li class="gray"><span class="strong">Room: </span>{{session.room}}</li>
-			<li class="gray"><span class="strong">Venue: </span>{{session.venue}}</li>
-			<li class="gray"><span class="strong">Persona: </span>{{session.personas}}</li>
-			</ul>
-			<br />
-			<h3><span class="gray">Papers in this session:</span></h3> 
-			<br />
-		{% for id, paper in session.submissions.items %}		
-			<ul class='dialog-list' style="border:1px solid #ccc; border-bottom:none; padding:10px;" onclick='load_paper("{{id}}")'>
-			<li class="strong">{{paper.title}}</li>
-			<li>{{paper.c_and_b}}</li>
-			<li class="blue">
-				{% for author in paper.authors %}
-					{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
-				{% endfor %}
-			</li>	
-			<li class='gray'>
-			{{paper.keywords}}
-			</li>
-			</ul>			
-		{% endfor %}
-		</div>
-		</td>	
-	</tr>
+	<div class="all {{session.date}} t{{session.time|slice:":2"}} {{session.venue}} {{session.personas|slice:":2"}}" onclick='load_session("{{s_id}}")' title="{{s_id}}">	
+	<ul style="border-top:1px solid #ccc; padding:10px;">	
+		<li class="strong">{{session.s_title}}</li>
+		<li class="gray">{{session.date}} {{session.time}}, {{session.room}}</li>
+	</ul>
+	<div id="{{s_id}}"  style="display:none;">		
+	{% for id, paper in session.submissions.items %}		
+		<ul class='clickable-paper' style="border-top:1px solid #ccc; padding:10px;" onclick='load_paper("{{id}}")'>
+		<li class="strong">{{paper.title}}</li>
+		<li>{{paper.c_and_b}}</li>
+		<li class="blue">
+			{% for author in paper.authors %}
+				{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
+			{% endfor %}
+		</li>	
+		<li class='gray'>{{paper.keywords}}</li>
+		</ul>			
 	{% endfor %}
-	</tbody>
-</table>
+	</div>
+	</div>
+{% endfor %}
 </div>
+
 {% endblock %}
