@@ -56,7 +56,9 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <div id="content">
 	<h3><span class="gray">Selected Paper</span></h3>
 	<div class="form" style="margin-top:10px; cursor:pointer;">
-	<span class="strong">{{paper.title}}</span><br />
+	<span class="strong">{{paper.title}}</span>{% if id in likes %}
+		 <span class="gray"> [You have starred this paper.]</span>
+		{%endif%}<br />
 	<span class="blue">
 		{% for author in paper.authors %}
 			{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
@@ -91,7 +93,11 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			</ul>
 			</td>
 			<td class="metadata">
-				<div class="ui-state-default ui-corner-all" title="{{rec.id}}">
+				{% if rec.id in likes %}
+					<div class="ui-state-default ui-corner-all ui-state-active" title="{{rec.id}}">
+				{% else %}
+					<div class="ui-state-default ui-corner-all" title="{{rec.id}}">
+				{%endif%}
 				<span class="ui-icon ui-icon-star"></span>
 				</div>
 			</td>

@@ -314,7 +314,11 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		</ul>
 		</td>
 		<td class="metadata">
-			<div class="ui-state-default ui-corner-all" title="{{id}}">
+			{% if id in likes %}
+				<div class="ui-state-default ui-corner-all ui-state-active" title="{{id}}">
+			{% else %}
+				<div class="ui-state-default ui-corner-all" title="{{id}}">
+			{%endif%}
 				<span class="ui-icon ui-icon-star"></span>
 			</div>
 		</td>
