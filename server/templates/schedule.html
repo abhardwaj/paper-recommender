@@ -279,7 +279,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <div class="hidden" style="display:none">
 	{% for s_id, session in sessions.items %}
 	<div class="all {{session.date}} t{{session.time|slice:":2"}} {{session.venue}} {{session.personas|slice:":2"}}" title="{{s_id}}">	
-	<ul style="border-top:1px solid #ccc; padding:10px;">	
+	<ul style="border-bottom:1px solid #ccc; padding:10px;">	
 		<li class="strong"><span class="arrow">▸</span> {{session.s_title}}</li>
 		<li class="gray">Room: {{session.room}}, Venue: {{session.venue}}, Persona: {{session.personas}}</li>
 	</ul>
