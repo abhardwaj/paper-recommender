@@ -7,6 +7,8 @@ urlpatterns = patterns('',
 	url(r'^schedule', 'server.views.schedule'),
     url(r'^user/(\w+)$', 'server.views.user'),
     url(r'^paper/(\w+)$', 'server.views.paper'),
+    url(r'^like/(\w+)/(\w+)$', 'server.views.like'),
+
 
     url(r'^login', 'server.views.login'),
 	url(r'^logout', 'server.views.logout'),
