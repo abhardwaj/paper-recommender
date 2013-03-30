@@ -107,14 +107,14 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			$('#'+s_id).toggle();			
 		};
 
+
 		$('.click-subtitle').click(
 			function(event){
-				var id = $(event.target);
-				$('#'+id.attr("title")).toggle();
-				if($('#'+id.attr("title")).is(':visible')){
-					id.find('.arrow').html('▾');
+				$('#'+this.title).toggle();
+				if($('#'+this.title).is(':visible')){
+					$(this).find('.arrow').html('▾');
 				}else{
-					id.find('.arrow').html('▸');
+					$(this).find('.arrow').html('▸');
 				}
 
 
