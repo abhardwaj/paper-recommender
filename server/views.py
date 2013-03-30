@@ -83,7 +83,7 @@ def index(request):
 			l.update(e.entities[id])
 			likes.append(l)
 		#print recs
-		return render_to_response("index.html", {'login': p.author_likes[user]['name'], 'recs':recs, 'likes':likes})
+		return render_to_response("index.html", {'login': p.author_likes[user]['name'], 'recs':recs, 'user_likes':likes})
 	except KeyError:
 		return HttpResponseRedirect('login')
 
@@ -117,7 +117,7 @@ def user(request, author_id):
 			l.update(e.entities[id])
 			likes.append(l)
 		#print recs
-		return render_to_response("user.html", {'login': p.author_likes[login]['name'], 'user': p.author_likes[user]['name'], 'recs':recs, 'likes':likes})
+		return render_to_response("user.html", {'login': p.author_likes[login]['name'], 'user': p.author_likes[user]['name'], 'recs':recs, 'user_likes':likes, 'likes':p.author_likes[login]['likes']})
 	except KeyError:
 		return HttpResponseRedirect('login')	
 
@@ -134,7 +134,7 @@ def paper(request, paper_id):
 		rec['id']=id
 		rec.update(e.entities[id])
 		recs.append(rec)
-	return render_to_response("paper.html", {'login': p.author_likes[user]['name'], 'id':paper_id, 'paper': paper, 'recs':recs})
+	return render_to_response("paper.html", {'login': p.author_likes[user]['name'], 'id':paper_id, 'paper': paper, 'recs':recs, 'likes':p.author_likes[user]['likes']})
 
 
 
@@ -156,5 +156,5 @@ def schedule(request):
 	for session in sessions:
 		for submission in sessions[session]['submissions']:
 			sessions[session]['submissions'][submission].update(e.entities[submission])
-	return render_to_response("schedule.html", {'login': p.author_likes[user]['name'], 'sessions':sessions})
+	return render_to_response("schedule.html", {'login': p.author_likes[user]['name'], 'sessions':sessions, 'likes':p.author_likes[user]['likes']})
 

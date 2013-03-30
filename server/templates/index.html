@@ -72,7 +72,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <div id="content">
 <h3 class="click-subtitle" id="likes_toggle"><span class="arrow">▾</span> Papers you liked.</h3>	
 <div id="likes" class="form" style="margin-top:0px;cursor:pointer; padding:0px;">
-{% for like in likes %}
+{% for like in user_likes %}
 	<table class="likes-container">
 	<tr class="clickable">
 	<td class="content" onclick='load_paper("{{like.id}}")'>

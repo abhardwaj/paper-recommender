@@ -69,7 +69,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <h3><span class="gray"></span>
 <h3 class="click-subtitle" id="likes_toggle"><span class="arrow">▾</span> Papers {{user}} liked.</h3>	
 <div id="likes">
-{% for like in likes %}
+{% for like in user_likes %}
 	<table class="likes-container">
 	<tr class="clickable">
 	<td class="content" onclick='load_paper("{{like.id}}")'>	
@@ -88,7 +88,11 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	</ul>
 	</td>
 	<td class="metadata">
-		<div class="ui-state-default ui-corner-all" title="{{like.id}}">
+		{% if like.id in likes %}
+			<div class="ui-state-default ui-corner-all ui-state-active" title="{{like.id}}">
+		{% else %}
+			<div class="ui-state-default ui-corner-all" title="{{like.id}}">
+		{%endif%}
 				<span class="ui-icon ui-icon-star"></span>
 		</div>
 	</td>
@@ -120,7 +124,11 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			</ul>
 			</td>
 			<td class="metadata">
-				<div class="ui-state-default ui-corner-all" title="{{rec.id}}">
+				{% if rec.id in likes %}
+					<div class="ui-state-default ui-corner-all ui-state-active" title="{{rec.id}}">
+				{% else %}
+					<div class="ui-state-default ui-corner-all" title="{{rec.id}}">
+				{%endif%}
 				<span class="ui-icon ui-icon-star"></span>
 				</div>
 			</td>
