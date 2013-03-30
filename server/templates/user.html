@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block headlink-right %}
 Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
-<a class="button" href="/index">Home</a>
-<a class="button" href="/users">Authors List</a>
+<a class="button" href="/index">My CHI</a>
+<a class="button" href="/users">Find People</a>
 <a class="button" href="/schedule">Schedule</a>
 <a class="button" href="/logout">Log out!</a>
 {% endblock %}
@@ -32,23 +32,31 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			
 		});
 
-		$(".likes").click(function(){
+		$("#likes_toggle").click(function(){
     		$("#likes").toggle();
-    		$('.likes').toggle();
+    		if($('#likes').is(':visible')){
+					$("#likes_toggle").find('.arrow').html('▾');
+			}else{
+					$("#likes_toggle").find('.arrow').html('▸');
+			}
   		});
 
 
-  		$(".recs").click(function(){
+  		$("#recs_toggle").click(function(){
     		$("#recs_container").toggle();
-    		$('.recs').toggle();
+    		if($('#recs_container').is(':visible')){
+					$("#recs_toggle").find('.arrow').html('▾');
+			}else{
+					$("#recs_toggle").find('.arrow').html('▸');
+			}
   		});
 
 	});
 </script>
 <div id="content">
-<h3><span class="gray">Papers {{user}} Liked</span> <a class="likes button" href="#" style="font-size:small; display:none;">SHOW</a> <a class="likes button" href="#" style="font-size:small;">HIDE</a></h3>
-	
-<div id="likes" class="form" style="margin-top:10px;cursor:pointer; padding:0px;">
+<h3><span class="gray"></span>
+<h3 class="click-subtitle" id="likes_toggle"><span class="arrow">▾</span> Papers {{user}} liked.</h3>	
+<div id="likes" class="form" style="margin-top:0px;cursor:pointer; padding:0px;">
 {% for like in likes %}
 	<ul style="border-bottom:1px solid #ccc; padding:10px;" onclick='load_paper("{{like.id}}")'>
 
@@ -69,8 +77,8 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 <br />
 <br />
-<h3><span class="gray">Papers Recommended for {{user}}</span> <a class="recs button" href="#" style="font-size:small; display:none;">SHOW</a> <a class="recs button" href="#" style="font-size:small;">HIDE</a></h3>
-	<br />
+
+<h3 class="click-subtitle" id="recs_toggle"><span class="arrow">▾</span> Papers recommended for {{user}}.</h3>
 	<div id="recs_container">
 	<table id="recs">
 		<thead>

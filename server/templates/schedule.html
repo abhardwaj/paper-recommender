@@ -1,67 +1,12 @@
 {% extends "base.html" %}
 {% block headlink-right %}
 Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
-<a class="button" href="/index">Home</a>
-<a class="button" href="/users">Authors List</a>
+<a class="button" href="/index">My CHI</a>
+<a class="button" href="/users">Find People</a>
 <a class="button" href="/schedule">Schedule</a>
 <a class="button" href="/logout">Log out!</a>
 {% endblock %}
 {% block content %}
-<style>
-
-.col1{
-	width:70%;
-}
-
-.col2{
-	width:25%;
-	float:right;
-	position: absolute;
-	top:20px;
-	right: 0;
-}
-
-.all {
-	background: #f0f4f9;
-	cursor: pointer;
-}
-
-.all:hover {
-	background-color: #D7ECFA;
-}
-
-.click-title{
-	background-color:#3D7AA6;
-	border: 1px solid #f0f4f9;
-	display:block;
-	color: #fff;
-	padding: 10px;
-
-}
-
-
-.click-subtitle{
-	background-color:#a4e388;
-	border: 1px solid #ccc;
-	display:block;
-	color: #fff;
-	padding: 10px;
-	cursor: pointer;
-
-}
-
-.clickable-paper:hover{
-	background-color: #fff7ce;
-}
-
-.clickable-paper{
-	background-color: #fff;
-}
-
-
-
-
-</style>
 <script type="text/javascript">
 
 	function load_paper (paper_id) {
