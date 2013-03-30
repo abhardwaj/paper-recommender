@@ -19,18 +19,6 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 	$(document).ready(function(){
 
-		var recs = $('#recs').dataTable({
-			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
-			"bPaginate": false,
-			"bFilter": true,
-			"bInfo": false,
-			"sWidth": "100%",
-			"aaSorting": [],
-			"aoColumns": [                 
-				{"sWidth": "100%"}
-			]
-			
-		});
 
 		$("#likes_toggle").click(function(){
     		$("#likes").toggle();
@@ -43,11 +31,11 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 
   		$("#recs_toggle").click(function(){
-    		$("#recs_container").toggle();
-    		if($('#recs_container').is(':visible')){
-					$("#recs_toggle").find('.arrow').html('▾');
+    		$("#recs").toggle();
+    		if($('#recs').is(':visible')){
+				$("#recs_toggle").find('.arrow').html('▾');
 			}else{
-					$("#recs_toggle").find('.arrow').html('▸');
+				$("#recs_toggle").find('.arrow').html('▸');
 			}
   		});
 
@@ -78,34 +66,23 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <br />
 <br />
 <h3 class="click-subtitle" id="recs_toggle"><span class="arrow">▾</span> Papers recommended for you.</h3>
-	<div id="recs_container">
-	<table id="recs">
-		<thead>
-		<tr>
-			<th>Recommended Papers</th>
-		</tr>
-		</thead>
-		<tbody>
-			{% for rec in recs %}
-				<tr onclick='load_paper("{{rec.id}}")'>
-				<td>
-				 <ul>
-				 	<li class="strong">{{rec.title}}</li>
-				 	<li>{{rec.c_and_b}}</li>
-					<li class="blue">
-					{% for author in rec.authors %}
-						{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
-					{% endfor %}
-					</li>
-					<li class='gray'>
-					{{rec.keywords}}
-					</li>
-				</ul>
-				</td>
-				</tr>
-			{% endfor %}		
-		</tbody>
-	</table>
+	<div id="recs">	
+		{% for rec in recs %}
+			<ul class='clickable-paper' style="border-top:1px solid #ccc; padding:10px;" onclick='load_paper("{{rec.id}}")'>
+			
+			 	<li class="strong">{{rec.title}}</li>
+			 	<li>{{rec.c_and_b}}</li>
+				<li class="blue">
+				{% for author in rec.authors %}
+					{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
+				{% endfor %}
+				</li>
+				<li class='gray'>
+				{{rec.keywords}}
+				</li>
+			</ul>			
+		{% endfor %}		
+		
 	</div>
 </div>
 {% endblock %}

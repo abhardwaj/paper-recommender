@@ -230,7 +230,7 @@ table.dataTable tbody tr td {
 }
 
 table.dataTable tbody tr:hover td {
-	background: #f0f4f9;
+	background-color: #fff7ce;
 }
 
 
@@ -305,6 +305,7 @@ table.dataTable tbody tr:hover{
 
 .clickable-paper:hover{
 	background-color: #fff7ce;
+	cursor: pointer;
 }
 
 .clickable-paper{

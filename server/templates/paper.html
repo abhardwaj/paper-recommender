@@ -17,18 +17,14 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 	$(document).ready(function(){	
 
-		var papers = $('#papers').dataTable({
-			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
-			"bPaginate": false,
-			"bFilter": true,
-			"bInfo": false,
-			"sWidth": "100%",
-			"aaSorting": [],
-			"aoColumns": [                 
-				{"sWidth": "100%"}
-			]
-			
-		});
+		$("#recs_toggle").click(function(){
+    		$("#recs").toggle();
+    		if($('#recs').is(':visible')){
+				$("#recs_toggle").find('.arrow').html('▾');
+			}else{
+				$("#recs_toggle").find('.arrow').html('▸');
+			}
+  		});
 
 
 
@@ -52,34 +48,23 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	</ul>
 	</div>
 	<br />
-	<h3><span class="gray">Papers similar to this paper</span></h3>
-	<br />
-	<table id="papers">
-		<thead>
-		<tr>
-			<th>People who liked this paper also liked the following papers</th>
-		</tr>
-		</thead>
-		<tbody>
-			{% for rec in recs %}
-				<tr onclick='load_paper("{{rec.id}}")'>
-				<td>
-				 <ul>
-				 	<li class="strong">{{rec.title}}</li>
-				 	<li>{{rec.c_and_b}}</li>
-					<li class="blue">
-					{% for author in rec.authors %}
-						{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
-					{% endfor %}
-					</li>
-					<li class='gray'>
-					{{rec.keywords}}
-					</li>
-				</ul>
-				</td>
-				</tr>
-			{% endfor %}		
-		</tbody>
-	</table>
+	<h3 class="click-subtitle" id="recs_toggle"><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
+	<div id="recs">		
+		{% for rec in recs %}
+			 <ul class='clickable-paper' style="border-top:1px solid #ccc; padding:10px;" onclick='load_paper("{{rec.id}}")'>
+			 	<li class="strong">{{rec.title}}</li>
+			 	<li>{{rec.c_and_b}}</li>
+				<li class="blue">
+				{% for author in rec.authors %}
+					{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
+				{% endfor %}
+				</li>
+				<li class='gray'>
+				{{rec.keywords}}
+				</li>
+			</ul>
+		{% endfor %}
+	</div>	
+		
 </div>
 {% endblock %}
