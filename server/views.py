@@ -161,6 +161,9 @@ def paper(request, paper_id):
 
 def like(request, paper_id, like_str):	
 	user = request.session['id']
+	if(user not in p.author_likes):
+		p.author_likes[user] = {}
+		p.author_likes[user]['likes'] = []
 	if(like_str=='like' and (paper_id not in p.author_likes[user]['likes'])):
 		p.author_likes[user]['likes'].append(paper_id)
 		return HttpResponse(json.dumps({'status':'ok'}), mimetype="application/json")
