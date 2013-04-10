@@ -349,7 +349,11 @@ table.dataTable tbody tr:hover{
 }
 
 .clickable:hover{
-	background-color: #fff7ce;
+	background-color: #D7ECFA;
+}
+
+.starred{
+	background-color: #fff7ce !important;
 }
 
 .clickable{	
