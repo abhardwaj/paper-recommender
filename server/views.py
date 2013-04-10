@@ -10,6 +10,7 @@ from algorithm.recommend import *
 from db.prefs import *
 from db.entity import *
 from db.session import *
+from db.authors import *
 
 
 '''
@@ -22,6 +23,7 @@ r = Recommender()
 e = Entity()
 p = Prefs()
 s = Session()
+a = Authors()
 
 
 
@@ -109,8 +111,8 @@ def index(request):
 
 def users(request):	
 	users = []
-	for u in p.author_likes:
-		users.append({'id':u, 'name': p.author_likes[u]['name']})
+	for u in a.authors:
+		users.append({'id':u, 'name': a.authors[u]['name'], 'email': a.authors[u]['email'], 'institution': a.authors[u]['institution']})
 	return render_to_response("users.html", {'login': request.session['name'], 'users':users})
 
 
