@@ -70,7 +70,7 @@ def logout(request):
 	return HttpResponseRedirect('index')
 
 
-def get_starred():
+def get_starred(request):
 	starred = []
 	try:
 		login_user = request.session['id']	
@@ -137,7 +137,7 @@ def user(request, author_id):
 				l.update(e.entities[id])
 				likes.append(l)
 		#print recs
-		return render_to_response("user.html", {'login': request.session['name'], 'user': name , 'recs':recs, 'likes':likes, 'starred':get_starred()})
+		return render_to_response("user.html", {'login': request.session['name'], 'user': name , 'recs':recs, 'likes':likes, 'starred':get_starred(request)})
 	except KeyError:
 		return HttpResponseRedirect('login')	
 
@@ -153,7 +153,7 @@ def paper(request, paper_id):
 		rec['id']=id
 		rec.update(e.entities[id])
 		recs.append(rec)
-	return render_to_response("paper.html", {'login': request.session['name'], 'id':paper_id, 'paper': paper, 'recs':recs, 'starred':get_starred()})
+	return render_to_response("paper.html", {'login': request.session['name'], 'id':paper_id, 'paper': paper, 'recs':recs, 'starred':get_starred(request)})
 
 
 
@@ -174,5 +174,5 @@ def schedule(request):
 	for session in sessions:
 		for submission in sessions[session]['submissions']:
 			sessions[session]['submissions'][submission].update(e.entities[submission])
-	return render_to_response("schedule.html", {'login': request.session['name'], 'sessions':sessions, 'starred':get_starred()})
+	return render_to_response("schedule.html", {'login': request.session['name'], 'sessions':sessions, 'starred':get_starred(request)})
 
