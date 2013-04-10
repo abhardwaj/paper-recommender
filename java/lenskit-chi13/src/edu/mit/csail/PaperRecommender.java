@@ -48,11 +48,12 @@ public class PaperRecommender {
           input_items.add(Long.valueOf(i)); 
         }
 		ArrayList<String> ret = new ArrayList<String>();
-		ScoredLongList recommendations = this.grec.globalRecommend(input_items, 10);
-		long items[] = new long[10];
-		double scores[] = new double[10];
-		recommendations.getElements(0, items, scores, 0, 10);
-		for(int i=0; i< 10; i++){
+		ScoredLongList recommendations = this.grec.globalRecommend(input_items, 20);
+		long items[] = new long[20];
+		double scores[] = new double[20];
+		if(recommendations.size() > 0)
+			recommendations.getElements(0, items, scores, 0, 20);
+		for(int i=0; i< 20; i++){
 			ret.add(items[i] + "," + scores[i]);
 		}
 		return ret;
