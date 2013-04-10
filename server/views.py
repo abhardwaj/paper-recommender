@@ -35,11 +35,6 @@ def init_session(email):
 def login_form(request):
 	c = {}
 	c.update(csrf(request))
-	users = {}
-	for k in p.author_likes.keys():
-		users[p.author_likes[k]['name']] = k
-
-	c.update({'users': json.dumps(users)})
 	return render_to_response('login.html', c)
 
 def login(request, redirect_url='index'):
