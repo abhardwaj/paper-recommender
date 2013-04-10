@@ -70,6 +70,15 @@ def logout(request):
 	return HttpResponseRedirect('index')
 
 
+def get_starred():
+	starred = []
+	try:
+		login_user = request.session['id']	
+		starred = p.author_likes[login_user]['likes']
+	except:
+		pass
+	return starred
+
 
 def index(request):
 	try:
@@ -92,14 +101,13 @@ def index(request):
 				l.update(e.entities[id])
 				likes.append(l)
 		#print recs
-		return render_to_response("index.html", {'login': request.session['name'], 'recs':recs, 'user_likes':likes})
+		return render_to_response("index.html", {'login': request.session['name'], 'recs':recs, 'likes':likes})
 	except KeyError:
 		print sys.exc_info()
 		return HttpResponseRedirect('login')
 
 
 def users(request):	
-	user = request.session['id']
 	users = []
 	for u in p.author_likes:
 		users.append({'id':u, 'name': p.author_likes[u]['name']})
@@ -109,33 +117,34 @@ def users(request):
 def user(request, author_id):
 	try:
 		user = author_id
-		login = request.session['id']
 		recs = []
 		likes = []
-		papers_liked = p.author_likes[user]['likes']
-		items = r.get_item_based_recommendations(papers_liked)
-		for item in items:
-			rec = {}
-			id=item['id']
-			rec['id']=id
-			rec.update(e.entities[id])
-			recs.append(rec)
-		for like in papers_liked:
-			l = {}
-			id=like
-			l['id']=id
-			l.update(e.entities[id])
-			likes.append(l)
+		name = ''
+		if(user in p.author_likes):
+			name = p.author_likes[user]['name']
+			papers_liked = p.author_likes[user]['likes']
+			items = r.get_item_based_recommendations(papers_liked)
+			for item in items:
+				rec = {}
+				id=item['id']
+				rec['id']=id
+				rec.update(e.entities[id])
+				recs.append(rec)
+			for like in papers_liked:
+				l = {}
+				id=like
+				l['id']=id
+				l.update(e.entities[id])
+				likes.append(l)
 		#print recs
-		return render_to_response("user.html", {'login': request.session['name'], 'user': p.author_likes[user]['name'], 'recs':recs, 'user_likes':likes, 'likes':p.author_likes[login]['likes']})
+		return render_to_response("user.html", {'login': request.session['name'], 'user': name , 'recs':recs, 'likes':likes, 'starred':get_starred()})
 	except KeyError:
 		return HttpResponseRedirect('login')	
 
 
 
-def paper(request, paper_id):	
+def paper(request, paper_id):
 	items = r.get_item_based_recommendations([paper_id])
-	user = request.session['id']
 	recs = []
 	paper = e.entities[paper_id]
 	for item in items:
@@ -144,7 +153,7 @@ def paper(request, paper_id):
 		rec['id']=id
 		rec.update(e.entities[id])
 		recs.append(rec)
-	return render_to_response("paper.html", {'login': request.session['name'], 'id':paper_id, 'paper': paper, 'recs':recs, 'likes':p.author_likes[user]['likes']})
+	return render_to_response("paper.html", {'login': request.session['name'], 'id':paper_id, 'paper': paper, 'recs':recs, 'starred':get_starred()})
 
 
 
@@ -160,11 +169,10 @@ def like(request, paper_id, like_str):
 
 
 
-def schedule(request):	
-	user = request.session['id']
+def schedule(request):
 	sessions = s.sessions
 	for session in sessions:
 		for submission in sessions[session]['submissions']:
 			sessions[session]['submissions'][submission].update(e.entities[submission])
-	return render_to_response("schedule.html", {'login': request.session['name'], 'sessions':sessions, 'likes':p.author_likes[user]['likes']})
+	return render_to_response("schedule.html", {'login': request.session['name'], 'sessions':sessions, 'starred':get_starred()})
 

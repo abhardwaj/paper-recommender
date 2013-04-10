@@ -56,7 +56,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <div id="content">
 	<h3><span class="gray">Selected Paper</span></h3>
 	<div class="form" style="margin-top:10px; cursor:pointer;">
-	<span class="strong">{{paper.title}}</span>{% if id in likes %}
+	<span class="strong">{{paper.title}}</span>{% if id in starred %}
 		 <span class="gray"> [You have starred this paper.]</span>
 		{%endif%}<br />
 	<span class="blue">
@@ -93,7 +93,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			</ul>
 			</td>
 			<td class="metadata">
-				{% if rec.id in likes %}
+				{% if rec.id in starred %}
 					<div class="ui-state-default ui-corner-all ui-state-active" title="{{rec.id}}">
 				{% else %}
 					<div class="ui-state-default ui-corner-all" title="{{rec.id}}">
