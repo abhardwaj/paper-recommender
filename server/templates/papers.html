@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block headlink-right %}
+Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
+<a class="button" href="/index">My CHI</a>
+<a class="button" href="/schedule">Schedule</a>
+<a class="button" href="/logout">Log out!</a>
+{% endblock %}
+{% block content %}
+<script type="text/javascript">
+
+	function load_paper (paper_id) {
+		window.location.href = "/paper/" + paper_id;
+	}
+
+	
+
+	$(document).ready(function(){	
+
+		var papers = $('#papers').dataTable({
+			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+			"bPaginate": false,
+			"bFilter": true,
+			"sWidth": "100%",
+			"aoColumns": [                 
+				{"sWidth": "100%"}
+			]
+			
+		});
+
+	});
+</script>
+<div id="content">
+	<h3><span class="gray">All CHI 2013 Papers.</span></h3>
+	<br />
+	<table id="papers">
+		<thead>
+		<tr>
+			<th>All CHI 2013 Papers.</th>
+		</tr>
+		</thead>
+		<tbody>
+			{% for id, paper in papers.items %}
+				<tr>
+				<td>
+					<table>
+					<tr class="clickable">
+					<td class="content" onclick='load_paper("{{id}}")' style="border-bottom: none;">	
+					 <ul>
+					 	<li class="strong">{{paper.title}}</li>
+					 	<li>{{paper.c_and_b}}</li>
+						<li class="blue">
+						{% for author in paper.authors %}
+							{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
+						{% endfor %}
+						</li>
+						<li class='gray'>
+						{{paper.keywords}}
+						</li>
+					</ul>
+					</td>
+					<td class="metadata" style="border-bottom: none;">
+						{% if paper.id in starred %}
+							<div class="ui-state-default ui-corner-all ui-state-active" title="{{paper.id}}">
+						{% else %}
+							<div class="ui-state-default ui-corner-all" title="{{paper.id}}">
+						{%endif%}
+						<span class="ui-icon ui-icon-star"></span>
+						</div>
+					</td>
+
+					</tr></table>	
+				</td>
+				
+				</tr>
+			{% endfor %}		
+		</tbody>
+	</table>
+</div>
+{% endblock %}
