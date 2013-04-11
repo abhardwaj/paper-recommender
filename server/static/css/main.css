@@ -243,6 +243,13 @@ table.dataTable tbody tr td {
 	font-weight: bold;
 }
 
+
+
+
+.dataTables_filter input[type="text"]{
+	width:600px;
+}
+
 .dataTables_paginate{
 	display: none;
 }
