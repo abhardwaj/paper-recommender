@@ -105,13 +105,17 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		});
 
 
-		function highlight_starred_sessions(){		   
-	   		$( ".all" ).each(function(index) {
-				if($(this).find('.paper-container').find('.ui-state-active').length > 0){
-					$(this).find('.session-container').find('.metadata').html('<div class="ui-state-default ui-corner-all ui-state-active"><span class="ui-icon ui-icon-star"></span></div>')
-				}else{
-					$(this).find('.session-container').find('.metadata').html('')
-				}
+		function update_starred(){		   
+	   		$( ".all" ).each(function(s_index) {
+	   			var session = $(this)
+				$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
+					if($(this).hasClass('ui-state-active')){
+						session.find('.timeline').children("div").eq(p_index).addClass("filled");
+					}else{
+						session.find('.timeline').children("div").eq(p_index).removeClass("filled");
+					}
+					
+				});
 			});
 		   
 		}
@@ -161,21 +165,21 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				$.get('/like/' + t.attr('title') +'/unlike', function(res) {
 				  if(res.status == 'ok'){
 				  	t.toggleClass('ui-state-active');
-				  	highlight_starred_sessions();
+				  	update_starred();  
 				  }
 				});
 			}else{
 				$.get('/like/' + t.attr('title') +'/like', function(res) {
 				  if(res.status == 'ok'){
 				  	t.toggleClass('ui-state-active');
-				  	highlight_starred_sessions();
+				  	update_starred();
 				  }
 				});
 
 			}
 		});
 	
-		highlight_starred_sessions();  		
+		update_starred();  		
 });
 
 	
@@ -322,7 +326,11 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		<li class="strong"><span class="arrow">▸</span> {{session.s_title}}</li>
 		<li class="gray">Room: {{session.room}}, Venue: {{session.venue}}, Persona: {{session.personas}}</li>
 	</ul>
-	
+	<div class="timeline">
+		{% for id in session.submissions %}
+		<div style="width:{{session.timeslot}};"></div>
+		{% endfor %}
+	</div>
 	</td>
 	<td class="metadata">
 			

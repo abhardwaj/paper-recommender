@@ -109,32 +109,6 @@ def index(request):
 def papers(request):	
 	return render_to_response("papers.html", {'login': request.session['name'], 'papers':e.entities, 'starred':get_starred(request)})
 
-def user(request, author_id):
-	try:
-		user = author_id
-		recs = []
-		likes = []
-		name = ''
-		if(user in p.author_likes):
-			name = p.author_likes[user]['name']
-			papers_liked = p.author_likes[user]['likes']
-			items = r.get_item_based_recommendations(papers_liked)
-			for item in items:
-				rec = {}
-				id=item['id']
-				rec['id']=id
-				rec.update(e.entities[id])
-				recs.append(rec)
-			for like in papers_liked:
-				l = {}
-				id=like
-				l['id']=id
-				l.update(e.entities[id])
-				likes.append(l)
-		#print recs
-		return render_to_response("user.html", {'login': request.session['name'], 'user': name , 'recs':recs, 'likes':likes, 'starred':get_starred(request)})
-	except KeyError:
-		return HttpResponseRedirect('login')	
 
 
 
@@ -171,6 +145,7 @@ def schedule(request):
 	sessions = s.sessions
 	for session in sessions:
 		for submission in sessions[session]['submissions']:
+			sessions[session].update({'timeslot': str(100/len(sessions[session]['submissions']))+'%'})
 			sessions[session]['submissions'][submission].update(e.entities[submission])
 	return render_to_response("schedule.html", {'login': request.session['name'], 'sessions':sessions, 'starred':get_starred(request)})
 

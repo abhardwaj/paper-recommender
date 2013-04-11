@@ -433,3 +433,28 @@ table.dataTable tbody tr td {
 	font-style: italic;
 }
 
+div.timeline {
+	margin: 0.25em 0em;
+	padding: 0em;
+	width: 100%;
+	height: 10px;
+	clear: right;
+	overflow: hidden;
+}
+
+
+
+div.timeline div {
+	float: left;
+	border: 1px solid #FFF;
+	background-color: #DDD;
+	border-radius: 10px;
+	box-sizing: border-box;
+	height: 100%;
+	margin: 0px;
+}
+
+div.timeline div.filled {
+	background-color: #00A8CD;
+}
+
