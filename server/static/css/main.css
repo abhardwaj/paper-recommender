@@ -300,9 +300,10 @@ table.dataTable tbody tr td {
 
 
 .collapsible-title{
-	background: #D7ECFA;
+	background: #3D7AA6;
 	cursor: pointer;
 	border: 1px solid #ccc;
+	color: #fff;
 	padding: 10px;
 	border-bottom: none;
 
