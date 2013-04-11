@@ -107,10 +107,10 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 		function highlight_starred_sessions(){		   
 	   		$( ".all" ).each(function(index) {
-				if($(this).find('.ui-state-active').length > 0){
-					$(this).css('background-color','#D7ECFA');
+				if($(this).find('.paper-container').find('.ui-state-active').length > 0){
+					$(this).find('.session-container').find('.metadata').html('<div class="ui-state-default ui-corner-all ui-state-active"><span class="ui-icon ui-icon-star"></span></div>')
 				}else{
-					$(this).css('background-color','#f0f4f9');
+					$(this).find('.session-container').find('.metadata').html('')
 				}
 			});
 		   
@@ -175,8 +175,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			}
 		});
 	
-		highlight_starred_sessions();	
-		highlight_starred();  		
+		highlight_starred_sessions();  		
 });
 
 	
@@ -316,11 +315,20 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 <div class="hidden" style="display:none">
 	{% for s_id, session in sessions.items %}
-	<div class="all {{session.date}} t{{session.time|slice:":2"}} {{session.venue}} {{session.personas|slice:":2"}}" title="{{s_id}}">	
-	<ul style="border-bottom:1px solid #ccc; padding:10px;">	
+	<div class="all {{session.date}} t{{session.time|slice:":2"}} {{session.venue}} {{session.personas|slice:":2"}}" title="{{s_id}}">
+	<table class="session-container"><tr class="clickable">
+	<td class="content">	
+	<ul>	
 		<li class="strong"><span class="arrow">▸</span> {{session.s_title}}</li>
 		<li class="gray">Room: {{session.room}}, Venue: {{session.venue}}, Persona: {{session.personas}}</li>
 	</ul>
+	
+	</td>
+	<td class="metadata">
+			
+	</td>
+	</tr>
+	</table>
 	<div id="{{s_id}}"  style="display:none;">		
 	{% for id, paper in session.submissions.items %}
 		<table class="paper-container"><tr class="clickable">

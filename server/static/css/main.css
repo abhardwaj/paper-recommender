@@ -371,6 +371,23 @@ table.dataTable tbody tr td {
 	margin:0;
 }
 
+.session-container{
+	width:100%;
+	border-spacing: 0;
+	border-bottom:1px solid #ccc;
+	background-color: #f0f4f9;
+	padding:0;
+	margin:0;
+}
+
+.session-container .clickable{
+	background-color: #f0f4f9;
+}
+
+.session-container .clickable:hover{
+	background-color: #D7ECFA;
+}
+
 .likes-container{
 	width:100%;
 	border-spacing: 0;
@@ -381,21 +398,12 @@ table.dataTable tbody tr td {
 }
 
 
-.likes-container .clickable{
-	background-color: #f0f4f9;
-}
-
-.likes-container .clickable:hover{
-	background-color: #D7ECFA;
-}
 
 .clickable:hover{
 	background-color: #fff7ce;
 }
 
-.starred{
-	background-color: #fff7ce !important;
-}
+
 
 .clickable{	
 	background-color: #fff;
