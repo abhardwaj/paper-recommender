@@ -84,7 +84,7 @@ def index(request):
 		likes = []
 		if(user in p.author_likes):
 			papers_liked = p.author_likes[user]['likes']
-			papers_liked = filter(lambda x: x!='', papers_liked)
+			papers_liked = filter(lambda x: x.strip()!='', papers_liked)
 			items = r.get_item_based_recommendations(papers_liked)
 			for item in items:
 				rec = {}
