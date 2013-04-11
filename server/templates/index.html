@@ -27,7 +27,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			"bFilter": false,
 			"sWidth": "100%",
 			"aLengthMenu": [[2, -1], ["Few", "All"]],
-			"iDisplayLength": 2,
+			"iDisplayLength": -1,
 			"oLanguage": {
 		      "sZeroRecords": "You haven't starred anything yet. Nothing to show."
 		    },
@@ -45,7 +45,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			"bFilter": true,
 			"bInfo": false,
 			"sWidth": "100%",
-			"iDisplayLength": 5,
+			"iDisplayLength": -1,
 			"oLanguage": {
 		      "sZeroRecords": "Since you haven't starred any paper yet, we can't generate recommendations for you."
 		    },
@@ -194,6 +194,13 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		$('.dataTables_filter').find('input[type=text]').addClass('default-text')
 		$('.default-text').val('');
 		$('.default-text').blur();
+
+		$("#recs").dataTable().fnSettings()._iDisplayLength = 5
+		$("#likes").dataTable().fnSettings()._iDisplayLength = 2
+
+		$("#likes").dataTable().fnDraw(false);
+		$("#recs").dataTable().fnDraw(false);
+
 
 		//highlight_starred();
 
