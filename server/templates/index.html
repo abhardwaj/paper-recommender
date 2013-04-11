@@ -2,7 +2,7 @@
 {% block headlink-right %}
 Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <a class="button" href="/index">My CHI</a>
-<a class="button" href="/schedule">Schedule</a>
+<a class="button" href="/schedule">My Schedule</a>
 <a class="button" href="/logout">Log out!</a>
 {% endblock %}
 
@@ -42,11 +42,10 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		var recs = $('#recs').dataTable({
 			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 			"bPaginate": true,
-			"bFilter": false,
+			"bFilter": true,
 			"bInfo": false,
 			"sWidth": "100%",
-			"aLengthMenu": [[2, -1], ["Few", "All"]],
-			"iDisplayLength": 2,
+			"iDisplayLength": 5,
 			"oLanguage": {
 		      "sZeroRecords": "Since you haven't starred any paper yet, we can't generate recommendations for you."
 		    },
@@ -107,12 +106,10 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 
   		$("#recs_show_toggle").click(function(){
-    		if($("#recs").dataTable().fnSettings()._iDisplayLength == -1){
-					$("#recs").dataTable().fnSettings()._iDisplayLength = 2;
-					$("#recs_show_toggle").html('Show More')
-			}else{
-					$("#recs").dataTable().fnSettings()._iDisplayLength = -1;
-					$("#recs_show_toggle").html('Show Less')
+    		if($("#recs").dataTable().fnSettings()._iDisplayLength < $("#recs").dataTable().fnSettings().fnRecordsTotal()){
+					$("#recs").dataTable().fnSettings()._iDisplayLength = $("#recs").dataTable().fnSettings()._iDisplayLength + 5;
+					if($("#recs").dataTable().fnSettings()._iDisplayLength >= $("#recs").dataTable().fnSettings().fnRecordsTotal())
+					$("#recs_show_toggle").hide();
 			}
 			$("#recs").dataTable().fnDraw(false);
   		});
