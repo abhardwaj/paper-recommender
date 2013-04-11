@@ -130,6 +130,18 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		});
 
 
+		function highlight_starred(){		   
+	   		$( ".clickable" ).each(function(index) {
+				if($(this).find('.ui-state-active').length > 0){
+					$(this).addClass('starred');
+				}
+			});
+		   
+		}
+
+		highlight_starred();
+
+
 	});
 </script>
 
@@ -211,8 +223,8 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				</ul>
 				</td>
 				<td class="metadata">
-					{% if paper.id in starred %}
-						<div class="ui-state-default ui-corner-all ui-state-active" title="{{paper.id}}">
+					{% if id in starred %}
+						<div class="ui-state-default ui-corner-all ui-state-active" title="{{id}}">
 					{% else %}
 						<div class="ui-state-default ui-corner-all" title="{{id}}">
 					{%endif%}

@@ -98,7 +98,7 @@ def index(request):
 				l.update(e.entities[id])
 				likes.append(l)
 		#print recs
-		return render_to_response("index.html", {'login': request.session['name'], 'recs':recs, 'likes':likes, 'papers': e.entities })
+		return render_to_response("index.html", {'login': request.session['name'], 'recs':recs, 'likes':likes, 'papers': e.entities, 'starred':get_starred(request)})
 	except KeyError:
 		print sys.exc_info()
 		return HttpResponseRedirect('login')
