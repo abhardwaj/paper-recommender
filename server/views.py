@@ -23,7 +23,7 @@ r = Recommender()
 e = Entity()
 p = Prefs()
 s = Session()
-a = Authors()
+#a = Authors()
 
 
 
@@ -103,12 +103,6 @@ def index(request):
 		print sys.exc_info()
 		return HttpResponseRedirect('login')
 
-
-def users(request):	
-	users = []
-	for u in a.authors:
-		users.append({'id':u, 'name': a.authors[u]['name'], 'email': a.authors[u]['email'], 'institution': a.authors[u]['institution']})
-	return render_to_response("users.html", {'login': request.session['name'], 'users':users})
 
 
 

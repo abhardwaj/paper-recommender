@@ -285,7 +285,7 @@ table.dataTable tbody tr td {
 }
 
 .metadata{
-	width:50px;
+	width:60px;
 	vertical-align: middle !important;
 
 }
@@ -362,6 +362,9 @@ table.dataTable tbody tr td {
 	margin:0 auto;
 }
 
+
+
+
 .paper-container{
 	width:100%;
 	border-spacing: 0;
@@ -409,6 +412,7 @@ table.dataTable tbody tr td {
 	background-color: #fff;
 	cursor: pointer;
 }
+
 
 
 
