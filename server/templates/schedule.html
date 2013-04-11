@@ -108,7 +108,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		function highlight_starred_sessions(){		   
 	   		$( ".all" ).each(function(index) {
 				if($(this).find('.ui-state-active').length > 0){
-					$(this).css('background-color','#fff7ce');
+					$(this).css('background-color','#D7ECFA');
 				}else{
 					$(this).css('background-color','#f0f4f9');
 				}
@@ -161,7 +161,6 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				$.get('/like/' + t.attr('title') +'/unlike', function(res) {
 				  if(res.status == 'ok'){
 				  	t.toggleClass('ui-state-active');
-				  	t.parent().parent().toggleClass('starred');
 				  	highlight_starred_sessions();
 				  }
 				});
@@ -169,7 +168,6 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				$.get('/like/' + t.attr('title') +'/like', function(res) {
 				  if(res.status == 'ok'){
 				  	t.toggleClass('ui-state-active');
-				  	t.parent().parent().toggleClass('starred');
 				  	highlight_starred_sessions();
 				  }
 				});

@@ -54,14 +54,12 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				$.get('/like/' + t.attr('title') +'/unlike', function(res) {
 				  if(res.status == 'ok'){
 				  	t.toggleClass('ui-state-active');
-				  	t.parent().parent().toggleClass('starred');
 				  }
 				});
 			}else{
 				$.get('/like/' + t.attr('title') +'/like', function(res) {
 				  if(res.status == 'ok'){
 				  	t.toggleClass('ui-state-active');
-				  	t.parent().parent().toggleClass('starred');
 				  }
 				});
 
