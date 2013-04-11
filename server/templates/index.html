@@ -2,7 +2,6 @@
 {% block headlink-right %}
 Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 <a class="button" href="/index">My CHI</a>
-<a class="button" href="/users">People</a>
 <a class="button" href="/schedule">Schedule</a>
 <a class="button" href="/logout">Log out!</a>
 {% endblock %}
@@ -19,9 +18,55 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 	$(document).ready(function(){
 
+		
+
+		var likes = $('#likes').dataTable({
+			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+			"bPaginate": true,
+			"bFilter": false,
+			"sWidth": "100%",
+			"aLengthMenu": [[2, 5, 10, 20, -1], [2, 5, 10, 20, "All"]],
+			"iDisplayLength": 2,
+			"aoColumns": [                 
+				{},
+				{}
+			]
+			
+		});
+
+
+		var recs = $('#recs').dataTable({
+			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+			"bPaginate": true,
+			"bFilter": false,
+			"sWidth": "100%",
+			"aLengthMenu": [[2, 5, 10, 20, -1], [2, 5, 10, 20, "All"]],
+			"iDisplayLength": 2,
+			"aoColumns": [                 
+				{},
+				{}
+			]
+			
+		});
+
+
+		var papers = $('#papers').dataTable({
+			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+			"bPaginate": true,
+			"bFilter": true,
+			"sWidth": "100%",
+			"aLengthMenu": [[5, 10, 20, 50, -1], [5, 10, 20, 50, "All"]],
+			"iDisplayLength": 20,
+			"aoColumns": [                 
+				{},
+				{}
+			]
+			
+		});
+
 
 		$("#likes_toggle").click(function(){
-    		$("#likes").toggle();
+    		$("#likes").parent().toggle();
     		if($('#likes').is(':visible')){
 					$("#likes_toggle").find('.arrow').html('▾');
 			}else{
@@ -31,11 +76,21 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 
   		$("#recs_toggle").click(function(){
-    		$("#recs").toggle();
+    		$("#recs").parent().toggle();
     		if($('#recs').is(':visible')){
 				$("#recs_toggle").find('.arrow').html('▾');
 			}else{
 				$("#recs_toggle").find('.arrow').html('▸');
+			}
+  		});
+
+
+  		$("#papers_toggle").click(function(){
+    		$("#papers").parent().toggle();
+    		if($('#papers').is(':visible')){
+					$("#papers_toggle").find('.arrow').html('▾');
+			}else{
+					$("#papers_toggle").find('.arrow').html('▸');
 			}
   		});
 
@@ -71,9 +126,8 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 <div id="content">
 <h3 class="click-subtitle" id="likes_toggle"><span class="arrow">▾</span> Papers you liked.</h3>	
-<div id="likes" class="form" style="margin-top:0px;cursor:pointer; padding:0px;">
+<table id="likes" class="paper-container">
 {% for like in likes %}
-	<table class="likes-container">
 	<tr class="clickable">
 	<td class="content" onclick='load_paper("{{like.id}}")'>
 	<ul>
@@ -95,16 +149,15 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		<span class="ui-icon ui-icon-star"></span>
 		</div>
 	</td>
-	</tr></table>
+	</tr>
 {% endfor %}		
-</div>
+</table>
 
 <br />
 <br />
 <h3 class="click-subtitle" id="recs_toggle"><span class="arrow">▾</span> Papers recommended for you.</h3>
-	<div id="recs">	
+	<table id="recs" class="paper-container">
 		{% for rec in recs %}
-			<table class="paper-container">
 			<tr class="clickable">
 			<td class="content" onclick='load_paper("{{rec.id}}")'>	
 			 <ul>
@@ -125,9 +178,40 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				<span class="ui-icon ui-icon-star"></span>
 				</div>
 			</td>
-			</tr></table>				
+			</tr>				
 		{% endfor %}		
-		
-	</div>
+	</table>
+	<br />
+	<br />
+	<h3 class="click-subtitle" id="papers_toggle"><span class="arrow">▾</span> All Papers</h3>
+	<table id="papers" class="paper-container">
+		{% for id, paper in papers.items %}
+			<tr class="clickable">				
+				<td class="content" onclick='load_paper("{{id}}")'>	
+				 <ul>
+				 	<li class="strong">{{paper.title}}</li>
+				 	<li>{{paper.c_and_b}}</li>
+					<li class="blue">
+					{% for author in paper.authors %}
+						{{author.givenName}} {{author.familyName}}&nbsp;&nbsp;&nbsp;&nbsp;
+					{% endfor %}
+					</li>
+					<li class='gray'>
+					{{paper.keywords}}
+					</li>
+				</ul>
+				</td>
+				<td class="metadata">
+					{% if paper.id in starred %}
+						<div class="ui-state-default ui-corner-all ui-state-active" title="{{paper.id}}">
+					{% else %}
+						<div class="ui-state-default ui-corner-all" title="{{paper.id}}">
+					{%endif%}
+					<span class="ui-icon ui-icon-star"></span>
+					</div>
+				</td>			
+			</tr>
+		{% endfor %}		
+	</table>
 </div>
 {% endblock %}

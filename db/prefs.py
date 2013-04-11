@@ -22,7 +22,6 @@ load prefs
 class Prefs:
 
 	def __init__(self):
-		self.author_prefs = {}
 		self.paper_prefs = {}
 		self.author_likes = {}
 		self.__load__()

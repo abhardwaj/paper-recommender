@@ -98,7 +98,7 @@ def index(request):
 				l.update(e.entities[id])
 				likes.append(l)
 		#print recs
-		return render_to_response("index.html", {'login': request.session['name'], 'recs':recs, 'likes':likes})
+		return render_to_response("index.html", {'login': request.session['name'], 'recs':recs, 'likes':likes, 'papers': e.entities })
 	except KeyError:
 		print sys.exc_info()
 		return HttpResponseRedirect('login')
@@ -110,6 +110,10 @@ def users(request):
 		users.append({'id':u, 'name': a.authors[u]['name'], 'email': a.authors[u]['email'], 'institution': a.authors[u]['institution']})
 	return render_to_response("users.html", {'login': request.session['name'], 'users':users})
 
+
+
+def papers(request):	
+	return render_to_response("papers.html", {'login': request.session['name'], 'papers':e.entities, 'starred':get_starred(request)})
 
 def user(request, author_id):
 	try:
