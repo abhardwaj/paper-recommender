@@ -113,9 +113,15 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 						session.find('.timeline').children("div").eq(p_index).addClass("filled");
 					}else{
 						session.find('.timeline').children("div").eq(p_index).removeClass("filled");
-					}
+					}				
 					
 				});
+
+				if($(this).find('.paper-container').find('.ui-state-active').length > 0){
+ 					$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
+		       	}else{
+		         	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
+		       	}
 			});
 		   
 		}
@@ -153,6 +159,8 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		});
 
 		
+
+		
 		$('.ui-state-default').hover(
 			function(){ $(this).addClass('ui-state-hover'); }, 
 			function(){ $(this).removeClass('ui-state-hover'); }
@@ -177,6 +185,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				});
 
 			}
+			event.stopPropagation();
 		});
 	
 		update_starred();  		
@@ -333,7 +342,9 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	</div>
 	</td>
 	<td class="metadata">
-			
+			<div class="ui-state-default ui-corner-all">
+				<span class="ui-icon ui-icon-star"></span>
+			</div>
 	</td>
 	</tr>
 	</table>
