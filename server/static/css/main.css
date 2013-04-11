@@ -37,7 +37,7 @@ form{
 	margin-top:30px; 
 	padding:30px; 
 	vertical-align:top;
-	background-color: #D7ECFA;
+	background-color: #f0f4f9;
 	width:border-box;
 }
 
@@ -231,14 +231,7 @@ table.dataTable tbody tr td {
 	border-bottom: #ccc solid 1px; 
 }
 
-table.dataTable tbody tr:hover td {
-	background-color: #fff7ce;
-}
 
-
-table.dataTable tbody tr:hover{
-	cursor:pointer;
-}
 	
 .dataTables_scroll {
 	border: #ccc solid 1px;
@@ -295,12 +288,7 @@ table.dataTable tbody tr:hover{
 	cursor: pointer;
 }
 
-.all:hover {
-	background-color: #D7ECFA;
-}
-
-
-.collapsible-title{
+.collapsible-subtitle{
 	background: #f0f4f9;
 	cursor: pointer;
 	border: 1px solid #ccc;
@@ -310,17 +298,18 @@ table.dataTable tbody tr:hover{
 }
 
 
-.click-subtitle{
-	background: -webkit-linear-gradient(top, #67ae55, #578843);
-	background-color: #69a74e;
-	-webkit-box-shadow: inset 0 1px 1px #a4e388;
-	border: 1px solid #ccc;
-	display:block;
-	color: #fff;
-	padding: 10px;
+
+.collapsible-title{
+	background: #D7ECFA;
 	cursor: pointer;
+	border: 1px solid #ccc;
+	padding: 10px;
+	border-bottom: none;
 
 }
+
+
+
 
 
 .ui-state-default, .ui-state-active{
@@ -362,7 +351,7 @@ table.dataTable tbody tr:hover{
 }
 
 .clickable:hover{
-	background-color: #D7ECFA;
+	background-color: #fff7ce;
 }
 
 .starred{

@@ -180,7 +180,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 </script>
 
 <div id="content">
-<h3 class="collapsible-title" id="likes_toggle"><span class="arrow">▾</span> Papers you liked.</h3>	
+<h3 class="collapsible-subtitle" id="likes_toggle"><span class="arrow">▾</span> Papers you liked.</h3>	
 <div id="likes_container">
 <table id="likes" class="paper-container">
 {% for like in likes %}
@@ -213,7 +213,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 </div>
 <br />
 <br />
-<h3 class="collapsible-title" id="recs_toggle"><span class="arrow">▾</span> Papers recommended for you.</h3>
+<h3 class="collapsible-subtitle" id="recs_toggle"><span class="arrow">▾</span> Papers recommended for you.</h3>
 <div id="recs_container">
 	<table id="recs" class="paper-container">
 		{% for rec in recs %}
@@ -245,7 +245,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 </div>
 	<br />
 	<br />
-	<h3 class="collapsible-title" id="papers_toggle"><span class="arrow">▾</span> All Papers</h3>
+	<h3 class="collapsible-subtitle" id="papers_toggle"><span class="arrow">▾</span> All Papers</h3>
 	<div id="papers_container">
 	<table id="papers" class="paper-container">
 		{% for id, paper in papers.items %}

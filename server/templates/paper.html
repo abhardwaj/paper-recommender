@@ -16,9 +16,27 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 	$(document).ready(function(){	
 
+
+
+		var recs = $('#recs').dataTable({
+			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+			"bPaginate": false,
+			"bFilter": true,
+			"bInfo": false,
+			"sWidth": "100%",
+			"oLanguage": {
+		      "sZeroRecords": "Not enough data to generate recommendations for this paper."
+		    },
+			"aoColumns": [                 
+				{},
+				{}
+			]
+			
+		});
+
 		$("#recs_toggle").click(function(){
-    		$("#recs").toggle();
-    		if($('#recs').is(':visible')){
+    		$("#recs_container").toggle();
+    		if($('#recs_container').is(':visible')){
 				$("#recs_toggle").find('.arrow').html('▾');
 			}else{
 				$("#recs_toggle").find('.arrow').html('▸');
@@ -87,10 +105,10 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	</ul>
 	</div>
 	<br />
-	<h3 class="click-subtitle" id="recs_toggle"><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
-	<div id="recs">		
+	<h3 class="collapsible-subtitle" id="recs_toggle"><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
+	<div id="recs_container">
+	<table id="recs">		
 		{% for rec in recs %}
-			<table class="paper-container">
 			<tr class="clickable">
 			<td class="content" onclick='load_paper("{{rec.id}}")'>	
 			 <ul>
@@ -116,9 +134,10 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 				</div>
 			</td>
 
-			</tr></table>	
+			</tr>	
 		{% endfor %}
-	</div>	
+	</table>
+	</div>
 		
 </div>
 {% endblock %}
