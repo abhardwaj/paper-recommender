@@ -75,6 +75,7 @@ button, input[type="button"], input[type="submit"]{
 	border-radius: 5px;
 	text-decoration: none;
 	color: #fff;
+	cursor: pointer;
 }
 
 

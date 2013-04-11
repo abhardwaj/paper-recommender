@@ -27,7 +27,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			"bFilter": false,
 			"sWidth": "100%",
 			"aLengthMenu": [[2, -1], ["Few", "All"]],
-			"iDisplayLength": -1,
+			"iDisplayLength": 2,
 			"oLanguage": {
 		      "sZeroRecords": "You haven't starred anything yet. Nothing to show."
 		    },
@@ -46,7 +46,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			"bInfo": false,
 			"sWidth": "100%",
 			"aLengthMenu": [[2, -1], ["Few", "All"]],
-			"iDisplayLength": -1,
+			"iDisplayLength": 2,
 			"oLanguage": {
 		      "sZeroRecords": "Since you haven't starred any paper yet, we can't generate recommendations for you."
 		    },
@@ -77,8 +77,8 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 
 		$("#likes_toggle").click(function(){
-    		$("#likes").parent().toggle();
-    		if($('#likes').is(':visible')){
+    		$("#likes_container").toggle();
+    		if($('#likes_container').is(':visible')){
 					$("#likes_toggle").find('.arrow').html('▾');
 			}else{
 					$("#likes_toggle").find('.arrow').html('▸');
@@ -87,8 +87,8 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 
   		$("#recs_toggle").click(function(){
-    		$("#recs").parent().toggle();
-    		if($('#recs').is(':visible')){
+    		$("#recs_container").toggle();
+    		if($('#recs_container').is(':visible')){
 				$("#recs_toggle").find('.arrow').html('▾');
 			}else{
 				$("#recs_toggle").find('.arrow').html('▸');
@@ -97,12 +97,36 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 
   		$("#papers_toggle").click(function(){
-    		$("#papers").parent().toggle();
-    		if($('#papers').is(':visible')){
+    		$("#papers_container").toggle();
+    		if($('#papers_container').is(':visible')){
 					$("#papers_toggle").find('.arrow').html('▾');
 			}else{
 					$("#papers_toggle").find('.arrow').html('▸');
 			}
+  		});
+
+
+  		$("#recs_show_toggle").click(function(){
+    		if($("#recs").dataTable().fnSettings()._iDisplayLength == -1){
+					$("#recs").dataTable().fnSettings()._iDisplayLength = 2;
+					$("#recs_show_toggle").html('Show More')
+			}else{
+					$("#recs").dataTable().fnSettings()._iDisplayLength = -1;
+					$("#recs_show_toggle").html('Show Less')
+			}
+			$("#recs").dataTable().fnDraw(false);
+  		});
+
+
+  		$("#likes_show_toggle").click(function(){
+    		if($("#likes").dataTable().fnSettings()._iDisplayLength == -1){
+					$("#likes").dataTable().fnSettings()._iDisplayLength = 2;
+					$("#likes_show_toggle").html('Show All')
+			}else{
+					$("#likes").dataTable().fnSettings()._iDisplayLength = -1;
+					$("#likes_show_toggle").html('Show Less')
+			}
+			$("#likes").dataTable().fnDraw(false);
   		});
 
 
@@ -141,6 +165,14 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		   
 		}
 
+		if($("#likes").dataTable().fnSettings().fnRecordsTotal() <= 2){
+			$('#likes_show_toggle').hide();
+		}
+
+		if($("#recs").dataTable().fnSettings().fnRecordsTotal() <= 2){
+			$('#recs_show_toggle').hide();
+		}
+
 		//highlight_starred();
 
 
@@ -149,6 +181,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 <div id="content">
 <h3 class="collapsible-title" id="likes_toggle"><span class="arrow">▾</span> Papers you liked.</h3>	
+<div id="likes_container">
 <table id="likes" class="paper-container">
 {% for like in likes %}
 	<tr class="clickable">
@@ -175,10 +208,13 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	</tr>
 {% endfor %}		
 </table>
-
+<br />
+<span class="button" id="likes_show_toggle">Show All</span>
+</div>
 <br />
 <br />
 <h3 class="collapsible-title" id="recs_toggle"><span class="arrow">▾</span> Papers recommended for you.</h3>
+<div id="recs_container">
 	<table id="recs" class="paper-container">
 		{% for rec in recs %}
 			<tr class="clickable">
@@ -205,8 +241,12 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		{% endfor %}		
 	</table>
 	<br />
+	<span class="button" id="recs_show_toggle">Show More</span>
+</div>
+	<br />
 	<br />
 	<h3 class="collapsible-title" id="papers_toggle"><span class="arrow">▾</span> All Papers</h3>
+	<div id="papers_container">
 	<table id="papers" class="paper-container">
 		{% for id, paper in papers.items %}
 			<tr class="clickable">				
@@ -236,5 +276,6 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			</tr>
 		{% endfor %}		
 	</table>
+	</div>
 </div>
 {% endblock %}
