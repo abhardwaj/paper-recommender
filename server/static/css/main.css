@@ -260,6 +260,7 @@ table.dataTable tbody tr:hover{
 	padding: 10px;
 	border: #ccc solid 1px;
 	color: #999;
+	display: none;
 	}
 
 
@@ -298,6 +299,14 @@ table.dataTable tbody tr:hover{
 }
 
 
+.collapsible-title{
+	background: #f0f4f9;
+	cursor: pointer;
+	border: 1px solid #ccc;
+	padding: 10px;
+	border-bottom: none;
+
+}
 
 
 .click-subtitle{

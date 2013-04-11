@@ -23,10 +23,11 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		var likes = $('#likes').dataTable({
 			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 			"bPaginate": true,
+			"bInfo": false,
 			"bFilter": false,
 			"sWidth": "100%",
 			"aLengthMenu": [[2, -1], ["Few", "All"]],
-			"iDisplayLength": 2,
+			"iDisplayLength": -1,
 			"oLanguage": {
 		      "sZeroRecords": "You haven't starred anything yet. Nothing to show."
 		    },
@@ -42,9 +43,10 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 			"bPaginate": true,
 			"bFilter": false,
+			"bInfo": false,
 			"sWidth": "100%",
 			"aLengthMenu": [[2, -1], ["Few", "All"]],
-			"iDisplayLength": 2,
+			"iDisplayLength": -1,
 			"oLanguage": {
 		      "sZeroRecords": "Since you haven't starred any paper yet, we can't generate recommendations for you."
 		    },
@@ -139,14 +141,14 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 		   
 		}
 
-		highlight_starred();
+		//highlight_starred();
 
 
 	});
 </script>
 
 <div id="content">
-<h3 class="click-subtitle" id="likes_toggle"><span class="arrow">▾</span> Papers you liked.</h3>	
+<h3 class="collapsible-title" id="likes_toggle"><span class="arrow">▾</span> Papers you liked.</h3>	
 <table id="likes" class="paper-container">
 {% for like in likes %}
 	<tr class="clickable">
@@ -176,7 +178,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 
 <br />
 <br />
-<h3 class="click-subtitle" id="recs_toggle"><span class="arrow">▾</span> Papers recommended for you.</h3>
+<h3 class="collapsible-title" id="recs_toggle"><span class="arrow">▾</span> Papers recommended for you.</h3>
 	<table id="recs" class="paper-container">
 		{% for rec in recs %}
 			<tr class="clickable">
@@ -204,7 +206,7 @@ Welcome,&nbsp;{{login}}! &nbsp; &nbsp;
 	</table>
 	<br />
 	<br />
-	<h3 class="click-subtitle" id="papers_toggle"><span class="arrow">▾</span> All Papers</h3>
+	<h3 class="collapsible-title" id="papers_toggle"><span class="arrow">▾</span> All Papers</h3>
 	<table id="papers" class="paper-container">
 		{% for id, paper in papers.items %}
 			<tr class="clickable">				
