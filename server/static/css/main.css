@@ -327,7 +327,36 @@ table.dataTable tbody tr td {
 	padding:8px;
 }
 
-.ui-icon{
+.ui-state-default{ 
+	border: 1px solid #d3d3d3 !important; 
+	background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x !important; 
+	font-weight: normal !important; 
+	color: #555555 !important; 
+}
+
+
+
+.ui-state-hover{ 
+	border: 1px solid #999999 !important;
+}
+
+
+
+
+
+
+.ui-state-active{
+	border: 1px solid #d19405 !important;
+	background: #fece2f url(images/ui-bg_gloss-wave_60_fece2f_500x100.png) 50% 50% repeat-x !important;
+	font-weight: bold;
+	color: #4c3000 !important;
+}
+
+
+
+
+
+.ui-icon-star{
 	margin:0 auto;
 }
 
