@@ -23,11 +23,6 @@ r = Recommender()
 e = Entity()
 p = Prefs()
 s = Session()
-#a = Authors()
-
-
-
-
 
 def init_session(email):
 	pass
@@ -64,73 +59,43 @@ def login(request, redirect_url='index'):
 
 def logout(request):
 	request.session.flush()
-	return HttpResponseRedirect('index')
-
-
-def get_starred(request):
-	starred = []
-	try:
-		login_user = request.session['id']	
-		starred = p.author_likes[login_user]['likes']
-	except:
-		pass
-	return starred
+	return HttpResponseRedirect('/login')
 
 
 def mobile(request):
 	return render_to_response("mobile.html",{})
 
 def desktop(request):
+	recs = []
 	try:
 		user = request.session['id']
-		recs = []
-		likes = []
 		if(user in p.author_likes):
 			papers_liked = p.author_likes[user]['likes']
-			papers_liked = filter(lambda x: x.strip()!='', papers_liked)
-			items = r.get_item_based_recommendations(papers_liked)
-			for item in items:
-				rec = {}
-				id=item['id']
-				rec['id']=id
-				rec.update(e.entities[id])
-				recs.append(rec)
-			for like in papers_liked:
-				l = {}
-				id=like
-				l['id']=id
-				l.update(e.entities[id])
-				likes.append(l)
-		#print recs
-		return render_to_response("desktop.html", {'login': request.session['name'], 'recs':recs, 'likes':likes, 'papers': e.entities, 'starred':get_starred(request)})
+			recs = r.get_item_based_recommendations(papers_liked)		
 	except KeyError:
-		print sys.exc_info()
 		return HttpResponseRedirect('login')
+	except:
+		pass
+	return render_to_response("desktop.html", 
+		{
+		'login_id': request.session['id'], 
+		'login_name': request.session['name'],
+		'recs':json.dumps(recs), 
+		'prefs':json.dumps(p.author_likes), 
+		'entities': json.dumps(e.entities), 
+		'sessions':json.dumps(s.sessions)
+		})
+
+
+def get_recs(request, papers):
+	recs = r.get_item_based_recommendations(papers)
+	return json.dumps(recs)
 
 
 
-
-def papers(request):	
-	return render_to_response("papers.html", {'login': request.session['name'], 'papers':e.entities, 'starred':get_starred(request)})
-
-
-
-
-def paper(request, paper_id):
-	items = r.get_item_based_recommendations([paper_id])
-	recs = []
-	paper = e.entities[paper_id]
-	for item in items:
-		rec = {}
-		id = item['id']
-		rec['id']=id
-		rec.update(e.entities[id])
-		recs.append(rec)
-	return render_to_response("paper.html", {'login': request.session['name'], 'id':paper_id, 'paper': paper, 'recs':recs, 'starred':get_starred(request)})
-
-
-
-def like(request, paper_id, like_str):	
+def like(request, paper_id, like_str):
+	if(paper_id == ''):
+		return HttpResponse(json.dumps({'status':'notok'}), mimetype="application/json")
 	user = request.session['id']
 	if(user not in p.author_likes):
 		p.author_likes[user] = {}
@@ -142,14 +107,3 @@ def like(request, paper_id, like_str):
 		p.author_likes[user]['likes'].remove(paper_id)
 		return HttpResponse(json.dumps({'status':'ok'}), mimetype="application/json")
 	return HttpResponse(json.dumps({'status':'notok'}), mimetype="application/json")
-
-
-
-def schedule(request):
-	sessions = s.sessions
-	for session in sessions:
-		for submission in sessions[session]['submissions']:
-			sessions[session].update({'timeslot': str(100/len(sessions[session]['submissions']))+'%'})
-			sessions[session]['submissions'][submission].update(e.entities[submission])
-	return render_to_response("schedule.html", {'login': request.session['name'], 'sessions':sessions, 'starred':get_starred(request)})
-

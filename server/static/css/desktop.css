@@ -152,7 +152,9 @@ body {
 
 
 
-
+#home, #schedule{
+	position: relative;
+}
 
 
 #content{
@@ -361,6 +363,8 @@ table.dataTable tbody tr td {
 .ui-icon-star{
 	margin:0 auto;
 }
+
+
 
 
 
