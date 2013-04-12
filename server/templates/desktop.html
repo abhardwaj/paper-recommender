@@ -53,13 +53,8 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 		raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
 		raw_html += '</ul>'
 		raw_html += '</td>'
-		raw_html += '<td class="metadata">'
-		
-		if(prefs[login_id].likes.indexOf(id)!=-1){
-			raw_html += '<div class="ui-state-default ui-corner-all ui-state-active" title="' + id + '">'
-		}else{
-			raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'
-		}
+		raw_html += '<td class="metadata">'		
+		raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'		
 		raw_html += '<span class="ui-icon ui-icon-star"></span>'
 		raw_html += '</div>'
 		
@@ -197,7 +192,8 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 					var row = $(raw_html)
 					$("#likes").append(row);
 				}
-			}			
+			}
+			//$("#likes").dataTable().fnDraw()			
 		}
 
 
@@ -218,7 +214,8 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 				var raw_html = get_paper_html(recommended[r].id)
 				var row = $(raw_html)
 				$("#recs").append(row);
-			}			
+			}
+			//$("#recs").dataTable().fnDraw()		
 		}
 
 
@@ -258,11 +255,7 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 			thu.filter('.t16').appendTo("#Thursdayt16");
 		}
 
-		populate_likes();
-		populate_recs();
-		populate_papers();
-		populate_sessions();		
-		arrange_sessions();
+		
 
 
 
@@ -346,18 +339,30 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 		});
 
 
-
+		populate_likes();
+		populate_recs();
+		populate_papers();
+		populate_sessions();		
+		arrange_sessions();
 
 		// Starred Items
 
-		function highlight_starred(){		   
-	   		$( ".clickable" ).each(function(index) {
-				if($(this).find('.ui-state-active').length > 0){
-					$(this).addClass('starred');
+
+		function refresh_starred(){
+			if(prefs[login_id] == null || prefs[login_id].likes == null){
+				return
+			}
+			$( ".ui-state-default" ).each(function(index) {
+				if(prefs[login_id].likes.indexOf($(this).attr("title")) != -1){
+					$(this).addClass('ui-state-active');
+				}else{
+					$(this).removeClass('ui-state-active');
 				}
 			});
-		   
 		}
+	
+
+		
 
 
 		
@@ -527,7 +532,7 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 			if($(this).hasClass('ui-state-active')){
 				$.get('/like/' + $(this).attr('title') +'/unlike', function(res) {
 				  if(res.status == 'ok'){
-				  	$(this).toggleClass('ui-state-active');				  	
+				  	$(this).toggleClass('ui-state-active');	  	
 				  }
 				});
 			}else{
@@ -538,6 +543,9 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 				});
 
 			}
+			populate_likes();
+			populate_recs();
+			refresh_starred();
 		});
 
 		
@@ -597,7 +605,9 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 		    }
 		});
 
-		
+		refresh_starred();
+
+		//do this in the end
 
 		$('.dataTables_filter').find('input[type=text]').attr('title', 'author name, paper keywords, persona, etc...')
 		$('.dataTables_filter').find('input[type=text]').addClass('default-text')
@@ -609,6 +619,7 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 
 		$("#likes").dataTable().fnDraw(false);
 		$("#recs").dataTable().fnDraw(false);
+		
 
 	});
 </script>
