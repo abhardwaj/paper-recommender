@@ -323,7 +323,7 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 				var node = recs.fnGetNodes(n)
 				$(node).addClass('clickable');
 				$(node.cells[0]).addClass('content')
-				var f = load_paper(r)
+				var f = load_paper(recommended[r].id)
 				$(node.cells[0]).click(f)
 				$(node.cells[1]).addClass('metadata')
 			}
