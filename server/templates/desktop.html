@@ -55,7 +55,7 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 		raw_html += '</td>'
 		raw_html += '<td class="metadata">'
 		
-		if(id in prefs){
+		if(prefs[login_id].likes.indexOf(id)!=-1){
 			raw_html += '<div class="ui-state-default ui-corner-all ui-state-active" title="' + id + '">'
 		}else{
 			raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'
@@ -527,15 +527,13 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 			if($(this).hasClass('ui-state-active')){
 				$.get('/like/' + $(this).attr('title') +'/unlike', function(res) {
 				  if(res.status == 'ok'){
-				  	$(this).toggleClass('ui-state-active');
-				  	window.location='/'
+				  	$(this).toggleClass('ui-state-active');				  	
 				  }
 				});
 			}else{
 				$.get('/like/' + $(this).attr('title') +'/like', function(res) {
 				  if(res.status == 'ok'){
 				  	$(this).toggleClass('ui-state-active');
-				  	window.location='/'
 				  }
 				});
 
