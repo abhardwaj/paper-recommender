@@ -24,14 +24,35 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 	};	
 
 
-	function show_tab(tab){
+	function show_tab(tab, paper_id){
 		console.log(tab)
 		$("#home").hide();
 		$("#schedule").hide();
 		$("#paper").hide();
-		$("#"+tab.trim()).show();
-		if(['home', 'schedule'].indexOf(tab)!=-1)
-			window.history.pushState(document.html, document.title, '?tab='+tab);
+		$("#"+tab).show();
+		if(tab == 'schedule' || tab == 'home')
+			window.history.pushState(document.html, document.title, '?tab='+tab)
+		else if(tab=='paper'){
+			var selected_paper_html = get_selected_paper_html(paper_id)
+			if(selected_paper_html!=null){
+				$('#paper').find('.form').html(selected_paper_html)
+				$.post('recs', {'papers': JSON.stringify([paper_id])}, 
+					function(res){				
+						$("#similar_papers").html("")
+						for(var i = 0; i< res.length; i++){
+							var raw_html = get_paper_html(res[i].id)
+							if(raw_html!=null){
+								var row = $(raw_html)
+								$("#similar_papers").append(row);
+							}
+						}
+						$("#similar_papers").dataTable().fnClearTable(true);
+					});
+				window.history.pushState(document.html, document.title, '?tab='+tab+'&id='+paper_id)
+			}
+		}
+		
+			
 	}		
 
 
@@ -124,24 +145,8 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 	}
 
 
-	function load_paper(paper_id) {
-		var selected_paper_html = get_selected_paper_html(paper_id)
-		if(selected_paper_html!=null){
-			$('#paper').find('.form').html(selected_paper_html)
-			show_tab('paper')
-			$.post('recs', {'papers': JSON.stringify([paper_id])}, 
-					function(res){				
-						$("#similar_papers").html("")
-						for(var i = 0; i< res.length; i++){
-							var raw_html = get_paper_html(res[i].id)
-							if(raw_html!=null){
-								var row = $(raw_html)
-								$("#similar_papers").append(row);
-							}
-						}
-						$("#similar_papers").dataTable().fnDraw();
-					});
-		}
+	function load_paper(paper_id) {		
+		show_tab('paper', paper_id)		
 	}
 
 
@@ -171,92 +176,15 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 		// Handle tabs
 
 		var tab = $.getUrlVar('tab')
-		if(tab==null || (['home','schedule','selected_paper'].indexOf(tab) == -1)){
+		var id = $.getUrlVar('id')
+		if(tab==null || (['home','schedule','paper'].indexOf(tab) == -1)){
 		    tab='home';
 		}		
 
 		$('#nav_home').click(function(){show_tab('home');})
 		$('#nav_schedule').click(function(){show_tab('schedule');})
 
-		show_tab(tab);		
-
-
-		// Populate all raw tables
-
-		function populate_likes(){
-			if(prefs[login_id] == null)
-				return		
-			for(p in prefs[login_id].likes){
-				var raw_html = get_paper_html(prefs[login_id].likes[p])
-				if(raw_html!=null){
-					var row = $(raw_html)
-					$("#likes").append(row);
-				}
-			}
-			//$("#likes").dataTable().fnDraw()			
-		}
-
-
-
-		function populate_papers(){			
-			for(e in entities){
-				var raw_html = get_paper_html(e)
-				if(raw_html != null){
-					var row = $(raw_html)
-					$("#papers").append(row);
-				}
-			}			
-		}
-
-
-		function populate_recs(){			
-			for(r in recommended){
-				var raw_html = get_paper_html(recommended[r].id)
-				var row = $(raw_html)
-				$("#recs").append(row);
-			}
-			//$("#recs").dataTable().fnDraw()		
-		}
-
-
-		function populate_sessions(){			
-			for(s in sessions){
-				var raw_html = get_session_html(s)
-				var row = $(raw_html)
-				$("#temp_session_container").append(row);
-			}			
-		}
-
-
-		function arrange_sessions(){
-			var mon = $('.all').filter('.Monday');
-			mon.filter('.t09').appendTo("#Mondayt09");
-			mon.filter('.t11').appendTo("#Mondayt11");
-			mon.filter('.t14').appendTo("#Mondayt14");
-			mon.filter('.t16').appendTo("#Mondayt16");
-			
-
-			var tue = $('.all').filter('.Tuesday');
-			tue.filter('.t09').appendTo("#Tuesdayt09");
-			tue.filter('.t11').appendTo("#Tuesdayt11");
-			tue.filter('.t14').appendTo("#Tuesdayt14");
-			tue.filter('.t16').appendTo("#Tuesdayt16");
-
-			var wed = $('.all').filter('.Wednesday');
-			wed.filter('.t09').appendTo("#Wednesdayt09");
-			wed.filter('.t11').appendTo("#Wednesdayt11");
-			wed.filter('.t14').appendTo("#Wednesdayt14");
-			wed.filter('.t16').appendTo("#Wednesdayt16");
-
-			var thu = $('.all').filter('.Thursday');
-			thu.filter('.t09').appendTo("#Thursdayt09");
-			thu.filter('.t11').appendTo("#Thursdayt11");
-			thu.filter('.t14').appendTo("#Thursdayt14");
-			thu.filter('.t16').appendTo("#Thursdayt16");
-		}
-
-		
-
+		show_tab(tab, id);
 
 
 
@@ -337,6 +265,90 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 			]
 			
 		});
+
+
+
+		// Populate all raw tables
+
+		function populate_likes(){
+			if(prefs[login_id] == null || prefs[login_id].likes == null)
+				return	
+			$("#likes").html('')	
+			for(p in prefs[login_id].likes){
+				var raw_html = get_paper_html(prefs[login_id].likes[p])
+				if(raw_html!=null){
+					var row = $(raw_html)
+					$("#likes").append(row);
+				}
+			}
+			likes.fnClearTable(true)	
+			//$("#likes").dataTable().fnDraw()			
+		}
+
+
+
+		function populate_papers(){
+			$("#papers").html('')	
+			for(e in entities){
+				var raw_html = get_paper_html(e)
+				if(raw_html != null){
+					var row = $(raw_html)
+					$("#papers").append(row);
+				}
+			}
+			papers.fnClearTable(true)			
+		}
+
+
+		function populate_recs(){
+			$("#recs").html('')	
+			for(r in recommended){
+				var raw_html = get_paper_html(recommended[r].id)
+				var row = $(raw_html)
+				$("#recs").append(row);
+			}
+			recs.fnClearTable(true)	
+			//$("#recs").dataTable().fnAddData(row);	
+		}
+
+
+		function populate_sessions(){
+			$("#temp_session_container").html('')	
+			for(s in sessions){
+				var raw_html = get_session_html(s)
+				var row = $(raw_html)
+				$("#temp_session_container").append(row);
+			}				
+		}
+
+
+		function arrange_sessions(){
+			var mon = $('.all').filter('.Monday');
+			mon.filter('.t09').appendTo("#Mondayt09");
+			mon.filter('.t11').appendTo("#Mondayt11");
+			mon.filter('.t14').appendTo("#Mondayt14");
+			mon.filter('.t16').appendTo("#Mondayt16");
+			
+
+			var tue = $('.all').filter('.Tuesday');
+			tue.filter('.t09').appendTo("#Tuesdayt09");
+			tue.filter('.t11').appendTo("#Tuesdayt11");
+			tue.filter('.t14').appendTo("#Tuesdayt14");
+			tue.filter('.t16').appendTo("#Tuesdayt16");
+
+			var wed = $('.all').filter('.Wednesday');
+			wed.filter('.t09').appendTo("#Wednesdayt09");
+			wed.filter('.t11').appendTo("#Wednesdayt11");
+			wed.filter('.t14').appendTo("#Wednesdayt14");
+			wed.filter('.t16').appendTo("#Wednesdayt16");
+
+			var thu = $('.all').filter('.Thursday');
+			thu.filter('.t09').appendTo("#Thursdayt09");
+			thu.filter('.t11').appendTo("#Thursdayt11");
+			thu.filter('.t14').appendTo("#Thursdayt14");
+			thu.filter('.t16').appendTo("#Thursdayt16");
+		}
+
 
 
 		populate_likes();
@@ -529,23 +541,27 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 
 
 		$('.ui-state-default').click(function(event){ 
-			if($(this).hasClass('ui-state-active')){
-				$.get('/like/' + $(this).attr('title') +'/unlike', function(res) {
+			var obj = $(this)
+			if(obj.hasClass('ui-state-active')){
+				$.get('/like/' + obj.attr('title') +'/unlike', function(res) {
 				  if(res.status == 'ok'){
-				  	$(this).toggleClass('ui-state-active');	  	
+				  	obj.removeClass('ui-state-active');	
+				  	prefs[login_id].likes.remove(obj.attr('title'))  	
 				  }
 				});
 			}else{
-				$.get('/like/' + $(this).attr('title') +'/like', function(res) {
+				$.get('/like/' + obj.attr('title') +'/like', function(res) {
 				  if(res.status == 'ok'){
-				  	$(this).toggleClass('ui-state-active');
+				  	obj.addClass('ui-state-active');
+				  	prefs[login_id].likes.append(obj.attr('title'))
 				  }
 				});
 
 			}
-			populate_likes();
-			populate_recs();
-			refresh_starred();
+			refresh_starred()
+			update_starred()
+			
+			//refresh_starred();
 		});
 
 		
@@ -606,6 +622,10 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 		});
 
 		refresh_starred();
+
+		if(tab == 'schedule'){
+			update_starred()
+		}
 
 		//do this in the end
 
