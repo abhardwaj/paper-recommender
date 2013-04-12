@@ -86,10 +86,11 @@ def desktop(request):
 		'sessions':json.dumps(s.sessions)
 		})
 
-
-def get_recs(request, papers):
+@csrf_exempt
+def get_recs(request):
+	papers = json.loads(request.POST["papers"])
 	recs = r.get_item_based_recommendations(papers)
-	return json.dumps(recs)
+	return HttpResponse(json.dumps(recs), mimetype="application/json")
 
 
 
