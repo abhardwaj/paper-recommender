@@ -239,8 +239,10 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 		}
 
 
-		load_paper = function (paper_id) {		
-			show_tab('paper', paper_id)		
+		load_paper = function (paper_id) {
+			return function(){ 		
+				show_tab('paper', paper_id)
+			}
 		}
 
 
@@ -250,17 +252,22 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 			$('#paper').find('.form').html(selected_paper_html)
 			$.post('recs', {'papers': JSON.stringify([paper_id])}, 
 			function(res){				
-				$("#similar_papers").html("")
 				for(var i = 0; i< res.length; i++){
+					var p_id = res[i].id
 					var raw_html = get_paper_html(res[i].id)
 					if(raw_html!=null){
 						var row = $(raw_html)
-						//console.log(row)
-						//console.log(row.children().eq(0).html())
-						$("#similar_papers").append(row)
+						var n = similar_papers.fnAddData([row.children().eq(0).html(), row.children().eq(1).html()])
+						var node = similar_papers.fnGetNodes(n)
+						$(node).addClass('clickable');
+						$(node.cells[0]).addClass('content')
+						var f = load_paper(p_id)
+						$(node.cells[0]).click(f)
+						$(node.cells[1]).addClass('metadata')
 					}
 				}
 			});
+
 		}	
 
 		show_tab(tab, id);
@@ -271,42 +278,56 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 		function populate_likes(){
 			if(prefs[login_id] == null || prefs[login_id].likes == null)
 				return	
-			$("#likes").html('')	
+			likes.fnClearTable();
 			for(p in prefs[login_id].likes){
 				var raw_html = get_paper_html(prefs[login_id].likes[p])
 				if(raw_html!=null){
 					var row = $(raw_html)
-					$("#likes").append(row);
+					var n = likes.fnAddData([row.children().eq(0).html(), row.children().eq(1).html()])
+					var node = likes.fnGetNodes(n)
+					$(node).addClass('clickable');
+					$(node.cells[0]).addClass('content')
+					var f = load_paper(prefs[login_id].likes[p])
+					$(node.cells[0]).click(f)
+					$(node.cells[1]).addClass('metadata')
 				}
-			}
-			likes.fnClearTable(true)	
-			//$("#likes").dataTable().fnDraw()			
+			}		
 		}
 
 
 
 		function populate_papers(){
-			$("#papers").html('')	
+			papers.fnClearTable();
 			for(e in entities){
 				var raw_html = get_paper_html(e)
 				if(raw_html != null){
 					var row = $(raw_html)
-					$("#papers").append(row);
+					var n = papers.fnAddData([row.children().eq(0).html(), row.children().eq(1).html()])
+					var node = papers.fnGetNodes(n)
+					$(node).addClass('clickable');
+					$(node.cells[0]).addClass('content')
+					var f = load_paper(e)
+					$(node.cells[0]).click(f)
+					$(node.cells[1]).addClass('metadata')
 				}
-			}
-			papers.fnClearTable(true)			
+			}	
 		}
 
 
 		function populate_recs(){
-			$("#recs").html('')	
+			papers.fnClearTable();	
 			for(r in recommended){
 				var raw_html = get_paper_html(recommended[r].id)
 				var row = $(raw_html)
-				$("#recs").append(row);
+				var n = recs.fnAddData([row.children().eq(0).html(), row.children().eq(1).html()])
+				var node = recs.fnGetNodes(n)
+				$(node).addClass('clickable');
+				$(node.cells[0]).addClass('content')
+				var f = load_paper(r)
+				$(node.cells[0]).click(f)
+				$(node.cells[1]).addClass('metadata')
 			}
-			recs.fnClearTable(true)	
-			//$("#recs").dataTable().fnAddData(row);	
+				
 		}
 
 
