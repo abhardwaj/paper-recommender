@@ -21,78 +21,111 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 	        if (obj.hasOwnProperty(key)) size++;
 	    }
     	return size;
-	};
+	};	
 
-	function load_paper (paper_id) {
-		window.location.href = "/paper/" + paper_id;
-	}
+
+	function show_tab(tab){
+		console.log(tab)
+		$("#home").hide();
+		$("#schedule").hide();
+		$("#paper").hide();
+		$("#"+tab.trim()).show();
+		window.history.pushState(document.html, document.title, '?tab='+tab);
+	}		
+
 
 	function get_paper_html(id){
-		var row_html = '<tr class="clickable">'
-		row_html += '<td class="content" onclick="load_paper(\'' + id + '\);">'	
-		row_html += '<ul>'
-		row_html += '<li class="strong">'+entities[id].title+'</li>'
-		row_html += '<li>'+entities[id].c_and_b + '</li>'
-		row_html += '<li class="blue">'
+		var raw_html = '<tr class="clickable">'
+		raw_html += '<td class="content" onclick="load_paper(\'' + id + '\');">'	
+		raw_html += '<ul>'
+		raw_html += '<li class="strong">'+entities[id].title+'</li>'
+		raw_html += '<li>'+entities[id].c_and_b + '</li>'
+		raw_html += '<li class="blue">'
 		for(author in entities[id].authors){
-			row_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
+			raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
 		}
-		row_html += '</li>'
-		row_html += '<li class="gray">' + entities[id].keywords + '</li>'
-		row_html += '</ul>'
-		row_html += '</td>'
-		row_html += '<td class="metadata">'
+		raw_html += '</li>'
+		raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
+		raw_html += '</ul>'
+		raw_html += '</td>'
+		raw_html += '<td class="metadata">'
 		
 		if(id in prefs){
-			row_html += '<div class="ui-state-default ui-corner-all ui-state-active" title="' + id + '">'
+			raw_html += '<div class="ui-state-default ui-corner-all ui-state-active" title="' + id + '">'
 		}else{
-			row_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'
+			raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'
 		}
-		row_html += '<span class="ui-icon ui-icon-star"></span>'
-		row_html += '</div>'
+		raw_html += '<span class="ui-icon ui-icon-star"></span>'
+		raw_html += '</div>'
 		
-		row_html += '</td>'
-		row_html += '</tr>'
+		raw_html += '</td>'
+		raw_html += '</tr>'
 
-		return row_html
+		return raw_html
 	}
 	
 
 
 	function get_session_html(id){
-		var row_html = '<div class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" title="' + id + '">'
-		row_html += '<table class="session-container"><tr class="clickable">'
-		row_html += '<td class="content">'	
-		row_html += '<ul>'
-		row_html += '<li class="strong"><span class="arrow">▸</span>'+sessions[id].s_title+'</li>'
-		row_html += '<li class="gray">Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</li>'
-		row_html += '</ul>'
+		var raw_html = '<div class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" title="' + id + '">'
+		raw_html += '<table class="session-container"><tr class="clickable">'
+		raw_html += '<td class="content">'	
+		raw_html += '<ul>'
+		raw_html += '<li class="strong"><span class="arrow">▸</span>'+sessions[id].s_title+'</li>'
+		raw_html += '<li class="gray">Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</li>'
+		raw_html += '</ul>'
 
 		
-		row_html += '<div class="timeline">'
+		raw_html += '<div class="timeline">'
 		var size = Object.size(sessions[id].submissions)
 		var w = 100/size
 		for(var i=0; i< size; i++){
-			row_html += '<div style="width:' + w + '%;"></div>'
+			raw_html += '<div style="width:' + w + '%;"></div>'
 		}
-		row_html += '</div>'
-		row_html += '</td>'
-		row_html += '<td class="metadata">'		
-		row_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'
-		row_html += '<span class="ui-icon ui-icon-star"></span>'
-		row_html += '</div>'		
-		row_html += '</td>'
-		row_html += '</tr>'
-		row_html += '</table>'
-		row_html += '<div id="' +id +'"  style="display:none;">'
+		raw_html += '</div>'
+		raw_html += '</td>'
+		raw_html += '<td class="metadata">'		
+		raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'
+		raw_html += '<span class="ui-icon ui-icon-star"></span>'
+		raw_html += '</div>'		
+		raw_html += '</td>'
+		raw_html += '</tr>'
+		raw_html += '</table>'
+		raw_html += '<div id="' +id +'"  style="display:none;">'
 		for(var paper_id in sessions[id].submissions){
-			row_html += '<table class="paper-container">'
-			row_html += get_paper_html(paper_id);
-			row_html += '</table>'
+			raw_html += '<table class="paper-container">'
+			raw_html += get_paper_html(paper_id);
+			raw_html += '</table>'
 		}
-		row_html += '</div>'
-		return row_html
+		raw_html += '</div>'
+		return raw_html
 	}
+
+	
+
+	function get_selected_paper_html(id){
+		var raw_html = '<span class="strong">' + entities[id].title + '</span><br />'
+		raw_html += '<span class="blue">'
+		for(var uthor in entities[id].authors){
+			raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
+		}
+		raw_html += '</span>'
+		raw_html += '<hr />'
+		raw_html += '<ul>'
+		raw_html += '<li>' + entities[id].abstract + '</li>'
+		raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
+		raw_html += '</ul>'
+		return raw_html
+	}
+
+
+	function load_paper(paper_id) {
+		var selected_paper_html = get_selected_paper_html(paper_id)
+		$('#paper').find('.form').html(selected_paper_html)
+		show_tab('paper')
+	}
+
+
 
 
 	$.extend({
@@ -100,7 +133,7 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 	        var vars = [], hash;
 	        var hashes = window.location.href.slice(
 	                window.location.href.indexOf('?') + 1).split('&');
-	        for ( var i = 0; i < hashes.length; i++) {
+	        for (var i = 0; i < hashes.length; i++) {
 	            hash = hashes[i].split('=');
 	            vars.push(hash[0]);
 	            vars[hash[0]] = hash[1];
@@ -121,32 +154,20 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 		var tab = $.getUrlVar('tab')
 		if(tab==null || (['home','schedule','selected_paper'].indexOf(tab) == -1)){
 		    tab='home';
-		}
-
-		show_tab = function(tab){
-			console.log(tab)
-			$("#home").hide();
-			$("#schedule").hide();
-			$("#paper").hide();
-			$("#"+tab.trim()).show();
-			window.history.pushState(document.html, document.title, '?tab='+tab);
 		}		
-		
 
 		$('#nav_home').click(function(){show_tab('home');})
 		$('#nav_schedule').click(function(){show_tab('schedule');})
 
-
-
-		show_tab(tab);
+		show_tab(tab);		
 
 
 		// Populate all raw tables
 
 		function populate_likes(){			
 			for(p in prefs[login_id].likes){
-				row_html = get_paper_html(prefs[login_id].likes[p])
-				var row = $(row_html)
+				raw_html = get_paper_html(prefs[login_id].likes[p])
+				var row = $(raw_html)
 				$("#likes").append(row);
 			}			
 		}
@@ -155,8 +176,8 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 
 		function populate_papers(){			
 			for(e in entities){
-				row_html = get_paper_html(e)
-				var row = $(row_html)
+				raw_html = get_paper_html(e)
+				var row = $(raw_html)
 				$("#papers").append(row);
 			}			
 		}
@@ -164,8 +185,8 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 
 		function populate_recs(){			
 			for(r in recommended){
-				row_html = get_paper_html(recommended[r].id)
-				var row = $(row_html)
+				raw_html = get_paper_html(recommended[r].id)
+				var row = $(raw_html)
 				$("#recs").append(row);
 			}			
 		}
@@ -173,8 +194,8 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 
 		function populate_sessions(){			
 			for(s in sessions){
-				row_html = get_session_html(s)
-				var row = $(row_html)
+				raw_html = get_session_html(s)
+				var row = $(raw_html)
 				$("#temp_session_container").append(row);
 			}			
 		}
@@ -212,6 +233,8 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 		populate_papers();
 		populate_sessions();		
 		arrange_sessions();
+
+
 
 
 
@@ -291,6 +314,8 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 			]
 			
 		});
+
+
 
 
 		// Starred Items
@@ -557,17 +582,10 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 		$("#likes").dataTable().fnDraw(false);
 		$("#recs").dataTable().fnDraw(false);
 
-
-
-
-		
-
-
-		
-
-
 	});
 </script>
+
+
 
 <div id="content">
 <div id="home">
@@ -729,6 +747,22 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 </div> 
 
 </div> <!-- schedule -->
+
+
+<div id="paper">
+	<h3><span class="gray">Selected Paper</span></h3>
+	<div class="form" style="margin-top:10px; cursor:pointer;">
+	</div>
+	<br />
+	<h3 class="collapsible-title" id="similar_papers_toggle"><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
+	<div id="similar_papers_container">
+	<table id="similar_papers">		
+	</table>
+	</div>
+
+</div>  <!-- paer -->
+
+
 </div> <!-- content -->
 
 <div class="hidden" style="display:none" id="temp_session_container">
