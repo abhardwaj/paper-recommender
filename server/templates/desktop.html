@@ -21,136 +21,7 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 	        if (obj.hasOwnProperty(key)) size++;
 	    }
     	return size;
-	};	
-
-
-	function show_tab(tab, paper_id){
-		console.log(tab)
-		$("#home").hide();
-		$("#schedule").hide();
-		$("#paper").hide();
-		$("#"+tab).show();
-		if(tab == 'schedule' || tab == 'home')
-			window.history.pushState(document.html, document.title, '?tab='+tab)
-		else if(tab=='paper'){
-			var selected_paper_html = get_selected_paper_html(paper_id)
-			if(selected_paper_html!=null){
-				$('#paper').find('.form').html(selected_paper_html)
-				$.post('recs', {'papers': JSON.stringify([paper_id])}, 
-					function(res){				
-						$("#similar_papers").html("")
-						for(var i = 0; i< res.length; i++){
-							var raw_html = get_paper_html(res[i].id)
-							if(raw_html!=null){
-								var row = $(raw_html)
-								$("#similar_papers").append(row);
-							}
-						}
-						$("#similar_papers").dataTable().fnClearTable(true);
-					});
-				window.history.pushState(document.html, document.title, '?tab='+tab+'&id='+paper_id)
-			}
-		}
-		
-			
-	}		
-
-
-	function get_paper_html(id){
-		if(entities[id] == null)
-			return null
-		var raw_html = '<tr class="clickable">'
-		raw_html += '<td class="content" onclick="load_paper(\'' + id + '\');">'	
-		raw_html += '<ul>'
-		raw_html += '<li class="strong">'+entities[id].title+'</li>'
-		raw_html += '<li>'+entities[id].c_and_b + '</li>'
-		raw_html += '<li class="blue">'
-		for(author in entities[id].authors){
-			if(entities[id].authors[author] != null){
-				raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
-			}
-		}
-		raw_html += '</li>'
-		raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
-		raw_html += '</ul>'
-		raw_html += '</td>'
-		raw_html += '<td class="metadata">'		
-		raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'		
-		raw_html += '<span class="ui-icon ui-icon-star"></span>'
-		raw_html += '</div>'
-		
-		raw_html += '</td>'
-		raw_html += '</tr>'
-
-		return raw_html
-	}
-	
-
-
-	function get_session_html(id){
-		var raw_html = '<div class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" title="' + id + '">'
-		raw_html += '<table class="session-container"><tr class="clickable">'
-		raw_html += '<td class="content">'	
-		raw_html += '<ul>'
-		raw_html += '<li class="strong"><span class="arrow">▸</span>'+sessions[id].s_title+'</li>'
-		raw_html += '<li class="gray">Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</li>'
-		raw_html += '</ul>'
-
-		
-		raw_html += '<div class="timeline">'
-		var size = Object.size(sessions[id].submissions)
-		var w = 100/size
-		for(var i=0; i< size; i++){
-			raw_html += '<div style="width:' + w + '%;"></div>'
-		}
-		raw_html += '</div>'
-		raw_html += '</td>'
-		raw_html += '<td class="metadata">'		
-		raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'
-		raw_html += '<span class="ui-icon ui-icon-star"></span>'
-		raw_html += '</div>'		
-		raw_html += '</td>'
-		raw_html += '</tr>'
-		raw_html += '</table>'
-		raw_html += '<div id="' +id +'"  style="display:none;">'
-		for(var paper_id in sessions[id].submissions){
-			raw_html += '<table class="paper-container">'
-			raw_html += get_paper_html(paper_id);
-			raw_html += '</table>'
-		}
-		raw_html += '</div>'
-		return raw_html
-	}
-
-	
-
-	function get_selected_paper_html(id){
-		if(entities[id] == null)
-			return null
-
-		var raw_html = '<span class="strong">' + entities[id].title + '</span><br />'
-		raw_html += '<span class="blue">'
-		for(var author in entities[id].authors){
-			if(entities[id].authors[author] != null){
-				raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
-			}
-		}
-		raw_html += '</span>'
-		raw_html += '<hr />'
-		raw_html += '<ul>'
-		raw_html += '<li>' + entities[id].abstract + '</li>'
-		raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
-		raw_html += '</ul>'
-		return raw_html
-	}
-
-
-	function load_paper(paper_id) {		
-		show_tab('paper', paper_id)		
-	}
-
-
-
+	};
 
 	$.extend({
 	    getUrlVars : function() {
@@ -174,7 +45,6 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 	$(document).ready(function(){
 
 		// Handle tabs
-
 		var tab = $.getUrlVar('tab')
 		var id = $.getUrlVar('id')
 		if(tab==null || (['home','schedule','paper'].indexOf(tab) == -1)){
@@ -183,10 +53,6 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 
 		$('#nav_home').click(function(){show_tab('home');})
 		$('#nav_schedule').click(function(){show_tab('schedule');})
-
-		show_tab(tab, id);
-
-
 
 
 		// All table definitions Below
@@ -264,12 +130,144 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 				{}
 			]
 			
-		});
+		});		
+
+
+		function show_tab(tab, paper_id){
+			console.log(tab)
+			$("#home").hide();
+			$("#schedule").hide();
+			$("#paper").hide();
+			$("#"+tab).show();
+			if(tab == 'schedule' || tab == 'home'){
+				window.history.pushState(document.html, document.title, '?tab='+tab)
+			}else if(tab=='paper'){
+				window.history.pushState(document.html, document.title, '?tab='+tab+'&id='+paper_id)
+				show_paper(paper_id)
+			}
+			
+				
+		}		
+
+
+		function get_paper_html(id){
+			if(entities[id] == null)
+				return null
+			var raw_html = '<tr class="clickable">'
+			raw_html += '<td class="content" onclick="load_paper(\'' + id + '\');">'	
+			raw_html += '<ul>'
+			raw_html += '<li class="strong">'+entities[id].title+'</li>'
+			raw_html += '<li>'+entities[id].c_and_b + '</li>'
+			raw_html += '<li class="blue">'
+			for(author in entities[id].authors){
+				if(entities[id].authors[author] != null){
+					raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
+				}
+			}
+			raw_html += '</li>'
+			raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
+			raw_html += '</ul>'
+			raw_html += '</td>'
+			raw_html += '<td class="metadata">'		
+			raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'		
+			raw_html += '<span class="ui-icon ui-icon-star"></span>'
+			raw_html += '</div>'
+			
+			raw_html += '</td>'
+			raw_html += '</tr>'
+
+			return raw_html
+		}
+		
+
+
+		function get_session_html(id){
+			var raw_html = '<div class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" title="' + id + '">'
+			raw_html += '<table class="session-container"><tr class="clickable">'
+			raw_html += '<td class="content">'	
+			raw_html += '<ul>'
+			raw_html += '<li class="strong"><span class="arrow">▸</span>'+sessions[id].s_title+'</li>'
+			raw_html += '<li class="gray">Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</li>'
+			raw_html += '</ul>'
+
+			
+			raw_html += '<div class="timeline">'
+			var size = Object.size(sessions[id].submissions)
+			var w = 100/size
+			for(var i=0; i< size; i++){
+				raw_html += '<div style="width:' + w + '%;"></div>'
+			}
+			raw_html += '</div>'
+			raw_html += '</td>'
+			raw_html += '<td class="metadata">'		
+			raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'
+			raw_html += '<span class="ui-icon ui-icon-star"></span>'
+			raw_html += '</div>'		
+			raw_html += '</td>'
+			raw_html += '</tr>'
+			raw_html += '</table>'
+			raw_html += '<div id="' +id +'"  style="display:none;">'
+			for(var paper_id in sessions[id].submissions){
+				raw_html += '<table class="paper-container">'
+				raw_html += get_paper_html(paper_id);
+				raw_html += '</table>'
+			}
+			raw_html += '</div>'
+			return raw_html
+		}
+
+		
+
+		function get_selected_paper_html(id){
+			if(entities[id] == null)
+				return null
+
+			var raw_html = '<span class="strong">' + entities[id].title + '</span><br />'
+			raw_html += '<span class="blue">'
+			for(var author in entities[id].authors){
+				if(entities[id].authors[author] != null){
+					raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
+				}
+			}
+			raw_html += '</span>'
+			raw_html += '<hr />'
+			raw_html += '<ul>'
+			raw_html += '<li>' + entities[id].abstract + '</li>'
+			raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
+			raw_html += '</ul>'
+			return raw_html
+		}
+
+
+		load_paper = function (paper_id) {		
+			show_tab('paper', paper_id)		
+		}
+
+
+		function show_paper(paper_id){
+			var selected_paper_html = get_selected_paper_html(paper_id)
+			similar_papers.fnClearTable();
+			$('#paper').find('.form').html(selected_paper_html)
+			$.post('recs', {'papers': JSON.stringify([paper_id])}, 
+			function(res){				
+				$("#similar_papers").html("")
+				for(var i = 0; i< res.length; i++){
+					var raw_html = get_paper_html(res[i].id)
+					if(raw_html!=null){
+						var row = $(raw_html)
+						//console.log(row)
+						//console.log(row.children().eq(0).html())
+						$("#similar_papers").append(row)
+					}
+				}
+			});
+		}	
+
+		show_tab(tab, id);
 
 
 
 		// Populate all raw tables
-
 		function populate_likes(){
 			if(prefs[login_id] == null || prefs[login_id].likes == null)
 				return	
