@@ -130,7 +130,7 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 
 		var raw_html = '<span class="strong">' + entities[id].title + '</span><br />'
 		raw_html += '<span class="blue">'
-		for(var uthor in entities[id].authors){
+		for(var author in entities[id].authors){
 			if(entities[id].authors[author] != null){
 				raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
 			}
