@@ -11,10 +11,10 @@
 <body>
 
 <script type="text/javascript">
-    var prefs = {{prefs|safe }};
     var entities = {{entities|safe }};
     var sessions = {{sessions|safe }};
     var recommended = {{recs|safe }};
+    var starred = {{starred|safe }};
     var login_id = '{{login_id|safe}}'
 
     Object.size = function(obj) {
@@ -41,7 +41,7 @@
         raw_html += '<p class="gray">' + entities[id].keywords + '</p>'
         raw_html += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">'
         raw_html += '<input type="button" onclick = "load_paper(\''+ id + '\');" value="Discover">'
-        if(prefs[login_id] == null || prefs[login_id].likes == null || prefs[login_id].likes.indexOf(id) == -1){
+        if(starred.indexOf(id) == -1){
             raw_html += '<input type="button" class="p_star" p_id="'+id+'" value="Star">'
         }else{
             raw_html += '<input type="button" class="p_star p_active" p_id="'+id+'" value="Unstar">'
@@ -201,7 +201,7 @@
 
     function populate_papers(){ 
         $("#papers").html('')           
-        for(e in entities){
+        for(var e in entities){
             var raw_html = get_paper_html(e)
             if(raw_html != null){
                 var row = $(raw_html)
@@ -213,7 +213,7 @@
 
     function populate_recs(){ 
         $("#recs").html('')           
-        for(r in recommended){
+        for(var r in recommended){
             var raw_html = get_paper_html(recommended[r].id)
             if(raw_html != null){
                 var row = $(raw_html)
@@ -225,11 +225,9 @@
 
 
     function populate_likes(){
-        if(prefs[login_id] == null || prefs[login_id].likes == null)
-            return
         $("#likes").html('')           
-        for(p in prefs[login_id].likes){
-            var raw_html = get_paper_html(prefs[login_id].likes[p])
+        for(var s in starred){
+            var raw_html = get_paper_html(starred[s])
             if(raw_html != null){
                 var row = $(raw_html)
                 $("#likes").append(row)
@@ -240,7 +238,7 @@
 
     function populate_sessions(){
         $(".sessions").html('')   
-        for(s in sessions){
+        for(var s in sessions){
             var raw_html = get_session_html(s)
             var row = $(raw_html)
             place_session(row)
