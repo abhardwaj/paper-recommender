@@ -29,7 +29,7 @@
         if(entities[id] == null)
             return null
         
-        var raw_html = '<li><h3 class="blue"><a href="#" onclick = "load_paper(\''+ id + '\');">'+entities[id].title+'</a></h3>'
+        var raw_html = '<li class="' + id + '"><h3 class="blue"><a href="#" onclick = "load_paper(\''+ id + '\');">'+entities[id].title+'</a></h3>'
         raw_html += '<p>'+entities[id].c_and_b + '</p>'
         raw_html += '<p><strong>'
         for(author in entities[id].authors){
@@ -168,12 +168,17 @@
 
 
     function highlight(){
-        $('.p_star').parents("li:first").removeClass('highlight') 
-        $('.p_star.p_active').each(function(index) {
-            $(this).parents("li:first").addClass('highlight') 
-        });
+        $('.p_star').each(function(){
+            if($(this).hasClass('p_active'))
+                $(this).parents("li:first").addClass('highlight')
+            else
+                $(this).parents("li:first").removeClass('highlight')
+        })
         
     }
+
+
+    
 
     function bind_p_star(){
         $('.p_star').click(function(event){ 
@@ -190,6 +195,9 @@
                     recommended = res.recs
                     reset_recs(recommended)
                     bind_p_star()
+                    $('.'+obj.attr('p_id')).each(function(){
+                        $(this).find('.p_star').parent().find('.ui-btn-inner').html('Star')
+                    })
                     highlight()
                   }
                 });
@@ -198,18 +206,23 @@
                   if(res.status == 'ok'){
                     obj.addClass('p_active')
                     obj.val('Unstar')
-                    obj.parent().find('.ui-btn-inner').html('Unstar')
+                    
                     obj.parents("li:first").addClass('highlight') 
                     starred[obj.attr('p_id')] = true
                     reset_likes(starred)
                     recommended = res.recs
                     reset_recs(recommended)
                     bind_p_star()
+                    $('.'+obj.attr('p_id')).each(function(){
+                        $(this).find('.p_star').parent().find('.ui-btn-inner').html('Unstar')
+                    })
                     highlight()
+                    
                   }
                 });
 
             }
+
             
         });
         
@@ -311,7 +324,7 @@
             console.log('home')
             reset_likes(starred);
             reset_recs(recommended);
-            reset_papers(entities);           
+            reset_papers(entities);         
         }else if(e.target.id == 'schedule') {
             reset_sessions(sessions);
             console.log('schedule')            
