@@ -17,7 +17,7 @@
     <div data-role="header" data-position="fixed">
     <div data-role="navbar">
             <ul>
-                <li><a href="#home" data-icon="login" class="ui-btn-active ui-state-persist">CHI 2013 Program Login</a></li>
+                <li><a href="#home" data-theme="a">CHI 2013 Program Login</a></li>
             </ul>
     </div><!-- /navbar -->
     </div><!-- /header -->
@@ -27,9 +27,9 @@
     <form method="POST" action="login" data-ajax="false">
     	{% csrf_token %}
 	    <label for="login_email">Please enter your PCS email address</label>
-	    <input type="email" data-clear-btn="true" name="login_email" id="login_email" value="">
+	    <input type="email" name="login_email" id="login_email" value="">
 	    <label for="login_password">Password</label>
-     	<input type="password" data-clear-btn="true" name="login_password" id="login_password" value="" autocomplete="off">
+     	<input type="password" name="login_password" id="login_password" value="" autocomplete="off">
      	<button id="login_submit" type="submit">Submit</button>
 	</form>
 

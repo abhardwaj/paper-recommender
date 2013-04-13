@@ -36,7 +36,7 @@ html, body {background-color: #333 !important;}
 .ui-dialog-contain {
     width: 92.5%;
     max-width: 500px;
-    margin: 5% auto 15px auto;
+    margin: 5% auto 25px auto;
     padding: 0;
     position: relative;
     top: -15px;
