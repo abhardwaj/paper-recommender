@@ -115,10 +115,30 @@
     }
 
 
+
+    function get_selected_paper_html(id){
+        if(entities[id] == null)
+            return ''
+
+        var raw_html = '<h2>' + entities[id].title + '</h2>'
+        raw_html += '<p><dtrong>'
+        for(var author in entities[id].authors){
+            if(entities[id].authors[author] != null){
+                raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
+            }
+        }
+        raw_html += '</p>'
+        raw_html += '<hr />'
+        raw_html += '<p>' + entities[id].abstract + '</p>'
+        raw_html += '<p class="gray">' + entities[id].keywords + '</p>'
+        return raw_html
+}
+
+
     
     function load_paper(paper_id){
-        //var selected_paper_html = get_selected_paper_html(paper_id)
-        $('#selected_paper').html('')
+        var selected_paper_html = get_selected_paper_html(paper_id)
+        $('#selected_paper').html(selected_paper_html)
         $("#similar_papers").html('')
         $.post('recs', {'papers': JSON.stringify([paper_id])}, 
         function(res){              
@@ -422,7 +442,7 @@
 
 <div data-role="dialog" class="ui-responsive-panel" id="paper">  
     <div data-role="header" data-position="fixed">
-        <h1>Discover Papers</h1>
+        <h1>Discover Related Papers</h1>
     </div>
     
     <div data-role="content"> 
