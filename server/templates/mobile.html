@@ -161,7 +161,10 @@
     
     
     $(document).bind("mobileinit", function(){
-       $.mobile.defaultTransition = 'none';
+       $.mobile.defaultTransition = 'none'
+       {% if login %}
+            $.mobile.changePage('#login', 'pop', true, true);
+       {% endif %}
     });
 
     
@@ -243,6 +246,8 @@
             
     });
 </script>
+
+
 
 <div data-role="page" class="ui-responsive-panel" id="home">
 
@@ -436,8 +441,7 @@
 
     </div><!-- /content -->
 
-</div><!-- /home -->
-
+</div><!-- /paper -->
 
 
 </body>
