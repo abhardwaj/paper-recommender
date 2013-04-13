@@ -29,7 +29,7 @@
         if(entities[id] == null)
             return null
         
-        var raw_html = '<li><h3 class="blue"><a href="#" onclick = "load_paper(\''+ id + '\');">'+entities[id].title+'</a></h3>'
+        var raw_html = '<li><a href="#" onclick = "load_paper(\''+ id + '\');"><h3 class="blue">'+entities[id].title+'</h3>'
         raw_html += '<p>'+entities[id].c_and_b + '</p>'
         raw_html += '<p><strong>'
         for(author in entities[id].authors){
@@ -38,8 +38,8 @@
             }
         }
         raw_html += '</strong></p>'
-        raw_html += '<p class="gray">' + entities[id].keywords + '</p>'          
-        raw_html += '</li>'
+        raw_html += '<p class="gray">' + entities[id].keywords + '</p></a>'          
+        raw_html += '<a href="#" data-theme="c" data-rel="popup" data-position-to="window" data-transition="pop">Star</a></li>'
         return raw_html
     }
 
@@ -264,14 +264,14 @@
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Starred Papers</h4>       
-    <ul id="likes" data-role="listview" data-content-theme="e"> 
+    <ul id="likes" data-role="listview" data-split-icon="star" data-split-theme="b"> 
     </ul>
     </div>
 
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Recommended Papers</h4>       
-    <ul id="recs" data-role="listview"> 
+    <ul id="recs" data-role="listview" data-split-icon="star" data-split-theme="b"> 
     </ul>
     </div>
 
@@ -279,7 +279,7 @@
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>All Papers</h4>       
-    <ul id="papers" data-role="listview" data-filter="true" data-filter-placeholder="Search for authors or other keywords"       
+    <ul id="papers" data-role="listview" data-split-icon="star" data-split-theme="b" data-filter="true" data-filter-placeholder="Search for authors or other keywords"       
     </ul>
     </div>    
 
@@ -311,20 +311,20 @@
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Monday, 11:00-12:20</h4>
-    <ul id="Mondayt11" data-role="listview" class="session"> 
+    <ul id="Mondayt11" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Monday, 14:00-15:20</h4>
-    <ul id="Mondayt14" data-role="listview" class="session"> 
+    <ul id="Mondayt14" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Monday, 16:00-17:20</h4>
-    <ul id="Mondayt16" data-role="listview" class="session"> 
+    <ul id="Mondayt16" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
@@ -336,25 +336,25 @@
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Tuesday, 09:00-10:20</h4>
-    <ul id="Tuesdayt09" data-role="listview" class="session"> 
+    <ul id="Tuesdayt09" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Tuesday, 11:00-12:20</h4>
-    <ul id="Tuesdayt11" data-role="listview" class="session"> 
+    <ul id="Tuesdayt11" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Tuesday, 14:00-15:20</h4>
-    <ul id="Tuesdayt14" data-role="listview" class="session"> 
+    <ul id="Tuesdayt14" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Tuesday, 16:00-17:20</h4>
-    <ul id="Tuesdayt16" data-role="listview" class="session"> 
+    <ul id="Tuesdayt16" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
@@ -365,25 +365,25 @@
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Wednesday, 09:00-10:20</h4>
-    <ul id="Wednesdayt09" data-role="listview" class="session"> 
+    <ul id="Wednesdayt09" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Wednesday, 11:00-12:20</h4>
-    <ul id="Wednesdayt11" data-role="listview" class="session"> 
+    <ul id="Wednesdayt11" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Wednesday, 14:00-15:20</h4>
-    <ul id="Wednesdayt14" data-role="listview" class="session"> 
+    <ul id="Wednesdayt14" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Wednesday, 16:00-17:20</h4>
-    <ul id="Wednesdayt16" data-role="listview" class="session"> 
+    <ul id="Wednesdayt16" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
@@ -394,25 +394,25 @@
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Thursday, 09:00-10:20</h4>
-    <ul id="Thursdayt09" data-role="listview" class="session"> 
+    <ul id="Thursdayt09" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Thursday, 11:00-12:20</h4>
-    <ul id="Thursdayt11" data-role="listview" class="session"> 
+    <ul id="Thursdayt11" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Thursday, 14:00-15:20</h4>
-    <ul id="Thursdayt14" data-role="listview" class="session"> 
+    <ul id="Thursdayt14" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
 
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Thursday, 16:00-17:20</h4>
-    <ul id="Thursdayt16" data-role="listview" class="session"> 
+    <ul id="Thursdayt16" data-role="listview" class="session" data-split-icon="star"> 
     </ul>
     </div>
     
