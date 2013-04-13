@@ -23,7 +23,7 @@
         if(entities[id] == null)
             return null
         
-        var raw_html = '<li><h3>'+entities[id].title+'</h3>'
+        var raw_html = '<li><h3 class="blue">'+entities[id].title+'</h3>'
         raw_html += '<p>'+entities[id].c_and_b + '</p>'
         raw_html += '<p><strong>'
         for(author in entities[id].authors){
@@ -48,7 +48,7 @@
     $(document).bind('pagecreate', function (e) {
         
         function populate_papers(){ 
-            $("#papers").html('<li data-role="list-divider">All Papers</li>')           
+            $("#papers").html('')           
             for(e in entities){
                 var raw_html = get_paper_html(e)
                 if(raw_html != null){
@@ -57,9 +57,38 @@
                 }
             }   
         }
+
+
+        function populate_recs(){ 
+            $("#recs").html('')           
+            for(r in recommended){
+                var raw_html = get_paper_html(recommended[r].id)
+                if(raw_html != null){
+                    var row = $(raw_html)
+                    $("#recs").append(row)
+                }
+            }   
+        }
+
+
+
+        function populate_likes(){ 
+            $("#likes").html('')           
+            for(p in prefs[login_id].likes){
+                var raw_html = get_paper_html(prefs[login_id].likes[p])
+                if(raw_html != null){
+                    var row = $(raw_html)
+                    $("#likes").append(row)
+                }
+            }   
+        }
         
-        if (e.target.id == 'discover') {
-            console.log('discover')
+        if (e.target.id == 'home') {
+            console.log('home')
+            populate_likes()
+            $("#likes").listview('refresh')
+            populate_recs()
+            $("#recs").listview('refresh')
             populate_papers()
             $("#papers").listview('refresh')
         }
@@ -75,64 +104,39 @@
     <div data-role="navbar">
             <ul>
                 <li><a href="#home" data-icon="home" class="ui-btn-active">My CHI</a></li>
-                <li><a href="#discover" data-icon="search">Discover</a></li>
                 <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
                 <li><a href="#more" data-icon="grid">More</a></li>
             </ul>
     </div><!-- /navbar -->
     </div><!-- /header -->
 
-    <div data-role="content">        
+    <div data-role="content"> 
 
-    <ul data-role="listview" data-inset="true">
-    <li data-role="list-divider">Friday, October 8, 2010 <span class="ui-li-count">2</span></li>
-    <li><a href="index.html">
-        <h2>Stephen Weber</h2>
-        <p><strong>You've been invited to a meeting at Filament Group in Boston, MA</strong></p>
-        <p>Hey Stephen, if you're available at 10am tomorrow, we've got a meeting with the jQuery team.</p>
-        <p class="ui-li-aside"><strong>6:24</strong>PM</p>
-    </a></li>
-    <li><a href="index.html">
-        <h2>jQuery Team</h2>
-        <p><strong>Boston Conference Planning</strong></p>
-        <p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
-        <p class="ui-li-aside"><strong>9:18</strong>AM</p>
-    </a></li>
-    <li data-role="list-divider">Thursday, October 7, 2010 <span class="ui-li-count">1</span></li>
-    <li><a href="index.html">
-        <h2>Avery Walker</h2>
-        <p><strong>Re: Dinner Tonight</strong></p>
-        <p>Sure, let's plan on meeting at Highland Kitchen at 8:00 tonight. Can't wait! </p>
-        <p class="ui-li-aside"><strong>4:48</strong>PM</p>
-    </a></li>
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Starred Papers</h4>       
+    <ul id="likes" data-role="listview" data-content-theme="e"> 
     </ul>
+    </div>
+
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Recommended Papers</h4>       
+    <ul id="recs" data-role="listview"> 
+    </ul>
+    </div>
+
+
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>All Papers</h4>       
+    <ul id="papers" data-role="listview" data-filter="true" data-filter-placeholder="Search for authors or other keywords"       
+    </ul>
+    </div>    
 
     </div><!-- /content -->
 
 </div><!-- /home -->
 
-
-<div data-role="page" class="ui-responsive-panel" id="discover">
-
-    <div data-role="header" data-position="fixed">
-    <div data-role="navbar">
-            <ul>
-                <li><a href="#home" data-icon="home">My CHI</a></li>
-                <li><a href="#discover" data-icon="search" class="ui-btn-active">Discover</a></li>
-                <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
-                <li><a href="#more" data-icon="grid">More</a></li>
-            </ul>
-    </div><!-- /navbar -->
-    </div><!-- /header -->
-
-    <div data-role="content">        
-
-        <ul id="papers" data-role="listview" data-filter="true" data-filter-placeholder="Search for authors or other keywords " data-inset="true">            
-        </ul>
-
-    </div><!-- /content -->
-
-</div><!-- /home -->
 
 
 <div data-role="page" class="ui-responsive-panel" id="schedule">
@@ -141,8 +145,7 @@
     <div data-role="navbar">
             <ul>
                 <li><a href="#home" data-icon="home">My CHI</a></li>
-                <li><a href="#discover" data-icon="search">Discover</a></li>
-                <li><a href="#schedule" data-icon="info" class="ui-btn-active">Program Schedule</a></li>
+                <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
                 <li><a href="#more" data-icon="grid">More</a></li>
             </ul>
     </div><!-- /navbar -->
@@ -163,9 +166,8 @@
     <div data-role="navbar">
             <ul>
                 <li><a href="#home" data-icon="home">My CHI</a></li>
-                <li><a href="#discover" data-icon="search">Discover</a></li>
                 <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
-                <li><a href="#more" data-icon="grid" class="ui-btn-active">More</a></li>
+                <li><a href="#more" data-icon="grid">More</a></li>
             </ul>
     </div><!-- /navbar -->
     </div><!-- /header -->

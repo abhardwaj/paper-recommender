@@ -32,7 +32,7 @@ def login_form(request):
 	c.update(csrf(request))
 	return render_to_response('login.html', c)
 
-def login(request, redirect_url='index'):
+def login(request, redirect_url='mobile'):
 	if request.method == "POST":
 		try:
 			login_email = request.POST["login_email"]
