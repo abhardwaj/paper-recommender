@@ -42,9 +42,9 @@
         raw_html += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">'
         raw_html += '<a href="#" data-role="button" onclick = "load_paper(\''+ id + '\');">Discover</a>'
         if(prefs[login_id] == null || prefs[login_id].likes == null || prefs[login_id].likes.indexOf(id) == -1){
-            raw_html += '<a href="#" data-role="button">Star</a>'
+            raw_html += '<a href="#" data-role="button" class="p_star" p_id="'+id+'">Star</a>'
         }else{
-            raw_html += '<a href="#" data-role="button">Unstar</a>'
+            raw_html += '<a href="#" data-role="button" class="p_star p_active" p_id="'+id+'">Unstar</a>'
         }
         raw_html += '</div>'       
         raw_html += '</li>' 
@@ -166,14 +166,35 @@
 
     }
 
+    function bind_paper_links(){
+        $('.p_star').click(function(event){ 
+            var obj = $(this)
+            if(obj.hasClass('p_active')){
+                $.get('/like/' + obj.attr('p_id') +'/unlike', function(res) {
+                  if(res.status == 'ok'){
+                    obj.removeClass('p_active'); 
+                    //prefs[login_id].likes.remove(obj.attr('title'))     
+                  }
+                });
+            }else{
+                $.get('/like/' + obj.attr('p_id') +'/like', function(res) {
+                  if(res.status == 'ok'){
+                    obj.addClass('p_active');
+                    //prefs[login_id].likes.append(obj.attr('title'))
+                  }
+                });
+
+            }
+            
+        });
+    }
+
+
 
     
     
     $(document).bind("mobileinit", function(){
        $.mobile.defaultTransition = 'none'
-       {% if login %}
-            $.mobile.changePage('#login', 'pop', true, true);
-       {% endif %}
     });
 
     
@@ -258,7 +279,7 @@
             console.log('paper')
             
         }
-
+        bind_paper_links();
         //$.mobile.pageLoading(true);
             
     });
