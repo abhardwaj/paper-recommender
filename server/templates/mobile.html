@@ -176,8 +176,7 @@
                   if(res.status == 'ok'){
                     obj.removeClass('p_active')
                     obj.val('Star')
-                    obj.removeClass ('ui-icon-check');
-                    obj.addClass ('ui-icon-refresh');
+                    obj.parent().find('.ui-btn-inner').html('Star')
                     //prefs[login_id].likes.remove(obj.attr('title'))  
                    
                     obj.parents("li:first").removeClass('highlight')   
@@ -188,8 +187,7 @@
                   if(res.status == 'ok'){
                     obj.addClass('p_active')
                     obj.val('Unstar')
-                    obj.removeClass ('ui-icon-check');
-                    obj.addClass ('ui-icon-refresh');
+                    obj.parent().find('.ui-btn-inner').html('Unstar')
                     //prefs[login_id].likes.append(obj.attr('title'))
                     obj.parents("li:first").addClass('highlight') 
                   }
