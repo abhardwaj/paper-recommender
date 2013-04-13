@@ -182,6 +182,7 @@
                     reset_likes(starred)
                     recommended = res.recs
                     reset_recs(recommended)
+                    bind_p_star()
                   }
                 });
             }else{
@@ -195,6 +196,7 @@
                     reset_likes(starred)
                     recommended = res.recs
                     reset_recs(recommended)
+                    bind_p_star()
                   }
                 });
 
@@ -252,12 +254,14 @@
 
 
     function reset_likes(_likes){
+        console.log('reset_likes')
         populate_likes(_likes)
         $("#likes").trigger('create');
         $("#likes").listview('refresh')
     }
 
     function reset_recs(_recs){
+        console.log('reset_recs')
         populate_recs(_recs)
         $("#recs").trigger('create');
         $("#recs").listview('refresh')

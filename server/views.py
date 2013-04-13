@@ -123,11 +123,11 @@ def like(request, paper_id, like_str):
 	if(like_str=='like' and (paper_id not in p.author_likes[user]['likes'])):
 		p.author_likes[user]['likes'].append(paper_id)
 		recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
-		return HttpResponse(json.dumps({'status':'ok', 'recs':recs}), mimetype="application/json")
+		return HttpResponse(json.dumps({'status':'ok', 'recs':recs, 'likes': p.author_likes[user]}), mimetype="application/json")
 	if(like_str=='unlike' and paper_id in p.author_likes[user]['likes']):
 		p.author_likes[user]['likes'].remove(paper_id)
 		recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
-		return HttpResponse(json.dumps({'status':'ok', 'recs':recs}), mimetype="application/json")
+		return HttpResponse(json.dumps({'status':'ok', 'recs':recs, 'likes':p.author_likes[user]}), mimetype="application/json")
 	return HttpResponse(json.dumps({'status':'notok'}), mimetype="application/json")
 
 
