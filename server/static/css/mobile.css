@@ -9,3 +9,31 @@
 a{
     text-decoration: none;
 }
+
+html, body { 
+    background-color: #333 !important;
+}
+@media only screen and (min-width: 600px){
+.ui-page{
+    max-width: 600px !important;
+    margin: 0 auto !important;
+    position: relative !important;
+    border:none;
+}
+
+.ui-header{
+    max-width: 600px !important;
+    margin: 0 auto !important;
+    border:none;
+
+}
+}
+
+.ui-dialog-contain {
+    width: 92.5%;
+    max-width: 500px;
+    margin: 5% auto 15px auto;
+    padding: 0;
+    position: relative;
+    top: -15px;
+}
