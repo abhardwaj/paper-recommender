@@ -40,11 +40,11 @@
         raw_html += '</strong></p>'
         raw_html += '<p class="gray">' + entities[id].keywords + '</p>'
         raw_html += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">'
-        raw_html += '<a href="#" data-role="button" onclick = "load_paper(\''+ id + '\');">Discover</a>'
+        raw_html += '<input type="button" onclick = "load_paper(\''+ id + '\');" value="Discover">'
         if(prefs[login_id] == null || prefs[login_id].likes == null || prefs[login_id].likes.indexOf(id) == -1){
-            raw_html += '<a href="#" data-role="button" class="p_star" p_id="'+id+'">Star</a>'
+            raw_html += '<input type="button" class="p_star" p_id="'+id+'" value="Star">'
         }else{
-            raw_html += '<a href="#" data-role="button" class="p_star p_active" p_id="'+id+'">Unstar</a>'
+            raw_html += '<input type="button" class="p_star p_active" p_id="'+id+'" value="Unstar">'
         }
         raw_html += '</div>'       
         raw_html += '</li>' 
@@ -140,7 +140,7 @@
         raw_html += '<p>' + entities[id].abstract + '</p>'
         raw_html += '<p class="gray">' + entities[id].keywords + '</p>'
         return raw_html
-}
+    }
 
 
     
@@ -166,21 +166,32 @@
 
     }
 
-    function bind_paper_links(){
+
+
+    function bind_p_star(){
         $('.p_star').click(function(event){ 
             var obj = $(this)
             if(obj.hasClass('p_active')){
                 $.get('/like/' + obj.attr('p_id') +'/unlike', function(res) {
                   if(res.status == 'ok'){
-                    obj.removeClass('p_active'); 
-                    //prefs[login_id].likes.remove(obj.attr('title'))     
+                    obj.removeClass('p_active')
+                    obj.val('Star')
+                    obj.removeClass ('ui-icon-check');
+                    obj.addClass ('ui-icon-refresh');
+                    //prefs[login_id].likes.remove(obj.attr('title'))  
+                   
+                    obj.parents("li:first").removeClass('highlight')   
                   }
                 });
             }else{
                 $.get('/like/' + obj.attr('p_id') +'/like', function(res) {
                   if(res.status == 'ok'){
-                    obj.addClass('p_active');
+                    obj.addClass('p_active')
+                    obj.val('Unstar')
+                    obj.removeClass ('ui-icon-check');
+                    obj.addClass ('ui-icon-refresh');
                     //prefs[login_id].likes.append(obj.attr('title'))
+                    obj.parents("li:first").addClass('highlight') 
                   }
                 });
 
@@ -188,6 +199,81 @@
             
         });
     }
+
+
+    function populate_papers(){ 
+        $("#papers").html('')           
+        for(e in entities){
+            var raw_html = get_paper_html(e)
+            if(raw_html != null){
+                var row = $(raw_html)
+                $("#papers").append(row)
+            }
+        }   
+    }
+
+
+    function populate_recs(){ 
+        $("#recs").html('')           
+        for(r in recommended){
+            var raw_html = get_paper_html(recommended[r].id)
+            if(raw_html != null){
+                var row = $(raw_html)
+                $("#recs").append(row)
+            }
+        }   
+    }
+
+
+
+    function populate_likes(){
+        if(prefs[login_id] == null || prefs[login_id].likes == null)
+            return
+        $("#likes").html('')           
+        for(p in prefs[login_id].likes){
+            var raw_html = get_paper_html(prefs[login_id].likes[p])
+            if(raw_html != null){
+                var row = $(raw_html)
+                $("#likes").append(row)
+            }
+        }   
+    }
+    
+
+    function populate_sessions(){
+        $(".sessions").html('')   
+        for(s in sessions){
+            var raw_html = get_session_html(s)
+            var row = $(raw_html)
+            place_session(row)
+        }
+    }
+
+
+    function reset_likes(){
+        populate_likes()
+        $("#likes").trigger('create');
+        $("#likes").listview('refresh')
+    }
+
+    function reset_recs(){
+        populate_recs()
+        $("#recs").trigger('create');
+        $("#recs").listview('refresh')
+    }
+
+    function reset_papers(){
+        populate_papers()
+        $("#papers").trigger('create');
+        $("#papers").listview('refresh')
+    }
+
+    function reset_sessions(){
+        populate_sessions()
+        $(".session").trigger('create');
+        $(".session").listview('refresh')
+    }
+
 
 
 
@@ -201,56 +287,6 @@
 
 
     $(document).bind('pagecreate', function (e) {
-        
-        function populate_papers(){ 
-            $("#papers").html('')           
-            for(e in entities){
-                var raw_html = get_paper_html(e)
-                if(raw_html != null){
-                    var row = $(raw_html)
-                    $("#papers").append(row)
-                }
-            }   
-        }
-
-
-        function populate_recs(){ 
-            $("#recs").html('')           
-            for(r in recommended){
-                var raw_html = get_paper_html(recommended[r].id)
-                if(raw_html != null){
-                    var row = $(raw_html)
-                    $("#recs").append(row)
-                }
-            }   
-        }
-
-
-
-        function populate_likes(){
-            if(prefs[login_id] == null || prefs[login_id].likes == null)
-                return
-            $("#likes").html('')           
-            for(p in prefs[login_id].likes){
-                var raw_html = get_paper_html(prefs[login_id].likes[p])
-                if(raw_html != null){
-                    var row = $(raw_html)
-                    $("#likes").append(row)
-                }
-            }   
-        }
-        
-
-        function populate_sessions(){
-            $(".sessions").html('')   
-            for(s in sessions){
-                var raw_html = get_session_html(s)
-                var row = $(raw_html)
-                place_session(row)
-            }
-        }
-
-
         $('.list-divider').click(function(){
             $(this).parent().find(':not(:first)').toggle()
         })
@@ -258,28 +294,18 @@
       
         if(e.target.id == 'home') {
             console.log('home')
-            
-            populate_likes()
-            $("#likes").trigger('create');
-            $("#likes").listview('refresh')
-            populate_recs()
-            $("#recs").trigger('create');
-            $("#recs").listview('refresh')
-            populate_papers()
-            $("#papers").trigger('create');
-            $("#papers").listview('refresh')
-            
+            reset_likes();
+            reset_recs();
+            reset_papers();           
         }else if(e.target.id == 'schedule') {
-            console.log('schedule')
-            populate_sessions()
-            $(".session").trigger('create');
-            $(".session").listview('refresh')
+            reset_sessions();
+            console.log('schedule')            
         
         }else if(e.target.id == 'paper'){
             console.log('paper')
             
         }
-        bind_paper_links();
+        bind_p_star();
         //$.mobile.pageLoading(true);
             
     });

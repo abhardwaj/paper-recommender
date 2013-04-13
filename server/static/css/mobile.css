@@ -50,7 +50,9 @@ body .ui-li .ui-li-desc {
  white-space: normal;
 }
 
-
+.highlight{
+    background-color: #fff7ce;
+}
 
 div.timeline {
     margin: 0.25em 0em;
