@@ -29,7 +29,7 @@
         if(entities[id] == null)
             return null
         
-        var raw_html = '<li><h3 class="blue">'+entities[id].title+'</h3>'
+        var raw_html = '<li><h3 class="blue"><a href="#" onclick = "load_paper(\''+ id + '\');">'+entities[id].title+'</a></h3>'
         raw_html += '<p>'+entities[id].c_and_b + '</p>'
         raw_html += '<p><strong>'
         for(author in entities[id].authors){
@@ -60,12 +60,7 @@
         for(var paper_id in sessions[id].submissions){
             raw_html += get_paper_html(paper_id);
         }
-        raw_html += '</div>'
-
-
-        
-
-        
+        raw_html += '</div>'        
         return raw_html
     }
 
@@ -118,6 +113,30 @@
         }
         
     }
+
+
+    
+    function load_paper(paper_id){
+        //var selected_paper_html = get_selected_paper_html(paper_id)
+        $('#selected_paper').html('')
+        $("#similar_papers").html('')
+        $.post('recs', {'papers': JSON.stringify([paper_id])}, 
+        function(res){              
+            for(var i = 0; i< res.length; i++){
+                var p_id = res[i].id
+                var raw_html = get_paper_html(res[i].id)
+                if(raw_html!=null){
+                    var row = $(raw_html)
+                    $("#similar_papers").append(row);
+                    
+                }
+            }
+            $.mobile.changePage('#paper', 'pop', true, true);
+            $("#similar_papers").listview('refresh')
+        });
+
+    }
+    
     
     
     
@@ -192,6 +211,9 @@
             console.log('schedule')
             populate_sessions()
             $(".session").listview('refresh')
+        }else if(e.target.id == 'paper'){
+            console.log('paper')
+            
         }
 
        
@@ -395,6 +417,25 @@
 
 </div><!-- /home -->
 
+
+<div data-role="dialog" class="ui-responsive-panel" id="paper">  
+    <div data-role="header" data-position="fixed">
+        <h1>Discover Papers</h1>
+    </div>
+    
+    <div data-role="content"> 
+    <div id="selected_paper">
+    </div>      
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Papers similar to this paper</h4>       
+    <ul id="similar_papers" data-role="listview"> 
+    </ul>
+    </div>
+        
+
+    </div><!-- /content -->
+
+</div><!-- /home -->
 
 
 
