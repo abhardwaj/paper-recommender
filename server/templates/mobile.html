@@ -11,13 +11,19 @@
 <body>
 
 <script type="text/javascript">
-
-    console.log("Page")
     var prefs = {{prefs|safe }};
     var entities = {{entities|safe }};
     var sessions = {{sessions|safe }};
     var recommended = {{recs|safe }};
     var login_id = '{{login_id|safe}}'
+
+    Object.size = function(obj) {
+    var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+    };
 
     function get_paper_html(id){
         if(entities[id] == null)
@@ -32,12 +38,86 @@
             }
         }
         raw_html += '</strong></p>'
-        raw_html += '<p class="gray">' + entities[id].keywords + '</p>'
-        raw_html += '</li>'            
-
+        raw_html += '<p class="gray">' + entities[id].keywords + '</p>'          
+        raw_html += '</li>'
         return raw_html
     }
 
+
+    function get_session_html(id){
+        var raw_html = '<li data-role="list-divider"  data-theme="d" class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" id="' + id + '">'
+        raw_html += '<h4>'+sessions[id].s_title+'</h4>'
+        raw_html += '<p><strong>Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</strong></p>'
+            raw_html += '<div class="timeline">'
+        var size = Object.size(sessions[id].submissions)
+        var w = 100/size
+        for(var i=0; i< size; i++){
+            raw_html += '<div style="width:' + w + '%;"></div>'
+        }
+        raw_html += '</div>'
+        raw_html += '</li>'
+        
+        for(var paper_id in sessions[id].submissions){
+            raw_html += get_paper_html(paper_id);
+        }
+        raw_html += '</div>'
+
+
+        
+
+        
+        return raw_html
+    }
+
+
+    function place_session(s){
+        if(s.hasClass('Monday')){
+            if(s.hasClass('t09')){
+                $("#Mondayt09").append(s)
+            }else if(s.hasClass('t11')){
+                $("#Mondayt11").append(s)
+            }else if(s.hasClass('t14')){
+                $("#Mondayt14").append(s)
+            }else if(s.hasClass('t16')){
+                $("#Mondayt16").append(s)
+            }
+
+        }else if(s.hasClass('Tuesday')){
+            if(s.hasClass('t09')){
+                $("#Tuesdayt09").append(s)
+            }else if(s.hasClass('t11')){
+                $("#Tuesdayt11").append(s)
+            }else if(s.hasClass('t14')){
+                $("#Tuesdayt14").append(s)
+            }else if(s.hasClass('t16')){
+                $("#Tuesdayt16").append(s)
+            }
+
+        }else if(s.hasClass('Wednesday')){
+            if(s.hasClass('t09')){
+                $("#Wednesdayt09").append(s)
+            }else if(s.hasClass('t11')){
+                $("#Wednesdayt11").append(s)
+            }else if(s.hasClass('t14')){
+                $("#Wednesdayt14").append(s)
+            }else if(s.hasClass('t16')){
+                $("#Wednesdayt16").append(s)
+            }
+
+        }else if(s.hasClass('Thursday')){
+            if(s.hasClass('t09')){
+                $("#Thursdayt09").append(s)
+            }else if(s.hasClass('t11')){
+                $("#Thursdayt11").append(s)
+            }else if(s.hasClass('t14')){
+                $("#Thursdayt14").append(s)
+            }else if(s.hasClass('t16')){
+                $("#Thursdayt16").append(s)
+            }
+
+        }
+        
+    }
     
     
     
@@ -72,7 +152,9 @@
 
 
 
-        function populate_likes(){ 
+        function populate_likes(){
+            if(prefs[login_id] == null || prefs[login_id].likes == null)
+                return
             $("#likes").html('')           
             for(p in prefs[login_id].likes){
                 var raw_html = get_paper_html(prefs[login_id].likes[p])
@@ -83,7 +165,22 @@
             }   
         }
         
-        if (e.target.id == 'home') {
+
+        function populate_sessions(){
+            $(".sessions").html('')   
+            for(s in sessions){
+                var raw_html = get_session_html(s)
+                var row = $(raw_html)
+                place_session(row)
+            }
+        }
+
+
+        $('.list-divider').click(function(){
+            $(this).parent().find(':not(:first)').toggle()
+        })
+      
+        if(e.target.id == 'home') {
             console.log('home')
             populate_likes()
             $("#likes").listview('refresh')
@@ -91,6 +188,10 @@
             $("#recs").listview('refresh')
             populate_papers()
             $("#papers").listview('refresh')
+        }else if(e.target.id == 'schedule') {
+            console.log('schedule')
+            populate_sessions()
+            $(".session").listview('refresh')
         }
 
        
@@ -153,6 +254,120 @@
 
     <div data-role="content">        
 
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Monday, 09:00-10:20</h4>
+    <ul id="Mondayt09" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Monday, 11:00-12:20</h4>
+    <ul id="Mondayt11" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Monday, 14:00-15:20</h4>
+    <ul id="Mondayt14" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Monday, 16:00-17:20</h4>
+    <ul id="Mondayt16" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+
+
+
+
+
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Tuesday, 09:00-10:20</h4>
+    <ul id="Tuesdayt09" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Tuesday, 11:00-12:20</h4>
+    <ul id="Tuesdayt11" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Tuesday, 14:00-15:20</h4>
+    <ul id="Tuesdayt14" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Tuesday, 16:00-17:20</h4>
+    <ul id="Tuesdayt16" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+
+
+
+
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Wednesday, 09:00-10:20</h4>
+    <ul id="Wednesdayt09" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Wednesday, 11:00-12:20</h4>
+    <ul id="Wednesdayt11" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Wednesday, 14:00-15:20</h4>
+    <ul id="Wednesdayt14" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Wednesday, 16:00-17:20</h4>
+    <ul id="Wednesdayt16" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+
+
+
+
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Thursday, 09:00-10:20</h4>
+    <ul id="Thursdayt09" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Thursday, 11:00-12:20</h4>
+    <ul id="Thursdayt11" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Thursday, 14:00-15:20</h4>
+    <ul id="Thursdayt14" data-role="listview" class="session"> 
+    </ul>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Thursday, 16:00-17:20</h4>
+    <ul id="Thursdayt16" data-role="listview" class="session"> 
+    </ul>
+    </div>
+    
         
 
     </div><!-- /content -->
