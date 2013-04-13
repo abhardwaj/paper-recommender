@@ -38,8 +38,14 @@
             }
         }
         raw_html += '</strong></p>'
-        raw_html += '<p class="gray">' + entities[id].keywords + '</p></a>'          
-        raw_html += '<a href="#" data-theme="c" data-rel="popup" data-position-to="window" data-transition="pop">Star</a></li>'
+        raw_html += '<p class="gray">' + entities[id].keywords + '</p></a>'
+        if(prefs[login_id] == null || prefs[login_id].likes == null || prefs[login_id].likes.indexOf(id) == -1){
+            raw_html += '<a href="#" data-theme="c" data-rel="popup" data-position-to="window" data-transition="pop">Star</a>'
+        }else{
+            raw_html += '<a href="#" data-theme="e" data-rel="popup" data-position-to="window" data-transition="pop">Unstar</a>'
+        }
+              
+       raw_html += '</li>' 
         return raw_html
     }
 
