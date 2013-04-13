@@ -10,40 +10,142 @@
 </head>
 <body>
 
+<script type="text/javascript">
+
+    console.log("Page")
+    var prefs = {{prefs|safe }};
+    var entities = {{entities|safe }};
+    var sessions = {{sessions|safe }};
+    var recommended = {{recs|safe }};
+    var login_id = '{{login_id|safe}}'
+
+    function get_paper_html(id){
+        if(entities[id] == null)
+            return null
+        
+        var raw_html = '<li><h3>'+entities[id].title+'</h3>'
+        raw_html += '<p>'+entities[id].c_and_b + '</p>'
+        raw_html += '<p><strong>'
+        for(author in entities[id].authors){
+            if(entities[id].authors[author] != null){
+                raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
+            }
+        }
+        raw_html += '</strong></p>'
+        raw_html += '<p class="gray">' + entities[id].keywords + '</p>'
+        raw_html += '</li>'            
+
+        return raw_html
+    }
+
+    
+    
+    
+
+    
+
+
+    $(document).bind('pagecreate', function (e) {
+        
+        function populate_papers(){ 
+            $("#papers").html('<li data-role="list-divider">All Papers</li>')           
+            for(e in entities){
+                var raw_html = get_paper_html(e)
+                if(raw_html != null){
+                    var row = $(raw_html)
+                    $("#papers").append(row)
+                }
+            }   
+        }
+        
+        if (e.target.id == 'discover') {
+            console.log('discover')
+            populate_papers()
+            $("#papers").listview('refresh')
+        }
+
+       
+            
+    });
+</script>
 
 <div data-role="page" class="ui-responsive-panel" id="home">
 
     <div data-role="header" data-position="fixed">
-    <h1>CHI 2013 Recommendation System</h1>
-    <a href="#nav-panel">My CHI</a>
-    <a href="#nav-panel">Schedule</a>
+    <div data-role="navbar">
+            <ul>
+                <li><a href="#home" data-icon="home" class="ui-btn-active">My CHI</a></li>
+                <li><a href="#discover" data-icon="search">Discover</a></li>
+                <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
+                <li><a href="#more" data-icon="grid">More</a></li>
+            </ul>
+    </div><!-- /navbar -->
     </div><!-- /header -->
 
     <div data-role="content">        
 
-        
-
-    </div><!-- /content -->
-    
-    <div data-position="left" data-role="panel" data-position-fixed="true" id="nav-panel">
-
-    <ul data-role="listview" data-theme="a" class="nav-search">
-        <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
-            <li><a href="#home">My CHI</a></li>
-            <li><a href="#schedule">Schedule</a></li>
-            
+    <ul data-role="listview" data-inset="true">
+    <li data-role="list-divider">Friday, October 8, 2010 <span class="ui-li-count">2</span></li>
+    <li><a href="index.html">
+        <h2>Stephen Weber</h2>
+        <p><strong>You've been invited to a meeting at Filament Group in Boston, MA</strong></p>
+        <p>Hey Stephen, if you're available at 10am tomorrow, we've got a meeting with the jQuery team.</p>
+        <p class="ui-li-aside"><strong>6:24</strong>PM</p>
+    </a></li>
+    <li><a href="index.html">
+        <h2>jQuery Team</h2>
+        <p><strong>Boston Conference Planning</strong></p>
+        <p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
+        <p class="ui-li-aside"><strong>9:18</strong>AM</p>
+    </a></li>
+    <li data-role="list-divider">Thursday, October 7, 2010 <span class="ui-li-count">1</span></li>
+    <li><a href="index.html">
+        <h2>Avery Walker</h2>
+        <p><strong>Re: Dinner Tonight</strong></p>
+        <p>Sure, let's plan on meeting at Highland Kitchen at 8:00 tonight. Can't wait! </p>
+        <p class="ui-li-aside"><strong>4:48</strong>PM</p>
+    </a></li>
     </ul>
 
-    </div><!-- /panel -->
+    </div><!-- /content -->
 
-</div><!-- /page -->
+</div><!-- /home -->
+
+
+<div data-role="page" class="ui-responsive-panel" id="discover">
+
+    <div data-role="header" data-position="fixed">
+    <div data-role="navbar">
+            <ul>
+                <li><a href="#home" data-icon="home">My CHI</a></li>
+                <li><a href="#discover" data-icon="search" class="ui-btn-active">Discover</a></li>
+                <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
+                <li><a href="#more" data-icon="grid">More</a></li>
+            </ul>
+    </div><!-- /navbar -->
+    </div><!-- /header -->
+
+    <div data-role="content">        
+
+        <ul id="papers" data-role="listview" data-filter="true" data-filter-placeholder="Search for authors or other keywords " data-inset="true">            
+        </ul>
+
+    </div><!-- /content -->
+
+</div><!-- /home -->
 
 
 <div data-role="page" class="ui-responsive-panel" id="schedule">
 
-    <div data-role="header" data-theme="f" data-position="fixed">
-        <h1>CHI 2013 Recommendation System</h1>
-        <a href="#nav-panel" data-icon="gear" data-iconpos="notext">Add</a>
+    <div data-role="header" data-position="fixed">
+    <div data-role="navbar">
+            <ul>
+                <li><a href="#home" data-icon="home">My CHI</a></li>
+                <li><a href="#discover" data-icon="search">Discover</a></li>
+                <li><a href="#schedule" data-icon="info" class="ui-btn-active">Program Schedule</a></li>
+                <li><a href="#more" data-icon="grid">More</a></li>
+            </ul>
+    </div><!-- /navbar -->
     </div><!-- /header -->
 
     <div data-role="content">        
@@ -51,19 +153,32 @@
         
 
     </div><!-- /content -->
-    
-    <div data-position="left" data-role="panel" data-position-fixed="true" id="nav-panel">
 
-    <ul data-role="listview" data-theme="a" class="nav-search">
-        <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
-            <li><a href="#home">My CHI</a></li>
-            <li><a href="#schedule">Schedule</a></li>
-            
-    </ul>
+</div><!-- /home -->
 
-    </div><!-- /panel -->
 
-</div><!-- /page -->
+<div data-role="page" class="ui-responsive-panel" id="more">
+
+    <div data-role="header" data-position="fixed">
+    <div data-role="navbar">
+            <ul>
+                <li><a href="#home" data-icon="home">My CHI</a></li>
+                <li><a href="#discover" data-icon="search">Discover</a></li>
+                <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
+                <li><a href="#more" data-icon="grid" class="ui-btn-active">More</a></li>
+            </ul>
+    </div><!-- /navbar -->
+    </div><!-- /header -->
+
+    <div data-role="content">        
+
+        
+
+    </div><!-- /content -->
+
+</div><!-- /home -->
+
+
 
 
 </body>
