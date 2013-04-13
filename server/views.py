@@ -64,11 +64,11 @@ def logout(request):
 
 def mobile(request):
 	recs = []
-	starred = []
+	starred = {}
 	try:
 		user = request.session['id']
 		if(user in p.author_likes):
-			starred = p.author_likes[user]['likes']
+			starred = {s:True for s in p.author_likes[user]['likes']}
 			recs = r.get_item_based_recommendations(starred)		
 	except KeyError:
 		return HttpResponseRedirect('login')
@@ -114,7 +114,7 @@ def get_recs(request):
 
 
 def like(request, paper_id, like_str):
-	if(paper_id == ''):
+	if(paper_id.strip() == ''):
 		return HttpResponse(json.dumps({'status':'notok'}), mimetype="application/json")
 	user = request.session['id']
 	if(user not in p.author_likes):
@@ -122,8 +122,13 @@ def like(request, paper_id, like_str):
 		p.author_likes[user]['likes'] = []
 	if(like_str=='like' and (paper_id not in p.author_likes[user]['likes'])):
 		p.author_likes[user]['likes'].append(paper_id)
-		return HttpResponse(json.dumps({'status':'ok'}), mimetype="application/json")
+		recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
+		return HttpResponse(json.dumps({'status':'ok', 'recs':recs}), mimetype="application/json")
 	if(like_str=='unlike' and paper_id in p.author_likes[user]['likes']):
 		p.author_likes[user]['likes'].remove(paper_id)
-		return HttpResponse(json.dumps({'status':'ok'}), mimetype="application/json")
+		recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
+		return HttpResponse(json.dumps({'status':'ok', 'recs':recs}), mimetype="application/json")
 	return HttpResponse(json.dumps({'status':'notok'}), mimetype="application/json")
+
+
+

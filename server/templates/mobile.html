@@ -41,7 +41,7 @@
         raw_html += '<p class="gray">' + entities[id].keywords + '</p>'
         raw_html += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">'
         raw_html += '<input type="button" onclick = "load_paper(\''+ id + '\');" value="Discover">'
-        if(starred.indexOf(id) == -1){
+        if(starred[id] == null){
             raw_html += '<input type="button" class="p_star" p_id="'+id+'" value="Star">'
         }else{
             raw_html += '<input type="button" class="p_star p_active" p_id="'+id+'" value="Unstar">'
@@ -176,10 +176,12 @@
                   if(res.status == 'ok'){
                     obj.removeClass('p_active')
                     obj.val('Star')
-                    obj.parent().find('.ui-btn-inner').html('Star')
-                    //prefs[login_id].likes.remove(obj.attr('title'))  
-                   
-                    obj.parents("li:first").removeClass('highlight')   
+                    obj.parent().find('.ui-btn-inner').html('Star')                  
+                    obj.parents("li:first").removeClass('highlight')
+                    delete starred[obj.attr('p_id')]
+                    reset_likes()
+                    recommended = res.recs
+                    reset_recs()
                   }
                 });
             }else{
@@ -188,8 +190,11 @@
                     obj.addClass('p_active')
                     obj.val('Unstar')
                     obj.parent().find('.ui-btn-inner').html('Unstar')
-                    //prefs[login_id].likes.append(obj.attr('title'))
                     obj.parents("li:first").addClass('highlight') 
+                    starred[obj.attr('p_id')] = true
+                    reset_likes()
+                    recommended = res.recs
+                    reset_recs()
                   }
                 });
 
@@ -227,7 +232,7 @@
     function populate_likes(){
         $("#likes").html('')           
         for(var s in starred){
-            var raw_html = get_paper_html(starred[s])
+            var raw_html = get_paper_html(s)
             if(raw_html != null){
                 var row = $(raw_html)
                 $("#likes").append(row)
