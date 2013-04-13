@@ -160,8 +160,8 @@
                 }
             }
             $.mobile.changePage('#paper', 'pop', true, true);
-            $("#similar_papers").listview('refresh')
             $("#similar_papers").trigger('create');
+            $("#similar_papers").listview('refresh')
         });
 
     }
@@ -233,29 +233,33 @@
         $('.list-divider').click(function(){
             $(this).parent().find(':not(:first)').toggle()
         })
+
       
         if(e.target.id == 'home') {
             console.log('home')
+            
             populate_likes()
-            $("#likes").listview('refresh')
             $("#likes").trigger('create');
+            $("#likes").listview('refresh')
             populate_recs()
-            $("#recs").listview('refresh')
             $("#recs").trigger('create');
+            $("#recs").listview('refresh')
             populate_papers()
-            $("#papers").listview('refresh')
             $("#papers").trigger('create');
+            $("#papers").listview('refresh')
+            
         }else if(e.target.id == 'schedule') {
             console.log('schedule')
             populate_sessions()
-            $(".session").listview('refresh')
             $(".session").trigger('create');
+            $(".session").listview('refresh')
+        
         }else if(e.target.id == 'paper'){
             console.log('paper')
             
         }
 
-       
+        //$.mobile.pageLoading(true);
             
     });
 </script>
