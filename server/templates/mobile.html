@@ -167,6 +167,13 @@
     }
 
 
+    function highlight(){
+        $('.p_star').parents("li:first").removeClass('highlight') 
+        $('.p_star.p_active').each(function(index) {
+            $(this).parents("li:first").addClass('highlight') 
+        });
+        
+    }
 
     function bind_p_star(){
         $('.p_star').click(function(event){ 
@@ -183,6 +190,7 @@
                     recommended = res.recs
                     reset_recs(recommended)
                     bind_p_star()
+                    highlight()
                   }
                 });
             }else{
@@ -197,12 +205,14 @@
                     recommended = res.recs
                     reset_recs(recommended)
                     bind_p_star()
+                    highlight()
                   }
                 });
 
             }
             
         });
+        
     }
 
 
@@ -311,6 +321,7 @@
             
         }
         bind_p_star();
+        highlight();
         //$.mobile.pageLoading(true);
             
     });
