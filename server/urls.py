@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
-	url(r'^$','server.views.desktop'),
+	url(r'^$','server.views.mobile'),
 	url(r'^desktop', 'server.views.desktop'),
 	url(r'^mobile', 'server.views.mobile'),
     

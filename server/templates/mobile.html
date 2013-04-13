@@ -50,9 +50,9 @@
         raw_html += '<p><strong>Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</strong></p>'
             raw_html += '<div class="timeline">'
         var size = Object.size(sessions[id].submissions)
-        var w = 100/size
+        var w = (100 - (4*size))/size
         for(var i=0; i< size; i++){
-            raw_html += '<div style="width:' + w + '%;"></div>'
+            raw_html += '<div style="width:' + w + '%;margin-right:4px;"></div>'
         }
         raw_html += '</div>'
         raw_html += '</li>'
@@ -156,7 +156,8 @@
         });
 
     }
-    
+
+
     
     
     $(document).bind("mobileinit", function(){
@@ -250,7 +251,6 @@
             <ul>
                 <li><a href="#home" data-icon="home" class="ui-btn-active">My CHI</a></li>
                 <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
-                <li><a href="#more" data-icon="grid">More</a></li>
             </ul>
     </div><!-- /navbar -->
     </div><!-- /header -->
@@ -291,7 +291,6 @@
             <ul>
                 <li><a href="#home" data-icon="home">My CHI</a></li>
                 <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
-                <li><a href="#more" data-icon="grid">More</a></li>
             </ul>
     </div><!-- /navbar -->
     </div><!-- /header -->
@@ -418,26 +417,6 @@
 
 </div><!-- /home -->
 
-
-<div data-role="page" class="ui-responsive-panel" id="more">
-
-    <div data-role="header" data-position="fixed">
-    <div data-role="navbar">
-            <ul>
-                <li><a href="#home" data-icon="home">My CHI</a></li>
-                <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
-                <li><a href="#more" data-icon="grid">More</a></li>
-            </ul>
-    </div><!-- /navbar -->
-    </div><!-- /header -->
-
-    <div data-role="content">        
-
-        
-
-    </div><!-- /content -->
-
-</div><!-- /home -->
 
 
 <div data-role="dialog" class="ui-responsive-panel" id="paper">  
