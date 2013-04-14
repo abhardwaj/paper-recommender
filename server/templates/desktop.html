@@ -77,6 +77,8 @@ function show_tab(tab, paper_id){
 		populate_papers(entities);
     }else if(tab == 'schedule'){
     	populate_sessions(sessions);
+    }else if(tab == 'selected_paper'){
+    	load_paper(paper_id)
     }
         
 }   
@@ -86,8 +88,8 @@ function show_tab(tab, paper_id){
 function get_paper_html(id){
     if(entities[id] == null)
         return null
-    var raw_html = '<tr class="clickable">'
-    raw_html += '<td class="content" onclick="load_paper(\'' + id + '\');">'    
+    var raw_html = '<tr class="clickable ' + id + '">'
+    raw_html += '<td class="content" onclick="show_tab(\'selected_paper\', \'' + id + '\');">'    
     raw_html += '<ul>'
     raw_html += '<li class="strong">'+entities[id].title+'</li>'
     raw_html += '<li>'+entities[id].c_and_b + '</li>'
@@ -102,7 +104,7 @@ function get_paper_html(id){
     raw_html += '</ul>'
     raw_html += '</td>'
     raw_html += '<td class="metadata">'     
-    raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'        
+    raw_html += '<div class="ui-state-default ui-corner-all" data="'+ id + '">'        
     raw_html += '<span class="ui-icon ui-icon-star"></span>'
     raw_html += '</div>'
     
@@ -115,8 +117,8 @@ function get_paper_html(id){
 
 
 function get_session_html(id){
-    var raw_html = '<div class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" title="' + id + '">'
-    raw_html += '<table class="session-container"><tr class="clickable">'
+    var raw_html = '<div class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
+    raw_html += '<table class="session-container"><tr class="clickable collapsible">'
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
     raw_html += '<li class="strong"><span class="arrow">▸</span>'+sessions[id].s_title+'</li>'
@@ -133,15 +135,13 @@ function get_session_html(id){
     raw_html += '</div>'
     raw_html += '</td>'
     raw_html += '<td class="metadata">'     
-    raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'
+    raw_html += '<div class="ui-state-default ui-corner-all" data="'+ id + '">'
     raw_html += '<span class="ui-icon ui-icon-star"></span>'
     raw_html += '</div>'        
     raw_html += '</td>'
     raw_html += '</tr>'
     raw_html += '</table>'
-    raw_html += '</div>'
-    raw_html += '<div id="' +id +'">'
-    raw_html += '<table class="paper-container">'
+    raw_html += '<table id="' +id +'" class="paper-container" style="display:none;">'
     for(var paper_id in sessions[id].submissions){        
         raw_html += get_paper_html(paper_id);        
     }
@@ -225,8 +225,8 @@ function place_session(s){
 
 function load_paper(paper_id){
     var selected_paper_html = get_selected_paper_html(paper_id)
-    similar_papers.fnClearTable();
-    $('#paper').find('.form').html(selected_paper_html)
+    $('#selected_paper').find('.form').html(selected_paper_html)
+    $('#similar_papers').html('')
     $.post('recs', {'papers': JSON.stringify([paper_id])}, 
     function(res){              
         for(var i = 0; i< res.length; i++){
@@ -234,13 +234,7 @@ function load_paper(paper_id){
             var raw_html = get_paper_html(res[i].id)
             if(raw_html!=null){
                 var row = $(raw_html)
-                var n = similar_papers.fnAddData([row.children().eq(0).html(), row.children().eq(1).html()])
-                var node = similar_papers.fnGetNodes(n)
-                $(node).addClass('clickable');
-                $(node.cells[0]).addClass('content')
-                var f = load_paper(p_id)
-                $(node.cells[0]).click(f)
-                $(node.cells[1]).addClass('metadata')
+               $('#similar_papers').append(row)
             }
         }
     });
@@ -371,22 +365,23 @@ $(document).ready(function(){
     // Handle tabs
     var tab = get_params('tab')
     var id = get_params('id')
-    if(tab==null || (['home','schedule','paper'].indexOf(tab) == -1)){
+    if(tab==null || (['home','schedule','selected_paper'].indexOf(tab) == -1)){
         tab='home';
     }       
 
     $('#nav_home').click(function(){show_tab('home');})
     $('#nav_schedule').click(function(){show_tab('schedule');})
 
-    show_tab(tab);
+    show_tab(tab, id);
 
     //do this in the end
     $('.default-text').val('');
     $('.default-text').blur();
 
-    $('.collapsible-title').click(
+    $('.collapsible').click(
 	    function(event){
 	    	var target = $(this).attr("data")
+	    	console.log(target)
 	        $('#'+ target).toggle();
 	        if($('#'+target).is(':visible')){
 	            $(this).find('.arrow').html('▾');
@@ -395,10 +390,10 @@ $(document).ready(function(){
 	        }
 	    });
 
-	$('.paper-container').click(function(event){
+	/*$('.paper-container').click(function(event){
 	    event.stopPropagation();
 	});
-
+*/
 
 
 
@@ -442,7 +437,7 @@ $(document).ready(function(){
 
 <!--- Home Page -->
 <div id="home">
-	<h3 class="collapsible-title" id="likes_toggle" data="likes_container"><span class="arrow">▾</span> Papers you liked.</h3>	
+	<h3 class="collapsible-title collapsible" id="likes_toggle" data="likes_container"><span class="arrow">▾</span> Papers you liked.</h3>	
 	<div id="likes_container">
 		<table id="likes" class="paper-container">		
 		</table>
@@ -450,7 +445,7 @@ $(document).ready(function(){
 <br />
 <br />
 
-	<h3 class="collapsible-title" id="recs_toggle" data="recs_container"><span class="arrow">▾</span> Papers recommended for you.</h3>
+	<h3 class="collapsible-title collapsible" id="recs_toggle" data="recs_container"><span class="arrow">▾</span> Papers recommended for you.</h3>
 	<div id="recs_container">
 		<table id="recs" class="paper-container">	
 		</table>
@@ -459,7 +454,7 @@ $(document).ready(function(){
 <br />
 <br />
 
-	<h3 class="collapsible-title" id="papers_toggle" data="all_papers_container"><span class="arrow">▾</span> All Papers</h3>
+	<h3 class="collapsible-title collapsible" id="papers_toggle" data="all_papers_container"><span class="arrow">▾</span> All Papers</h3>
 	<div id="all_papers_container">
 		<table id="all_papers" class="paper-container">	
 		</table>
@@ -481,45 +476,45 @@ $(document).ready(function(){
 	<h3 class="collapsible-title" data="Mondayt09"><span class="arrow">▾</span> Monday, 09:00-10:20</h3> -->
 	<div id = "Mondayt09" class="session">
 	</div>
-	<h3 class="collapsible-title" data="Mondayt11"><span class="arrow">▾</span> Monday, 11:00-12:20</h3>
+	<h3 class="collapsible-title collapsible" data="Mondayt11"><span class="arrow">▾</span> Monday, 11:00-12:20</h3>
 	<div id = "Mondayt11" class="session">
 	</div>
-	<h3 class="collapsible-title" data="Mondayt14"><span class="arrow">▾</span> Monday, 14:00-15:20</h3>
+	<h3 class="collapsible-title collapsible" data="Mondayt14"><span class="arrow">▾</span> Monday, 14:00-15:20</h3>
 	<div id = "Mondayt14" class="session">
 	</div>
-	<h3 class="collapsible-title" data="Mondayt16"><span class="arrow">▾</span> Monday, 16:00-17:20</h3>
+	<h3 class="collapsible-title collapsible" data="Mondayt16"><span class="arrow">▾</span> Monday, 16:00-17:20</h3>
 	<div id = "Mondayt16" class="session">
 	</div>
 	</div>
 
 
 	<div id="Tuesday">
-	<h3 class="collapsible-title" data="Tuesdayt09"><span class="arrow">▾</span> Tuesday, 09:00-10:20</h3>
+	<h3 class="collapsible-title collapsible" data="Tuesdayt09"><span class="arrow">▾</span> Tuesday, 09:00-10:20</h3>
 	<div id = "Tuesdayt09" class="session">
 	</div>
-	<h3 class="collapsible-title" data="Tuesdayt11"><span class="arrow">▾</span> Tuesday, 11:00-12:20</h3>
+	<h3 class="collapsible-title collapsible" data="Tuesdayt11"><span class="arrow">▾</span> Tuesday, 11:00-12:20</h3>
 	<div id = "Tuesdayt11" class="session">
 	</div>
-	<h3 class="collapsible-title" data="Tuesdayt14"><span class="arrow">▾</span> Tuesday, 14:00-15:20</h3>
+	<h3 class="collapsible-title collapsible" data="Tuesdayt14"><span class="arrow">▾</span> Tuesday, 14:00-15:20</h3>
 	<div id = "Tuesdayt14" class="session">
 	</div>
-	<h3 class="collapsible-title" data="Tuesdayt16"><span class="arrow">▾</span> Tuesday, 16:00-17:20</h3>
+	<h3 class="collapsible-title collapsible" data="Tuesdayt16"><span class="arrow">▾</span> Tuesday, 16:00-17:20</h3>
 	<div id = "Tuesdayt16" class="session">
 	</div>
 	</div>
 
 
 	<div id = "Wednesday">
-	<h3 class="collapsible-title" data="Wednesdayt09"><span class="arrow">▾</span> Wednesday, 09:00-10:20</h3>
+	<h3 class="collapsible-title collapsible" data="Wednesdayt09"><span class="arrow">▾</span> Wednesday, 09:00-10:20</h3>
 	<div id = "Wednesdayt09" class="session">
 	</div>
-	<h3 class="collapsible-title" data="Wednesdayt11"><span class="arrow">▾</span> Wednesday, 11:00-12:20</h3>
+	<h3 class="collapsible-title collapsible" data="Wednesdayt11"><span class="arrow">▾</span> Wednesday, 11:00-12:20</h3>
 	<div id = "Wednesdayt11" class="session">
 	</div>
-	<h3 class="collapsible-title" data="Wednesdayt14"><span class="arrow">▾</span> Wednesday, 14:00-15:20</h3>
+	<h3 class="collapsible-title collapsible" data="Wednesdayt14"><span class="arrow">▾</span> Wednesday, 14:00-15:20</h3>
 	<div id = "Wednesdayt14" class="session">
 	</div>
-	<h3 class="collapsible-title" data="Wednesdayt16"><span class="arrow">▾</span> Wednesday, 16:00-17:20</h3>
+	<h3 class="collapsible-title collapsible" data="Wednesdayt16"><span class="arrow">▾</span> Wednesday, 16:00-17:20</h3>
 	<div id = "Wednesdayt16" class="session">
 	
 	</div>  
@@ -528,17 +523,17 @@ $(document).ready(function(){
 
 
 	<div id = "Thursday">
-<!-- h3 class="collapsible-title" data="Thursdayt09"><span class="arrow">▾</span> Thursday, 09:00-10:20</h3> -->
+<!-- h3 class="collapsible-title collapsible" data="Thursdayt09"><span class="arrow">▾</span> Thursday, 09:00-10:20</h3> -->
 	<div id = "Thursdayt09" class="session">
 	</div>
-	<h3 class="collapsible-title" data="Thursdayt11"><span class="arrow">▾</span> Thursday, 11:00-12:20</h3>
+	<h3 class="collapsible-title collapsible" data="Thursdayt11"><span class="arrow">▾</span> Thursday, 11:00-12:20</h3>
 	<div id = "Thursdayt11" class="session">
 	</div>
-	<h3 class="collapsible-title" data"Thursdayt14"><span class="arrow">▾</span> Thursday, 14:00-15:20</h3>
+	<h3 class="collapsible-title collapsible" data"Thursdayt14"><span class="arrow">▾</span> Thursday, 14:00-15:20</h3>
 	<div id = "Thursdayt14" class="session">
 	</div>
 	<!--
-	<h3 class="collapsible-title" data="Thursdayt16"><span class="arrow">▾</span> Thursday, 16:00-17:20</h3>-->
+	<h3 class="collapsible-title collapsible" data="Thursdayt16"><span class="arrow">▾</span> Thursday, 16:00-17:20</h3>-->
 	<div id = "Thursdayt16" class="session">
 	</div>
 	</div>
@@ -605,7 +600,7 @@ $(document).ready(function(){
 
 
 <!-- Selected Paper -->
-<div id="paper">
+<div id="selected_paper">
 	<h3><span class="gray">Selected Paper</span></h3>
 	<div class="form" style="margin-top:10px; cursor:pointer;">
 	</div>
