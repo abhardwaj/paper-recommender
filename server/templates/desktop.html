@@ -303,10 +303,14 @@ function update_session_view(){
 			}				
 
 		});
+
+		var id = session.attr("data")
+		var rec = false
+		var like = false
 		
 	   	if($(this).find('.paper-container').find('.recommended').length > 0){
 			$(this).find('.session-container').find('tr').addClass('recommended')
-			$(this).clone().appendTo('#session_recs')
+			rec = true
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('recommended')
@@ -314,11 +318,15 @@ function update_session_view(){
 	   	
 	   	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
 			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
-			$(this).find('.session-container').find('tr').addClass('highlight')
-			$(this).clone().appendTo('#session_likes')
+			like = true
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
+	   	}
+	   	if(like){
+	   		$(this).clone().attr("id",'likes'+id).appendTo('#session_recs')
+	   	}else if(rec){
+	   		$(this).clone().attr("id",'recs'+id).appendTo('#session_recs')
 	   	}
 
 	});
