@@ -279,6 +279,29 @@ function place_session(s){
 }
 
 
+function update_timeline(){
+
+	$( ".all" ).each(function(s_index) {
+		var session = $(this)
+	$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
+		if($(this).hasClass('ui-state-active')){
+			session.find('.timeline').children("div").eq(p_index).addClass("filled");
+		}else{
+			session.find('.timeline').children("div").eq(p_index).removeClass("filled");
+		}				
+
+	});
+
+	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
+			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
+   	}else{
+     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
+   	}
+
+	});
+}
+
+
 
 
 function handle_star(event){ 
@@ -295,7 +318,7 @@ function handle_star(event){
                 $(this).find('.p_star').removeClass('ui-state-active')
                 $(this).removeClass('highlight')
             })
-            
+            update_timeline()
           }
         });
     }else{
@@ -310,9 +333,11 @@ function handle_star(event){
                 $(this).addClass('highlight')
             })
            
-            
+            update_timeline()
           }
         });
+
+        
 
     }
 }
@@ -385,6 +410,7 @@ function populate_sessions(_sessions){
         place_session(row)
     }
     bind_events()
+    update_timeline()
 }
 
 
