@@ -62,6 +62,8 @@ def logout(request):
 	return HttpResponseRedirect('/login')
 
 
+
+
 def mobile(request):
 	recs = []
 	starred = {}

@@ -64,6 +64,14 @@ Object.size = function(obj) {
     return size;
 };
 
+function search_rec(id){
+	for(var r in recommended){
+		if(recommended[r].id == id)
+			return true
+	}
+	return false
+}
+
 
 function bind_events(){
 	//do this in the end
@@ -137,12 +145,12 @@ function show_tab(tab, paper_id){
 function get_paper_html(id){
     if(entities[id] == null)
         return ''
-    var raw_html = '<tr class="clickable ' + id +' '
-    if(recommended[id] != null){
-    	raw_html += 'recommended '
+    var raw_html = '<tr class="clickable ' + id
+    if(search_rec(id)){
+    	raw_html += ' recommended'
     }
     if(starred[id] != null){
-    	raw_html += 'highlight '
+    	raw_html += ' highlight'
     }
     raw_html += '">'
     raw_html += '<td class="content">'    
@@ -295,7 +303,14 @@ function update_timeline(){
 
 		});
 
-		if($(this).find('.paper-container').find('.ui-state-active').length > 0){
+	   	if($(this).find('.paper-container').find('.recommended').length > 0){
+			$(this).find('.session-container').find('tr').addClass('recommended')
+	   	}else{
+	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
+	     	$(this).find('.session-container').find('tr').removeClass('recommended')
+	   	}
+
+	   	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
 			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
 			$(this).find('.session-container').find('tr').addClass('highlight')
 	   	}else{
