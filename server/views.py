@@ -86,11 +86,12 @@ def mobile(request):
 
 def desktop(request):
 	recs = []
+	starred = {}
 	try:
 		user = request.session['id']
 		if(user in p.author_likes):
-			papers_liked = p.author_likes[user]['likes']
-			recs = r.get_item_based_recommendations(papers_liked)		
+			starred = {s:True for s in p.author_likes[user]['likes']}
+			recs = r.get_item_based_recommendations(starred)		
 	except KeyError:
 		return HttpResponseRedirect('login')
 	except:
@@ -100,7 +101,7 @@ def desktop(request):
 		'login_id': request.session['id'], 
 		'login_name': request.session['name'],
 		'recs':json.dumps(recs), 
-		'prefs':json.dumps(p.author_likes), 
+		'starred':json.dumps(starred), 
 		'entities': json.dumps(e.entities), 
 		'sessions':json.dumps(s.sessions)
 		})

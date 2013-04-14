@@ -1,698 +1,428 @@
-{% extends "base.html" %}
-{% block headlink-right %}
-Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
-<a class="button" id="nav_home">My CHI</a>
-<a class="button" id="nav_schedule">My Schedule</a>
-<a class="button" href="/logout">Log out!</a>
-{% endblock %}
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>{% block title %}CHI 2013 Recommendation System{% endblock %}</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="/static/css/desktop.css" />
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>	
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+	<script type="text/javascript" src="/static/javascript/third-party/cufon-yui.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/static/javascript/third-party/droid-sans.fonts.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/static/javascript/third-party/jquery.dataTables.min.js"></script>
+	<script type="text/javascript">
+	   Cufon.replace('#logo', { fontFamily: 'Droid Sans Bold' });
+	</script>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<div id="header">
+	<div id="wrap">
+		<span id="headlink-left">
+			<a id="logo" href="/">CHI 2013 Recommendation System</a>
+		</span>
+		<span id="headlink-right">
+			Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
+			<a class="button" id="nav_home">My CHI</a>
+			<a class="button" id="nav_schedule">My Schedule</a>
+			<a class="button" href="/logout">Log out!</a>
+		</span>
+	</div>
+</div>
 
 
-{% block content %}
+<body>
 <script type="text/javascript">
-	var prefs = {{prefs|safe }};
-	var entities = {{entities|safe }};
-	var sessions = {{sessions|safe }};
-	var recommended = {{recs|safe }};
-	var login_id = '{{login_id|safe}}'
 
-	Object.size = function(obj) {
+
+var entities = {{entities|safe }};
+var sessions = {{sessions|safe }};
+var recommended = {{recs|safe }};
+var starred = {{starred|safe }};
+var login_id = '{{login_id|safe}}'
+
+
+function get_params() {
+    var vars = [], hash;
+    var hashes = window.location.href.slice(
+            window.location.href.indexOf('?') + 1).split('&');
+    for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
+
+
+Object.size = function(obj) {
     var size = 0, key;
-	    for (key in obj) {
-	        if (obj.hasOwnProperty(key)) size++;
-	    }
-    	return size;
-	};
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
 
-	$.extend({
-	    getUrlVars : function() {
-	        var vars = [], hash;
-	        var hashes = window.location.href.slice(
-	                window.location.href.indexOf('?') + 1).split('&');
-	        for (var i = 0; i < hashes.length; i++) {
-	            hash = hashes[i].split('=');
-	            vars.push(hash[0]);
-	            vars[hash[0]] = hash[1];
+
+function show_tab(tab, paper_id){
+    console.log(tab)
+    $("#home").hide();
+    $("#schedule").hide();
+    $("#paper").hide();
+    $("#"+tab).show();
+    if(tab == 'home'){
+    	populate_likes(starred);
+		populate_recs(recommended);
+		populate_papers(entities);
+    }else if(tab == 'schedule'){
+    	populate_sessions();
+    }
+        
+}   
+
+
+
+function get_paper_html(id){
+    if(entities[id] == null)
+        return null
+    var raw_html = '<tr class="clickable">'
+    raw_html += '<td class="content" onclick="load_paper(\'' + id + '\');">'    
+    raw_html += '<ul>'
+    raw_html += '<li class="strong">'+entities[id].title+'</li>'
+    raw_html += '<li>'+entities[id].c_and_b + '</li>'
+    raw_html += '<li class="blue">'
+    for(author in entities[id].authors){
+        if(entities[id].authors[author] != null){
+            raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
+        }
+    }
+    raw_html += '</li>'
+    raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
+    raw_html += '</ul>'
+    raw_html += '</td>'
+    raw_html += '<td class="metadata">'     
+    raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'        
+    raw_html += '<span class="ui-icon ui-icon-star"></span>'
+    raw_html += '</div>'
+    
+    raw_html += '</td>'
+    raw_html += '</tr>'
+
+    return raw_html
+}
+
+
+
+function get_session_html(id){
+    var raw_html = '<div class="session '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" title="' + id + '">'
+    raw_html += '<table class="session-container"><tr class="clickable">'
+    raw_html += '<td class="content">'  
+    raw_html += '<ul>'
+    raw_html += '<li class="strong"><span class="arrow">▸</span>'+sessions[id].s_title+'</li>'
+    raw_html += '<li class="gray">Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</li>'
+    raw_html += '</ul>'
+
+    
+    raw_html += '<div class="timeline">'
+    var size = Object.size(sessions[id].submissions)
+    var w = 100/size
+    for(var i=0; i< size; i++){
+        raw_html += '<div style="width:' + w + '%;"></div>'
+    }
+    raw_html += '</div>'
+    raw_html += '</td>'
+    raw_html += '<td class="metadata">'     
+    raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'
+    raw_html += '<span class="ui-icon ui-icon-star"></span>'
+    raw_html += '</div>'        
+    raw_html += '</td>'
+    raw_html += '</tr>'
+    raw_html += '</table>'
+    raw_html += '<div id="' +id +'"  style="display:none;">'
+    for(var paper_id in sessions[id].submissions){
+        raw_html += '<table class="paper-container">'
+        raw_html += get_paper_html(paper_id);
+        raw_html += '</table>'
+    }
+    raw_html += '</div>'
+    return raw_html
+}
+
+
+
+function get_selected_paper_html(id){
+    if(entities[id] == null)
+        return null
+
+    var raw_html = '<span class="strong">' + entities[id].title + '</span><br />'
+    raw_html += '<span class="blue">'
+    for(var author in entities[id].authors){
+        if(entities[id].authors[author] != null){
+            raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
+        }
+    }
+    raw_html += '</span>'
+    raw_html += '<hr />'
+    raw_html += '<ul>'
+    raw_html += '<li>' + entities[id].abstract + '</li>'
+    raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
+    raw_html += '</ul>'
+    return raw_html
+}
+
+
+
+function load_paper(paper_id){
+    var selected_paper_html = get_selected_paper_html(paper_id)
+    similar_papers.fnClearTable();
+    $('#paper').find('.form').html(selected_paper_html)
+    $.post('recs', {'papers': JSON.stringify([paper_id])}, 
+    function(res){              
+        for(var i = 0; i< res.length; i++){
+            var p_id = res[i].id
+            var raw_html = get_paper_html(res[i].id)
+            if(raw_html!=null){
+                var row = $(raw_html)
+                var n = similar_papers.fnAddData([row.children().eq(0).html(), row.children().eq(1).html()])
+                var node = similar_papers.fnGetNodes(n)
+                $(node).addClass('clickable');
+                $(node.cells[0]).addClass('content')
+                var f = load_paper(p_id)
+                $(node.cells[0]).click(f)
+                $(node.cells[1]).addClass('metadata')
+            }
+        }
+    });
+
+} 
+
+function populate_papers(_entities){ 
+	console.log(_entities)
+    $("#all_papers").html("")        
+    for(var e in _entities){
+        var raw_html = get_paper_html(e)
+        if(raw_html != null){
+            var row = $(raw_html)
+            $("#all_papers").append(row)
+        }
+    }   
+}
+
+
+function populate_recs(_recs){ 
+    $("#recs").html("")     
+    for(var r in _recs){
+        var raw_html = get_paper_html(recommended[r].id)
+        if(raw_html != null){
+            var row = $(raw_html)
+            $("#recs").append(row)
+        }
+    }   
+}
+
+
+
+function populate_likes(_likes){  
+    $("#likes").html("")     
+    for(var l in _likes){
+        var raw_html = get_paper_html(l)
+        if(raw_html != null){
+            var row = $(raw_html)
+            $("#likes").append(row)
+        }
+    }   
+}
+
+
+function populate_sessions(_sessions){
+    $(".sessions").html("") 
+    for(var s in _sessions){
+        var raw_html = get_session_html(s)
+        var row = $(raw_html)
+        place_session(row)
+    }
+}
+
+
+
+
+
+
+
+function setup_filters(){
+    $('input:checkbox').live('change', function(){
+        var days_checked = $("input:checked.day")
+        var times_checked = $("input:checked.time")
+        var venues_checked = $("input:checked.venue")
+        var personas_checked = $("input:checked.persona")
+        var star = $("input:checked.fav")
+        var day_classes = ''
+        for(var i=0; i< days_checked.length; i++){
+            var c = days_checked[i].title               
+            day_classes  += '.'+c + ','     
+        }
+        day_classes = day_classes.substr(0, day_classes.length-1)
+        console.log(day_classes)
+        time_classes=''
+        for(var i=0; i< times_checked.length; i++){
+            var c = times_checked[i].title
+            time_classes += '.'+c + ',';
+        }
+
+        time_classes = time_classes.substr(0, time_classes.length-1)
+        console.log(time_classes)
+        personas_classes = '';
+        for(var i=0; i< personas_checked.length; i++){
+            var c = personas_checked[i].title
+            personas_classes +=  '.' + c + ',';
+        }
+
+        personas_classes = personas_classes.substr(0, personas_classes.length-1)
+        console.log(personas_classes)
+        venues_classes = ''
+        for(var i=0; i< venues_checked.length; i++){
+            var c = venues_checked[i].title
+            venues_classes += '.' + c + ',';
+        }
+
+        venues_classes = venues_classes.substr(0, venues_classes.length-1)
+        console.log(venues_classes)
+
+
+        var select_class = $('.all')
+        if(day_classes != ''){
+            select_class = select_class.filter(day_classes)
+        }
+        
+        if(time_classes!=''){               
+            select_class = select_class.filter(time_classes)                
+        }
+
+        if(personas_classes!=''){               
+            select_class = select_class.filter(personas_classes)                
+        }
+
+        if(venues_classes!=''){             
+            select_class = select_class.filter(venues_classes)              
+        }
+       $('.all').hide();
+       select_class.show();
+
+        
+    });
+}
+
+
+
+
+
+$(document).ready(function(){
+
+    // Handle tabs
+    var tab = get_params('tab')
+    var id = get_params('id')
+    if(tab==null || (['home','schedule','paper'].indexOf(tab) == -1)){
+        tab='home';
+    }       
+
+    $('#nav_home').click(function(){show_tab('home');})
+    $('#nav_schedule').click(function(){show_tab('schedule');})
+
+    show_tab(tab);
+
+    //do this in the end
+    $('.default-text').val('');
+    $('.default-text').blur();
+
+    $('.collapsible-title').click(
+	    function(event){
+	    	var target = $(this).attr("data")
+	        $('#'+ target).toggle();
+	        if($('#'+target).is(':visible')){
+	            $(this).find('.arrow').html('▾');
+	        }else{
+	            $(this).find('.arrow').html('▸');
 	        }
-	        return vars;
-	    },
-	    getUrlVar : function(name) {
-	        return $.getUrlVars()[name];
+	    });
+
+	$('.paper-container').click(function(event){
+	    event.stopPropagation();
+	});
+
+
+
+
+	$(".default-text").focus(function(src) {
+	    if ($(this).val() == $(this).title) {
+	        $(this).removeClass("default-text-active");
+	        $(this).val("");
 	    }
 	});
-	
-	
 
-	$(document).ready(function(){
-
-		// Handle tabs
-		var tab = $.getUrlVar('tab')
-		var id = $.getUrlVar('id')
-		if(tab==null || (['home','schedule','paper'].indexOf(tab) == -1)){
-		    tab='home';
-		}		
-
-		$('#nav_home').click(function(){show_tab('home');})
-		$('#nav_schedule').click(function(){show_tab('schedule');})
-
-
-		// All table definitions Below
-
-		var likes = $('#likes').dataTable({
-			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
-			"bPaginate": true,
-			"bInfo": false,
-			"bFilter": false,
-			"sWidth": "100%",
-			"aaSorting": [],
-			"aLengthMenu": [[2, -1], ["Few", "All"]],
-			"iDisplayLength": -1,
-			"oLanguage": {
-		      "sZeroRecords": "You haven't starred anything yet. Nothing to show."
-		    },
-			"aoColumns": [                 
-				{},
-				{}
-			]
-			
-		});
-
-
-		var recs = $('#recs').dataTable({
-			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
-			"bPaginate": true,
-			"bFilter": true,
-			"bInfo": false,
-			"aaSorting": [],
-			"sWidth": "100%",
-			"iDisplayLength": -1,
-			"oLanguage": {
-		      "sZeroRecords": "Since you haven't starred any paper yet, we can't generate recommendations for you."
-		    },
-			"aoColumns": [                 
-				{},
-				{}
-			]
-			
-		});
-		
-
-		var papers = $('#papers').dataTable({
-			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
-			"bPaginate": true,
-			"bFilter": true,
-			"sWidth": "100%",
-			"aaSorting": [],
-			"aLengthMenu": [[5, 10, 20, 50, -1], [5, 10, 20, 50, "All"]],
-			"iDisplayLength": -1,
-			"oLanguage": {
-		      "sZeroRecords": "Seems like something went wrong. No data to display."
-		    },
-			"aoColumns": [                 
-				{},
-				{}
-			]
-			
-		});
-
-
-		var similar_papers = $('#similar_papers').dataTable({
-			"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
-			"bPaginate": false,
-			"bFilter": true,
-			"bInfo": false,
-			"aaSorting": [],
-			"sWidth": "100%",
-			"oLanguage": {
-		      "sZeroRecords": "Not enough data to generate recommendations for this paper."
-		    },
-			"aoColumns": [                 
-				{},
-				{}
-			]
-			
-		});		
-
-
-		function show_tab(tab, paper_id){
-			console.log(tab)
-			$("#home").hide();
-			$("#schedule").hide();
-			$("#paper").hide();
-			$("#"+tab).show();
-			if(tab == 'schedule' || tab == 'home'){
-				window.history.pushState(document.html, document.title, '?tab='+tab)
-			}else if(tab=='paper'){
-				window.history.pushState(document.html, document.title, '?tab='+tab+'&id='+paper_id)
-				show_paper(paper_id)
-			}
-			
-				
-		}		
-
-
-		function get_paper_html(id){
-			if(entities[id] == null)
-				return null
-			var raw_html = '<tr class="clickable">'
-			raw_html += '<td class="content" onclick="load_paper(\'' + id + '\');">'	
-			raw_html += '<ul>'
-			raw_html += '<li class="strong">'+entities[id].title+'</li>'
-			raw_html += '<li>'+entities[id].c_and_b + '</li>'
-			raw_html += '<li class="blue">'
-			for(author in entities[id].authors){
-				if(entities[id].authors[author] != null){
-					raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
-				}
-			}
-			raw_html += '</li>'
-			raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
-			raw_html += '</ul>'
-			raw_html += '</td>'
-			raw_html += '<td class="metadata">'		
-			raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'		
-			raw_html += '<span class="ui-icon ui-icon-star"></span>'
-			raw_html += '</div>'
-			
-			raw_html += '</td>'
-			raw_html += '</tr>'
-
-			return raw_html
-		}
-		
-
-
-		function get_session_html(id){
-			var raw_html = '<div class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" title="' + id + '">'
-			raw_html += '<table class="session-container"><tr class="clickable">'
-			raw_html += '<td class="content">'	
-			raw_html += '<ul>'
-			raw_html += '<li class="strong"><span class="arrow">▸</span>'+sessions[id].s_title+'</li>'
-			raw_html += '<li class="gray">Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</li>'
-			raw_html += '</ul>'
-
-			
-			raw_html += '<div class="timeline">'
-			var size = Object.size(sessions[id].submissions)
-			var w = 100/size
-			for(var i=0; i< size; i++){
-				raw_html += '<div style="width:' + w + '%;"></div>'
-			}
-			raw_html += '</div>'
-			raw_html += '</td>'
-			raw_html += '<td class="metadata">'		
-			raw_html += '<div class="ui-state-default ui-corner-all" title="'+ id + '">'
-			raw_html += '<span class="ui-icon ui-icon-star"></span>'
-			raw_html += '</div>'		
-			raw_html += '</td>'
-			raw_html += '</tr>'
-			raw_html += '</table>'
-			raw_html += '<div id="' +id +'"  style="display:none;">'
-			for(var paper_id in sessions[id].submissions){
-				raw_html += '<table class="paper-container">'
-				raw_html += get_paper_html(paper_id);
-				raw_html += '</table>'
-			}
-			raw_html += '</div>'
-			return raw_html
-		}
-
-		
-
-		function get_selected_paper_html(id){
-			if(entities[id] == null)
-				return null
-
-			var raw_html = '<span class="strong">' + entities[id].title + '</span><br />'
-			raw_html += '<span class="blue">'
-			for(var author in entities[id].authors){
-				if(entities[id].authors[author] != null){
-					raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
-				}
-			}
-			raw_html += '</span>'
-			raw_html += '<hr />'
-			raw_html += '<ul>'
-			raw_html += '<li>' + entities[id].abstract + '</li>'
-			raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
-			raw_html += '</ul>'
-			return raw_html
-		}
-
-
-		load_paper = function (paper_id) {
-			return function(){ 		
-				show_tab('paper', paper_id)
-			}
-		}
-
-
-		function show_paper(paper_id){
-			var selected_paper_html = get_selected_paper_html(paper_id)
-			similar_papers.fnClearTable();
-			$('#paper').find('.form').html(selected_paper_html)
-			$.post('recs', {'papers': JSON.stringify([paper_id])}, 
-			function(res){				
-				for(var i = 0; i< res.length; i++){
-					var p_id = res[i].id
-					var raw_html = get_paper_html(res[i].id)
-					if(raw_html!=null){
-						var row = $(raw_html)
-						var n = similar_papers.fnAddData([row.children().eq(0).html(), row.children().eq(1).html()])
-						var node = similar_papers.fnGetNodes(n)
-						$(node).addClass('clickable');
-						$(node.cells[0]).addClass('content')
-						var f = load_paper(p_id)
-						$(node.cells[0]).click(f)
-						$(node.cells[1]).addClass('metadata')
-					}
-				}
-			});
-
-		}	
-
-		show_tab(tab, id);
-
-
-
-		// Populate all raw tables
-		function populate_likes(){
-			if(prefs[login_id] == null || prefs[login_id].likes == null)
-				return	
-			likes.fnClearTable();
-			for(p in prefs[login_id].likes){
-				var raw_html = get_paper_html(prefs[login_id].likes[p])
-				if(raw_html!=null){
-					var row = $(raw_html)
-					var n = likes.fnAddData([row.children().eq(0).html(), row.children().eq(1).html()])
-					var node = likes.fnGetNodes(n)
-					$(node).addClass('clickable');
-					$(node.cells[0]).addClass('content')
-					var f = load_paper(prefs[login_id].likes[p])
-					$(node.cells[0]).click(f)
-					$(node.cells[1]).addClass('metadata')
-				}
-			}		
-		}
-
-
-
-		function populate_papers(){
-			papers.fnClearTable();
-			for(e in entities){
-				var raw_html = get_paper_html(e)
-				if(raw_html != null){
-					var row = $(raw_html)
-					var n = papers.fnAddData([row.children().eq(0).html(), row.children().eq(1).html()])
-					var node = papers.fnGetNodes(n)
-					$(node).addClass('clickable');
-					$(node.cells[0]).addClass('content')
-					var f = load_paper(e)
-					$(node.cells[0]).click(f)
-					$(node.cells[1]).addClass('metadata')
-				}
-			}	
-		}
-
-
-		function populate_recs(){
-			papers.fnClearTable();	
-			for(r in recommended){
-				var raw_html = get_paper_html(recommended[r].id)
-				var row = $(raw_html)
-				var n = recs.fnAddData([row.children().eq(0).html(), row.children().eq(1).html()])
-				var node = recs.fnGetNodes(n)
-				$(node).addClass('clickable');
-				$(node.cells[0]).addClass('content')
-				var f = load_paper(recommended[r].id)
-				$(node.cells[0]).click(f)
-				$(node.cells[1]).addClass('metadata')
-			}
-				
-		}
-
-
-		function populate_sessions(){
-			$("#temp_session_container").html('')	
-			for(s in sessions){
-				var raw_html = get_session_html(s)
-				var row = $(raw_html)
-				$("#temp_session_container").append(row);
-			}				
-		}
-
-
-		function arrange_sessions(){
-			var mon = $('.all').filter('.Monday');
-			mon.filter('.t09').appendTo("#Mondayt09");
-			mon.filter('.t11').appendTo("#Mondayt11");
-			mon.filter('.t14').appendTo("#Mondayt14");
-			mon.filter('.t16').appendTo("#Mondayt16");
-			
-
-			var tue = $('.all').filter('.Tuesday');
-			tue.filter('.t09').appendTo("#Tuesdayt09");
-			tue.filter('.t11').appendTo("#Tuesdayt11");
-			tue.filter('.t14').appendTo("#Tuesdayt14");
-			tue.filter('.t16').appendTo("#Tuesdayt16");
-
-			var wed = $('.all').filter('.Wednesday');
-			wed.filter('.t09').appendTo("#Wednesdayt09");
-			wed.filter('.t11').appendTo("#Wednesdayt11");
-			wed.filter('.t14').appendTo("#Wednesdayt14");
-			wed.filter('.t16').appendTo("#Wednesdayt16");
-
-			var thu = $('.all').filter('.Thursday');
-			thu.filter('.t09').appendTo("#Thursdayt09");
-			thu.filter('.t11').appendTo("#Thursdayt11");
-			thu.filter('.t14').appendTo("#Thursdayt14");
-			thu.filter('.t16').appendTo("#Thursdayt16");
-		}
-
-
-
-		populate_likes();
-		populate_recs();
-		populate_papers();
-		populate_sessions();		
-		arrange_sessions();
-
-		// Starred Items
-
-
-		function refresh_starred(){
-			if(prefs[login_id] == null || prefs[login_id].likes == null){
-				return
-			}
-			$( ".ui-state-default" ).each(function(index) {
-				if(prefs[login_id].likes.indexOf($(this).attr("title")) != -1){
-					$(this).addClass('ui-state-active');
-				}else{
-					$(this).removeClass('ui-state-active');
-				}
-			});
-		}
-		
-
-		function update_starred(){		   
-	   		$( ".all" ).each(function(s_index) {
-	   			var session = $(this)
-				$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
-					if($(this).hasClass('ui-state-active')){
-						session.find('.timeline').children("div").eq(p_index).addClass("filled");
-					}else{
-						session.find('.timeline').children("div").eq(p_index).removeClass("filled");
-					}				
-					
-				});
-
-				if($(this).find('.paper-container').find('.ui-state-active').length > 0){
- 					$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
-		       	}else{
-		         	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
-		       	}
-			});
-		   
-		}
-
-
-
-		// Session Filtering
-
-		$('input:checkbox').live('change', function(){
-	  		var days_checked = $("input:checked.day")
-	  		var times_checked = $("input:checked.time")
-	  		var venues_checked = $("input:checked.venue")
-	  		var personas_checked = $("input:checked.persona")
-			var star = $("input:checked.fav")
-	  		var day_classes = ''
-		    for(var i=0; i< days_checked.length; i++){
-		    	var c = days_checked[i].title		    	
-		    	day_classes  += '.'+c + ','    	
-		    }
-		    day_classes = day_classes.substr(0, day_classes.length-1)
-		    console.log(day_classes)
-		    time_classes=''
-		    for(var i=0; i< times_checked.length; i++){
-		    	var c = times_checked[i].title
-		    	time_classes += '.'+c + ',';
-		    }
-
-		    time_classes = time_classes.substr(0, time_classes.length-1)
-		    console.log(time_classes)
-		    personas_classes = '';
-		    for(var i=0; i< personas_checked.length; i++){
-		    	var c = personas_checked[i].title
-		    	personas_classes +=  '.' + c + ',';
-		    }
-
-		    personas_classes = personas_classes.substr(0, personas_classes.length-1)
-		    console.log(personas_classes)
-		    venues_classes = ''
-		    for(var i=0; i< venues_checked.length; i++){
-		    	var c = venues_checked[i].title
-		    	venues_classes += '.' + c + ',';
-		    }
-
-		    venues_classes = venues_classes.substr(0, venues_classes.length-1)
-		    console.log(venues_classes)
-
-
-		    var select_class = $('.all')
-		    if(day_classes != ''){
-		    	select_class = select_class.filter(day_classes)
-		    }
-		    
-		    if(time_classes!=''){		    	
-		    	select_class = select_class.filter(time_classes)		    	
-		    }
-
-		    if(personas_classes!=''){		    	
-		    	select_class = select_class.filter(personas_classes)		    	
-		    }
-
-		    if(venues_classes!=''){		    	
-		    	select_class = select_class.filter(venues_classes)		    	
-		    }
-		   $('.all').hide();
-		   select_class.show();
-
-		    
-		});
-
-
-
-		// All toggling below
-
-
-		$("#likes_toggle").click(function(){
-    		$("#likes_container").toggle();
-    		if($('#likes_container').is(':visible')){
-					$("#likes_toggle").find('.arrow').html('▾');
-			}else{
-					$("#likes_toggle").find('.arrow').html('▸');
-			}
-  		});
-
-
-  		$("#recs_toggle").click(function(){
-    		$("#recs_container").toggle();
-    		if($('#recs_container').is(':visible')){
-				$("#recs_toggle").find('.arrow').html('▾');
-			}else{
-				$("#recs_toggle").find('.arrow').html('▸');
-			}
-  		});
-
-
-  		$("#papers_toggle").click(function(){
-    		$("#papers_container").toggle();
-    		if($('#papers_container').is(':visible')){
-					$("#papers_toggle").find('.arrow').html('▾');
-			}else{
-					$("#papers_toggle").find('.arrow').html('▸');
-			}
-  		});
-
-
-  		$("#similar_papers_toggle").click(function(){
-    		$("#similar_papers_container").toggle();
-    		if($('#similar_papers_container').is(':visible')){
-				$("#similar_papers_toggle").find('.arrow').html('▾');
-			}else{
-				$("#similar_papers_toggle").find('.arrow').html('▸');
-			}
-  		});
-
-
-  		$("#recs_show_toggle").click(function(){
-    		if($("#recs").dataTable().fnSettings()._iDisplayLength < $("#recs").dataTable().fnSettings().fnRecordsTotal()){
-					$("#recs").dataTable().fnSettings()._iDisplayLength = $("#recs").dataTable().fnSettings()._iDisplayLength + 5;
-					if($("#recs").dataTable().fnSettings()._iDisplayLength >= $("#recs").dataTable().fnSettings().fnRecordsTotal())
-					$("#recs_show_toggle").hide();
-			}
-			$("#recs").dataTable().fnDraw(false);
-  		});
-
-
-  		$("#likes_show_toggle").click(function(){
-    		if($("#likes").dataTable().fnSettings()._iDisplayLength == -1){
-					$("#likes").dataTable().fnSettings()._iDisplayLength = 2;
-					$("#likes_show_toggle").html('Show All')
-			}else{
-					$("#likes").dataTable().fnSettings()._iDisplayLength = -1;
-					$("#likes_show_toggle").html('Show Less')
-			}
-			$("#likes").dataTable().fnDraw(false);
-  		});
-
-
-  		// Other click handlers	
-
-  		$('.ui-state-default').hover(
-			function(){ $(this).addClass('ui-state-hover'); }, 
-			function(){ $(this).removeClass('ui-state-hover'); }
-		);
-
-
-		$('.ui-state-default').click(function(event){ 
-			var obj = $(this)
-			if(obj.hasClass('ui-state-active')){
-				$.get('/like/' + obj.attr('title') +'/unlike', function(res) {
-				  if(res.status == 'ok'){
-				  	obj.removeClass('ui-state-active');	
-				  	prefs[login_id].likes.remove(obj.attr('title'))  	
-				  }
-				});
-			}else{
-				$.get('/like/' + obj.attr('title') +'/like', function(res) {
-				  if(res.status == 'ok'){
-				  	obj.addClass('ui-state-active');
-				  	prefs[login_id].likes.append(obj.attr('title'))
-				  }
-				});
-
-			}
-			refresh_starred()
-			update_starred()
-			
-			//refresh_starred();
-		});
-
-		
-		$('.all').click(
-			function(event){
-				$('#'+this.title).toggle();
-				if($('#'+this.title).is(':visible')){
-					$(this).find('.arrow').html('▾');
-				}else{
-					$(this).find('.arrow').html('▸');
-				}
-			});
-
-		
-
-		$('.collapsible-title').click(
-			function(event){
-				$('#'+this.title).toggle();
-				if($('#'+this.title).is(':visible')){
-					$(this).find('.arrow').html('▾');
-				}else{
-					$(this).find('.arrow').html('▸');
-				}
-
-			});
-
-		$('.paper-container').click(function(event){
-			event.stopPropagation();
-		});
-
-
-
-		
-		if($("#likes").dataTable().fnSettings().fnRecordsTotal() <= 2){
-			$('#likes_show_toggle').hide();
-		}
-
-		if($("#recs").dataTable().fnSettings().fnRecordsTotal() <= 2){
-			$('#recs_show_toggle').hide();
-		}
-
-		$(".default-text").focus(function(src)
-		{
-		    if ($(this).val() == $(this).title)
-		    {
-		        $(this).removeClass("default-text-active");
-		        $(this).val("");
-		    }
-		});
-	    
-		$(".default-text").blur(function(target)
-		{
-		    if ($(this).val() == "")
-		    {
-		        $(this).addClass("default-text-active");
-		        $(this).val($(this).title);
-		    }
-		});
-
-		refresh_starred();
-
-		if(tab == 'schedule'){
-			update_starred()
-		}
-
-		//do this in the end
-
-		$('.dataTables_filter').find('input[type=text]').attr('title', 'author name, paper keywords, persona, etc...')
-		$('.dataTables_filter').find('input[type=text]').addClass('default-text')
-		$('.default-text').val('');
-		$('.default-text').blur();
-
-		$("#recs").dataTable().fnSettings()._iDisplayLength = 5
-		$("#likes").dataTable().fnSettings()._iDisplayLength = 2
-
-		$("#likes").dataTable().fnDraw(false);
-		$("#recs").dataTable().fnDraw(false);
-		
-
+	$(".default-text").blur(function(target) {
+	    if ($(this).val() == "") {
+	        $(this).addClass("default-text-active");
+	        $(this).val($(this).title);
+	    }
 	});
+
+
+	$('.ui-state-default').hover(
+	    function(){ $(this).addClass('ui-state-hover'); }, 
+	    function(){ $(this).removeClass('ui-state-hover'); }
+	);
+
+
+	$('.ui-state-default').click(function(event){ 
+	    
+	});
+
+});
+
 </script>
 
 
 
+
+
+
+
+<div id="page">
 <div id="content">
+
+<!--- Home Page -->
 <div id="home">
-<h3 class="collapsible-title" id="likes_toggle"><span class="arrow">▾</span> Papers you liked.</h3>	
-<div id="likes_container">
-<table id="likes" class="paper-container">		
-</table>
+	<h3 class="collapsible-title" id="likes_toggle" data="likes_container"><span class="arrow">▾</span> Papers you liked.</h3>	
+	<div id="likes_container">
+		<table id="likes" class="paper-container">		
+		</table>
+	</div>
 <br />
-<span class="button" id="likes_show_toggle">Show All</span>
-</div>
+<br />
+
+	<h3 class="collapsible-title" id="recs_toggle" data="recs_container"><span class="arrow">▾</span> Papers recommended for you.</h3>
+	<div id="recs_container">
+		<table id="recs" class="paper-container">	
+		</table>
+	</div>
 
 <br />
 <br />
 
-<h3 class="collapsible-title" id="recs_toggle"><span class="arrow">▾</span> Papers recommended for you.</h3>
-<div id="recs_container">
-	<table id="recs" class="paper-container">	
-	</table>
-	<br />
-	<span class="button" id="recs_show_toggle">Show More</span>
-</div>
-
-<br />
-<br />
-
-<h3 class="collapsible-title" id="papers_toggle"><span class="arrow">▾</span> All Papers</h3>
-<div id="papers_container">
-	<table id="papers" class="paper-container">	
-	</table>
-</div>
+	<h3 class="collapsible-title" id="papers_toggle" data="all_papers_container"><span class="arrow">▾</span> All Papers</h3>
+	<div id="all_papers_container">
+		<table id="all_papers" class="paper-container">	
+		</table>
+	</div>
 </div>
 
 
-<div id="schedule">
+
+
+
+<!--  Schedule -->
+<div id="schedule">	
 <div class="col1">
 <h3><span class="gray">CHI 2013 Program</span></h3>
 <br />
@@ -742,8 +472,9 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 	</div>
 	<h3 class="collapsible-title" title="Wednesdayt16"><span class="arrow">▾</span> Wednesday, 16:00-17:20</h3>
 	<div id = "Wednesdayt16">
-	</div>
-	</div>
+	
+	</div>  
+	</div>	
 
 
 
@@ -763,8 +494,8 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 	</div>
 	</div>
 
-</div>
-</div>
+</div> <!-- col1 -->
+</div> <!-- program -->
 
 <div class="col2">
 <h3><span class="gray">Filter Options</span></h3>
@@ -817,11 +548,14 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 	<input type="checkbox" title="He" class="persona"/> <span class="gray">Health</span><br />	
 </div>
 
-</div> 
+</div>  <!-- col2 -->
 
 </div> <!-- schedule -->
 
 
+
+
+<!-- Selected Paper -->
 <div id="paper">
 	<h3><span class="gray">Selected Paper</span></h3>
 	<div class="form" style="margin-top:10px; cursor:pointer;">
@@ -833,11 +567,10 @@ Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
 	</table>
 	</div>
 
-</div>  <!-- paer -->
+</div>  <!-- selected paper -->
 
 
 </div> <!-- content -->
-
-<div class="hidden" style="display:none" id="temp_session_container">
-</div>
-{% endblock %}
+</div> <!-- page -->
+</body>
+</html>
