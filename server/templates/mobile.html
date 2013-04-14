@@ -42,9 +42,9 @@
         raw_html += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">'
         raw_html += '<input type="button" onclick = "load_paper(\''+ id + '\');" value="Discover">'
         if(starred[id] == null){
-            raw_html += '<input type="button" class="p_star" p_id="'+id+'" value="Star">'
+            raw_html += '<input type="button" class="p_star" p_id="'+id+'" onclick="handle_star(event);" value="Star">'
         }else{
-            raw_html += '<input type="button" class="p_star p_active" p_id="'+id+'" value="Unstar">'
+            raw_html += '<input type="button" class="p_star p_active" p_id="'+id+'" onclick="handle_star(event);" value="Unstar">'
         }
         raw_html += '</div>'       
         raw_html += '</li>' 
@@ -178,59 +178,52 @@
     }
 
 
-    
+    function handle_star(event){ 
+        var obj = $(event.target)
+        console.log(obj.attr('p_id'))
+        if(obj.hasClass('p_active')){
+            $.get('/like/' + obj.attr('p_id') +'/unlike', function(res) {
+              if(res.status == 'ok'){
+                obj.removeClass('p_active')
+                obj.val('Star')
+                obj.parent().find('.ui-btn-inner').html('Star')                  
+                obj.parents("li:first").removeClass('highlight')
+                delete starred[obj.attr('p_id')]
+                reset_likes(starred)
+                recommended = res.recs
+                reset_recs(recommended)
+                $('.'+obj.attr('p_id')).each(function(){
+                    $(this).find('.p_star').parent().find('.ui-btn-inner').html('Star')
+                })
+                highlight()
+              }
+            });
+        }else{
+            $.get('/like/' + obj.attr('p_id') +'/like', function(res) {
+              if(res.status == 'ok'){
+                obj.addClass('p_active')
+                obj.val('Unstar')
+                
+                obj.parents("li:first").addClass('highlight') 
+                starred[obj.attr('p_id')] = true
+                reset_likes(starred)
+                recommended = res.recs
+                reset_recs(recommended)
+                $('.'+obj.attr('p_id')).each(function(){
+                    $(this).find('.p_star').parent().find('.ui-btn-inner').html('Unstar')
+                })
+                highlight()
+                
+              }
+            });
 
-    function bind_p_star(){
-        $('.p_star').click(function(event){ 
-            var obj = $(this)
-            if(obj.hasClass('p_active')){
-                $.get('/like/' + obj.attr('p_id') +'/unlike', function(res) {
-                  if(res.status == 'ok'){
-                    obj.removeClass('p_active')
-                    obj.val('Star')
-                    obj.parent().find('.ui-btn-inner').html('Star')                  
-                    obj.parents("li:first").removeClass('highlight')
-                    delete starred[obj.attr('p_id')]
-                    reset_likes(starred)
-                    recommended = res.recs
-                    reset_recs(recommended)
-                    bind_p_star()
-                    $('.'+obj.attr('p_id')).each(function(){
-                        $(this).find('.p_star').parent().find('.ui-btn-inner').html('Star')
-                    })
-                    highlight()
-                  }
-                });
-            }else{
-                $.get('/like/' + obj.attr('p_id') +'/like', function(res) {
-                  if(res.status == 'ok'){
-                    obj.addClass('p_active')
-                    obj.val('Unstar')
-                    
-                    obj.parents("li:first").addClass('highlight') 
-                    starred[obj.attr('p_id')] = true
-                    reset_likes(starred)
-                    recommended = res.recs
-                    reset_recs(recommended)
-                    bind_p_star()
-                    $('.'+obj.attr('p_id')).each(function(){
-                        $(this).find('.p_star').parent().find('.ui-btn-inner').html('Unstar')
-                    })
-                    highlight()
-                    
-                  }
-                });
-
-            }
-
-            
-        });
-        
+        }
     }
+       
 
 
     function populate_papers(_entities){ 
-        $("#papers").empty()         
+        $("#papers").html("")        
         for(var e in _entities){
             var raw_html = get_paper_html(e)
             if(raw_html != null){
@@ -242,7 +235,7 @@
 
 
     function populate_recs(_recs){ 
-        $("#recs").empty()       
+        $("#recs").html("")     
         for(var r in _recs){
             var raw_html = get_paper_html(recommended[r].id)
             if(raw_html != null){
@@ -255,7 +248,7 @@
 
 
     function populate_likes(_likes){  
-        $("#likes").empty()       
+        $("#likes").html("")     
         for(var l in _likes){
             var raw_html = get_paper_html(l)
             if(raw_html != null){
@@ -267,7 +260,7 @@
     
 
     function populate_sessions(_sessions){
-        $(".sessions").empty()  
+        $(".sessions").html("") 
         for(var s in _sessions){
             var raw_html = get_session_html(s)
             var row = $(raw_html)
@@ -333,7 +326,6 @@
             console.log('paper')
             
         }
-        bind_p_star();
         highlight();
         //$.mobile.pageLoading(true);
             
