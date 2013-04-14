@@ -54,6 +54,7 @@
 
     function get_session_html(id){
         var raw_html = '<li class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" id="' + id + '">'
+        raw_html += '<a href="#" onclick= "load_session(\''+ id + '\');">'
         raw_html += '<h4>'+sessions[id].s_title+'</h4>'
         raw_html += '<p><strong>Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</strong></p>'
             raw_html += '<div class="timeline">'
@@ -63,15 +64,7 @@
             raw_html += '<div style="width:' + w + '%;margin-right:4px;"></div>'
         }
         raw_html += '</div>'
-        raw_html += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">'
-        raw_html += '<input type="button" onclick = "load_session(\''+ id + '\');" value="Explore">'
-        if(starred[id] == null){
-            raw_html += '<input type="button" class="p_star" p_id="'+id+'" onclick="handle_star(event);" value="Star">'
-        }else{
-            raw_html += '<input type="button" class="p_star p_active" p_id="'+id+'" onclick="handle_star(event);" value="Unstar">'
-        }
-        raw_html += '</div>'
-        raw_html += '</li>'     
+        raw_html += '</a></li>'     
         return raw_html
     }
 
@@ -162,7 +155,7 @@
                     
                 }
             }
-            $.mobile.changePage('#paper', 'pop', true, true);
+            $.mobile.changePage('#paper');
             $("#similar_papers").trigger('create');
             $("#similar_papers").listview('refresh')
             highlight();
@@ -185,7 +178,7 @@
         selected_session_html += '<h3>'+sessions[id].s_title+'</h3>'
         selected_session_html += '<p class="gray"><strong>Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</strong></p>'
         $('#selected_session').html(selected_session_html)
-        $.mobile.changePage('#session', 'pop', true, true);
+        $.mobile.changePage('#session');
 
         $("#session_papers").trigger('create');
         $("#session_papers").listview('refresh')
@@ -247,12 +240,12 @@
 
 
     function populate_papers(_entities){ 
-        $("#papers").html("")        
+        $("#all_papers").html("")        
         for(var e in _entities){
             var raw_html = get_paper_html(e)
             if(raw_html != null){
                 var row = $(raw_html)
-                $("#papers").append(row)
+                $("#all_papers").append(row)
             }
         }   
     }
@@ -308,12 +301,14 @@
     }
 
     function reset_papers(_entities){
+        console.log('reset_papers')
         populate_papers(_entities)
-        $("#papers").trigger('create');
-        $("#papers").listview('refresh')
+        $("#all_papers").trigger('create');
+        $("#all_papers").listview('refresh')
     }
 
     function reset_sessions(_sessions){
+        console.log('reset_sessions')
         populate_sessions(_sessions)
         $(".session").trigger('create');
         $(".session").listview('refresh')
@@ -331,64 +326,70 @@
     
 
 
-    $(document).bind('pagecreate', function (e) {
-        $('.list-divider').click(function(){
-            $(this).parent().find(':not(:first)').toggle()
-        })
-
-      
-        if(e.target.id == 'home') {
-            console.log('home')
-            reset_likes(starred);
-            reset_recs(recommended);
-            //reset_papers(entities);         
-        }else if(e.target.id == 'schedule') {
-            reset_sessions(sessions);
-            console.log('schedule')            
-        
-        }else if(e.target.id == 'paper'){
-            console.log('paper')
-            
-        }
+    $("#home").live('pageinit', function (e) {       
+        console.log('home')
+        reset_likes(starred);
+        reset_recs(recommended); 
         highlight();
-        //$.mobile.pageLoading(true);
-            
     });
+
+
+    $("#schedule").live('pageinit', function (e) {  
+        console.log('schedule') 
+        reset_sessions(sessions);      
+        highlight();
+    });
+
+
+    $("#papers").live('pageinit', function (e) {
+        console.log('papers')
+        reset_papers(entities);
+        highlight();            
+    });
+
+
 </script>
 
 
 
 <div data-role="page" class="ui-responsive-panel" id="home">
-
     <div data-role="header" data-position="fixed">
     <div data-role="navbar">
             <ul>
                 <li><a href="#home" data-icon="home" class="ui-btn-active ui-state-persist">My CHI</a></li>
                 <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
+                <li><a href="#papers" data-icon="grid">All Papers</a></li>
             </ul>
     </div><!-- /navbar -->
     </div><!-- /header -->
 
     <div data-role="content"> 
 
-    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <div data-role="collapsible" data-collapsed="false" data-theme="a" data-mini="true" data-content-theme="d" data-inset="false">
     <h4>Starred Papers</h4>       
     <ul id="likes" data-role="listview"> 
     </ul>
     </div>
 
 
-    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <div data-role="collapsible" data-collapsed="false" data-theme="a" data-mini="true" data-content-theme="d" data-inset="false">
     <h4>Recommended Papers</h4>       
     <ul id="recs" data-role="listview"> 
     </ul>
     </div>
 
 
+   
+    <div data-role="collapsible" data-collapsed="false" data-theme="a" data-mini="true" data-content-theme="d" data-inset="false">
+    <h4>Sessions which have starred papers</h4>
+    <ul id="sessions_starred" data-role="listview" class="session"> 
+    </ul>
+    </div>
 
-    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
-    <h4>All Papers</h4>       
-    <ul id="papers" data-role="listview"  data-filter="true" data-filter-placeholder="Search for authors or other keywords"       
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="a" data-mini="true" data-content-theme="d" data-inset="false">
+    <h4>Sessions which have recommended papers</h4>
+    <ul id="sessions_recommended" data-role="listview" class="session"> 
     </ul>
     </div>    
 
@@ -397,36 +398,45 @@
 </div><!-- /home -->
 
 
-
-<div data-role="page" class="ui-responsive-panel" id="schedule">
+<div data-role="page" class="ui-responsive-panel" id="papers">
 
     <div data-role="header" data-position="fixed">
     <div data-role="navbar">
             <ul>
                 <li><a href="#home" data-icon="home">My CHI</a></li>
-                <li><a href="#schedule" data-icon="info" class="ui-btn-active ui-state-persist">Program Schedule</a></li>
+                <li><a href="#schedule" data-icon="info">Program Schedule</a></li>
+                <li><a href="#papers" data-icon="grid" class="ui-btn-active ui-state-persist">All Papers</a></li>
             </ul>
     </div><!-- /navbar -->
     </div><!-- /header -->
 
     <div data-role="content"> 
-    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
-    <h4>Sessions which have starred papers</h4>
-    <ul id="sessions_starred" data-role="listview" class="session"> 
+
+    <div data-role="collapsible" data-collapsed="false" data-theme="a" data-mini="true" data-content-theme="d" data-inset="false">
+    <h4>All Papers</h4>       
+    <ul id="all_papers" data-role="listview" data-filter="true" data-filter-placeholder="Search for authors or other keywords">
     </ul>
     </div>
 
+    </div><!-- /content -->
 
-    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
-    <h4>Sessions which have recommended papers</h4>
-    <ul id="sessions_recommended" data-role="listview" class="session"> 
-    </ul>
-    </div>
+</div><!-- /home -->
 
 
 
-    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
-    <h4>All Sessions</h4>    
+<div data-role="page" class="ui-responsive-panel" id="schedule">
+    <div data-role="header" data-position="fixed">
+    <div data-role="navbar">
+            <ul>
+                <li><a href="#home" data-icon="home">My CHI</a></li>
+                <li><a href="#schedule" data-icon="info" class="ui-btn-active ui-state-persist">Program Schedule</a></li>
+                <li><a href="#papers" data-icon="grid" >All Papers</a></li>
+            </ul>
+    </div><!-- /navbar -->
+    </div><!-- /header -->
+
+    
+    <div data-role="content">     
     <!--
     <div data-role="collapsible" data-collapsed="false" data-theme="a" data-mini="true" data-content-theme="d" data-inset="false">
     <h4>Monday, 09:00-10:20</h4>
@@ -542,15 +552,15 @@
     </ul>
     </div>
     
-    </div> <!-- all sessions -->   
+    
 
     </div><!-- /content -->
 
-</div><!-- /home -->
+</div><!-- /schedule -->
 
 
 
-<div data-role="dialog" class="ui-responsive-panel" id="paper">  
+<div data-role="page" class="ui-responsive-panel" id="paper" data-add-back-btn="true">  
     <div data-role="header" data-position="fixed">
         <h1>Discover Related Papers</h1>
     </div>
@@ -558,7 +568,7 @@
     <div data-role="content"> 
     <div id="selected_paper">
     </div>      
-    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <div data-role="collapsible" data-collapsed="false" data-theme="a" data-mini="true" data-content-theme="d" data-inset="false">
     <h4>Papers similar to this paper</h4>       
     <ul id="similar_papers" data-role="listview"> 
     </ul>
@@ -567,10 +577,10 @@
 
     </div><!-- /content -->
 
-</div><!-- /paper -->
+</div><!-- /related_papers -->
 
 
-<div data-role="dialog" class="ui-responsive-panel" id="session">  
+<div data-role="page" class="ui-responsive-panel" id="session" data-add-back-btn="true">  
     <div data-role="header" data-position="fixed">
         <h1>Session</h1>
     </div>
@@ -578,7 +588,7 @@
     <div data-role="content"> 
     <div id="selected_session">
     </div>      
-    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <div data-role="collapsible" data-collapsed="false" data-theme="a" data-mini="true" data-content-theme="d" data-inset="false">
     <h4>Papers in this session</h4>       
     <ul id="session_papers" data-role="listview"> 
     </ul>
@@ -587,7 +597,7 @@
 
     </div><!-- /content -->
 
-</div><!-- /paper -->
+</div><!-- /session_papers -->
 
 
 </body>
