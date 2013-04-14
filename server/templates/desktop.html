@@ -185,7 +185,7 @@ function get_paper_html(id){
 
 
 function get_session_html(id){
-    var raw_html = '<div class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
+    var raw_html = '<div class="session '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
     raw_html += '<table class="session-container collapsible" data="' + id + '"><tr class="clickable">'
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
@@ -203,9 +203,9 @@ function get_session_html(id){
     raw_html += '</div>'
     raw_html += '</td>'
     raw_html += '<td class="metadata">'     
-    raw_html += '<div class="ui-state-default ui-corner-all" data="'+ id + '">'
-    raw_html += '<span class="ui-icon ui-icon-star"></span>'
-    raw_html += '</div>'        
+   	//raw_html += '<div class="ui-state-default ui-corner-all" data="'+ id + '">'
+    //raw_html += '<span class="ui-icon ui-icon-star"></span>'
+    //raw_html += '</div>'        
     raw_html += '</td>'
     raw_html += '</tr>'
     raw_html += '</table>'
@@ -290,9 +290,9 @@ function place_session(s){
 }
 
 
-function update_timeline(){
+function update_session_view(){
 
-	$( ".all" ).each(function(s_index) {
+	$( ".session" ).each(function(s_index) {
 		var session = $(this)
 		$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
 			if($(this).hasClass('ui-state-active')){
@@ -302,17 +302,19 @@ function update_timeline(){
 			}				
 
 		});
-
+		$('#session_likes').html('')
 	   	if($(this).find('.paper-container').find('.recommended').length > 0){
 			$(this).find('.session-container').find('tr').addClass('recommended')
+			$(this).clone().appendTo($('#session_recs'))
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('recommended')
 	   	}
-
+	   	$('#session_recs').html('')
 	   	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
 			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
 			$(this).find('.session-container').find('tr').addClass('highlight')
+			$(this).clone().appendTo($('#session_likes'))
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
@@ -349,7 +351,7 @@ function handle_star(event){
                 $(this).removeClass('highlight')
             })
             update_recs()
-            update_timeline()
+            update_session_view()
           }
         });
     }else{
@@ -364,7 +366,7 @@ function handle_star(event){
                 $(this).addClass('highlight')
             })
             update_recs()
-            update_timeline()
+            update_session_view()
           }
         });
 
@@ -434,14 +436,14 @@ function populate_likes(_likes){
 
 
 function populate_sessions(_sessions){
-    $(".session").html("") 
+    $(".session-timeslot").html("") 
     for(var s in _sessions){
         var raw_html = get_session_html(s)
         var row = $(raw_html)
         place_session(row)
     }
     bind_events()
-    update_timeline()
+    update_session_view()
 }
 
 
@@ -491,7 +493,7 @@ function setup_filters(){
         console.log(venues_classes)
 
 
-        var select_class = $('.all')
+        var select_class = $('.session')
         if(day_classes != ''){
             select_class = select_class.filter(day_classes)
         }
@@ -507,7 +509,7 @@ function setup_filters(){
         if(venues_classes!=''){             
             select_class = select_class.filter(venues_classes)              
         }
-       $('.all').hide();
+       $('.session').hide();
        select_class.show();
 
         
@@ -582,51 +584,68 @@ $(document).ready(function(){
 <h3><span class="gray">CHI 2013 Program</span></h3>
 <br />
 <div id="program">
+	<h3 class="collapsible-title collapsible" id="likes_toggle" data="session_likes"><span class="arrow">▾</span> Starred Sessions</h3>	
+	
+	<div id="session_likes">		
+	</div>
+	
+	<br />
+	<br />
+
+	<h3 class="collapsible-title collapsible" id="recs_toggle" data="session_recs"><span class="arrow">▾</span> Recommended Sessions</h3>
+	
+	<div id="session_recs">	
+	</div>
+	
+
+	<br />
+	<br />
+
 	<div id = "Monday">
 	<!--
 	<h3 class="collapsible-title" data="Mondayt09"><span class="arrow">▾</span> Monday, 09:00-10:20</h3> -->
-	<div id = "Mondayt09" class="session">
+	<div id = "Mondayt09" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Mondayt11"><span class="arrow">▾</span> Monday, 11:00-12:20</h3>
-	<div id = "Mondayt11" class="session">
+	<div id = "Mondayt11" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Mondayt14"><span class="arrow">▾</span> Monday, 14:00-15:20</h3>
-	<div id = "Mondayt14" class="session">
+	<div id = "Mondayt14" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Mondayt16"><span class="arrow">▾</span> Monday, 16:00-17:20</h3>
-	<div id = "Mondayt16" class="session">
+	<div id = "Mondayt16" class="session-timeslot">
 	</div>
 	</div>
 
 
 	<div id="Tuesday">
 	<h3 class="collapsible-title collapsible" data="Tuesdayt09"><span class="arrow">▾</span> Tuesday, 09:00-10:20</h3>
-	<div id = "Tuesdayt09" class="session">
+	<div id = "Tuesdayt09" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Tuesdayt11"><span class="arrow">▾</span> Tuesday, 11:00-12:20</h3>
-	<div id = "Tuesdayt11" class="session">
+	<div id = "Tuesdayt11" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Tuesdayt14"><span class="arrow">▾</span> Tuesday, 14:00-15:20</h3>
-	<div id = "Tuesdayt14" class="session">
+	<div id = "Tuesdayt14" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Tuesdayt16"><span class="arrow">▾</span> Tuesday, 16:00-17:20</h3>
-	<div id = "Tuesdayt16" class="session">
+	<div id = "Tuesdayt16" class="session-timeslot">
 	</div>
 	</div>
 
 
 	<div id = "Wednesday">
 	<h3 class="collapsible-title collapsible" data="Wednesdayt09"><span class="arrow">▾</span> Wednesday, 09:00-10:20</h3>
-	<div id = "Wednesdayt09" class="session">
+	<div id = "Wednesdayt09" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Wednesdayt11"><span class="arrow">▾</span> Wednesday, 11:00-12:20</h3>
-	<div id = "Wednesdayt11" class="session">
+	<div id = "Wednesdayt11" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Wednesdayt14"><span class="arrow">▾</span> Wednesday, 14:00-15:20</h3>
-	<div id = "Wednesdayt14" class="session">
+	<div id = "Wednesdayt14" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Wednesdayt16"><span class="arrow">▾</span> Wednesday, 16:00-17:20</h3>
-	<div id = "Wednesdayt16" class="session">
+	<div id = "Wednesdayt16" class="session-timeslot">
 	
 	</div>  
 	</div>	
@@ -635,17 +654,17 @@ $(document).ready(function(){
 
 	<div id = "Thursday">
 <!-- h3 class="collapsible-title collapsible" data="Thursdayt09"><span class="arrow">▾</span> Thursday, 09:00-10:20</h3> -->
-	<div id = "Thursdayt09" class="session">
+	<div id = "Thursdayt09" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Thursdayt11"><span class="arrow">▾</span> Thursday, 11:00-12:20</h3>
-	<div id = "Thursdayt11" class="session">
+	<div id = "Thursdayt11" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Thursdayt14"><span class="arrow">▾</span> Thursday, 14:00-15:20</h3>
-	<div id = "Thursdayt14" class="session">
+	<div id = "Thursdayt14" class="session-timeslot">
 	</div>
 	<!--
 	<h3 class="collapsible-title collapsible" data="Thursdayt16"><span class="arrow">▾</span> Thursday, 16:00-17:20</h3>-->
-	<div id = "Thursdayt16" class="session">
+	<div id = "Thursdayt16" class="session-timeslot">
 	</div>
 	</div>
 
