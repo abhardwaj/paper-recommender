@@ -70,9 +70,6 @@ function bind_events(){
     $('.default-text').val('');
     $('.default-text').blur();
 
-    
-
-	
     $('.collapsible').off('click')
     $('.collapsible').on('click',
 	    function(event){
@@ -86,10 +83,6 @@ function bind_events(){
 	            $(this).find('.arrow').html('▸');
 	        }
 	    });
-
-	
-
-
 
 
 	$(".default-text").focus(function(src) {
@@ -123,6 +116,7 @@ function show_tab(tab, paper_id){
 		populate_papers(entities);
     }else if(tab == 'schedule'){
     	populate_sessions(sessions);
+    	setup_filters()
     }else if(tab == 'selected_paper'){
     	load_paper(paper_id)
     }
@@ -389,6 +383,7 @@ function populate_sessions(_sessions){
 
 
 function setup_filters(){
+	$('input:checkbox').die()
     $('input:checkbox').live('change', function(){
         var days_checked = $("input:checked.day")
         var times_checked = $("input:checked.time")
