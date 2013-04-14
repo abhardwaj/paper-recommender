@@ -92,6 +92,21 @@ function bind_events(){
 	        }
 	    });
 
+    $('.session-collapsible').off('click')
+    $('.session-collapsible').on('click',
+	    function(event){
+	    	event.stopPropagation();
+
+	    	var s = $(this).parents('div.session:first')
+
+	        s.find('.paper-container').toggle();
+	        if(s.find('.paper-container').is(':visible')){
+	            s.find('.arrow').html('▾');
+	        }else{
+	            s.find('.arrow').html('▸');
+	        }
+	    });
+
 
     $(".default-text").off('focus')
 	$(".default-text").on('focus',
@@ -186,7 +201,7 @@ function get_paper_html(id){
 
 function get_session_html(id){
     var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
-    raw_html += '<table class="session-container collapsible" data="' + id + '"><tr class="clickable">'
+    raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
     raw_html += '<li><h3><span class="arrow">▸</span> '+sessions[id].s_title+'</h3></li>'
@@ -333,9 +348,9 @@ function update_session_view(){
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
 	   	}
 	   	if(like){
-	   		$(this).clone().attr("id",'likes'+id).appendTo('#session_likes')
+	   		session.clone().attr("id",'likes'+id).appendTo('#session_likes')
 	   	}else if(rec){
-	   		$(this).clone().attr("id",'recs'+id).appendTo('#session_recs')
+	   		session.clone().attr("id",'recs'+id).appendTo('#session_recs')
 	   	}
 
 	});
