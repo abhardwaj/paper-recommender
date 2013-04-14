@@ -287,6 +287,7 @@ table.dataTable tbody tr td {
 
 .content{
 	padding:10px;
+	padding-bottom: 15px;
 }
 
 .metadata{
@@ -331,9 +332,10 @@ table.dataTable tbody tr td {
 
 .ui-state-default{ 
 	border: 1px solid #d3d3d3 !important; 
-	background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x !important; 
+	background: #e6e6e6 repeat-x !important; 
 	font-weight: normal !important; 
 	color: #555555 !important; 
+	cursor: pointer !important;
 }
 
 
@@ -349,7 +351,7 @@ table.dataTable tbody tr td {
 
 .ui-state-active{
 	border: 1px solid #d19405 !important;
-	background: #fece2f url(images/ui-bg_gloss-wave_60_fece2f_500x100.png) 50% 50% repeat-x !important;
+	background: #fece2f !important;
 	font-weight: bold;
 	color: #4c3000 !important;
 }
@@ -382,18 +384,21 @@ table.dataTable tbody tr td {
 	width:100%;
 	border-spacing: 0;
 	border-bottom:1px solid #ccc;
-	background-color: #D7ECFA;
 	padding:0;
 	margin:0;
 }
 
-.session-container .clickable{
+
+.recommended{
 	background-color: #D7ECFA;
 }
 
-.session-container .clickable:hover{
-	background-color: #D7ECFA;
+.session-container .clickable{
+	cursor: pointer;
+	
 }
+
+
 
 
 
@@ -401,16 +406,17 @@ table.dataTable tbody tr td {
 	background-color: #fff7ce !important;
 }
 
+
+/*
 .clickable:hover{
 	background-color: #f0f4f9
 }
 
-
+*/
 
 
 .clickable{	
 	background-color: #fff;
-	cursor: pointer;
 }
 
 

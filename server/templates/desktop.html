@@ -138,15 +138,18 @@ function get_paper_html(id){
     if(entities[id] == null)
         return ''
     var raw_html = '<tr class="clickable ' + id +' '
+    if(recommended[id] != null){
+    	raw_html += 'recommended '
+    }
     if(starred[id] != null){
-    	raw_html += 'highlight'
+    	raw_html += 'highlight '
     }
     raw_html += '">'
-    raw_html += '<td class="content" onclick="show_tab(\'selected_paper\', \'' + id + '\');">'    
+    raw_html += '<td class="content">'    
     raw_html += '<ul>'
-    raw_html += '<li class="strong">'+entities[id].title+'</li>'
+    raw_html += '<li class="blue"><a href="#" onclick="show_tab(\'selected_paper\', \'' + id + '\');"><h3>'+entities[id].title+'</h3></a></li>'
     raw_html += '<li>'+entities[id].c_and_b + '</li>'
-    raw_html += '<li class="blue">'
+    raw_html += '<li class="strong">'
     for(author in entities[id].authors){
         if(entities[id].authors[author] != null){
             raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
@@ -213,8 +216,8 @@ function get_selected_paper_html(id){
     if(entities[id] == null)
         return null
 
-    var raw_html = '<span class="strong">' + entities[id].title + '</span><br />'
-    raw_html += '<span class="blue">'
+    var raw_html = '<h3>' + entities[id].title + '</h3><br />'
+    raw_html += '<span class="strong">'
     for(var author in entities[id].authors){
         if(entities[id].authors[author] != null){
             raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
@@ -684,7 +687,7 @@ $(document).ready(function(){
 <!-- Selected Paper -->
 <div id="selected_paper" class="tab">
 	<h3><span class="gray">Selected Paper</span></h3>
-	<div class="form" style="margin-top:10px; cursor:pointer;">
+	<div class="form" style="margin-top:10px;">
 	</div>
 	<br />
 	<h3 class="collapsible-title collapsible" id="similar_papers_toggle" data="similar_papers_container"><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
