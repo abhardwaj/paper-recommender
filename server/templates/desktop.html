@@ -103,12 +103,15 @@ function bind_events(){
 	    }
 	});
 
-	
 	$('.ui-state-default').hover(
 	    function(){ $(this).addClass('ui-state-hover'); }, 
 	    function(){ $(this).removeClass('ui-state-hover'); }
 	);
+
+	
 }
+
+
 
 function show_tab(tab, paper_id){
     console.log(tab)
@@ -342,7 +345,8 @@ function populate_papers(_entities){
             var row = $(raw_html)
             $("#all_papers").append(row)
         }
-    }   
+    }
+    bind_events()   
 }
 
 
@@ -354,7 +358,8 @@ function populate_recs(_recs){
             var row = $(raw_html)
             $("#recs").append(row)
         }
-    }   
+    }  
+    bind_events() 
 }
 
 
@@ -367,7 +372,8 @@ function populate_likes(_likes){
             var row = $(raw_html)
             $("#likes").append(row)
         }
-    }   
+    }
+    bind_events()   
 }
 
 
@@ -378,6 +384,7 @@ function populate_sessions(_sessions){
         var row = $(raw_html)
         place_session(row)
     }
+    bind_events()
 }
 
 
