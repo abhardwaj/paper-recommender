@@ -184,16 +184,14 @@
         if(obj.hasClass('p_active')){
             $.get('/like/' + obj.attr('p_id') +'/unlike', function(res) {
               if(res.status == 'ok'){
-                obj.removeClass('p_active')
-                obj.val('Star')
-                obj.parent().find('.ui-btn-inner').html('Star')                  
-                obj.parents("li:first").removeClass('highlight')
                 delete starred[obj.attr('p_id')]
                 reset_likes(starred)
                 recommended = res.recs
                 reset_recs(recommended)
                 $('.'+obj.attr('p_id')).each(function(){
                     $(this).find('.p_star').parent().find('.ui-btn-inner').html('Star')
+                    $(this).find('.p_star').val('Unstar')
+                    $(this).find('.p_star').removeClass('p_active')
                 })
                 highlight()
               }
@@ -201,16 +199,14 @@
         }else{
             $.get('/like/' + obj.attr('p_id') +'/like', function(res) {
               if(res.status == 'ok'){
-                obj.addClass('p_active')
-                obj.val('Unstar')
-                
-                obj.parents("li:first").addClass('highlight') 
                 starred[obj.attr('p_id')] = true
                 reset_likes(starred)
                 recommended = res.recs
                 reset_recs(recommended)
                 $('.'+obj.attr('p_id')).each(function(){
                     $(this).find('.p_star').parent().find('.ui-btn-inner').html('Unstar')
+                    $(this).find('.p_star').val('Star')
+                    $(this).find('.p_star').addClass('p_active')
                 })
                 highlight()
                 
