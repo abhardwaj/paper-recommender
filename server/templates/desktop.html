@@ -306,8 +306,7 @@ function update_session_view(){
 		
 	   	if($(this).find('.paper-container').find('.recommended').length > 0){
 			$(this).find('.session-container').find('tr').addClass('recommended')
-			var node = this.cloneNode(true)
-			$('#session_recs').append($(node))
+			$(this).clone().appendTo('#session_recs')
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('recommended')
@@ -316,14 +315,14 @@ function update_session_view(){
 	   	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
 			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
 			$(this).find('.session-container').find('tr').addClass('highlight')
-			var node = this.cloneNode(true)
-			$('#session_likes').append($(node))
+			$(this).clone().appendTo('#session_likes')
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
 	   	}
 
 	});
+	bind_events() 
 
 }
 
