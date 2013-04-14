@@ -185,7 +185,7 @@ function get_paper_html(id){
 
 
 function get_session_html(id){
-    var raw_html = '<div class="session '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
+    var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
     raw_html += '<table class="session-container collapsible" data="' + id + '"><tr class="clickable">'
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
@@ -291,7 +291,8 @@ function place_session(s){
 
 
 function update_session_view(){
-
+	$('#session_likes').html('')
+	$('#session_recs').html('')
 	$( ".session" ).each(function(s_index) {
 		var session = $(this)
 		$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
@@ -302,19 +303,21 @@ function update_session_view(){
 			}				
 
 		});
-		$('#session_likes').html('')
+		
 	   	if($(this).find('.paper-container').find('.recommended').length > 0){
 			$(this).find('.session-container').find('tr').addClass('recommended')
-			$(this).clone().appendTo($('#session_recs'))
+			var node = this.cloneNode(true)
+			$('#session_recs').append($(node))
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('recommended')
 	   	}
-	   	$('#session_recs').html('')
+	   	
 	   	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
 			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
 			$(this).find('.session-container').find('tr').addClass('highlight')
-			$(this).clone().appendTo($('#session_likes'))
+			var node = this.cloneNode(true)
+			$('#session_likes').append($(node))
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
