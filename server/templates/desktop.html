@@ -331,8 +331,9 @@ function load_paper(paper_id){
             var p_id = res[i].id
             var raw_html = get_paper_html(res[i].id)
             if(raw_html!=null){
-                var row = $(raw_html)
+               var row = $(raw_html)
                $('#similar_papers').append(row)
+               highlight()
             }
         }
     });
