@@ -318,6 +318,7 @@ function update_session_view(){
 	   	
 	   	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
 			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
+			$(this).find('.session-container').find('tr').addClass('highlight')
 			like = true
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
