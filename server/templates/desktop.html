@@ -297,9 +297,18 @@ function update_session_view(){
 		var session = $(this)
 		$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
 			if($(this).hasClass('ui-state-active')){
-				session.find('.timeline').children("div").eq(p_index).addClass("filled");
+				session.find('.timeline').children("div").eq(p_index).addClass("filled_yellow");
 			}else{
-				session.find('.timeline').children("div").eq(p_index).removeClass("filled");
+				session.find('.timeline').children("div").eq(p_index).removeClass("filled_yellow");
+			}				
+
+		});
+
+		$(this).find('.paper-container tr').each(function(p_index){
+			if($(this).hasClass('recommended')){
+				session.find('.timeline').children("div").eq(p_index).addClass("filled_blue");
+			}else{
+				session.find('.timeline').children("div").eq(p_index).removeClass("filled_blue");
 			}				
 
 		});
@@ -312,7 +321,6 @@ function update_session_view(){
 			$(this).find('.session-container').find('tr').addClass('recommended')
 			rec = true
 	   	}else{
-	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('recommended')
 	   	}
 	   	

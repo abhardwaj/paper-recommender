@@ -453,8 +453,12 @@ div.timeline div {
 	margin: 0px;
 }
 
-div.timeline div.filled {
+div.timeline div.filled_blue {
 	background-color: #00A8CD;
+}
+
+div.timeline div.filled_yellow {
+	background-color: #ffaa00 !important;
 }
 
 
