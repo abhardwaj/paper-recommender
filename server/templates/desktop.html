@@ -324,7 +324,7 @@ function update_session_view(){
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
 	   	}
 	   	if(like){
-	   		$(this).clone().attr("id",'likes'+id).appendTo('#session_recs')
+	   		$(this).clone().attr("id",'likes'+id).appendTo('#session_likes')
 	   	}else if(rec){
 	   		$(this).clone().attr("id",'recs'+id).appendTo('#session_recs')
 	   	}
