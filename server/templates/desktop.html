@@ -65,11 +65,60 @@ Object.size = function(obj) {
 };
 
 
+function bind_events(){
+	//do this in the end
+    $('.default-text').val('');
+    $('.default-text').blur();
+
+    $('.collapsible').click(
+	    function(event){
+	    	var target = $(this).attr("data")
+	    	console.log(target)
+	        $('#'+ target).toggle();
+	        if($('#'+target).is(':visible')){
+	            $(this).find('.arrow').html('▾');
+	        }else{
+	            $(this).find('.arrow').html('▸');
+	        }
+	    });
+
+	/*$('.paper-container').click(function(event){
+	    event.stopPropagation();
+	});
+*/
+
+
+
+	$(".default-text").focus(function(src) {
+	    if ($(this).val() == $(this).title) {
+	        $(this).removeClass("default-text-active");
+	        $(this).val("");
+	    }
+	});
+
+	$(".default-text").blur(function(target) {
+	    if ($(this).val() == "") {
+	        $(this).addClass("default-text-active");
+	        $(this).val($(this).title);
+	    }
+	});
+
+
+	$('.ui-state-default').hover(
+	    function(){ $(this).addClass('ui-state-hover'); }, 
+	    function(){ $(this).removeClass('ui-state-hover'); }
+	);
+
+
+	$('.ui-state-default').click(function(event){ 
+	    
+	});
+
+}
+
 function show_tab(tab, paper_id){
     console.log(tab)
-    $("#home").hide();
-    $("#schedule").hide();
-    $("#paper").hide();
+    $(".tab").hide();
     $("#"+tab).show();
     if(tab == 'home'){
     	populate_likes(starred);
@@ -80,6 +129,8 @@ function show_tab(tab, paper_id){
     }else if(tab == 'selected_paper'){
     	load_paper(paper_id)
     }
+
+    bind_events()
         
 }   
 
@@ -118,7 +169,7 @@ function get_paper_html(id){
 
 function get_session_html(id){
     var raw_html = '<div class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
-    raw_html += '<table class="session-container"><tr class="clickable collapsible">'
+    raw_html += '<table class="session-container collapsible" data="' + id + '"><tr class="clickable">'
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
     raw_html += '<li class="strong"><span class="arrow">▸</span>'+sessions[id].s_title+'</li>'
@@ -374,54 +425,7 @@ $(document).ready(function(){
 
     show_tab(tab, id);
 
-    //do this in the end
-    $('.default-text').val('');
-    $('.default-text').blur();
-
-    $('.collapsible').click(
-	    function(event){
-	    	var target = $(this).attr("data")
-	    	console.log(target)
-	        $('#'+ target).toggle();
-	        if($('#'+target).is(':visible')){
-	            $(this).find('.arrow').html('▾');
-	        }else{
-	            $(this).find('.arrow').html('▸');
-	        }
-	    });
-
-	/*$('.paper-container').click(function(event){
-	    event.stopPropagation();
-	});
-*/
-
-
-
-	$(".default-text").focus(function(src) {
-	    if ($(this).val() == $(this).title) {
-	        $(this).removeClass("default-text-active");
-	        $(this).val("");
-	    }
-	});
-
-	$(".default-text").blur(function(target) {
-	    if ($(this).val() == "") {
-	        $(this).addClass("default-text-active");
-	        $(this).val($(this).title);
-	    }
-	});
-
-
-	$('.ui-state-default').hover(
-	    function(){ $(this).addClass('ui-state-hover'); }, 
-	    function(){ $(this).removeClass('ui-state-hover'); }
-	);
-
-
-	$('.ui-state-default').click(function(event){ 
-	    
-	});
-
+    
 });
 
 </script>
@@ -436,7 +440,7 @@ $(document).ready(function(){
 <div id="content">
 
 <!--- Home Page -->
-<div id="home">
+<div id="home" class="tab">
 	<h3 class="collapsible-title collapsible" id="likes_toggle" data="likes_container"><span class="arrow">▾</span> Papers you liked.</h3>	
 	<div id="likes_container">
 		<table id="likes" class="paper-container">		
@@ -466,7 +470,7 @@ $(document).ready(function(){
 
 
 <!--  Schedule -->
-<div id="schedule">	
+<div id="schedule" class="tab">	
 <div class="col1">
 <h3><span class="gray">CHI 2013 Program</span></h3>
 <br />
@@ -529,7 +533,7 @@ $(document).ready(function(){
 	<h3 class="collapsible-title collapsible" data="Thursdayt11"><span class="arrow">▾</span> Thursday, 11:00-12:20</h3>
 	<div id = "Thursdayt11" class="session">
 	</div>
-	<h3 class="collapsible-title collapsible" data"Thursdayt14"><span class="arrow">▾</span> Thursday, 14:00-15:20</h3>
+	<h3 class="collapsible-title collapsible" data="Thursdayt14"><span class="arrow">▾</span> Thursday, 14:00-15:20</h3>
 	<div id = "Thursdayt14" class="session">
 	</div>
 	<!--
@@ -600,12 +604,12 @@ $(document).ready(function(){
 
 
 <!-- Selected Paper -->
-<div id="selected_paper">
+<div id="selected_paper" class="tab">
 	<h3><span class="gray">Selected Paper</span></h3>
 	<div class="form" style="margin-top:10px; cursor:pointer;">
 	</div>
 	<br />
-	<h3 class="collapsible-title" id="similar_papers_toggle"><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
+	<h3 class="collapsible-title collapsible" id="similar_papers_toggle" data="similar_papers_container"><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
 	<div id="similar_papers_container">
 	<table id="similar_papers">		
 	</table>
