@@ -70,8 +70,13 @@ function bind_events(){
     $('.default-text').val('');
     $('.default-text').blur();
 
-    $('.collapsible').click(
+    
+
+	
+    $('.collapsible').off('click')
+    $('.collapsible').on('click',
 	    function(event){
+	    	event.stopPropagation();
 	    	var target = $(this).attr("data")
 	    	console.log(target)
 	        $('#'+ target).toggle();
@@ -82,10 +87,8 @@ function bind_events(){
 	        }
 	    });
 
-	/*$('.paper-container').click(function(event){
-	    event.stopPropagation();
-	});
-*/
+	
+
 
 
 
@@ -172,7 +175,7 @@ function get_session_html(id){
     raw_html += '<table class="session-container collapsible" data="' + id + '"><tr class="clickable">'
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
-    raw_html += '<li class="strong"><span class="arrow">▸</span>'+sessions[id].s_title+'</li>'
+    raw_html += '<li class="strong"><span class="arrow">▸</span> '+sessions[id].s_title+'</li>'
     raw_html += '<li class="gray">Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</li>'
     raw_html += '</ul>'
 
@@ -555,8 +558,8 @@ $(document).ready(function(){
 	<input type="checkbox" title="SIG" class="venue"/> <span class="gray">SIG</span><br />	
 	<input type="checkbox" title="altchi" class="venue"/> <span class="gray">Alt CHI</span><br />	
 
-	<input type="checkbox" title="casestudy" class="venue"/><span class="gray">Case Study</span><br />
-	<input type="checkbox" title="paper" class="venue"/><span class="gray">Paper</span><br />
+	<input type="checkbox" title="casestudy" class="venue"/> <span class="gray">Case Study</span><br />
+	<input type="checkbox" title="paper" class="venue"/> <span class="gray">Paper</span><br />
 	<input type="checkbox" title="special" class="venue"/> <span class="gray">Special</span><br />		
 	<input type="checkbox" title="bof" class="venue"/> <span class="gray">BOF</span><br />
 </div>
