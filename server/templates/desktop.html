@@ -198,7 +198,7 @@ function get_session_html(id){
     raw_html += '</td>'
     raw_html += '</tr>'
     raw_html += '</table>'
-    raw_html += '<table id="' +id +'" class="paper-container" style="display:none;">'
+    raw_html += '<table id="' +id +'" class="paper-container" style="display:none; padding-left:20px;">'
     for(var paper_id in sessions[id].submissions){        
         raw_html += get_paper_html(paper_id);        
     }
@@ -283,22 +283,25 @@ function update_timeline(){
 
 	$( ".all" ).each(function(s_index) {
 		var session = $(this)
-	$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
-		if($(this).hasClass('ui-state-active')){
-			session.find('.timeline').children("div").eq(p_index).addClass("filled");
-		}else{
-			session.find('.timeline').children("div").eq(p_index).removeClass("filled");
-		}				
+		$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
+			if($(this).hasClass('ui-state-active')){
+				session.find('.timeline').children("div").eq(p_index).addClass("filled");
+			}else{
+				session.find('.timeline').children("div").eq(p_index).removeClass("filled");
+			}				
 
-	});
+		});
 
-	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
+		if($(this).find('.paper-container').find('.ui-state-active').length > 0){
 			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
-   	}else{
-     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
-   	}
+			$(this).find('.session-container').find('tr').addClass('highlight')
+	   	}else{
+	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
+	     	$(this).find('.session-container').find('tr').removeClass('highlight')
+	   	}
 
 	});
+
 }
 
 
