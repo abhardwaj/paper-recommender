@@ -102,7 +102,8 @@ body {
 
 #header {
 	margin:0 auto;
-	position: relative;
+	position: fixed;
+	top:0px;
 	height: 39px;
 	font-size:11pt;
 	background: #3D7AA6;
@@ -110,6 +111,7 @@ body {
 	color: white;
 	border-bottom: 1px solid #447EAC;
 	width: 100%;
+	z-index: 100;
 }
 
 #wrap{
@@ -141,6 +143,7 @@ body {
 
 
 #page{
+	position: relative;
 	margin:0 auto;
 	top: 40px;
 	right: 0px;
