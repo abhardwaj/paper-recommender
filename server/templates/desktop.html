@@ -111,12 +111,6 @@ function bind_events(){
 	    function(){ $(this).addClass('ui-state-hover'); }, 
 	    function(){ $(this).removeClass('ui-state-hover'); }
 	);
-
-
-	$('.ui-state-default').click(function(event){ 
-	    
-	});
-
 }
 
 function show_tab(tab, paper_id){
@@ -134,6 +128,7 @@ function show_tab(tab, paper_id){
     }
 
     bind_events()
+    highlight()
         
 }   
 
@@ -141,7 +136,7 @@ function show_tab(tab, paper_id){
 
 function get_paper_html(id){
     if(entities[id] == null)
-        return null
+        return ''
     var raw_html = '<tr class="clickable ' + id + '">'
     raw_html += '<td class="content" onclick="show_tab(\'selected_paper\', \'' + id + '\');">'    
     raw_html += '<ul>'
@@ -157,8 +152,12 @@ function get_paper_html(id){
     raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
     raw_html += '</ul>'
     raw_html += '</td>'
-    raw_html += '<td class="metadata">'     
-    raw_html += '<div class="ui-state-default ui-corner-all" data="'+ id + '">'        
+    raw_html += '<td class="metadata">'   
+    if(starred[id] == null){
+        raw_html += '<div class="ui-state-default ui-corner-all p_star" data="'+ id + '" onclick="handle_star(event);">'        
+    }else{
+        raw_html += '<div class="ui-state-default ui-corner-all ui-state-active p_star" data="'+ id + '" onclick="handle_star(event);">'        
+    }  
     raw_html += '<span class="ui-icon ui-icon-star"></span>'
     raw_html += '</div>'
     
@@ -271,6 +270,51 @@ function place_session(s){
         }else if(s.hasClass('t16')){
             $("#Thursdayt16").append(s)
         }
+
+    }
+}
+
+function highlight(){
+    $('.p_star').each(function(){
+        if($(this).hasClass('ui-state-active'))
+            $(this).parents("tr:first").addClass('highlight')
+        else
+            $(this).parents("tr:first").removeClass('highlight')
+    })
+    
+}
+
+
+function handle_star(event){ 
+    var obj = $(event.target).parents("td:first").find('.p_star')
+    console.log(obj.attr("data"))
+    if(obj.hasClass('ui-state-active')){
+        $.get('/like/' + obj.attr('data') +'/unlike', function(res) {
+          if(res.status == 'ok'){
+            delete starred[obj.attr('data')]
+            populate_likes(starred)
+            recommended = res.recs
+            populate_recs(recommended)
+            $('.'+obj.attr('data')).each(function(){
+                $(this).find('.p_star').removeClass('ui-state-active')
+            })
+            highlight()
+          }
+        });
+    }else{
+        $.get('/like/' + obj.attr('data') +'/like', function(res) {
+          if(res.status == 'ok'){
+            starred[obj.attr('data')] = true
+            populate_likes(starred)
+            recommended = res.recs
+            populate_recs(recommended)
+            $('.'+obj.attr('data')).each(function(){
+                $(this).find('.p_star').addClass('ui-state-active')
+            })
+            highlight()
+            
+          }
+        });
 
     }
 }

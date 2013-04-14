@@ -382,33 +382,29 @@ table.dataTable tbody tr td {
 	width:100%;
 	border-spacing: 0;
 	border-bottom:1px solid #ccc;
-	background-color: #f0f4f9;
+	background-color: #D7ECFA;
 	padding:0;
 	margin:0;
 }
 
 .session-container .clickable{
-	background-color: #f0f4f9;
+	background-color: #D7ECFA;
 }
 
 .session-container .clickable:hover{
 	background-color: #D7ECFA;
 }
 
-.likes-container{
-	width:100%;
-	border-spacing: 0;
-	border-bottom:1px solid #ccc;
-	background-color: #fff;
-	padding:0;
-	margin:0;
+
+
+.highlight{
+	background-color: #fff7ce !important;
 }
-
-
 
 .clickable:hover{
-	background-color: #fff7ce;
+	background-color: #f0f4f9
 }
+
 
 
 
@@ -420,14 +416,7 @@ table.dataTable tbody tr td {
 
 
 
-#table-input {
-	display: block;
-	height: 200px;
-	margin-left: 0px;
-	margin-top: 10px;
-	width: 100%;
-	resize: vertical;
-}
+
 
 .default-text {
 }
