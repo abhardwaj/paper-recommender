@@ -53,7 +53,7 @@
 
 
     function get_session_html(id){
-        var raw_html = '<li data-role="list-divider"  data-theme="d" class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" id="' + id + '">'
+        var raw_html = '<li class="all '+ sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" id="' + id + '">'
         raw_html += '<h4>'+sessions[id].s_title+'</h4>'
         raw_html += '<p><strong>Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</strong></p>'
             raw_html += '<div class="timeline">'
@@ -63,12 +63,15 @@
             raw_html += '<div style="width:' + w + '%;margin-right:4px;"></div>'
         }
         raw_html += '</div>'
-        raw_html += '</li>'
-        
-        for(var paper_id in sessions[id].submissions){
-            raw_html += get_paper_html(paper_id);
+        raw_html += '<div data-role="controlgroup" data-type="horizontal" data-mini="true">'
+        raw_html += '<input type="button" onclick = "load_session(\''+ id + '\');" value="Explore">'
+        if(starred[id] == null){
+            raw_html += '<input type="button" class="p_star" p_id="'+id+'" onclick="handle_star(event);" value="Star">'
+        }else{
+            raw_html += '<input type="button" class="p_star p_active" p_id="'+id+'" onclick="handle_star(event);" value="Unstar">'
         }
-        raw_html += '</div>'        
+        raw_html += '</div>'
+        raw_html += '</li>'     
         return raw_html
     }
 
@@ -162,7 +165,32 @@
             $.mobile.changePage('#paper', 'pop', true, true);
             $("#similar_papers").trigger('create');
             $("#similar_papers").listview('refresh')
+            highlight();
         });
+
+    }
+
+
+    function load_session(id){
+        for(var paper_id in sessions[id].submissions){
+            var raw_html = get_paper_html(paper_id);
+            $("#session_papers").html('')
+            if(raw_html!=null){
+                var row = $(raw_html)
+                $("#session_papers").append(row);                
+            }
+        } 
+        var selected_session_html = ''
+
+        selected_session_html += '<h3>'+sessions[id].s_title+'</h3>'
+        selected_session_html += '<p class="gray"><strong>Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</strong></p>'
+        $('#selected_session').html(selected_session_html)
+        $.mobile.changePage('#session', 'pop', true, true);
+
+        $("#session_papers").trigger('create');
+        $("#session_papers").listview('refresh')
+        highlight();
+
 
     }
 
@@ -313,7 +341,7 @@
             console.log('home')
             reset_likes(starred);
             reset_recs(recommended);
-            reset_papers(entities);         
+            //reset_papers(entities);         
         }else if(e.target.id == 'schedule') {
             reset_sessions(sessions);
             console.log('schedule')            
@@ -533,6 +561,26 @@
     <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
     <h4>Papers similar to this paper</h4>       
     <ul id="similar_papers" data-role="listview"> 
+    </ul>
+    </div>
+        
+
+    </div><!-- /content -->
+
+</div><!-- /paper -->
+
+
+<div data-role="dialog" class="ui-responsive-panel" id="session">  
+    <div data-role="header" data-position="fixed">
+        <h1>Session</h1>
+    </div>
+    
+    <div data-role="content"> 
+    <div id="selected_session">
+    </div>      
+    <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-inset="false">
+    <h4>Papers in this session</h4>       
+    <ul id="session_papers" data-role="listview"> 
     </ul>
     </div>
         
