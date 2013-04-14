@@ -145,7 +145,7 @@ function show_tab(tab, paper_id){
 function get_paper_html(id){
     if(entities[id] == null)
         return ''
-    var raw_html = '<tr class="clickable ' + id
+    var raw_html = '<tr class="clickable paper ' + id
     if(search_rec(id)){
     	raw_html += ' recommended'
     }
@@ -323,6 +323,15 @@ function update_timeline(){
 }
 
 
+function update_recs(){
+	$('.paper').removeClass('recommended')
+	for(var r in recommended){
+		$('.'+recommended[r].id).addClass('recommended')
+	}
+
+}
+
+
 
 
 function handle_star(event){ 
@@ -339,6 +348,7 @@ function handle_star(event){
                 $(this).find('.p_star').removeClass('ui-state-active')
                 $(this).removeClass('highlight')
             })
+            update_recs()
             update_timeline()
           }
         });
@@ -353,7 +363,7 @@ function handle_star(event){
                 $(this).find('.p_star').addClass('ui-state-active')
                 $(this).addClass('highlight')
             })
-           
+            update_recs()
             update_timeline()
           }
         });
@@ -702,7 +712,7 @@ $(document).ready(function(){
 <!-- Selected Paper -->
 <div id="selected_paper" class="tab">
 	<h3><span class="gray">Selected Paper</span></h3>
-	<div class="form" style="margin-top:10px;">
+	<div class="form" style="margin-top:10px; background-color:#fff;">
 	</div>
 	<br />
 	<h3 class="collapsible-title collapsible" id="similar_papers_toggle" data="similar_papers_container"><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
