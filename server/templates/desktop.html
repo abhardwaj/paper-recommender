@@ -137,7 +137,11 @@ function show_tab(tab, paper_id){
 function get_paper_html(id){
     if(entities[id] == null)
         return ''
-    var raw_html = '<tr class="clickable ' + id + '">'
+    var raw_html = '<tr class="clickable ' + id +' '
+    if(starred[id] != null){
+    	raw_html += 'highlight'
+    }
+    raw_html += '">'
     raw_html += '<td class="content" onclick="show_tab(\'selected_paper\', \'' + id + '\');">'    
     raw_html += '<ul>'
     raw_html += '<li class="strong">'+entities[id].title+'</li>'
@@ -274,15 +278,7 @@ function place_session(s){
     }
 }
 
-function highlight(){
-    $('.p_star').each(function(){
-        if($(this).hasClass('ui-state-active'))
-            $(this).parents("tr:first").addClass('highlight')
-        else
-            $(this).parents("tr:first").removeClass('highlight')
-    })
-    
-}
+
 
 
 function handle_star(event){ 
@@ -297,8 +293,9 @@ function handle_star(event){
             populate_recs(recommended)
             $('.'+obj.attr('data')).each(function(){
                 $(this).find('.p_star').removeClass('ui-state-active')
+                $(this).removeClass('highlight')
             })
-            highlight()
+            
           }
         });
     }else{
@@ -310,8 +307,9 @@ function handle_star(event){
             populate_recs(recommended)
             $('.'+obj.attr('data')).each(function(){
                 $(this).find('.p_star').addClass('ui-state-active')
+                $(this).addClass('highlight')
             })
-            highlight()
+           
             
           }
         });
@@ -333,7 +331,6 @@ function load_paper(paper_id){
             if(raw_html!=null){
                var row = $(raw_html)
                $('#similar_papers').append(row)
-               highlight()
             }
         }
     });
