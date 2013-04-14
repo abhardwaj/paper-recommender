@@ -166,8 +166,8 @@
 
     function load_session(id){
         for(var paper_id in sessions[id].submissions){
-            var raw_html = get_paper_html(paper_id);
             $("#session_papers").html('')
+            var raw_html = get_paper_html(paper_id);
             if(raw_html!=null){
                 var row = $(raw_html)
                 $("#session_papers").append(row);                
