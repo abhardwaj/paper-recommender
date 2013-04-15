@@ -43,6 +43,8 @@ var starred = {{starred|safe }};
 var login_id = '{{login_id|safe}}'
 
 
+
+
 function get_params() {
     var vars = [], hash;
     var hashes = window.location.href.slice(
@@ -347,9 +349,10 @@ function update_session_view(){
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
 	   	}
+	   	/*
 	   	if(like || rec){
 	   		session.clone().attr("id",'recs'+id).appendTo('#session_recs')
-	   	}
+	   	}*/
 
 	});
 	bind_events() 
@@ -423,6 +426,24 @@ function load_paper(paper_id){
                $('#similar_papers').append(row)
             }
         }
+    try{    
+    	$('#similar_papers').dataTable().fnDestroy()
+    }catch(err){}
+     $('#similar_papers').dataTable({
+		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+		"bPaginate": true,
+		"bFilter": true,
+		"bInfo": false,
+		"sWidth": "100%",
+		"oLanguage": {
+	      "sZeroRecords": "Not enough data to recommend papers similar to this."
+	    },
+		"aoColumns": [                 
+			{},
+			{}
+		]
+
+	});  
     });
 
 } 
@@ -436,6 +457,25 @@ function populate_papers(_entities){
             $("#all_papers").append(row)
         }
     }
+    
+    $('#all_papers').dataTable({
+		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+		"bPaginate": true,
+		"bFilter": true,
+		"bDestroy": true,
+		"sWidth": "100%",
+		"aLengthMenu": [[5, 10, 20, 50, -1], [5, 10, 20, 50, "All"]],
+		"iDisplayLength": -1,
+		"oLanguage": {
+	      "sZeroRecords": "Seems like something went wrong. No data to display."
+	    },
+		"aoColumns": [                 
+			{},
+			{}
+		]
+
+	});
+
     bind_events()   
 }
 
@@ -448,7 +488,24 @@ function populate_recs(_recs){
             var row = $(raw_html)
             $("#recs").append(row)
         }
-    }  
+    }
+   
+    $('#recs').dataTable({
+		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+		"bPaginate": true,
+		"bDestroy": true,
+		"bFilter": true,
+		"bInfo": false,
+		"sWidth": "100%",
+		"oLanguage": {
+	      "sZeroRecords": "Since you haven't starred any paper yet, we can't generate recommendations for you."
+	    },
+		"aoColumns": [                 
+			{},
+			{}
+		]
+
+	});  
     bind_events() 
 }
 
@@ -463,6 +520,26 @@ function populate_likes(_likes){
             $("#likes").append(row)
         }
     }
+
+
+    $('#likes').dataTable({
+		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
+		"bPaginate": true,
+		"bInfo": false,
+		"bDestroy": true,
+		"bFilter": false,
+		"sWidth": "100%",
+		"aLengthMenu": [[2, -1], ["Few", "All"]],
+		"iDisplayLength": 2,
+		"oLanguage": {
+	      "sZeroRecords": "You haven't starred anything yet. Nothing to show."
+	    },
+		"aoColumns": [                 
+			{},
+			{}
+		]
+
+	});
     bind_events()   
 }
 
@@ -616,6 +693,8 @@ $(document).ready(function(){
 <h3><span class="gray">CHI 2013 Program</span></h3>
 <br />
 <div id="program">
+
+	<!--
 	<h3 class="collapsible-title collapsible" id="recs_toggle" data="session_recs"><span class="arrow">▾</span> Sessions recommended for you</h3>
 	
 	<div id="session_recs">	
@@ -624,7 +703,7 @@ $(document).ready(function(){
 
 	<br />
 	<br />
-
+	-->
 	<div id = "Monday">
 	<!--
 	<h3 class="collapsible-title" data="Mondayt09"><span class="arrow">▾</span> Monday, 09:00-10:20</h3> -->
