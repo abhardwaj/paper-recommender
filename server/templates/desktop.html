@@ -628,8 +628,14 @@ function setup_filters(){
             select_class = select_class.filter(venues_classes)              
         }
        $('.session').hide();
-       select_class.show();
+       $('.session-timeslot').each(function(){
+       		$(this).prev().hide()
+       	});
 
+       select_class.show();
+       select_class.each(function(){
+       		$(this).parent().prev().show()
+       	});
         
     });
 }
@@ -708,7 +714,7 @@ $(document).ready(function(){
 	
 	<h3 class="collapsible-title collapsible" id="recs_toggle" data="session_recs"><span class="arrow">▾</span> Sessions recommended for you</h3>
 	
-	<div id="session_recs">	
+	<div id="session_recs" class="session-timeslot">	
 	</div>
 	
 
