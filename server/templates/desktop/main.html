@@ -245,9 +245,9 @@ function get_session_html(id){
     raw_html += '</div>'
     raw_html += '</td>'
     raw_html += '<td class="metadata">'     
-   	//raw_html += '<div class="ui-state-default ui-corner-all" data="'+ id + '">'
-    //raw_html += '<span class="ui-icon ui-icon-star"></span>'
-    //raw_html += '</div>'        
+   	raw_html += '<div class="ui-state-default ui-corner-all s_star" data="'+ id + '" onclick="handle_session_star(event);">'
+    raw_html += '<span class="ui-icon ui-icon-star"></span>'
+    raw_html += '</div>'        
     raw_html += '</td>'
     raw_html += '</tr>'
     raw_html += '</table>'
@@ -394,6 +394,48 @@ function update_recs(){
 
 }
 
+
+function handle_session_star(event){
+    event.stopPropagation();
+    var obj = $(event.target).parents("td:first").find('.s_star')
+    var session_id = obj.attr("data")
+    var papers = sessions[session_id]['submissions']
+    if(obj.hasClass('ui-state-active')){
+        $.post('/like/unstar', {'papers': JSON.stringify(papers)}, function(res) {
+            for(var paper_id in papers){
+                delete starred[paper_id]
+            }
+            populate_likes(starred)
+            recommended = res.recs
+            populate_recs(recommended)
+            $('.'+obj.attr('data')).each(function(){
+                $(this).find('.p_star').removeClass('ui-state-active')
+                $(this).removeClass('highlight')
+                $(this).find('.paper').removeClass('highlight')
+            })
+            update_recs()
+            update_session_view()
+        });
+    }else{
+        $.post('/like/star', {'papers': JSON.stringify(papers)}, function(res) {
+            for(var paper_id in papers){
+                starred[paper_id] = true
+            }
+            populate_likes(starred)
+            recommended = res.recs
+            populate_recs(recommended)
+            $('.'+obj.attr('data')).each(function(){
+                $(this).find('.p_star').addClass('ui-state-active')
+                $(this).find('.paper').addClass('highlight')
+            })
+            update_recs()
+            update_session_view()
+        });
+    }
+    
+
+
+}
 
 
 

@@ -106,9 +106,11 @@ def like(request, like_str):
 	for paper_id in papers:
 		if(like_str=='star' and (paper_id not in p.author_likes[user]['likes']) and paper_id != ''):
 			p.author_likes[user]['likes'].append(paper_id)
-			res[paper_id] = 'star'
 		if(like_str=='unstar' and (paper_id in p.author_likes[user]['likes']) and paper_id != ''):
 			p.author_likes[user]['likes'].remove(paper_id)
+		if(paper_id in p.author_likes[user]['likes']):
+			res[paper_id] = 'star'
+		else:
 			res[paper_id] = 'unstar'
 	recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
 	return HttpResponse(json.dumps({'recs':recs, 'likes':p.author_likes[user], 'res':res}), mimetype="application/json")
