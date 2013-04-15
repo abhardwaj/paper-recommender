@@ -347,9 +347,7 @@ function update_session_view(){
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
 	   	}
-	   	if(like){
-	   		session.clone().attr("id",'likes'+id).appendTo('#session_likes')
-	   	}else if(rec){
+	   	if(like || rec){
 	   		session.clone().attr("id",'recs'+id).appendTo('#session_recs')
 	   	}
 
@@ -618,15 +616,7 @@ $(document).ready(function(){
 <h3><span class="gray">CHI 2013 Program</span></h3>
 <br />
 <div id="program">
-	<h3 class="collapsible-title collapsible" id="likes_toggle" data="session_likes"><span class="arrow">▾</span> Starred Sessions</h3>	
-	
-	<div id="session_likes">		
-	</div>
-	
-	<br />
-	<br />
-
-	<h3 class="collapsible-title collapsible" id="recs_toggle" data="session_recs"><span class="arrow">▾</span> Recommended Sessions</h3>
+	<h3 class="collapsible-title collapsible" id="recs_toggle" data="session_recs"><span class="arrow">▾</span> Sessions recommended for you</h3>
 	
 	<div id="session_recs">	
 	</div>
