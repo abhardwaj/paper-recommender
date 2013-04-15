@@ -24,7 +24,7 @@
 
     <div data-role="content"> 
 
-    <form method="POST" action="login" data-ajax="false">
+    <form method="POST" action="/mobile/login" data-ajax="false">
     	{% csrf_token %}
 	    <label for="login_email">Please enter your PCS email address</label>
 	    <input type="email" name="login_email" id="login_email" value="">

@@ -27,12 +27,12 @@ s = Session()
 def init_session(email):
 	pass
 
-def login_form(request):
+def login_form(request, req_url= 'desktop'):
 	c = {}
 	c.update(csrf(request))
-	return render_to_response('login.html', c)
+	return render_to_response(req_url + '/login.html', c)
 
-def login(request, redirect_url='/desktop'):
+def login(request, req_url='desktop'):
 	if request.method == "POST":
 		try:
 			login_email = request.POST["login_email"]
@@ -46,25 +46,27 @@ def login(request, redirect_url='/desktop'):
 				request.session['id'] = data[0][0]
 				request.session['email'] = login_email
 				request.session['name'] = data[0][1] + ' ' + data[0][2]
-				return HttpResponseRedirect(redirect_url)
+				return HttpResponseRedirect('/' + req_url)
 			else:
-				return login_form(request)
+				return login_form(request, req_url)
 		except:
 			print sys.exc_info()
-			return login_form(request)
+			return login_form(request, req_url)
 	else:
-		return login_form(request)
+		return login_form(request, req_url)
 		
 
 
-def logout(request):
+def logout(request, req_url='desktop'):
 	request.session.flush()
-	return HttpResponseRedirect('/login')
+	return HttpResponseRedirect('/'+req_url)
 
 
 
 
-def mobile(request):
+
+
+def main(request, req_url='desktop'):
 	recs = []
 	starred = {}
 	try:
@@ -73,32 +75,10 @@ def mobile(request):
 			starred = {s:True for s in p.author_likes[user]['likes']}
 			recs = r.get_item_based_recommendations(starred)		
 	except KeyError:
-		return HttpResponseRedirect('login')
+		return HttpResponseRedirect(req_url+'/login')
 	except:
 		pass
-	return render_to_response("mobile.html", 
-		{
-		'login_id': request.session['id'], 
-		'login_name': request.session['name'],
-		'recs':json.dumps(recs), 
-		'starred':json.dumps(starred), 
-		'entities': json.dumps(e.entities), 
-		'sessions':json.dumps(s.sessions)
-		})
-
-def desktop(request):
-	recs = []
-	starred = {}
-	try:
-		user = request.session['id']
-		if(user in p.author_likes):
-			starred = {s:True for s in p.author_likes[user]['likes']}
-			recs = r.get_item_based_recommendations(starred)		
-	except KeyError:
-		return HttpResponseRedirect('login')
-	except:
-		pass
-	return render_to_response("desktop.html", 
+	return render_to_response(req_url + "/main.html", 
 		{
 		'login_id': request.session['id'], 
 		'login_name': request.session['name'],
