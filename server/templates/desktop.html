@@ -110,21 +110,21 @@ function bind_events(){
 	    });
 
 
-    $(".default-text").off('focus')
-	$(".default-text").on('focus',
+  
+	$(".default-text").focus(
 		function(src) {
-	    if ($(this).val() == $(this).title) {
+	    if ($(this).val() == $(this).attr("title")) {
 	        $(this).removeClass("default-text-active");
 	        $(this).val("");
 	    }
 	});
 
-	$(".default-text").off('blur')
-	$(".default-text").on('blur',
+	
+	$(".default-text").blur(
 		function(target) {
 	    if ($(this).val() == "") {
 	        $(this).addClass("default-text-active");
-	        $(this).val($(this).title);
+	        $(this).val($(this).attr("title"));
 	    }
 	});
 
@@ -132,6 +132,16 @@ function bind_events(){
 	    function(){ $(this).addClass('ui-state-hover'); }, 
 	    function(){ $(this).removeClass('ui-state-hover'); }
 	);
+
+
+	$('#search_papers').keyup(function(event){
+		var str = $(this).val()
+		//console.log(str)
+		$("#all_papers").dataTable().fnFilter(str);
+		$("#likes").dataTable().fnFilter(str);
+		$("#recs").dataTable().fnFilter(str);
+
+	});
 
 	
 }
@@ -154,6 +164,7 @@ function show_tab(tab, paper_id){
     }
 
     bind_events()
+    $(".default-text").blur()
         
 }   
 
@@ -493,7 +504,7 @@ function populate_recs(_recs){
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 		"bPaginate": true,
 		"bDestroy": true,
-		"bFilter": false,
+		"bFilter": true,
 		"bInfo": false,
 		"sWidth": "100%",
 		"oLanguage": {
@@ -526,7 +537,7 @@ function populate_likes(_likes){
 		"bPaginate": true,
 		"bInfo": false,
 		"bDestroy": true,
-		"bFilter": false,
+		"bFilter": true,
 		"sWidth": "100%",
 		"aLengthMenu": [[2, -1], ["Few", "All"]],
 		"oLanguage": {
@@ -657,6 +668,8 @@ $(document).ready(function(){
 
 <!--- Home Page -->
 <div id="home" class="tab">
+
+	<input type="text" id="search_papers" class="default-text search" title="search for any keywords  (authors, paper title, paper keywords etc.."></input>
 	<h3 class="collapsible-title collapsible" id="likes_toggle" data="likes_container"><span class="arrow">▾</span> Starred Papers</h3>	
 	<div id="likes_container">
 		<table id="likes" class="paper-container">		
@@ -835,7 +848,7 @@ $(document).ready(function(){
 	<div class="form" style="margin-top:10px; background-color:#fff;">
 	</div>
 	<br />
-	<h3 class="collapsible-title collapsible" id="similar_papers_toggle" data="similar_papers_container"><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
+	<h3 class="collapsible-title collapsible" id="similar_papers_toggle" data="similar_papers_container" value=""><span class="arrow">▾</span> People who liked this paper also liked the following papers.</h3>
 	<div id="similar_papers_container">
 	<table id="similar_papers" class="paper-container">		
 	</table>

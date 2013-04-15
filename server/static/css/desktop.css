@@ -251,8 +251,8 @@ table.dataTable tbody tr td {
 
 
 
-.dataTables_filter input[type="text"]{
-	width:600px;
+.dataTables_wrapper .top{
+	display: none;
 }
 
 .dataTables_paginate{
@@ -367,6 +367,14 @@ table.dataTable tbody tr td {
 }
 
 
+.search{
+	width:70%;
+	height:30px;
+	margin: 0 auto !important;
+	margin-bottom: 15px !important;
+	display: block;
+	padding: 5px;
+}
 
 
 
