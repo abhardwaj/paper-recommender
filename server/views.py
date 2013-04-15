@@ -95,23 +95,23 @@ def get_recs(request):
 	return HttpResponse(json.dumps(recs), mimetype="application/json")
 
 
-
-def like(request, paper_id, like_str):
-	if(paper_id.strip() == ''):
-		return HttpResponse(json.dumps({'status':'notok'}), mimetype="application/json")
+@csrf_exempt
+def like(request, like_str):
+	papers = json.loads(request.POST["papers"])
 	user = request.session['id']
+	res = {}
 	if(user not in p.author_likes):
 		p.author_likes[user] = {}
 		p.author_likes[user]['likes'] = []
-	if(like_str=='like' and (paper_id not in p.author_likes[user]['likes'])):
-		p.author_likes[user]['likes'].append(paper_id)
-		recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
-		return HttpResponse(json.dumps({'status':'ok', 'recs':recs, 'likes': p.author_likes[user]}), mimetype="application/json")
-	if(like_str=='unlike' and paper_id in p.author_likes[user]['likes']):
-		p.author_likes[user]['likes'].remove(paper_id)
-		recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
-		return HttpResponse(json.dumps({'status':'ok', 'recs':recs, 'likes':p.author_likes[user]}), mimetype="application/json")
-	return HttpResponse(json.dumps({'status':'notok'}), mimetype="application/json")
+	for paper_id in papers:
+		if(like_str=='star' and (paper_id not in p.author_likes[user]['likes']) and paper_id != ''):
+			p.author_likes[user]['likes'].append(paper_id)
+			res[paper_id] = 'star'
+		if(like_str=='unstar' and (paper_id in p.author_likes[user]['likes']) and paper_id != ''):
+			p.author_likes[user]['likes'].remove(paper_id)
+			res[paper_id] = 'unstar'
+	recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
+	return HttpResponse(json.dumps({'recs':recs, 'likes':p.author_likes[user], 'res':res}), mimetype="application/json")
 
 
 

@@ -399,11 +399,12 @@ function update_recs(){
 
 function handle_star(event){ 
     var obj = $(event.target).parents("td:first").find('.p_star')
-    console.log(obj.attr("data"))
+    var paper_id = obj.attr("data")
+    console.log(paper_id)
     if(obj.hasClass('ui-state-active')){
-        $.get('/like/' + obj.attr('data') +'/unlike', function(res) {
-          if(res.status == 'ok'){
-            delete starred[obj.attr('data')]
+        $.post('/like/unstar', {'papers': JSON.stringify([paper_id])}, function(res) {
+          if(res.res[paper_id] == 'unstar'){
+            delete starred[paper_id]
             populate_likes(starred)
             recommended = res.recs
             populate_recs(recommended)
@@ -416,9 +417,9 @@ function handle_star(event){
           }
         });
     }else{
-        $.get('/like/' + obj.attr('data') +'/like', function(res) {
-          if(res.status == 'ok'){
-            starred[obj.attr('data')] = true
+        $.post('/like/star', {'papers': JSON.stringify([paper_id])}, function(res) {
+          if(res.res[paper_id] == 'star'){
+            starred[paper_id] = true
             populate_likes(starred)
             recommended = res.recs
             populate_recs(recommended)
