@@ -381,6 +381,7 @@ function update_session_view(){
 
 	});
 	bind_events() 
+    $('#session_recs_toggle').show()
 
 }
 
@@ -588,6 +589,7 @@ function populate_sessions(_sessions){
 function setup_filters(){
 	$('input:checkbox').die()
     $('input:checkbox').live('change', function(){
+        $('#session_recs_toggle').show()
         var days_checked = $("input:checked.day")
         var times_checked = $("input:checked.time")
         var venues_checked = $("input:checked.venue")
@@ -727,7 +729,7 @@ $(document).ready(function(){
 <div id="program">
 
 	
-	<h3 class="collapsible-title collapsible" id="recs_toggle" data="session_recs"><span class="arrow">▾</span> Sessions recommended for you</h3>
+	<h3 class="collapsible-title collapsible" id="session_recs_toggle" data="session_recs"><span class="arrow">▾</span> Sessions recommended for you</h3>
 	
 	<div id="session_recs" class="session-timeslot">	
 	</div>
