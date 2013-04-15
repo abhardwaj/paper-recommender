@@ -170,11 +170,7 @@ body {
 	margin-bottom: 50px;
 }
 
-#content .dataTables_wrapper{
-	bottom:0px; 
-	overflow:auto; 
-	border-top: #ccc solid 1px;
-}
+
 
 
 
@@ -250,6 +246,11 @@ table.dataTable tbody tr td {
 
 
 
+.dataTables_wrapper{
+	bottom:0px; 
+	overflow:auto; 
+	border-top: none;
+}
 
 .dataTables_wrapper .top{
 	display: none;
@@ -310,13 +311,11 @@ table.dataTable tbody tr td {
 
 
 .collapsible-title{
-	background: #3D7AA6;
+	background:#3D7AA6;
 	cursor: pointer;
 	border: 1px solid #ccc;
 	color: #fff;
 	padding: 10px;
-	border-bottom: none;
-
 }
 
 
@@ -398,7 +397,7 @@ table.dataTable tbody tr td {
 
 
 .recommended{
-	background-color: #D7ECFA !important;
+	background-color: #f0f4f9 !important;
 }
 
 .session-container .clickable{
