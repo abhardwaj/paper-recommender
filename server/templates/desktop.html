@@ -134,16 +134,30 @@ function bind_events(){
 	);
 
 
+
+
+
 	$('#search_papers').keyup(function(event){
 		var str = $(this).val()
 		//console.log(str)
-		$("#all_papers").dataTable().fnFilter(str);
-		$("#likes").dataTable().fnFilter(str);
-		$("#recs").dataTable().fnFilter(str);
-
+		delay('search("'+str+'");', 100);
 	});
 
 	
+}
+
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
+function search(str){
+	$("#all_papers").dataTable().fnFilter(str);
+	$("#likes").dataTable().fnFilter(str);
+	$("#recs").dataTable().fnFilter(str);
 }
 
 
