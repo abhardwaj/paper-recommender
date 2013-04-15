@@ -426,13 +426,12 @@ function load_paper(paper_id){
                $('#similar_papers').append(row)
             }
         }
-    try{    
-    	$('#similar_papers').dataTable().fnDestroy()
-    }catch(err){}
+    
      $('#similar_papers').dataTable({
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 		"bPaginate": true,
 		"bFilter": true,
+		"bDestroy": true,
 		"bInfo": false,
 		"sWidth": "100%",
 		"oLanguage": {
