@@ -136,13 +136,13 @@ function bind_events(){
 
 
 
-
+	/*
 
 	$('#search_papers').keyup(function(event){
 		var str = $(this).val()
 		//console.log(str)
 		delay('search("'+str+'");', 100);
-	});
+	});*/
 
 	
 }
@@ -375,11 +375,11 @@ function update_session_view(){
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
 	   	}
-	   	
+	   	/*
 	   	if(like || rec){
 	   		session.clone().attr("id",'recs'+id).appendTo('#session_recs')
 	   	}
-
+		*/
 	});
 	bind_events() 
     $('#session_recs_toggle').show()
@@ -500,10 +500,10 @@ function load_paper(paper_id){
     
      $('#similar_papers').dataTable({
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
-		"bPaginate": true,
-		"bFilter": false,
+		"bPaginate": false,
+		"bFilter": true,
 		"bDestroy": true,
-		"bInfo": false,
+		"bInfo": true,
 		"sWidth": "100%",
 		"oLanguage": {
 	      "sZeroRecords": "Not enough data to recommend papers similar to this."
@@ -533,9 +533,10 @@ function populate_papers(_entities){
 		"bPaginate": true,
 		"bFilter": true,
 		"bDestroy": true,
+        "bInfo": true,
 		"sWidth": "100%",
 		"aLengthMenu": [[5, 10, 20, 50, -1], [5, 10, 20, 50, "All"]],
-		"iDisplayLength": -1,
+		"iDisplayLength": 10,
 		"oLanguage": {
 	      "sZeroRecords": "Seems like something went wrong. No data to display."
 	    },
@@ -565,8 +566,10 @@ function populate_recs(_recs){
 		"bPaginate": true,
 		"bDestroy": true,
 		"bFilter": true,
-		"bInfo": false,
+		"bInfo": true,
 		"sWidth": "100%",
+        "aLengthMenu": [[5, 10, 20], [5, 10, 20]],
+        "iDisplayLength": 5,
 		"oLanguage": {
 	      "sZeroRecords": "Since you haven't starred any paper yet, we can't generate recommendations for you."
 	    },
@@ -595,11 +598,12 @@ function populate_likes(_likes){
     $('#likes').dataTable({
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 		"bPaginate": true,
-		"bInfo": false,
+		"bInfo": true,
 		"bDestroy": true,
 		"bFilter": true,
 		"sWidth": "100%",
-		"aLengthMenu": [[2, -1], ["Few", "All"]],
+		"aLengthMenu": [[-1, 2], ["All", "Few"]],
+        "iDisplayLength": 2,
 		"oLanguage": {
 	      "sZeroRecords": "You haven't starred anything yet. Nothing to show."
 	    },
@@ -735,8 +739,13 @@ $(document).ready(function(){
 
 <!--- Home Page -->
 <div id="home" class="tab">
+	
+	<!--
 
 	<input type="text" id="search_papers" class="default-text search" title="Enter paper titles, authors, or keywords"></input>
+		
+	-->
+	
 	<h3 class="collapsible-title collapsible" id="likes_toggle" data="likes_container"><span class="arrow">▾</span> Starred Papers</h3>	
 	<div id="likes_container">
 		<table id="likes" class="paper-container">		
@@ -772,12 +781,12 @@ $(document).ready(function(){
 <br />
 <div id="program">
 
-	
+	<!--
 	<h3 class="collapsible-title collapsible" id="session_recs_toggle" data="session_recs"><span class="arrow">▾</span> Sessions recommended for you</h3>
 	
 	<div id="session_recs" class="session-timeslot">	
 	</div>
-	
+	-->
 
 	<br />
 	<br />
