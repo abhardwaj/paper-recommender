@@ -28,7 +28,8 @@ form{
 	padding:30px; 
 	vertical-align:top;
 	background-color: #D7ECFA;
-	width:310px;
+	max-width:310px;
+	width: 100%;
 	box-shadow: 1px 0px 10px #666;
 }
 
@@ -118,7 +119,8 @@ body {
 	position: relative;
 	margin:0 auto;
 	padding: 0;
-	width: 1024px;
+	width: 100%;
+	max-width: 1024px;
 }
 
 #headlink-right{
@@ -149,7 +151,8 @@ body {
 	right: 0px;
 	bottom: 0px;
 	left: 0px;
-	width: 1024px;
+	width: 100%;
+	max-width: 1024px;
 	background-color: #fff;
 }
 

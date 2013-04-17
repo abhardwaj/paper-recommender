@@ -1,8 +1,9 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>{% block title %}CHI 2013 Recommendation System{% endblock %}</title>
+	<title>myCHI</title>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 	<link rel="stylesheet" type="text/css" href="/static/css/desktop.css" />
 	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>	
@@ -20,13 +21,13 @@
 <div id="header">
 	<div id="wrap">
 		<span id="headlink-left">
-			<a id="logo" href="/">CHI 2013 Recommendation System</a>
+			<a id="logo" href="/">myCHI</a>
 		</span>
 		<span id="headlink-right">
-			Welcome,&nbsp;{{login_name}}! &nbsp; &nbsp;
-			<a class="button" id="nav_home">My CHI</a>
+			Welcome,&nbsp;{{login_name}} &nbsp; &nbsp;
+			<a class="button" id="nav_home">My Papers</a>
 			<a class="button" id="nav_schedule">My Schedule</a>
-			<a class="button" href="/desktop/logout">Log out!</a>
+			<a class="button" href="/desktop/logout">Log out</a>
 		</span>
 	</div>
 </div>
@@ -735,7 +736,7 @@ $(document).ready(function(){
 <!--- Home Page -->
 <div id="home" class="tab">
 
-	<input type="text" id="search_papers" class="default-text search" title="search for any keywords  (authors, paper title, paper keywords etc..)"></input>
+	<input type="text" id="search_papers" class="default-text search" title="Enter paper titles, authors, or keywords"></input>
 	<h3 class="collapsible-title collapsible" id="likes_toggle" data="likes_container"><span class="arrow">▾</span> Starred Papers</h3>	
 	<div id="likes_container">
 		<table id="likes" class="paper-container">		
