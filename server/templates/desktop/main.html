@@ -599,8 +599,14 @@ function populate_recs(_recs){
     $('#show_more_recs').on('click', function(){
         if($("#recs").dataTable().fnSettings()._iDisplayLength < $("#recs").dataTable().fnSettings().fnRecordsTotal()){
             $("#recs").dataTable().fnSettings()._iDisplayLength = $("#recs").dataTable().fnSettings()._iDisplayLength + 5;
-            if($("#recs").dataTable().fnSettings()._iDisplayLength >= $("#recs").dataTable().fnSettings().fnRecordsTotal())
-                $("#show_more_recs").hide();
+            if($("#recs").dataTable().fnSettings()._iDisplayLength >= $("#recs").dataTable().fnSettings().fnRecordsTotal()){
+                $("#show_more_recs").html('Show Less')
+            }
+        }else{
+            $("#recs").dataTable().fnSettings()._iDisplayLength = 5;            
+            $("#show_more_recs").html('Show More')
+            
+
         }
         $("#recs").dataTable().fnDraw(true);
     });
