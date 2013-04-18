@@ -27,6 +27,12 @@ a:link, a:visited, a:active, a:hover {
   text-decoration:none; 
 }
 
+a.filter{
+	color: #00A8CD !important;
+  	text-decoration:underline;
+  	margin-right: 10px;
+}
+
 a:active, a:hover {
   color: #447EAC;
   text-decoration:none; 
