@@ -275,6 +275,7 @@ function get_paper_html(id){
 
 
 function get_session_html(id){
+    console.log(sessions[id].communities)
     var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
     raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
     raw_html += '<td class="content">'  
