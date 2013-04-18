@@ -671,14 +671,8 @@ function populate_recs(_recs){
     $('#show_more_recs').on('click', function(){
         if($("#recs").dataTable().fnSettings()._iDisplayLength < $("#recs").dataTable().fnSettings().fnRecordsTotal()){
             $("#recs").dataTable().fnSettings()._iDisplayLength = $("#recs").dataTable().fnSettings()._iDisplayLength + 5;
-            if($("#recs").dataTable().fnSettings()._iDisplayLength >= $("#recs").dataTable().fnSettings().fnRecordsTotal()){
-                $("#show_more_recs").html('Show Less')
-            }
-        }else{
-            $("#recs").dataTable().fnSettings()._iDisplayLength = 5;            
-            $("#show_more_recs").html('Show More')
-            
-
+        }else{        
+            $("#show_more_recs").hide()
         }
         $("#recs").dataTable().fnDraw(true);
     });
@@ -699,6 +693,12 @@ function populate_likes(_likes){
             $("#likes").append(row)
         }
     }
+    var len = 2
+    var user_mode = true
+    if($("#show_more_likes").html()=='Show Less'){
+
+        len = -1
+    }
 
 
     $('#likes').dataTable({
@@ -709,7 +709,7 @@ function populate_likes(_likes){
 		"bFilter": false,
 		"sWidth": "100%",
 		"aLengthMenu": [[-1, 2], ["All", "Few"]],
-        "iDisplayLength": 2,
+        "iDisplayLength": len,
         "aaSorting":[],
 		"oLanguage": {
 	      "sZeroRecords": "You haven't starred anything yet. Nothing to show."
@@ -725,7 +725,9 @@ function populate_likes(_likes){
         $('#show_more_likes').hide();
     }else{
         $('#show_more_likes').show()
-        $("#show_more_likes").html('Show All')
+        if(!user_mode){
+            $("#show_more_likes").html('Show All')
+        }
     }   
     $('#show_more_likes').off('click')
 
