@@ -110,8 +110,8 @@ function bind_events(){
 	        }
 	    });
 
-    $('input:checkbox').addClass('default-text')
-    $('input:checkbox').attr("title", "Enter paper titles, authors, or keywords")
+    $('input:text').addClass('default-text')
+    $('input:text').attr("title", "Enter paper titles, authors, or keywords")
   
 	$(".default-text").focus(
 		function(src) {
@@ -873,8 +873,103 @@ $(document).ready(function(){
 
 <!--  Schedule -->
 <div id="schedule" class="tab">	
-<div class="col1">
-<h3><span class="gray">CHI 2013 Program</span></h3>
+<div id="filter_schedule">
+<table>
+<tr>
+<td>
+<h4 style="display:inline-block">Venue</h4>  
+</td>
+<td>
+<div id ="venue_filter" style="display:inline-block">
+<!--                
+    <input type="checkbox" title="course" class="venue"/> <span class="gray">Course</span>   
+    <input type="checkbox" title="panel" class="venue"/> <span class="gray">Panel</span>      
+    <input type="checkbox" title="SIG" class="venue"/> <span class="gray">SIG</span>  
+    <input type="checkbox" title="altchi" class="venue"/> <span class="gray">Alt CHI</span>  
+
+    <input type="checkbox" title="casestudy" class="venue"/> <span class="gray">Case Study</span>
+    <input type="checkbox" title="paper" class="venue"/> <span class="gray">Paper</span>
+    <input type="checkbox" title="special" class="venue"/> <span class="gray">Special</span>      
+    <input type="checkbox" title="bof" class="venue"/> <span class="gray">BOF</span>
+-->
+<a href="#" title="course" class="venue filter"/>Course </a>
+<a href="#" title="panel" class="venue filter"/>Panel </a>      
+<a href="#" title="SIG" class="venue filter"/>SIG</a>  
+<a href="#" title="altchi" class="venue filter"/>Alt CHI</a>
+
+<a href="#" title="casestudy" class="venue filter"/>Case Study</a>
+<a href="#" title="paper" class="venue filter"/>Paper</a>
+<a href="#" title="special" class="venue filter"/>Special</a>   
+<a href="#" title="bof" class="venue filter"/>BOF</a>
+<a href="#" title="all" class="venue filter"/>All</a>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<h4 style="display:inline-block">Day</h4>
+</td>
+<td>
+<!--
+<div id ="day_filter" style="display:inline-block">      
+    <input type="checkbox" title="Monday" class="day" /> <span class="gray">Monday</span>    
+    <input type="checkbox" title="Tuesday" class="day"/> <span class="gray">Tuesday</span>      
+    <input type="checkbox" title="Wednesday" class="day"/> <span class="gray">Wednesday</span>  
+    <input type="checkbox" title="Thursday" class="day"/> <span class="gray">Thursday</span>
+</div>
+-->
+<a href="#" title="Monday" class="day filter" />Monday</a>    
+<a href="#" title="Tuesday" class="day filter"/>Tuesday</a>      
+<a href="#" title="Wednesday" class="day filter"/>Wednesday</a>  
+<a href="#" title="Thursday" class="day filter"/>Thursday</a>
+</td>
+</tr>
+<tr>
+<td>
+<h4 style="display:inline-block">Time</h4>
+</td>
+<td>
+<div id ="time_filter" style="display:inline-block">
+    <!--
+    <input type="checkbox" title="t09" class="time"/> <span class="gray">09:00-10:20</span>      
+    <input type="checkbox" title="t11" class="time"/> <span class="gray">11:00-12:20</span>   
+    <input type="checkbox" title="t14" class="time"/> <span class="gray">14:00-15:20</span>       
+    <input type="checkbox" title="t16" class="time"/> <span class="gray">16:00-17:20</span>
+-->
+<a href="#" title="t09" class="time"/> <span class="gray">09:00-10:20</span>      
+<a href="#" title="t11" class="time"/> <span class="gray">11:00-12:20</span>   
+    <input type="checkbox" title="t14" class="time"/> <span class="gray">14:00-15:20</span>       
+    <input type="checkbox" title="t16" class="time"/> <span class="gray">16:00-17:20</span>
+</div>
+</td>
+</tr>
+<tr>
+<td style="vertical-align:top">
+<h4 style="display:inline-block">Persona</h4>
+</td>
+<td>
+<div id ="persona_filter" style="display:inline-block">
+    <input type="checkbox" title="De" class="persona"/> <span class="gray">Design</span>          
+    <input type="checkbox" title="UI" class="persona"/> <span class="gray">UIST</span>        
+    <input type="checkbox" title="Vi" class="persona"/> <span class="gray">Visualization</span>        
+    <input type="checkbox" title="En" class="persona"/> <span class="gray">Engagement</span>
+
+    <input type="checkbox" title="IO" class="persona"/> <span class="gray">IO</span>
+    <input type="checkbox" title="Et" class="persona"/> <span class="gray">Ethics</span>
+    <input type="checkbox" title="fo" class="persona"/> <span class="gray">For a cause</span> 
+    <input type="checkbox" title="Mi" class="persona"/> <span class="gray">Misc</span>   
+
+    <input type="checkbox" title="Se" class="persona"/> <span class="gray">Security and privacy</span>
+    <input type="checkbox" title="Ki" class="persona"/> <span class="gray">Kids and learning </span>  
+    <input type="checkbox" title="He" class="persona"/> <span class="gray">Health</span> 
+    <input type="checkbox" title="On" class="persona"/> <span class="gray">Online social communities &amp; crowdsourcing</span>
+    
+</div>
+</td>
+</tr>
+</table>
+</div>
+<br />
 <br />
 <div id="program">
 
@@ -884,9 +979,6 @@ $(document).ready(function(){
 	<div id="session_recs" class="session-timeslot">	
 	</div>
 	-->
-
-	<br />
-	<br />
 
 	<div id = "Monday">
 	<!--
@@ -955,60 +1047,7 @@ $(document).ready(function(){
 	</div>
 	</div>
 
-</div> <!-- col1 -->
 </div> <!-- program -->
-
-<div class="col2">
-<h3><span class="gray">Filter Options</span></h3>
-<br />
-<h4>Venue</h4>	
-<div id ="venue_filter">				
-	<input type="checkbox" title="course" class="venue"/> <span class="gray">Course</span><br />	
-	<input type="checkbox" title="panel" class="venue"/> <span class="gray">Panel</span><br />		
-	<input type="checkbox" title="SIG" class="venue"/> <span class="gray">SIG</span><br />	
-	<input type="checkbox" title="altchi" class="venue"/> <span class="gray">alt.chi</span><br />	
-
-	<input type="checkbox" title="casestudy" class="venue"/> <span class="gray">Case Study</span><br />
-	<input type="checkbox" title="paper" class="venue"/> <span class="gray">Paper</span><br />
-	<input type="checkbox" title="special" class="venue"/> <span class="gray">Special</span><br />		
-	<input type="checkbox" title="bof" class="venue"/> <span class="gray">BOF</span><br />
-</div>
-
-<h4>Day</h4>
-<div id ="day_filter">		
-	<input type="checkbox" title="Monday" class="day" /> <span class="gray">Monday</span><br />		
-	<input type="checkbox" title="Tuesday" class="day"/> <span class="gray">Tuesday</span><br />		
-	<input type="checkbox" title="Wednesday" class="day"/> <span class="gray">Wednesday</span><br />	
-	<input type="checkbox" title="Thursday" class="day"/> <span class="gray">Thursday</span><br />
-</div>
-
-<h4>Time</h4>
-<div id ="time_filter">
-	<input type="checkbox" title="t09" class="time"/> <span class="gray">09:00-10:20</span><br />		
-	<input type="checkbox" title="t11" class="time"/> <span class="gray">11:00-12:20</span><br />	
-	<input type="checkbox" title="t14" class="time"/> <span class="gray">14:00-15:20</span><br />		
-	<input type="checkbox" title="t16" class="time"/> <span class="gray">16:00-17:20</span><br />
-</div>
-
-
-<h4>Persona</h4>
-<div id ="persona_filter">
-	<input type="checkbox" title="On" class="persona"/> <span class="gray">Online social communities &amp; crowdsourcing</span><br />
-	<input type="checkbox" title="De" class="persona"/> <span class="gray">Design</span><br />			
-	<input type="checkbox" title="UI" class="persona"/> <span class="gray">UIST</span><br />		
-	<input type="checkbox" title="Vi" class="persona"/> <span class="gray">Visualization</span><br />
-		
-	<input type="checkbox" title="En" class="persona"/> <span class="gray">Engagement</span><br />	
-	<input type="checkbox" title="IO" class="persona"/> <span class="gray">IO</span><br />	
-	<input type="checkbox" title="fo" class="persona"/> <span class="gray">For a cause</span><br />	
-	<input type="checkbox" title="Mi" class="persona"/> <span class="gray">Misc</span><br />	
-
-	<input type="checkbox" title="Se" class="persona"/> <span class="gray">Security and privacy</span><br />	
-	<input type="checkbox" title="Et" class="persona"/> <span class="gray">Ethics</span><br />		
-	<input type="checkbox" title="Ki" class="persona"/> <span class="gray">Kids and learning </span><br />	
-	<input type="checkbox" title="He" class="persona"/> <span class="gray">Health</span><br />	
-</div>
-</div>  <!-- col2 -->
 
 </div> <!-- schedule -->
 
