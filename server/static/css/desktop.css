@@ -30,6 +30,14 @@ a:link, a:visited {
 a.filter{
 	color: #00A8CD !important;
   	text-decoration:underline;
+  	margin-left: 10px;
+  	margin-right: 10px;
+}
+
+a.filter.active{
+	color: #ccc !important;
+  	text-decoration:underline;
+  	margin-left: 10px;
   	margin-right: 10px;
 }
 

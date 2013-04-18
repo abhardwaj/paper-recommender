@@ -746,20 +746,23 @@ function populate_sessions(_sessions){
 
 function setup_filters(){
 	$('input:checkbox').die()
-    $('input:checkbox').live('change', function(){
-        $('#session_recs_toggle').show()
+    //$('input:checkbox').live('change', function(){
+    $('.filter').on('click', function(){
+        //$('#session_recs_toggle').show()
+        /*
         var days_checked = $("input:checked.day")
         var times_checked = $("input:checked.time")
         var venues_checked = $("input:checked.venue")
         var personas_checked = $("input:checked.persona")
-        var star = $("input:checked.fav")
+        
+        //var star = $("input:checked.fav")
         var day_classes = ''
         for(var i=0; i< days_checked.length; i++){
             var c = days_checked[i].title               
             day_classes  += '.'+c + ','     
         }
         day_classes = day_classes.substr(0, day_classes.length-1)
-        console.log(day_classes)
+        
         time_classes=''
         for(var i=0; i< times_checked.length; i++){
             var c = times_checked[i].title
@@ -767,7 +770,7 @@ function setup_filters(){
         }
 
         time_classes = time_classes.substr(0, time_classes.length-1)
-        console.log(time_classes)
+        
         personas_classes = '';
         for(var i=0; i< personas_checked.length; i++){
             var c = personas_checked[i].title
@@ -775,7 +778,7 @@ function setup_filters(){
         }
 
         personas_classes = personas_classes.substr(0, personas_classes.length-1)
-        console.log(personas_classes)
+        
         venues_classes = ''
         for(var i=0; i< venues_checked.length; i++){
             var c = venues_checked[i].title
@@ -783,23 +786,37 @@ function setup_filters(){
         }
 
         venues_classes = venues_classes.substr(0, venues_classes.length-1)
-        console.log(venues_classes)
+        
+        */
 
+        var attr = $(this).attr("type")
+        $('.'+attr).removeClass('active')
+
+        $(this).addClass('active')
+
+        var day_classes = '.'+$('.day.active').attr("title")
+        var time_classes = '.'+$('.time.active').attr("title")
+        var personas_classes = '.'+$('.persona.active').attr("title")
+        var venues_classes = '.'+$('.venue.active').attr("title")
+        console.log(day_classes)
+        console.log(time_classes)
+        console.log(venues_classes)
+        console.log(personas_classes)
 
         var select_class = $('.session')
-        if(day_classes != ''){
+        if(day_classes != '.all'){
             select_class = select_class.filter(day_classes)
         }
         
-        if(time_classes!=''){               
+        if(time_classes!='.all'){               
             select_class = select_class.filter(time_classes)                
         }
 
-        if(personas_classes!=''){               
+        if(personas_classes!='.all'){               
             select_class = select_class.filter(personas_classes)                
         }
 
-        if(venues_classes!=''){             
+        if(venues_classes!='.all'){             
             select_class = select_class.filter(venues_classes)              
         }
        $('.session').hide();
@@ -909,16 +926,15 @@ $(document).ready(function(){
     <input type="checkbox" title="special" class="venue"/> <span class="gray">Special</span>      
     <input type="checkbox" title="bof" class="venue"/> <span class="gray">BOF</span>
 -->
-<a href="#" title="all" class="venue filter"/>All</a>
-<a href="#" title="course" class="venue filter"/>Course </a>
-<a href="#" title="panel" class="venue filter"/>Panel </a>      
-<a href="#" title="SIG" class="venue filter"/>SIG</a>  
-<a href="#" title="altchi" class="venue filter"/>alt.chi</a>
-
-<a href="#" title="casestudy" class="venue filter"/>Case Study</a>
-<a href="#" title="paper" class="venue filter"/>Paper</a>
-<a href="#" title="special" class="venue filter"/>Special</a>   
-<a href="#" title="bof" class="venue filter"/>BOF</a>
+    <a href="#" title="all" class="venue filter active" type="venue"/>All</a>
+    <a href="#" title="paper" class="venue filter" type="venue"/>Paper</a>
+    <a href="#" title="casestudy" class="venue filter" type="venue"/>Case Study</a>
+    <a href="#" title="altchi" class="venue filter" type="venue"/>alt.chi</a>
+    <a href="#" title="course" class="venue filter" type="venue"/>Course </a>
+    <a href="#" title="panel" class="venue filter" type="venue"/>Panel </a>      
+    <a href="#" title="SIG" class="venue filter" type="venue"/>SIG</a>  
+    <a href="#" title="bof" class="venue filter" type="venue"/>BOF</a>
+    <a href="#" title="special" class="venue filter" type="venue"/>Special</a>   
 </div>
 </td>
 </tr>
@@ -927,18 +943,20 @@ $(document).ready(function(){
 <h4 style="display:inline-block">Day</h4>
 </td>
 <td>
-<!--
-<div id ="day_filter" style="display:inline-block">      
+
+<div id ="day_filter" style="display:inline-block">  
+<!--    
     <input type="checkbox" title="Monday" class="day" /> <span class="gray">Monday</span>    
     <input type="checkbox" title="Tuesday" class="day"/> <span class="gray">Tuesday</span>      
     <input type="checkbox" title="Wednesday" class="day"/> <span class="gray">Wednesday</span>  
     <input type="checkbox" title="Thursday" class="day"/> <span class="gray">Thursday</span>
-</div>
 -->
-<a href="#" title="Monday" class="day filter" />Monday</a>    
-<a href="#" title="Tuesday" class="day filter"/>Tuesday</a>      
-<a href="#" title="Wednesday" class="day filter"/>Wednesday</a>  
-<a href="#" title="Thursday" class="day filter"/>Thursday</a>
+    <a href="#" title="Monday" class="day filter" type="day"/>Monday</a>    
+    <a href="#" title="Tuesday" class="day filter" type="day"/>Tuesday</a>      
+    <a href="#" title="Wednesday" class="day filter" type="day"/>Wednesday</a>  
+    <a href="#" title="Thursday" class="day filter" type="day"/>Thursday</a>
+    <a href="#" title="all" class="day filter active" type="day"/>All</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -953,10 +971,11 @@ $(document).ready(function(){
     <input type="checkbox" title="t14" class="time"/> <span class="gray">14:00-15:20</span>       
     <input type="checkbox" title="t16" class="time"/> <span class="gray">16:00-17:20</span>
 -->
-<a href="#" title="t09" class="time"/> <span class="gray">09:00-10:20</span>      
-<a href="#" title="t11" class="time"/> <span class="gray">11:00-12:20</span>   
-    <input type="checkbox" title="t14" class="time"/> <span class="gray">14:00-15:20</span>       
-    <input type="checkbox" title="t16" class="time"/> <span class="gray">16:00-17:20</span>
+    <a href="#" title="t09" class="time filter" type="time"/>09:00-10:20</a>   
+    <a href="#" title="t11" class="time filter" type="time"/>11:00-12:20</a>     
+    <a href="#" title="t14" class="time filter" type="time"/>14:00-15:20</a>          
+    <a href="#" title="t16" class="time filter" type="time"/>16:00-17:20</a> 
+    <a href="#" title="all" class="time filter active" type="time"/>All</a>   
 </div>
 </td>
 </tr>
@@ -966,6 +985,7 @@ $(document).ready(function(){
 </td>
 <td>
 <div id ="persona_filter" style="display:inline-block">
+<!--
     <input type="checkbox" title="De" class="persona"/> <span class="gray">Design</span>          
     <input type="checkbox" title="UI" class="persona"/> <span class="gray">UIST</span>        
     <input type="checkbox" title="Vi" class="persona"/> <span class="gray">Visualization</span>        
@@ -980,7 +1000,22 @@ $(document).ready(function(){
     <input type="checkbox" title="Ki" class="persona"/> <span class="gray">Kids and learning </span>  
     <input type="checkbox" title="He" class="persona"/> <span class="gray">Health</span> 
     <input type="checkbox" title="On" class="persona"/> <span class="gray">Online social communities &amp; crowdsourcing</span>
-    
+--> 
+    <a href="#" title="De" class="persona filter" type="persona"/>Design</a>          
+    <a href="#" title="UI" class="persona filter" type="persona"/>UIST</a>        
+    <a href="#" title="Vi" class="persona filter" type="persona"/>Visualization</a>        
+    <a href="#" title="En" class="persona filter" type="persona"/>Engagement</a>
+
+    <a href="#" title="IO" class="persona filter" type="persona"/>IO</a>
+    <a href="#" title="Et" class="persona filter" type="persona"/>Ethics</a>
+    <a href="#" title="fo" class="persona filter" type="persona"/>For a cause</a> 
+    <a href="#" title="Mi" class="persona filter" type="persona"/>Misc</a>   
+
+    <a href="#" title="Se" class="persona filter" type="persona"/>Security and privacy</a>
+    <a href="#" title="Ki" class="persona filter" type="persona"/>Kids and learning </a>  
+    <a href="#" title="He" class="persona filter" type="persona"/>Health</a> 
+    <a href="#" title="On" class="persona filter" type="persona"/>Online social communities &amp; crowdsourcing</a>   
+    <a href="#" title="all" class="persona filter active" type="persona"/>All</a> 
 </div>
 </td>
 </tr>
