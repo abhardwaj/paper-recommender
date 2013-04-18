@@ -110,7 +110,8 @@ function bind_events(){
 	        }
 	    });
 
-
+    $('input:checkbox').addClass('default-text')
+    $('input:checkbox').attr("title", "Enter paper titles, authors, or keywords")
   
 	$(".default-text").focus(
 		function(src) {
@@ -119,6 +120,8 @@ function bind_events(){
 	        $(this).val("");
 	    }
 	});
+
+
 
 	
 	$(".default-text").blur(
@@ -133,6 +136,11 @@ function bind_events(){
 	    function(){ $(this).addClass('ui-state-hover'); }, 
 	    function(){ $(this).removeClass('ui-state-hover'); }
 	);
+
+    
+
+
+   
 
 
 
@@ -503,7 +511,7 @@ function load_paper(paper_id){
 		"bPaginate": false,
 		"bFilter": true,
 		"bDestroy": true,
-		"bInfo": true,
+		"bInfo": false,
 		"sWidth": "100%",
 		"oLanguage": {
 	      "sZeroRecords": "Not enough data to recommend papers similar to this."
@@ -533,12 +541,12 @@ function populate_papers(_entities){
 		"bPaginate": true,
 		"bFilter": true,
 		"bDestroy": true,
-        "bInfo": true,
+        "bInfo": false,
 		"sWidth": "100%",
 		"aLengthMenu": [[5, 10, 20, 50, -1], [5, 10, 20, 50, "All"]],
 		"iDisplayLength": 10,
 		"oLanguage": {
-	      "sZeroRecords": "Seems like something went wrong. No data to display."
+	      "sZeroRecords": "Nothing matched the filter. No data to display."
 	    },
 		"aoColumns": [                 
 			{},
@@ -565,11 +573,12 @@ function populate_recs(_recs){
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 		"bPaginate": true,
 		"bDestroy": true,
-		"bFilter": true,
-		"bInfo": true,
+		"bFilter": false,
+		"bInfo": false,
 		"sWidth": "100%",
         "aLengthMenu": [[5, 10, 20], [5, 10, 20]],
         "iDisplayLength": 5,
+        "aaSorting":[],
 		"oLanguage": {
 	      "sZeroRecords": "Since you haven't starred any paper yet, we can't generate recommendations for you."
 	    },
@@ -580,6 +589,24 @@ function populate_recs(_recs){
 
 	});  
     bind_events() 
+    if($("#recs").dataTable().fnSettings().fnRecordsTotal() <= 5){
+        $('#show_more_recs').hide();
+    }else{
+        $('#show_more_recs').show();
+    }
+
+
+    $('#show_more_recs').on('click', function(){
+        if($("#recs").dataTable().fnSettings()._iDisplayLength < $("#recs").dataTable().fnSettings().fnRecordsTotal()){
+            $("#recs").dataTable().fnSettings()._iDisplayLength = $("#recs").dataTable().fnSettings()._iDisplayLength + 5;
+            if($("#recs").dataTable().fnSettings()._iDisplayLength >= $("#recs").dataTable().fnSettings().fnRecordsTotal())
+                $("#show_more_recs").hide();
+        }
+        $("#recs").dataTable().fnDraw(true);
+    });
+
+                
+    
 }
 
 
@@ -600,10 +627,11 @@ function populate_likes(_likes){
 		"bPaginate": true,
 		"bInfo": true,
 		"bDestroy": true,
-		"bFilter": true,
+		"bFilter": false,
 		"sWidth": "100%",
 		"aLengthMenu": [[-1, 2], ["All", "Few"]],
         "iDisplayLength": 2,
+        "aaSorting":[],
 		"oLanguage": {
 	      "sZeroRecords": "You haven't starred anything yet. Nothing to show."
 	    },
@@ -613,7 +641,26 @@ function populate_likes(_likes){
 		]
 
 	});
-    bind_events()   
+    bind_events()
+    if($("#likes").dataTable().fnSettings().fnRecordsTotal() <= 2){
+        $('#show_more_likes').hide();
+    }else{
+        $('#show_more_likes').show()
+        $("#show_more_likes").html('Show All')
+    }   
+
+
+    $('#show_more_likes').on('click', function(){
+        if($("#likes").dataTable().fnSettings()._iDisplayLength == -1){
+                $("#likes").dataTable().fnSettings()._iDisplayLength = 2;
+                $("#show_more_likes").html('Show All')
+        }else{
+                $("#likes").dataTable().fnSettings()._iDisplayLength = -1;
+                $("#show_more_likes").html('Show Less')
+        }
+        $("#likes").dataTable().fnDraw(true);
+                
+    });
 }
 
 
@@ -750,6 +797,8 @@ $(document).ready(function(){
 	<div id="likes_container">
 		<table id="likes" class="paper-container">		
 		</table>
+        <br />
+        <a class="button" id="show_more_likes">Show All</a>
 	</div>
 <br />
 <br />
@@ -758,6 +807,8 @@ $(document).ready(function(){
 	<div id="recs_container">
 		<table id="recs" class="paper-container">	
 		</table>
+        <br />
+        <a class="button" id="show_more_recs">Show More</a>
 	</div>
 
 <br />
