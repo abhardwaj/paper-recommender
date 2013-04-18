@@ -296,7 +296,8 @@ function get_paper_html(id){
 }
 
 function get_session_html(id){
-    var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + format_venue(sessions[id].venue) + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
+    console.log(sessions[id].communities)
+    var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
     raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
@@ -802,10 +803,12 @@ function setup_filters(){
         var time_classes = '.'+$('.time.active').attr("title")
         var personas_classes = '.'+$('.persona.active').attr("title")
         var venues_classes = '.'+$('.venue.active').attr("title")
+        /*
         console.log(day_classes)
         console.log(time_classes)
         console.log(venues_classes)
         console.log(personas_classes)
+        */
 
         var select_class = $('.session')
         if(day_classes != '.all'){
@@ -955,11 +958,11 @@ $(document).ready(function(){
     <input type="checkbox" title="Wednesday" class="day"/> <span class="gray">Wednesday</span>  
     <input type="checkbox" title="Thursday" class="day"/> <span class="gray">Thursday</span>
 -->
+    <a href="#" title="all" class="day filter active" type="day"/>All</a>
     <a href="#" title="Monday" class="day filter" type="day"/>Monday</a>    
     <a href="#" title="Tuesday" class="day filter" type="day"/>Tuesday</a>      
     <a href="#" title="Wednesday" class="day filter" type="day"/>Wednesday</a>  
     <a href="#" title="Thursday" class="day filter" type="day"/>Thursday</a>
-    <a href="#" title="all" class="day filter active" type="day"/>All</a>
 </div>
 </td>
 </tr>
@@ -975,11 +978,11 @@ $(document).ready(function(){
     <input type="checkbox" title="t14" class="time"/> <span class="gray">14:00-15:20</span>       
     <input type="checkbox" title="t16" class="time"/> <span class="gray">16:00-17:20</span>
 -->
+    <a href="#" title="all" class="time filter active" type="time"/>All</a> 
     <a href="#" title="t09" class="time filter" type="time"/>09:00-10:20</a>   
     <a href="#" title="t11" class="time filter" type="time"/>11:00-12:20</a>     
     <a href="#" title="t14" class="time filter" type="time"/>14:00-15:20</a>          
-    <a href="#" title="t16" class="time filter" type="time"/>16:00-17:20</a> 
-    <a href="#" title="all" class="time filter active" type="time"/>All</a>   
+    <a href="#" title="t16" class="time filter" type="time"/>16:00-17:20</a>   
 </div>
 </td>
 </tr>
@@ -1005,6 +1008,7 @@ $(document).ready(function(){
     <input type="checkbox" title="He" class="persona"/> <span class="gray">Health</span> 
     <input type="checkbox" title="On" class="persona"/> <span class="gray">Online social communities &amp; crowdsourcing</span>
 --> 
+    <a href="#" title="all" class="persona filter active" type="persona"/>All</a> 
     <a href="#" title="De" class="persona filter" type="persona"/>Design</a>          
     <a href="#" title="UI" class="persona filter" type="persona"/>UIST</a>        
     <a href="#" title="Vi" class="persona filter" type="persona"/>Visualization</a>        
@@ -1019,7 +1023,7 @@ $(document).ready(function(){
     <a href="#" title="Ki" class="persona filter" type="persona"/>Kids and learning </a>  
     <a href="#" title="He" class="persona filter" type="persona"/>Health</a> 
     <a href="#" title="On" class="persona filter" type="persona"/>Online social communities &amp; crowdsourcing</a>   
-    <a href="#" title="all" class="persona filter active" type="persona"/>All</a> 
+    
 </div>
 </td>
 </tr>
