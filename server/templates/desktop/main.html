@@ -80,8 +80,7 @@ function search_rec(id){
 
 function bind_events(){
 	//do this in the end
-    $('.default-text').val('');
-    $('.default-text').blur();
+   
 
     $('.collapsible').off('click')
     $('.collapsible').on('click',
@@ -116,13 +115,21 @@ function bind_events(){
 	        }
 	    });
 
-    $('input:text').addClass('default-text')
+    $('input:text').addClass('default-search-text')
     $('input:text').attr("title", "Enter paper titles, authors, or keywords")
+
+    $('input:text').each(function(){
+        if( $(this).val() == '' || $(this).val() == $(this).attr("title")){
+            $(this).blur()
+        }else{
+            $(this).focus()
+        }
+    });
   
-	$(".default-text").focus(
+	$(".default-search-text").focus(
 		function(src) {
 	    if ($(this).val() == $(this).attr("title")) {
-	        $(this).removeClass("default-text-active");
+	        $(this).removeClass("default-search-text-active");
 	        $(this).val("");
 	    }
 	});
@@ -130,13 +137,14 @@ function bind_events(){
 
 
 	
-	$(".default-text").blur(
+	$(".default-search-text").blur(
 		function(target) {
 	    if ($(this).val() == "") {
-	        $(this).addClass("default-text-active");
+	        $(this).addClass("default-search-text-active");
 	        $(this).val($(this).attr("title"));
 	    }
 	});
+
 
 	$('.ui-state-default').hover(
 	    function(){ $(this).addClass('ui-state-hover'); }, 
@@ -918,6 +926,26 @@ $(document).ready(function(){
 <div id="schedule" class="tab">	
 <div id="filter_schedule">
 <table>
+<!--
+<tr>
+    <td>
+        <h4 style="display:inline-block">Papers</h4>  
+    </td>
+    <td>
+        <a href="#" title="all" class="venue filter active" type="venue"/>All</a>
+        <a href="#" title="award" class="venue filter" type="venue"/>Award Papers</a>
+        <a href="#" title="casestudy" class="venue filter" type="venue"/>Recommen</a>
+        <a href="#" title="altchi" class="venue filter" type="venue"/>alt.chi</a>
+    </td>
+</tr>
+<tr>
+    <td>
+        <h4 style="display:inline-block">Communities</h4>  
+    </td>
+    <td>
+    </td>
+</tr>
+-->
 <tr>
 <td>
 <h4 style="display:inline-block">Venue</h4>  
