@@ -538,13 +538,13 @@ function populate_papers(_entities){
     
     $('#all_papers').dataTable({
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
-		"bPaginate": true,
+		"bPaginate": false,
 		"bFilter": true,
 		"bDestroy": true,
         "bInfo": false,
 		"sWidth": "100%",
 		"aLengthMenu": [[5, 10, 20, 50, -1], [5, 10, 20, 50, "All"]],
-		"iDisplayLength": 10,
+		"iDisplayLength": -1,
 		"oLanguage": {
 	      "sZeroRecords": "Nothing matched the filter. No data to display."
 	    },
