@@ -229,6 +229,22 @@ function remove_special_chars(str){
     return result;
 }
 
+function format_venue(venue){
+  if (venue == "paper")
+    return "Paper";
+  if (venue == "SIG")
+    return "SIG Meeting";
+  if (venue == "altchi")
+    return "alt.chi";
+  if (venue == "course")
+    return "Course";
+  if (venue == "casestudy")
+    return "Case Study";
+  if (venue == "panel")
+    return "Panel";
+  return venue;
+}
+
 function get_paper_html(id){
     if(entities[id] == null)
         return ''
@@ -242,19 +258,22 @@ function get_paper_html(id){
     raw_html += '">'
     raw_html += '<td class="content">'    
     raw_html += '<ul>'
-    raw_html += '<li class="blue"><a href="#" onclick="show_tab(\'selected_paper\', \'' + id + '\');"><h3>'+remove_special_chars(entities[id].title)+'</h3></a></li>'
-    if (entities[id].c_and_b == "null")
-      raw_html += '<li>'+ remove_special_chars(entities[id].abstract) + '</li>'
-    else
-      raw_html += '<li>'+ remove_special_chars(entities[id].c_and_b) + '</li>'
-    raw_html += '<li class="strong">'
+    raw_html += '<li class="paper-title blue"><a href="#" onclick="show_tab(\'selected_paper\', \'' + id + '\');"><h3>'+remove_special_chars(entities[id].title)+'</h3></a></li>'
+    
+    raw_html += '<li class="paper-authors strong">'
     for(author in entities[id].authors){
         if(entities[id].authors[author] != null){
             raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
         }
     }
     raw_html += '</li>'
-    raw_html += '<li class="gray">' + remove_special_chars(entities[id].keywords) + '</li>'
+      
+    if (entities[id].c_and_b == "null")
+      raw_html += '<li class="paper-cb">'+ remove_special_chars(entities[id].abstract) + '</li>'
+    else
+      raw_html += '<li class="paper-cb">'+ remove_special_chars(entities[id].c_and_b) + '</li>'
+        
+    raw_html += '<li class="paper-keywords">' + remove_special_chars(entities[id].keywords) + '</li>'
     raw_html += '</ul>'
     raw_html += '</td>'
     raw_html += '<td class="metadata">'   
@@ -272,16 +291,14 @@ function get_paper_html(id){
     return raw_html
 }
 
-
-
 function get_session_html(id){
     console.log(sessions[id].communities)
     var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
     raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
-    raw_html += '<li><h3><span class="arrow">▸</span> '+ remove_special_chars(sessions[id].s_title) + '</h3></li>'
-    raw_html += '<li class="gray">Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</authorgjli>'
+    raw_html += '<li><h3><span class="arrow ui-icon ui-icon-triangle-1-e">▸</span> <span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span></h3></li>'
+    raw_html += '<li class="session-info"><span class="session-venue">' + format_venue(sessions[id].venue) + '</span> <span class="session-room">Room: ' + sessions[id].room + '</span></li>'
     raw_html += '</ul>'
 
     
@@ -326,7 +343,7 @@ function get_selected_paper_html(id){
     raw_html += '<hr />'
     raw_html += '<ul>'
     raw_html += '<li>' + remove_special_chars(entities[id].abstract) + '</li>'
-    raw_html += '<li class="gray">' + remove_special_chars(entities[id].keywords) + '</li>'
+    raw_html += '<li class="session-info">' + remove_special_chars(entities[id].keywords) + '</li>'
     raw_html += '</ul>'
     return raw_html
 }
@@ -910,16 +927,15 @@ $(document).ready(function(){
     <input type="checkbox" title="special" class="venue"/> <span class="gray">Special</span>      
     <input type="checkbox" title="bof" class="venue"/> <span class="gray">BOF</span>
 -->
+    <a href="#" title="all" class="venue filter active" type="venue"/>All</a>
+    <a href="#" title="paper" class="venue filter" type="venue"/>Paper</a>
+    <a href="#" title="casestudy" class="venue filter" type="venue"/>Case Study</a>
+    <a href="#" title="altchi" class="venue filter" type="venue"/>alt.chi</a>
     <a href="#" title="course" class="venue filter" type="venue"/>Course </a>
     <a href="#" title="panel" class="venue filter" type="venue"/>Panel </a>      
     <a href="#" title="SIG" class="venue filter" type="venue"/>SIG</a>  
-    <a href="#" title="altchi" class="venue filter" type="venue"/>Alt CHI</a>
-
-    <a href="#" title="casestudy" class="venue filter" type="venue"/>Case Study</a>
-    <a href="#" title="paper" class="venue filter" type="venue"/>Paper</a>
-    <a href="#" title="special" class="venue filter" type="venue"/>Special</a>   
     <a href="#" title="bof" class="venue filter" type="venue"/>BOF</a>
-    <a href="#" title="all" class="venue filter active" type="venue"/>All</a>
+    <a href="#" title="special" class="venue filter" type="venue"/>Special</a>   
 </div>
 </td>
 </tr>
@@ -936,11 +952,11 @@ $(document).ready(function(){
     <input type="checkbox" title="Wednesday" class="day"/> <span class="gray">Wednesday</span>  
     <input type="checkbox" title="Thursday" class="day"/> <span class="gray">Thursday</span>
 -->
+    <a href="#" title="all" class="day filter active" type="day"/>All</a>
     <a href="#" title="Monday" class="day filter" type="day"/>Monday</a>    
     <a href="#" title="Tuesday" class="day filter" type="day"/>Tuesday</a>      
     <a href="#" title="Wednesday" class="day filter" type="day"/>Wednesday</a>  
     <a href="#" title="Thursday" class="day filter" type="day"/>Thursday</a>
-    <a href="#" title="all" class="day filter active" type="day"/>All</a>
 </div>
 </td>
 </tr>
@@ -956,11 +972,11 @@ $(document).ready(function(){
     <input type="checkbox" title="t14" class="time"/> <span class="gray">14:00-15:20</span>       
     <input type="checkbox" title="t16" class="time"/> <span class="gray">16:00-17:20</span>
 -->
+    <a href="#" title="all" class="time filter active" type="time"/>All</a> 
     <a href="#" title="t09" class="time filter" type="time"/>09:00-10:20</a>   
     <a href="#" title="t11" class="time filter" type="time"/>11:00-12:20</a>     
     <a href="#" title="t14" class="time filter" type="time"/>14:00-15:20</a>          
-    <a href="#" title="t16" class="time filter" type="time"/>16:00-17:20</a> 
-    <a href="#" title="all" class="time filter active" type="time"/>All</a>   
+    <a href="#" title="t16" class="time filter" type="time"/>16:00-17:20</a>   
 </div>
 </td>
 </tr>
@@ -986,6 +1002,7 @@ $(document).ready(function(){
     <input type="checkbox" title="He" class="persona"/> <span class="gray">Health</span> 
     <input type="checkbox" title="On" class="persona"/> <span class="gray">Online social communities &amp; crowdsourcing</span>
 --> 
+    <a href="#" title="all" class="persona filter active" type="persona"/>All</a> 
     <a href="#" title="De" class="persona filter" type="persona"/>Design</a>          
     <a href="#" title="UI" class="persona filter" type="persona"/>UIST</a>        
     <a href="#" title="Vi" class="persona filter" type="persona"/>Visualization</a>        
@@ -1000,7 +1017,7 @@ $(document).ready(function(){
     <a href="#" title="Ki" class="persona filter" type="persona"/>Kids and learning </a>  
     <a href="#" title="He" class="persona filter" type="persona"/>Health</a> 
     <a href="#" title="On" class="persona filter" type="persona"/>Online social communities &amp; crowdsourcing</a>   
-    <a href="#" title="all" class="persona filter active" type="persona"/>All</a> 
+    
 </div>
 </td>
 </tr>

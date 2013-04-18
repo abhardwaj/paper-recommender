@@ -116,7 +116,7 @@ textarea {
 }
 
 body {
-	font-family: Calibri, "Gill Sans", "Gill Sans MT", "Lucida Grande", Lucida, Verdana, sans-serif;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Verdana, sans-serif;
 	font-size:10pt;
 	height: 100%;
 	overflow: auto;
@@ -202,12 +202,53 @@ body {
 
 
 
-
-
-.gray{
-	color: #737373;
+.paper-keywords{
+  color: #737373;
 }
 
+.arrow {
+  display:inline-block !important;
+  width: 15px;
+}
+
+.session-title{
+  margin-left: 5px;
+
+}
+.session-info{
+	color: #737373;
+  font-size: 12pt;
+  margin: 5px 0 10px 10px;
+}
+.session-venue{
+  display:inline-block;
+  width: 100px;
+  margin-left: 15px;
+}
+.session-room{
+  
+}
+
+.paper-title{
+}
+
+.paper-authors{
+  font-size: 10pt;
+  margin:7px 0 0 0;
+}
+
+.paper-cb{
+  margin: 5px 0 0 0;  
+}
+
+.paper-keywords{
+  margin: 5px 0 0 0;
+}
+
+
+.gray {
+  color: #737373;
+}
 
 .blue{
 	color: #447EAC;
