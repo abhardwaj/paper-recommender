@@ -594,13 +594,19 @@ function populate_recs(_recs){
     }else{
         $('#show_more_recs').show();
     }
-
+    $('#show_more_recs').off('click')
 
     $('#show_more_recs').on('click', function(){
         if($("#recs").dataTable().fnSettings()._iDisplayLength < $("#recs").dataTable().fnSettings().fnRecordsTotal()){
             $("#recs").dataTable().fnSettings()._iDisplayLength = $("#recs").dataTable().fnSettings()._iDisplayLength + 5;
-            if($("#recs").dataTable().fnSettings()._iDisplayLength >= $("#recs").dataTable().fnSettings().fnRecordsTotal())
-                $("#show_more_recs").hide();
+            if($("#recs").dataTable().fnSettings()._iDisplayLength >= $("#recs").dataTable().fnSettings().fnRecordsTotal()){
+                $("#show_more_recs").html('Show Less')
+            }
+        }else{
+            $("#recs").dataTable().fnSettings()._iDisplayLength = 5;            
+            $("#show_more_recs").html('Show More')
+            
+
         }
         $("#recs").dataTable().fnDraw(true);
     });
@@ -612,9 +618,10 @@ function populate_recs(_recs){
 
 
 function populate_likes(_likes){  
-    $("#likes").html("")     
-    for(var l in _likes){
-        var raw_html = get_paper_html(l)
+    $("#likes").html("") 
+    var liked_papers = Object.keys(_likes)    
+    for(var i = liked_papers.length; i>=0 ; i--){
+        var raw_html = get_paper_html(liked_papers[i])
         if(raw_html != null){
             var row = $(raw_html)
             $("#likes").append(row)
@@ -648,7 +655,7 @@ function populate_likes(_likes){
         $('#show_more_likes').show()
         $("#show_more_likes").html('Show All')
     }   
-
+    $('#show_more_likes').off('click')
 
     $('#show_more_likes').on('click', function(){
         if($("#likes").dataTable().fnSettings()._iDisplayLength == -1){
