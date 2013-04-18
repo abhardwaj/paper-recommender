@@ -22,7 +22,7 @@ hr{
 	border: thin #447EAC solid;
 }
 
-a:link, a:visited, a:active, a:hover {
+a:link, a:visited {
   color: #000;
   text-decoration:none; 
 }

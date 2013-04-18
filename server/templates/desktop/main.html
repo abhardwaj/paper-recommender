@@ -15,7 +15,7 @@
 	   Cufon.replace('#logo', { fontFamily: 'Droid Sans Bold' });
 	</script>
 	
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 
 <div id="header">
@@ -192,6 +192,42 @@ function show_tab(tab, paper_id){
 }   
 
 
+function remove_special_chars(str){
+    //if (str.indexOf("Spindex") > -1)
+    //  console.log(str);
+    if (str == null || str == "null")
+      return "";
+    var result = str;
+    result = result.replace(/¬/g, "-"); 
+    result = result.replace(/×/g, "x"); 
+    result = result.replace(/–/g, "-"); 
+    result = result.replace(/‘/g, "'"); 
+    result = result.replace(/’/g, "'"); 
+    result = result.replace(/“/g, "\""); 
+    result = result.replace(/”/g, "\""); 
+    result = result.replace(/\\"/g, "\""); 
+    result = result.replace(/â€”/g, "-");
+    result = result.replace(/â€"/g, "-");
+    result = result.replace(/â€˜/g, "'");
+    result = result.replace(/â€œ/g, "\"");
+    result = result.replace(/â€/g, "\"");
+    result = result.replace(/Ã©/g, "é");
+    result = result.replace(/\\u2013/g, "-");
+    result = result.replace(/\\u00ac/g, "-");
+    result = result.replace(/\\u2014/g, "-");
+    result = result.replace(/\\u2018/g, "'");
+    result = result.replace(/\\u2019/g, "'");
+    result = result.replace(/\\u2022/g, "*");
+    result = result.replace(/\\u201c/g, "\"");
+    result = result.replace(/\\u201d/g, "\"");
+    result = result.replace(/â€™/g, "'");
+    result = result.replace(/â€“/g, "-");
+    result = result.replace(/™/g, "(TM)"); 
+    result = result.replace(/\\\//g, "/"); 
+    result = result.replace(/\\/g, ""); 
+    result = result.replace(/\\ \\/g, ""); 
+    return result;
+}
 
 function get_paper_html(id){
     if(entities[id] == null)
@@ -206,8 +242,11 @@ function get_paper_html(id){
     raw_html += '">'
     raw_html += '<td class="content">'    
     raw_html += '<ul>'
-    raw_html += '<li class="blue"><a href="#" onclick="show_tab(\'selected_paper\', \'' + id + '\');"><h3>'+entities[id].title+'</h3></a></li>'
-    raw_html += '<li>'+entities[id].c_and_b + '</li>'
+    raw_html += '<li class="blue"><a href="#" onclick="show_tab(\'selected_paper\', \'' + id + '\');"><h3>'+remove_special_chars(entities[id].title)+'</h3></a></li>'
+    if (entities[id].c_and_b == "null")
+      raw_html += '<li>'+ remove_special_chars(entities[id].abstract) + '</li>'
+    else
+      raw_html += '<li>'+ remove_special_chars(entities[id].c_and_b) + '</li>'
     raw_html += '<li class="strong">'
     for(author in entities[id].authors){
         if(entities[id].authors[author] != null){
@@ -215,7 +254,7 @@ function get_paper_html(id){
         }
     }
     raw_html += '</li>'
-    raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
+    raw_html += '<li class="gray">' + remove_special_chars(entities[id].keywords) + '</li>'
     raw_html += '</ul>'
     raw_html += '</td>'
     raw_html += '<td class="metadata">'   
@@ -240,8 +279,8 @@ function get_session_html(id){
     raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
-    raw_html += '<li><h3><span class="arrow">▸</span> '+sessions[id].s_title+'</h3></li>'
-    raw_html += '<li class="gray">Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</li>'
+    raw_html += '<li><h3><span class="arrow">▸</span> '+ remove_special_chars(sessions[id].s_title) + '</h3></li>'
+    raw_html += '<li class="gray">Room: ' + sessions[id].room + ', Venue: ' + sessions[id].venue + '</authorgjli>'
     raw_html += '</ul>'
 
     
@@ -275,7 +314,7 @@ function get_selected_paper_html(id){
     if(entities[id] == null)
         return null
 
-    var raw_html = '<h3>' + entities[id].title + '</h3><br />'
+    var raw_html = '<h3>' + remove_special_chars(entities[id].title) + '</h3><br />'
     raw_html += '<span class="strong">'
     for(var author in entities[id].authors){
         if(entities[id].authors[author] != null){
@@ -285,8 +324,8 @@ function get_selected_paper_html(id){
     raw_html += '</span>'
     raw_html += '<hr />'
     raw_html += '<ul>'
-    raw_html += '<li>' + entities[id].abstract + '</li>'
-    raw_html += '<li class="gray">' + entities[id].keywords + '</li>'
+    raw_html += '<li>' + remove_special_chars(entities[id].abstract) + '</li>'
+    raw_html += '<li class="gray">' + remove_special_chars(entities[id].keywords) + '</li>'
     raw_html += '</ul>'
     return raw_html
 }
@@ -1045,11 +1084,6 @@ $(document).ready(function(){
 	</div>
 
 </div> <!-- program -->
-
-
-
-
-
 
 </div> <!-- schedule -->
 
