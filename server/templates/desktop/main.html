@@ -188,6 +188,7 @@ function search(str){
 function show_tab(tab, paper_id){
     console.log(tab)
     $(".tab").hide();
+    window.scrollTo(0,0);
     $("#"+tab).show();
     if(tab == 'home'){
     	populate_likes(starred);
@@ -203,7 +204,7 @@ function show_tab(tab, paper_id){
     bind_events()
     $(".default-text").blur()
         
-}   
+}
 
 
 function remove_special_chars(str){
