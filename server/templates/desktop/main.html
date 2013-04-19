@@ -260,10 +260,25 @@ function get_paper_html(id){
     	raw_html += ' highlight'
     }
     raw_html += '">'
+      
+    raw_html += '<td class="metadata">'   
+    if(starred[id] == null){
+        raw_html += '<div class="star-open p_star" data="'+ id + '" onclick="handle_star(event);">'        
+        //raw_html += '<div class="ui-state-default ui-corner-all p_star" data="'+ id + '" onclick="handle_star(event);">'        
+    }else{
+        raw_html += '<div class="star-filled p_star" data="'+ id + '" onclick="handle_star(event);">'        
+        //raw_html += '<div class="ui-state-default ui-corner-all ui-state-active p_star" data="'+ id + '" onclick="handle_star(event);">'        
+    }  
+    //raw_html += '<span class="ui-icon ui-icon-star"></span>'
+    raw_html += '</div>'
+    
+    raw_html += '</td>'
+    
     raw_html += '<td class="content">'    
     raw_html += '<ul>'
     raw_html += '<li class="paper-title blue"><a href="#" onclick="show_tab(\'selected_paper\', \'' + id + '\');"><h3>'+remove_special_chars(entities[id].title)+'</h3></a></li>'
-    
+
+    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span></li>';
     raw_html += '<li class="paper-authors strong">'
     for(author in entities[id].authors){
         if(entities[id].authors[author] != null){
@@ -280,16 +295,7 @@ function get_paper_html(id){
     raw_html += '<li class="paper-keywords">' + remove_special_chars(entities[id].keywords) + '</li>'
     raw_html += '</ul>'
     raw_html += '</td>'
-    raw_html += '<td class="metadata">'   
-    if(starred[id] == null){
-        raw_html += '<div class="ui-state-default ui-corner-all p_star" data="'+ id + '" onclick="handle_star(event);">'        
-    }else{
-        raw_html += '<div class="ui-state-default ui-corner-all ui-state-active p_star" data="'+ id + '" onclick="handle_star(event);">'        
-    }  
-    raw_html += '<span class="ui-icon ui-icon-star"></span>'
-    raw_html += '</div>'
     
-    raw_html += '</td>'
     raw_html += '</tr>'
 
     return raw_html
@@ -299,9 +305,17 @@ function get_session_html(id){
     console.log(sessions[id].communities)
     var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
     raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
+    
+    raw_html += '<td class="metadata">'     
+   	//raw_html += '<div class="ui-state-default ui-corner-all s_star" data="'+ id + '" onclick="handle_session_star(event);">'
+   	raw_html += '<div class="star-open s_star" data="'+ id + '" onclick="handle_session_star(event);">'
+    //raw_html += '<span class="ui-icon ui-icon-star"></span>'
+    raw_html += '</div>'        
+    raw_html += '</td>'
+    
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
-    raw_html += '<li><h3><span class="arrow ui-icon ui-icon-triangle-1-e"></span> <span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span></h3></li>'
+    raw_html += '<li><h3><span class="arrow ui-icon ui-icon-triangle-1-e"></span> <span class="rec-icon">recommended</span><span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span></h3></li>'
     raw_html += '<li class="session-info"><span class="session-venue">' + format_venue(sessions[id].venue) + '</span> <span class="session-room">Room: ' + sessions[id].room + '</span></li>'
     raw_html += '</ul>'
 
@@ -314,11 +328,7 @@ function get_session_html(id){
     }
     raw_html += '</div>'
     raw_html += '</td>'
-    raw_html += '<td class="metadata">'     
-   	raw_html += '<div class="ui-state-default ui-corner-all s_star" data="'+ id + '" onclick="handle_session_star(event);">'
-    raw_html += '<span class="ui-icon ui-icon-star"></span>'
-    raw_html += '</div>'        
-    raw_html += '</td>'
+    
     raw_html += '</tr>'
     raw_html += '</table>'
     raw_html += '<table id="' +id +'" class="paper-container" style="display:none; padding-left:20px;">'
@@ -479,7 +489,8 @@ function handle_session_star(event){
             recommended = res.recs
             populate_recs(recommended)
             $('.'+obj.attr('data')).each(function(){
-                $(this).find('.p_star').removeClass('ui-state-active')
+                //$(this).find('.p_star').removeClass('ui-state-active')
+                $(this).find('.p_star').removeClass('star-open')
                 $(this).removeClass('highlight')
                 $(this).find('.paper').removeClass('highlight')
             })
@@ -495,7 +506,8 @@ function handle_session_star(event){
             recommended = res.recs
             populate_recs(recommended)
             $('.'+obj.attr('data')).each(function(){
-                $(this).find('.p_star').addClass('ui-state-active')
+                //$(this).find('.p_star').addClass('ui-state-active')
+                $(this).find('.p_star').addClass('star-filled')
                 $(this).find('.paper').addClass('highlight')
             })
             update_recs()
@@ -521,7 +533,8 @@ function handle_star(event){
             recommended = res.recs
             populate_recs(recommended)
             $('.'+obj.attr('data')).each(function(){
-                $(this).find('.p_star').removeClass('ui-state-active')
+                $(this).find('.p_star').removeClass('star-open')
+                //$(this).find('.p_star').removeClass('ui-state-active')
                 $(this).removeClass('highlight')
             })
             update_recs()
@@ -536,7 +549,8 @@ function handle_star(event){
             recommended = res.recs
             populate_recs(recommended)
             $('.'+obj.attr('data')).each(function(){
-                $(this).find('.p_star').addClass('ui-state-active')
+                //$(this).find('.p_star').addClass('ui-state-active')
+                $(this).find('.p_star').addClass('star-filled')
                 $(this).addClass('highlight')
             })
             update_recs()
@@ -641,7 +655,7 @@ function populate_recs(_recs){
         "iDisplayLength": 5,
         "aaSorting":[],
 		"oLanguage": {
-	      "sZeroRecords": "Since you haven't starred any paper yet, we can't generate recommendations for you."
+	      "sZeroRecords": "Favorite papers you're interested in and we'll recommend others you may like."
 	    },
 		"aoColumns": [                 
 			{},
@@ -701,7 +715,7 @@ function populate_likes(_likes){
         "iDisplayLength": 2,
         "aaSorting":[],
 		"oLanguage": {
-	      "sZeroRecords": "You haven't starred anything yet. Nothing to show."
+	      "sZeroRecords": "You haven't liked any papers."
 	    },
 		"aoColumns": [                 
 			{},
@@ -880,7 +894,7 @@ $(document).ready(function(){
 		
 	-->
 	
-	<h3 class="collapsible-title collapsible" id="likes_toggle" data="likes_container"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Starred Papers</h3>	
+	<h3 class="collapsible-title collapsible" id="likes_toggle" data="likes_container"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Papers you want to see</h3>	
 	<div id="likes_container">
 		<table id="likes" class="paper-container">		
 		</table>
