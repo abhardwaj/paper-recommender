@@ -586,6 +586,7 @@ function update_recs(){
 
 
 function handle_session_star(event){
+    enable_alert("updating information..."); 
     event.stopPropagation();
     var obj = $(event.target).parents("td:first").find('.s_star')
     var session_id = obj.attr("data")
@@ -639,6 +640,7 @@ function handle_session_star(event){
 
 
 function handle_star(event){ 
+    enable_alert("updating information..."); 
     var obj = $(event.target).parents("td:first").find('.p_star')
     var paper_id = obj.attr("data")
     console.log(paper_id)
