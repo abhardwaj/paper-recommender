@@ -174,15 +174,15 @@ function show_tab(tab, paper_id){
     if(tab == 'home'){
     	setTimeout('populate_likes(starred);', 0)
 		setTimeout('populate_recs(recommended);', 0)
-		setTimeout('populate_papers(entities);', 1);
+		setTimeout('populate_papers(entities);', 0);
     }else if(tab == 'schedule'){
-    	populate_sessions(sessions);
-    	setup_filters()
+    	setTimeout('populate_sessions(sessions);', 0)
+    	setTimeout('setup_filters()', 0)
     }else if(tab == 'selected_paper'){
-    	load_paper(paper_id)
+    	setTimeout('load_paper(paper_id);', 0)
     }
 
-    bind_events()        
+    setTimeout('bind_events();', 0)        
 }
 
 
