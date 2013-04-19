@@ -29,7 +29,7 @@ a:link, a:visited {
 
 #filter_schedule td{
   line-height: 2.1em;
-  padding-bottom: 0.4em;
+  padding-bottom: 0.5em;
   font-size: 0.9em;
 }
 
@@ -41,7 +41,7 @@ a.filter{
   text-decoration:none;
   margin-left: 0.7em;
   margin-right: 0.7em;
-  padding: 0.2em 0.3em;
+  padding: 0.2em 0.4em;
 }
 
 a.filter.active{
@@ -147,11 +147,11 @@ body {
 	margin:0 auto;
 	position: fixed;
 	top:0;
-	height: 3em;
+	height: 2.7em;
 	font-size:1.1em;
 	background: #2B2B2B; /*3D7AA6;*/
 	margin-bottom: 0.1em;
-	color: white;
+	color: #F6F6F6;
 	border-bottom: 1px solid #2B2B2B;
 	width: 100%;
 	z-index: 100;
@@ -246,17 +246,15 @@ body {
 }
 
 .session-title{
-  /*font-size: 1.1em;*/
-  margin-left: 0.3em;
 }
 .session-info{
 	color: #737373;
-  margin: 0.4em 0 0.7em 0.7em;
+  margin: 0.4em 0 0.7em 0;
 }
 .session-venue{
   display:inline-block;
   width: 7em;
-  margin-left: 1em;
+  /*margin-left: 1em;*/
 }
 .session-room{
   
@@ -267,6 +265,7 @@ body {
 
 .paper-authors{
   margin: 0.4em 0 0 0;
+  font-weight: bold;
 }
 
 .paper-cb{
@@ -286,10 +285,6 @@ body {
 
 .blue{
 	color: #447EAC;
-}
-
-.strong{
-	font-weight: bold;
 }
 
 .link{
@@ -549,6 +544,21 @@ table.dataTable tbody tr td {
   display:none;
 }
 
+.communities .community-icon{
+  display:inline-block;
+  vertical-align: top;
+  margin-top: 0.2em;
+  margin-right: 0.7em;
+  /*background-color: #00A8CD;*/
+  border: 1px solid #AAAAAA;
+  background-color: #AAAAAA;
+  color: #F6F6F6;
+  padding: 0.2em 0.5em;
+  height: 1.5em;
+  text-align: center;
+  font-size: 0.9em;
+}
+
 .paper-icons, .session-icons {
   margin-top: 0.3em;
   height: 2em;
@@ -560,12 +570,12 @@ table.dataTable tbody tr td {
   margin-top: 0.2em;
   margin-right: 0.7em;
   background-color: #00A8CD;
+  border: 1px solid #00A8CD;
   color: #fff;
   padding: 0.2em 0.5em;
   height: 1.5em;
   text-align: center;
   font-size: 0.9em;
-  font-weight: normal;
 }
 
 .session.s_award .session-icons .award-icon, .paper.p_award .paper-icons .award-icon{
@@ -587,7 +597,17 @@ table.dataTable tbody tr td {
   width: 1.8em;
   height: 1.8em;
 }
-
+/*
+.community-icon.design{
+  display:inline-block;
+  margin-right: 0.7em;
+  background-image:url(/static/img/design.png);
+  background-repeat: no-repeat;
+  background-size: 1.6em 1.6em;
+  width: 1.6em;
+  height: 1.6em;
+}
+*/
 .session-container .clickable{
 	cursor: pointer;
 	

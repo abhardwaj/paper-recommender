@@ -249,9 +249,18 @@ function format_venue(venue){
   return venue;
 }
 
+function get_communities(entity){
+  if (typeof entity.communities === "undefined" || entity.communities == null || entity.communities == "")
+    return "";
+  else
+    return entity.communities.join(' ');
+
+}
+
 function get_paper_html(id){
     if(entities[id] == null)
         return ''
+    var communities = get_communities(entities[id]);
     var raw_html = '<tr class="clickable paper ' + id
     if(search_rec(id)){
     	raw_html += ' recommended'
@@ -259,16 +268,14 @@ function get_paper_html(id){
     if(starred[id] != null){
     	raw_html += ' highlight'
     }
-
     if(entities[id].hm){
         raw_html += ' p_hm'
-
     }
-
     if(entities[id].award){
         raw_html += ' p_award'
-
     }
+    if(communities += "")
+      raw_html += ' communities'
     raw_html += '">'
       
     raw_html += '<td class="metadata">'   
@@ -288,8 +295,9 @@ function get_paper_html(id){
     raw_html += '<ul>'
     raw_html += '<li class="paper-title blue"><a href="#" onclick="show_tab(\'selected_paper\', \'' + id + '\');"><h3>'+remove_special_chars(entities[id].title)+'</h3></a></li>'
 
-    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon"></span></li>';
-    raw_html += '<li class="paper-authors strong">'
+    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon '
+             + communities + '">' + communities + '</span></li>';
+    raw_html += '<li class="paper-authors">'
     for(author in entities[id].authors){
         if(entities[id].authors[author] != null){
             raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
@@ -315,6 +323,8 @@ function get_paper_html(id){
 
 
 function get_session_html(id){
+    var communities = get_communities(sessions[id]);
+    var communities_class = (communities == "") ? "" : "communities";
     var award=''
     if(sessions[id].award || sessions[id].hm){
         award = 's_awardhm'
@@ -325,7 +335,9 @@ function get_session_html(id){
     if(sessions[id].award || sessions[id].hm){
         award += ' s_hm'
     }
-    var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + ' ' + sessions[id].communities.join(' ') + ' ' + award + '" data="' + id + '">'
+    var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' '
+              + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + ' '
+              + communities_class + ' ' + award + '" data="' + id + '">'
     raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
     
     raw_html += '<td class="metadata">'     
@@ -338,7 +350,8 @@ function get_session_html(id){
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
     raw_html += '<li><h3><span class="arrow arrow-right"></span> <span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span></h3></li>'
-    raw_html += '<li class="session-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon"></span></li>';
+    raw_html += '<li class="session-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon '
+             + communities + '">' + communities + '</span></li>';
     raw_html += '<li class="session-info"><span class="session-venue">' + format_venue(sessions[id].venue) + '</span> <span class="session-room">Room: ' + sessions[id].room + '</span></li>'
     raw_html += '</ul>'
 
@@ -380,22 +393,42 @@ function get_session_html(id){
 
 function get_selected_paper_html(id){
     if(entities[id] == null)
-        return null
+      return null
+    var communities = get_communities(entities[id]);
 
-    var raw_html = '<h3>' + remove_special_chars(entities[id].title) + '</h3><br />'
-    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon"></span></li>';
-    raw_html += '<span class="strong">'
+    var raw_html = '<div class="paper ';    
+    if(search_rec(id)){
+    	raw_html += ' recommended'
+    }
+    if(starred[id] != null){
+    	raw_html += ' highlight'
+    }
+    if(entities[id].hm){
+        raw_html += ' p_hm'
+    }
+    if(entities[id].award){
+        raw_html += ' p_award'
+    }
+    if(communities != ""){
+      raw_html += ' communities';
+    }
+    raw_html += '">'
+    raw_html += '<h3>' + remove_special_chars(entities[id].title) + '</h3>'
+    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon '
+             + communities + '">' + communities + '</span></li>';
+    raw_html += '<li class="paper-authors">'
     for(var author in entities[id].authors){
         if(entities[id].authors[author] != null){
             raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
         }
     }
-    raw_html += '</span>'
+    raw_html += '</li>'
     raw_html += '<hr />'
     raw_html += '<ul>'
     raw_html += '<li>' + remove_special_chars(entities[id].abstract) + '</li>'
     raw_html += '<li class="paper-keywords">' + remove_special_chars(entities[id].keywords) + '</li>'
     raw_html += '</ul>'
+    raw_html += '</div>'
     return raw_html
 }
 
@@ -1160,7 +1193,7 @@ $(document).ready(function(){
 <!-- Selected Paper -->
 <div id="selected_paper" class="tab">
 	<h3><span class="gray">Selected Paper</span></h3>
-	<div class="form" style="margin-top:10px;">
+	<div class="form">
 	</div>
 	<br />
 	<h3 class="collapsible-title collapsible" id="similar_papers_toggle" data="similar_papers_container" value=""><span class="arrow arrow-down"></span> People who liked this paper also liked:</h3>
