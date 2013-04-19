@@ -3,7 +3,9 @@
 <head>
 	<title>myCHI</title>
 	<meta charset="utf-8">
+    <!--
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+-->
 	<link rel="stylesheet" type="text/css" href="/static/css/desktop.css" />
 	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>	
@@ -77,10 +79,6 @@ function search_rec(id){
 
 
 function bind_events(){
-	//do this in the end
-    $('.default-text').val('');
-    $('.default-text').blur();
-
     $('.collapsible').off('click')
     $('.collapsible').on('click',
 	    function(event){
@@ -114,13 +112,21 @@ function bind_events(){
 	        }
 	    });
 
-    $('input:text').addClass('default-text')
+    $('input:text').addClass('default-search-text')
     $('input:text').attr("title", "Enter paper titles, authors, or keywords")
+
+    $('input:text').each(function(){
+        if( $(this).val() == '' || $(this).val() == $(this).attr("title")){
+            $(this).blur()
+        }else{
+            $(this).focus()
+        }
+    });
   
-	$(".default-text").focus(
+	$(".default-search-text").focus(
 		function(src) {
 	    if ($(this).val() == $(this).attr("title")) {
-	        $(this).removeClass("default-text-active");
+	        $(this).removeClass("default-search-text-active");
 	        $(this).val("");
 	    }
 	});
@@ -128,27 +134,20 @@ function bind_events(){
 
 
 	
-	$(".default-text").blur(
+	$(".default-search-text").blur(
 		function(target) {
 	    if ($(this).val() == "") {
-	        $(this).addClass("default-text-active");
+	        $(this).addClass("default-search-text-active");
 	        $(this).val($(this).attr("title"));
 	    }
 	});
 
-/* juho: ui-state not used anymore
+/* juho: not used anymore
 	$('.ui-state-default').hover(
 	    function(){ $(this).addClass('ui-state-hover'); }, 
 	    function(){ $(this).removeClass('ui-state-hover'); }
 	);
 */
-    
-
-
-   
-
-
-
 	/*
 
 	$('#search_papers').keyup(function(event){
@@ -156,9 +155,9 @@ function bind_events(){
 		//console.log(str)
 		delay('search("'+str+'");', 100);
 	});*/
-
-	
 }
+
+
 
 var delay = (function(){
   var timer = 0;
@@ -168,41 +167,36 @@ var delay = (function(){
   };
 })();
 
-function search(str){
-	$("#all_papers").dataTable().fnFilter(str);
-	$("#likes").dataTable().fnFilter(str);
-	$("#recs").dataTable().fnFilter(str);
-}
+
+
+
 
 
 
 function show_tab(tab, paper_id){
     console.log(tab)
     $(".tab").hide();
+    window.scrollTo(0,0);
     $("#"+tab).show();
     $("#headlink-right a").removeClass("active");
     if(tab == 'home'){
-    	populate_likes(starred);
-		  populate_recs(recommended);
-		  populate_papers(entities);
+    	setTimeout('populate_likes(starred);', 0)
+		  setTimeout('populate_recs(recommended);', 0)
+		  setTimeout('populate_papers(entities);', 0);
       $("#nav_home").addClass("active");
     }else if(tab == 'schedule'){
-    	populate_sessions(sessions);
-    	setup_filters()
+    	setTimeout('populate_sessions(sessions);', 0)
+    	setTimeout('setup_filters()', 0)
       $("#nav_schedule").addClass("active");
     }else if(tab == 'selected_paper'){
-    	load_paper(paper_id)
+    	setTimeout('load_paper(paper_id);', 0)
     }
 
-    bind_events()
-    $(".default-text").blur()
-        
-}   
+    setTimeout('bind_events();', 0)        
+}
 
 
 function remove_special_chars(str){
-    //if (str.indexOf("Spindex") > -1)
-    //  console.log(str);
     if (str == null || str == "null")
       return "";
     var result = str;
@@ -236,6 +230,8 @@ function remove_special_chars(str){
     result = result.replace(/\\ \\/g, ""); 
     return result;
 }
+
+
 
 function format_venue(venue){
   if (venue == "paper")
@@ -305,9 +301,15 @@ function get_paper_html(id){
     return raw_html
 }
 
+
+
+
 function get_session_html(id){
-    console.log(sessions[id].communities)
-    var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
+    var award=''
+    if(sessions[id].award || sessions[id].hm){
+        award = 'p_award'
+    }
+    var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + ' ' + sessions[id].communities.join(' ') + ' ' + award + '" data="' + id + '">'
     raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
     
     raw_html += '<td class="metadata">'     
@@ -346,6 +348,8 @@ function get_session_html(id){
 
 
 
+
+
 function get_selected_paper_html(id){
     if(entities[id] == null)
         return null
@@ -367,49 +371,67 @@ function get_selected_paper_html(id){
 }
 
 
+
+
 function place_session(s){
     if(s.hasClass('Monday')){
         if(s.hasClass('t09')){
             $("#Mondayt09").append(s)
+            $("#Mondayt09").prev().show()
         }else if(s.hasClass('t11')){
             $("#Mondayt11").append(s)
+            $("#Mondayt11").prev().show()
         }else if(s.hasClass('t14')){
             $("#Mondayt14").append(s)
+            $("#Mondayt14").prev().show()
         }else if(s.hasClass('t16')){
             $("#Mondayt16").append(s)
+            $("#Mondayt16").prev().show()
         }
 
     }else if(s.hasClass('Tuesday')){
         if(s.hasClass('t09')){
             $("#Tuesdayt09").append(s)
+            $("#Tuesdayt09").prev().show()
         }else if(s.hasClass('t11')){
             $("#Tuesdayt11").append(s)
+            $("#Tuesdayt11").prev().show()
         }else if(s.hasClass('t14')){
             $("#Tuesdayt14").append(s)
+            $("#Tuesdayt14").prev().show()
         }else if(s.hasClass('t16')){
             $("#Tuesdayt16").append(s)
+            $("#Tuesdayt16").prev().show()
         }
 
     }else if(s.hasClass('Wednesday')){
         if(s.hasClass('t09')){
             $("#Wednesdayt09").append(s)
+            $("#Wednesdayt09").prev().show()
         }else if(s.hasClass('t11')){
             $("#Wednesdayt11").append(s)
+            $("#Wednesdayt11").prev().show()
         }else if(s.hasClass('t14')){
             $("#Wednesdayt14").append(s)
+            $("#Wednesdayt14").prev().show()
         }else if(s.hasClass('t16')){
             $("#Wednesdayt16").append(s)
+            $("#Wednesdayt16").prev().show()
         }
 
     }else if(s.hasClass('Thursday')){
         if(s.hasClass('t09')){
             $("#Thursdayt09").append(s)
+            $("#Thursdayt09").prev().show()
         }else if(s.hasClass('t11')){
             $("#Thursdayt11").append(s)
+            $("#Thursdayt11").prev().show()
         }else if(s.hasClass('t14')){
             $("#Thursdayt14").append(s)
+            $("#Thursdayt14").prev().show()
         }else if(s.hasClass('t16')){
             $("#Thursdayt16").append(s)
+            $("#Thursdayt16").prev().show()
         }
 
     }
@@ -427,15 +449,17 @@ function update_session_view(){
 			if($(this).hasClass('star-filled')){
 				session.find('.timeline').children("div").eq(p_index).addClass("filled_yellow");
 			}else{
-				session.find('.timeline').children("div").eq(p_index).removeClass("filled_yellow");
-			}				
+				session.find('.timeline').children("div").eq(p_index).removeClass("filled_yellow");                  
+			}
+            			
 
 		});
 
 		$(this).find('.paper-container tr').each(function(p_index){
 			if($(this).hasClass('recommended')){
+                session.addClass('p_recommended')
 				session.find('.timeline').children("div").eq(p_index).addClass("filled_blue");
-			}else{
+			}else{                
 				session.find('.timeline').children("div").eq(p_index).removeClass("filled_blue");
 			}				
 
@@ -447,14 +471,17 @@ function update_session_view(){
 		
 	   	if($(this).find('.paper-container').find('.recommended').length > 0){
 			$(this).find('.session-container').find('tr').addClass('recommended')
+            session.addClass('p_recommended')
 			rec = true
 	   	}else{
 	     	$(this).find('.session-container').find('tr').removeClass('recommended')
+            session.removeClass('p_recommended')
 	   	}
 	   	/*
 	   	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
 			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
 			$(this).find('.session-container').find('tr').addClass('highlight')
+            session.addClass('p_starred') 
 			like = true
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
@@ -468,15 +495,12 @@ function update_session_view(){
 	   	}else{
 	     	$(this).find('.session-container').find('.star').removeClass('star-filled').addClass('star-open')
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
+        session.removeClass('p_starred') 
 	   	}
-	   	/*
-	   	if(like || rec){
-	   		session.clone().attr("id",'recs'+id).appendTo('#session_recs')
-	   	}
-		*/
+	   	
 	});
+
 	bind_events() 
-    $('#session_recs_toggle').show()
 
 }
 
@@ -619,14 +643,12 @@ function load_paper(paper_id){
 } 
 
 function populate_papers(_entities){ 
-    $("#all_papers").html("")        
+    $("#all_papers").html("") 
+    var raw_html = ''       
     for(var e in _entities){
-        var raw_html = get_paper_html(e)
-        if(raw_html != null){
-            var row = $(raw_html)
-            $("#all_papers").append(row)
-        }
+        raw_html += get_paper_html(e)
     }
+    $("#all_papers").html(raw_html)
     
     $('#all_papers').dataTable({
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
@@ -651,15 +673,12 @@ function populate_papers(_entities){
 }
 
 
-function populate_recs(_recs){ 
-    $("#recs").html("")     
+function populate_recs(_recs){  
+    var raw_html = ''   
     for(var r in _recs){
-        var raw_html = get_paper_html(recommended[r].id)
-        if(raw_html != null){
-            var row = $(raw_html)
-            $("#recs").append(row)
-        }
+        raw_html += get_paper_html(recommended[r].id)
     }
+    $("#recs").html(raw_html)
    
     $('#recs').dataTable({
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
@@ -691,14 +710,8 @@ function populate_recs(_recs){
     $('#show_more_recs').on('click', function(){
         if($("#recs").dataTable().fnSettings()._iDisplayLength < $("#recs").dataTable().fnSettings().fnRecordsTotal()){
             $("#recs").dataTable().fnSettings()._iDisplayLength = $("#recs").dataTable().fnSettings()._iDisplayLength + 5;
-            if($("#recs").dataTable().fnSettings()._iDisplayLength >= $("#recs").dataTable().fnSettings().fnRecordsTotal()){
-                $("#show_more_recs").html('Show Less')
-            }
-        }else{
-            $("#recs").dataTable().fnSettings()._iDisplayLength = 5;            
-            $("#show_more_recs").html('Show More')
-            
-
+        }else{        
+            $("#show_more_recs").hide()
         }
         $("#recs").dataTable().fnDraw(true);
     });
@@ -710,26 +723,29 @@ function populate_recs(_recs){
 
 
 function populate_likes(_likes){  
-    $("#likes").html("") 
+    var raw_html = ''
     var liked_papers = Object.keys(_likes)    
     for(var i = liked_papers.length; i>=0 ; i--){
-        var raw_html = get_paper_html(liked_papers[i])
-        if(raw_html != null){
-            var row = $(raw_html)
-            $("#likes").append(row)
-        }
+       raw_html += get_paper_html(liked_papers[i])
+    }
+    $("#likes").html(raw_html)
+    var len = 2
+    var user_mode = true
+    if($("#show_more_likes").html()=='Show Less'){
+
+        len = -1
     }
 
 
     $('#likes').dataTable({
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 		"bPaginate": true,
-		"bInfo": true,
+		"bInfo": false,
 		"bDestroy": true,
 		"bFilter": false,
 		"sWidth": "100%",
 		"aLengthMenu": [[-1, 2], ["All", "Few"]],
-        "iDisplayLength": 2,
+        "iDisplayLength": len,
         "aaSorting":[],
 		"oLanguage": {
 	      "sZeroRecords": "You haven't liked any papers."
@@ -745,7 +761,9 @@ function populate_likes(_likes){
         $('#show_more_likes').hide();
     }else{
         $('#show_more_likes').show()
-        $("#show_more_likes").html('Show All')
+        if(!user_mode){
+            $("#show_more_likes").html('Show All')
+        }
     }   
     $('#show_more_likes').off('click')
 
@@ -764,7 +782,10 @@ function populate_likes(_likes){
 
 
 function populate_sessions(_sessions){
-    $(".session-timeslot").html("") 
+    $(".session-timeslot").html("")
+    $('.session-timeslot').each(function(){
+        $(this).prev().hide()
+    }); 
     for(var s in _sessions){
         var raw_html = get_session_html(s)
         var row = $(raw_html)
@@ -781,49 +802,8 @@ function populate_sessions(_sessions){
 
 
 function setup_filters(){
-	$('input:checkbox').die()
-    //$('input:checkbox').live('change', function(){
-    $('.filter').on('click', function(){
-        //$('#session_recs_toggle').show()
-        /*
-        var days_checked = $("input:checked.day")
-        var times_checked = $("input:checked.time")
-        var venues_checked = $("input:checked.venue")
-        var personas_checked = $("input:checked.persona")
-        
-        //var star = $("input:checked.fav")
-        var day_classes = ''
-        for(var i=0; i< days_checked.length; i++){
-            var c = days_checked[i].title               
-            day_classes  += '.'+c + ','     
-        }
-        day_classes = day_classes.substr(0, day_classes.length-1)
-        
-        time_classes=''
-        for(var i=0; i< times_checked.length; i++){
-            var c = times_checked[i].title
-            time_classes += '.'+c + ',';
-        }
-
-        time_classes = time_classes.substr(0, time_classes.length-1)
-        
-        personas_classes = '';
-        for(var i=0; i< personas_checked.length; i++){
-            var c = personas_checked[i].title
-            personas_classes +=  '.' + c + ',';
-        }
-
-        personas_classes = personas_classes.substr(0, personas_classes.length-1)
-        
-        venues_classes = ''
-        for(var i=0; i< venues_checked.length; i++){
-            var c = venues_checked[i].title
-            venues_classes += '.' + c + ',';
-        }
-
-        venues_classes = venues_classes.substr(0, venues_classes.length-1)
-        
-        */
+    $('.filter').off('click')
+    $('.filter').on('click', function(){       
 
         var attr = $(this).attr("type")
         $('.'+attr).removeClass('active')
@@ -834,11 +814,14 @@ function setup_filters(){
         var time_classes = '.'+$('.time.active').attr("title")
         var personas_classes = '.'+$('.persona.active').attr("title")
         var venues_classes = '.'+$('.venue.active').attr("title")
+        var communities_classes = '.'+$('.community.active').attr("title")
+        var papers_classes = '.'+$('.p_session.active').attr("title")
         /*
         console.log(day_classes)
         console.log(time_classes)
         console.log(venues_classes)
         console.log(personas_classes)
+        console.log(papers_classes)
         */
 
         var select_class = $('.session')
@@ -856,6 +839,13 @@ function setup_filters(){
 
         if(venues_classes!='.all'){             
             select_class = select_class.filter(venues_classes)              
+        }
+        if(communities_classes!='.all'){             
+            select_class = select_class.filter(communities_classes)              
+        }
+
+        if(papers_classes!='.all'){             
+            select_class = select_class.filter(papers_classes)              
         }
        $('.session').hide();
        $('.session-timeslot').each(function(){
@@ -905,6 +895,7 @@ $(document).ready(function(){
 <!--- Home Page -->
 <div id="home" class="tab">
 	
+<<<<<<< HEAD
 	<!--
 
 	<input type="text" id="search_papers" class="default-text search" title="Enter paper titles, authors, or keywords"></input>
@@ -949,21 +940,26 @@ $(document).ready(function(){
 <table>
 <tr>
 <td>
+<h4 style="display:inline-block">Papers</h4>
+</td>
+<td>
+
+<div id ="p_filter" style="display:inline-block">  
+
+    <a href="#" title="all" class="p_session filter active" type="p_session"/>All</a>
+    <a href="#" title="p_starred" class="p_session filter" type="p_session"/>Starred</a> 
+    <a href="#" title="p_recommended" class="p_session filter" type="p_session"/>Recommended+Starred</a>   
+    <a href="#" title="p_award" class="p_session filter" type="p_session"/>Awards</a>    
+</div>
+</td>
+</tr>
+<tr>
+<td>
 <h4 style="display:inline-block">Venue</h4>  
 </td>
 <td>
 <div id ="venue_filter" style="display:inline-block">
-<!--                
-    <input type="checkbox" title="course" class="venue"/> <span class="gray">Course</span>   
-    <input type="checkbox" title="panel" class="venue"/> <span class="gray">Panel</span>      
-    <input type="checkbox" title="SIG" class="venue"/> <span class="gray">SIG</span>  
-    <input type="checkbox" title="altchi" class="venue"/> <span class="gray">Alt CHI</span>  
 
-    <input type="checkbox" title="casestudy" class="venue"/> <span class="gray">Case Study</span>
-    <input type="checkbox" title="paper" class="venue"/> <span class="gray">Paper</span>
-    <input type="checkbox" title="special" class="venue"/> <span class="gray">Special</span>      
-    <input type="checkbox" title="bof" class="venue"/> <span class="gray">BOF</span>
--->
     <a href="#" title="all" class="venue filter active" type="venue"/>All</a>
     <a href="#" title="paper" class="venue filter" type="venue"/>Paper</a>
     <a href="#" title="casestudy" class="venue filter" type="venue"/>Case Study</a>
@@ -983,12 +979,7 @@ $(document).ready(function(){
 <td>
 
 <div id ="day_filter" style="display:inline-block">  
-<!--    
-    <input type="checkbox" title="Monday" class="day" /> <span class="gray">Monday</span>    
-    <input type="checkbox" title="Tuesday" class="day"/> <span class="gray">Tuesday</span>      
-    <input type="checkbox" title="Wednesday" class="day"/> <span class="gray">Wednesday</span>  
-    <input type="checkbox" title="Thursday" class="day"/> <span class="gray">Thursday</span>
--->
+
     <a href="#" title="all" class="day filter active" type="day"/>All</a>
     <a href="#" title="Monday" class="day filter" type="day"/>Monday</a>    
     <a href="#" title="Tuesday" class="day filter" type="day"/>Tuesday</a>      
@@ -1003,12 +994,7 @@ $(document).ready(function(){
 </td>
 <td>
 <div id ="time_filter" style="display:inline-block">
-    <!--
-    <input type="checkbox" title="t09" class="time"/> <span class="gray">09:00-10:20</span>      
-    <input type="checkbox" title="t11" class="time"/> <span class="gray">11:00-12:20</span>   
-    <input type="checkbox" title="t14" class="time"/> <span class="gray">14:00-15:20</span>       
-    <input type="checkbox" title="t16" class="time"/> <span class="gray">16:00-17:20</span>
--->
+    
     <a href="#" title="all" class="time filter active" type="time"/>All</a> 
     <a href="#" title="t09" class="time filter" type="time"/>09:00-10:20</a>   
     <a href="#" title="t11" class="time filter" type="time"/>11:00-12:20</a>     
@@ -1018,27 +1004,33 @@ $(document).ready(function(){
 </td>
 </tr>
 <tr>
+<td>
+<h4 style="display:inline-block">Community</h4>
+</td>
+<td>
+<div id ="communities_filter" style="display:inline-block">
+    <a href="#" title="all" class="community filter active" type="community"/>All</a> 
+    <a href="#" title="ux" class="community filter" type="community"/>UX</a>   
+    <a href="#" title="design" class="community filter" type="community"/>Design</a>     
+    <a href="#" title="engineering" class="community filter" type="community"/>Engineering</a>          
+    <a href="#" title="hci4d" class="community filter" type="community"/>HCI4D</a>  
+    <a href="#" title="management" class="community filter" type="community"/>Management</a> 
+    <a href="#" title="sustainability" class="community filter" type="community"/>Sustainability</a> 
+    <a href="#" title="cci" class="community filter" type="community"/>CCI</a>  
+    <a href="#" title="games" class="community filter" type="community"/>Games</a> 
+    <a href="#" title="arts" class="community filter" type="community"/>Arts</a>  
+    <a href="#" title="health" class="community filter" type="community"/>Health</a> 
+</div>
+</td>
+</tr>
+<tr>
+<tr>
 <td style="vertical-align:top">
 <h4 style="display:inline-block">Persona</h4>
 </td>
 <td>
 <div id ="persona_filter" style="display:inline-block">
-<!--
-    <input type="checkbox" title="De" class="persona"/> <span class="gray">Design</span>          
-    <input type="checkbox" title="UI" class="persona"/> <span class="gray">UIST</span>        
-    <input type="checkbox" title="Vi" class="persona"/> <span class="gray">Visualization</span>        
-    <input type="checkbox" title="En" class="persona"/> <span class="gray">Engagement</span>
 
-    <input type="checkbox" title="IO" class="persona"/> <span class="gray">IO</span>
-    <input type="checkbox" title="Et" class="persona"/> <span class="gray">Ethics</span>
-    <input type="checkbox" title="fo" class="persona"/> <span class="gray">For a cause</span> 
-    <input type="checkbox" title="Mi" class="persona"/> <span class="gray">Misc</span>   
-
-    <input type="checkbox" title="Se" class="persona"/> <span class="gray">Security and privacy</span>
-    <input type="checkbox" title="Ki" class="persona"/> <span class="gray">Kids and learning </span>  
-    <input type="checkbox" title="He" class="persona"/> <span class="gray">Health</span> 
-    <input type="checkbox" title="On" class="persona"/> <span class="gray">Online social communities &amp; crowdsourcing</span>
---> 
     <a href="#" title="all" class="persona filter active" type="persona"/>All</a> 
     <a href="#" title="De" class="persona filter" type="persona"/>Design</a>          
     <a href="#" title="UI" class="persona filter" type="persona"/>UIST</a>        
@@ -1062,18 +1054,9 @@ $(document).ready(function(){
 </div>
 <br />
 <br />
-<div id="program">
-
-	<!--
-	<h3 class="collapsible-title collapsible" id="session_recs_toggle" data="session_recs"><span class="arrow">▾</span> Sessions recommended for you</h3>
-	
-	<div id="session_recs" class="session-timeslot">	
-	</div>
-	-->
-
+<div id="program">	
 	<div id = "Monday">
-	<!--
-	<h3 class="collapsible-title" data="Mondayt09"><span class="arrow">▾</span> Monday, 09:00-10:20</h3> -->
+	<h3 class="collapsible-title" data="Mondayt09"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Monday, 09:00-10:20</h3>
 	<div id = "Mondayt09" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Mondayt11"><span class="arrow arrow-down"></span> Monday, 11:00-12:20</h3>
@@ -1123,7 +1106,7 @@ $(document).ready(function(){
 
 
 	<div id = "Thursday">
-<!-- h3 class="collapsible-title collapsible" data="Thursdayt09"><span class="arrow"></span> Thursday, 09:00-10:20</h3> -->
+    <h3 class="collapsible-title collapsible" data="Thursdayt09"><span class="arrow"></span> Thursday, 09:00-10:20</h3>
 	<div id = "Thursdayt09" class="session-timeslot">
 	</div>
 	<h3 class="collapsible-title collapsible" data="Thursdayt11"><span class="arrow arrow-down"></span> Thursday, 11:00-12:20</h3>
@@ -1132,8 +1115,8 @@ $(document).ready(function(){
 	<h3 class="collapsible-title collapsible" data="Thursdayt14"><span class="arrow arrow-down"></span> Thursday, 14:00-15:20</h3>
 	<div id = "Thursdayt14" class="session-timeslot">
 	</div>
-	<!--
-	<h3 class="collapsible-title collapsible" data="Thursdayt16"><span class="arrow"></span> Thursday, 16:00-17:20</h3>-->
+
+	<h3 class="collapsible-title collapsible" data="Thursdayt16"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Thursday, 16:00-17:20</h3>
 	<div id = "Thursdayt16" class="session-timeslot">
 	</div>
 	</div>

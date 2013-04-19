@@ -314,6 +314,18 @@ body {
 }
 
 
+.default-search-text {
+	width:60%;
+}
+
+.default-search-text-active { 
+	color: #a1a1a1; 
+	font-style: italic;
+}
+
+.tab{
+	display: none;
+}
 
 
 table.dataTable{
