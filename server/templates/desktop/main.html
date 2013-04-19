@@ -90,10 +90,10 @@ function bind_events(){
 	        $('#'+ target).toggle();
 	        if($('#'+target).is(':visible')){
 	            //$(this).find('.arrow').html('▾');
-	            $(this).find('.arrow').removeClass("ui-icon-triangle-1-e").addClass("ui-icon-triangle-1-s");
+	            $(this).find('.arrow').removeClass("arrow-right").addClass("arrow-down");
 	        }else{
 	            //$(this).find('.arrow').html('▸');
-	            $(this).find('.arrow').removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-e");
+	            $(this).find('.arrow').removeClass("arrow-down").addClass("arrow-right");
 	        }
 	    });
 
@@ -107,10 +107,10 @@ function bind_events(){
 	        s.find('.paper-container').toggle();
 	        if(s.find('.paper-container').is(':visible')){
 	            //s.find('.arrow').html('▾');
-	            s.find('.arrow').removeClass("ui-icon-triangle-1-e").addClass("ui-icon-triangle-1-s");
+	            s.find('.arrow').removeClass("arrow-right").addClass("arrow-down");
 	        }else{
 	            //s.find('.arrow').html('▸');
-	            s.find('.arrow').removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-e");
+	            s.find('.arrow').removeClass("arrow-down").addClass("arrow-right");
 	        }
 	    });
 
@@ -136,11 +136,12 @@ function bind_events(){
 	    }
 	});
 
+/* juho: ui-state not used anymore
 	$('.ui-state-default').hover(
 	    function(){ $(this).addClass('ui-state-hover'); }, 
 	    function(){ $(this).removeClass('ui-state-hover'); }
 	);
-
+*/
     
 
 
@@ -179,13 +180,16 @@ function show_tab(tab, paper_id){
     console.log(tab)
     $(".tab").hide();
     $("#"+tab).show();
+    $("#headlink-right a").removeClass("active");
     if(tab == 'home'){
     	populate_likes(starred);
-		populate_recs(recommended);
-		populate_papers(entities);
+		  populate_recs(recommended);
+		  populate_papers(entities);
+      $("#nav_home").addClass("active");
     }else if(tab == 'schedule'){
     	populate_sessions(sessions);
     	setup_filters()
+      $("#nav_schedule").addClass("active");
     }else if(tab == 'selected_paper'){
     	load_paper(paper_id)
     }
@@ -263,10 +267,10 @@ function get_paper_html(id){
       
     raw_html += '<td class="metadata">'   
     if(starred[id] == null){
-        raw_html += '<div class="star-open p_star" data="'+ id + '" onclick="handle_star(event);">'        
+        raw_html += '<div class="star star-open p_star" data="'+ id + '" onclick="handle_star(event);">'        
         //raw_html += '<div class="ui-state-default ui-corner-all p_star" data="'+ id + '" onclick="handle_star(event);">'        
     }else{
-        raw_html += '<div class="star-filled p_star" data="'+ id + '" onclick="handle_star(event);">'        
+        raw_html += '<div class="star star-filled p_star" data="'+ id + '" onclick="handle_star(event);">'        
         //raw_html += '<div class="ui-state-default ui-corner-all ui-state-active p_star" data="'+ id + '" onclick="handle_star(event);">'        
     }  
     //raw_html += '<span class="ui-icon ui-icon-star"></span>'
@@ -308,14 +312,14 @@ function get_session_html(id){
     
     raw_html += '<td class="metadata">'     
    	//raw_html += '<div class="ui-state-default ui-corner-all s_star" data="'+ id + '" onclick="handle_session_star(event);">'
-   	raw_html += '<div class="star-open s_star" data="'+ id + '" onclick="handle_session_star(event);">'
+   	raw_html += '<div class="star star-open s_star" data="'+ id + '" onclick="handle_session_star(event);">'
     //raw_html += '<span class="ui-icon ui-icon-star"></span>'
     raw_html += '</div>'        
     raw_html += '</td>'
     
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
-    raw_html += '<li><h3><span class="arrow ui-icon ui-icon-triangle-1-e"></span> <span class="rec-icon">recommended</span><span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span></h3></li>'
+    raw_html += '<li><h3><span class="arrow arrow-right"></span> <span class="rec-icon">recommended</span><span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span></h3></li>'
     raw_html += '<li class="session-info"><span class="session-venue">' + format_venue(sessions[id].venue) + '</span> <span class="session-room">Room: ' + sessions[id].room + '</span></li>'
     raw_html += '</ul>'
 
@@ -357,7 +361,7 @@ function get_selected_paper_html(id){
     raw_html += '<hr />'
     raw_html += '<ul>'
     raw_html += '<li>' + remove_special_chars(entities[id].abstract) + '</li>'
-    raw_html += '<li class="session-info">' + remove_special_chars(entities[id].keywords) + '</li>'
+    raw_html += '<li class="paper-keywords">' + remove_special_chars(entities[id].keywords) + '</li>'
     raw_html += '</ul>'
     return raw_html
 }
@@ -417,8 +421,10 @@ function update_session_view(){
 	$('#session_recs').html('')
 	$( ".session" ).each(function(s_index) {
 		var session = $(this)
-		$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
-			if($(this).hasClass('ui-state-active')){
+		//$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
+		//	if($(this).hasClass('ui-state-active')){
+		$(this).find('.paper-container').find('.star').each(function(p_index){
+			if($(this).hasClass('star-filled')){
 				session.find('.timeline').children("div").eq(p_index).addClass("filled_yellow");
 			}else{
 				session.find('.timeline').children("div").eq(p_index).removeClass("filled_yellow");
@@ -445,13 +451,22 @@ function update_session_view(){
 	   	}else{
 	     	$(this).find('.session-container').find('tr').removeClass('recommended')
 	   	}
-	   	
+	   	/*
 	   	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
 			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
 			$(this).find('.session-container').find('tr').addClass('highlight')
 			like = true
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
+	     	$(this).find('.session-container').find('tr').removeClass('highlight')
+      }
+      */
+	   	if($(this).find('.paper-container').find('.star-filled').length > 0){
+			  $(this).find('.session-container').find('.star').removeClass('star-open').addClass('star-filled')
+			  $(this).find('.session-container').find('tr').addClass('highlight')
+			  like = true
+	   	}else{
+	     	$(this).find('.session-container').find('.star').removeClass('star-filled').addClass('star-open')
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
 	   	}
 	   	/*
@@ -480,7 +495,8 @@ function handle_session_star(event){
     var obj = $(event.target).parents("td:first").find('.s_star')
     var session_id = obj.attr("data")
     var papers = sessions[session_id]['submissions']
-    if(obj.hasClass('ui-state-active')){
+    //if(obj.hasClass('ui-state-active')){
+    if(obj.hasClass('star-filled')){
         $.post('/like/unstar', {'papers': JSON.stringify(papers)}, function(res) {
             for(var paper_id in papers){
                 delete starred[paper_id]
@@ -490,7 +506,7 @@ function handle_session_star(event){
             populate_recs(recommended)
             $('.'+obj.attr('data')).each(function(){
                 //$(this).find('.p_star').removeClass('ui-state-active')
-                $(this).find('.p_star').removeClass('star-open')
+                $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
                 $(this).removeClass('highlight')
                 $(this).find('.paper').removeClass('highlight')
             })
@@ -507,7 +523,7 @@ function handle_session_star(event){
             populate_recs(recommended)
             $('.'+obj.attr('data')).each(function(){
                 //$(this).find('.p_star').addClass('ui-state-active')
-                $(this).find('.p_star').addClass('star-filled')
+                $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
                 $(this).find('.paper').addClass('highlight')
             })
             update_recs()
@@ -525,7 +541,8 @@ function handle_star(event){
     var obj = $(event.target).parents("td:first").find('.p_star')
     var paper_id = obj.attr("data")
     console.log(paper_id)
-    if(obj.hasClass('ui-state-active')){
+    //if(obj.hasClass('ui-state-active')){
+    if(obj.hasClass('star-filled')){
         $.post('/like/unstar', {'papers': JSON.stringify([paper_id])}, function(res) {
           if(res.res[paper_id] == 'unstar'){
             delete starred[paper_id]
@@ -533,7 +550,7 @@ function handle_star(event){
             recommended = res.recs
             populate_recs(recommended)
             $('.'+obj.attr('data')).each(function(){
-                $(this).find('.p_star').removeClass('star-open')
+                $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
                 //$(this).find('.p_star').removeClass('ui-state-active')
                 $(this).removeClass('highlight')
             })
@@ -550,7 +567,7 @@ function handle_star(event){
             populate_recs(recommended)
             $('.'+obj.attr('data')).each(function(){
                 //$(this).find('.p_star').addClass('ui-state-active')
-                $(this).find('.p_star').addClass('star-filled')
+                $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
                 $(this).addClass('highlight')
             })
             update_recs()
@@ -894,7 +911,7 @@ $(document).ready(function(){
 		
 	-->
 	
-	<h3 class="collapsible-title collapsible" id="likes_toggle" data="likes_container"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Papers you want to see</h3>	
+	<h3 class="collapsible-title collapsible" id="likes_toggle" data="likes_container"><span class="arrow arrow-down"></span> Papers you want to see</h3>	
 	<div id="likes_container">
 		<table id="likes" class="paper-container">		
 		</table>
@@ -904,7 +921,7 @@ $(document).ready(function(){
 <br />
 <br />
 
-	<h3 class="collapsible-title collapsible" id="recs_toggle" data="recs_container"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Papers recommended for you</h3>
+	<h3 class="collapsible-title collapsible" id="recs_toggle" data="recs_container"><span class="arrow arrow-down"></span> Papers recommended for you</h3>
 	<div id="recs_container">
 		<table id="recs" class="paper-container">	
 		</table>
@@ -915,7 +932,7 @@ $(document).ready(function(){
 <br />
 <br />
 
-	<h3 class="collapsible-title collapsible" id="papers_toggle" data="all_papers_container"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> All Papers</h3>
+	<h3 class="collapsible-title collapsible" id="papers_toggle" data="all_papers_container"><span class="arrow arrow-down"></span> All Papers</h3>
 	<div id="all_papers_container">
 		<table id="all_papers" class="paper-container">	
 		</table>
@@ -1059,45 +1076,45 @@ $(document).ready(function(){
 	<h3 class="collapsible-title" data="Mondayt09"><span class="arrow">▾</span> Monday, 09:00-10:20</h3> -->
 	<div id = "Mondayt09" class="session-timeslot">
 	</div>
-	<h3 class="collapsible-title collapsible" data="Mondayt11"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Monday, 11:00-12:20</h3>
+	<h3 class="collapsible-title collapsible" data="Mondayt11"><span class="arrow arrow-down"></span> Monday, 11:00-12:20</h3>
 	<div id = "Mondayt11" class="session-timeslot">
 	</div>
-	<h3 class="collapsible-title collapsible" data="Mondayt14"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Monday, 14:00-15:20</h3>
+	<h3 class="collapsible-title collapsible" data="Mondayt14"><span class="arrow arrow-down"></span> Monday, 14:00-15:20</h3>
 	<div id = "Mondayt14" class="session-timeslot">
 	</div>
-	<h3 class="collapsible-title collapsible" data="Mondayt16"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Monday, 16:00-17:20</h3>
+	<h3 class="collapsible-title collapsible" data="Mondayt16"><span class="arrow arrow-down"></span> Monday, 16:00-17:20</h3>
 	<div id = "Mondayt16" class="session-timeslot">
 	</div>
 	</div>
 
 
 	<div id="Tuesday">
-	<h3 class="collapsible-title collapsible" data="Tuesdayt09"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Tuesday, 09:00-10:20</h3>
+	<h3 class="collapsible-title collapsible" data="Tuesdayt09"><span class="arrow arrow-down"></span> Tuesday, 09:00-10:20</h3>
 	<div id = "Tuesdayt09" class="session-timeslot">
 	</div>
-	<h3 class="collapsible-title collapsible" data="Tuesdayt11"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Tuesday, 11:00-12:20</h3>
+	<h3 class="collapsible-title collapsible" data="Tuesdayt11"><span class="arrow arrow-down"></span> Tuesday, 11:00-12:20</h3>
 	<div id = "Tuesdayt11" class="session-timeslot">
 	</div>
-	<h3 class="collapsible-title collapsible" data="Tuesdayt14"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Tuesday, 14:00-15:20</h3>
+	<h3 class="collapsible-title collapsible" data="Tuesdayt14"><span class="arrow arrow-down"></span> Tuesday, 14:00-15:20</h3>
 	<div id = "Tuesdayt14" class="session-timeslot">
 	</div>
-	<h3 class="collapsible-title collapsible" data="Tuesdayt16"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Tuesday, 16:00-17:20</h3>
+	<h3 class="collapsible-title collapsible" data="Tuesdayt16"><span class="arrow arrow-down"></span> Tuesday, 16:00-17:20</h3>
 	<div id = "Tuesdayt16" class="session-timeslot">
 	</div>
 	</div>
 
 
 	<div id = "Wednesday">
-	<h3 class="collapsible-title collapsible" data="Wednesdayt09"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Wednesday, 09:00-10:20</h3>
+	<h3 class="collapsible-title collapsible" data="Wednesdayt09"><span class="arrow arrow-down"></span> Wednesday, 09:00-10:20</h3>
 	<div id = "Wednesdayt09" class="session-timeslot">
 	</div>
-	<h3 class="collapsible-title collapsible" data="Wednesdayt11"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Wednesday, 11:00-12:20</h3>
+	<h3 class="collapsible-title collapsible" data="Wednesdayt11"><span class="arrow arrow-down"></span> Wednesday, 11:00-12:20</h3>
 	<div id = "Wednesdayt11" class="session-timeslot">
 	</div>
-	<h3 class="collapsible-title collapsible" data="Wednesdayt14"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Wednesday, 14:00-15:20</h3>
+	<h3 class="collapsible-title collapsible" data="Wednesdayt14"><span class="arrow arrow-down"></span> Wednesday, 14:00-15:20</h3>
 	<div id = "Wednesdayt14" class="session-timeslot">
 	</div>
-	<h3 class="collapsible-title collapsible" data="Wednesdayt16"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Wednesday, 16:00-17:20</h3>
+	<h3 class="collapsible-title collapsible" data="Wednesdayt16"><span class="arrow arrow-down"></span> Wednesday, 16:00-17:20</h3>
 	<div id = "Wednesdayt16" class="session-timeslot">
 	
 	</div>  
@@ -1109,10 +1126,10 @@ $(document).ready(function(){
 <!-- h3 class="collapsible-title collapsible" data="Thursdayt09"><span class="arrow"></span> Thursday, 09:00-10:20</h3> -->
 	<div id = "Thursdayt09" class="session-timeslot">
 	</div>
-	<h3 class="collapsible-title collapsible" data="Thursdayt11"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Thursday, 11:00-12:20</h3>
+	<h3 class="collapsible-title collapsible" data="Thursdayt11"><span class="arrow arrow-down"></span> Thursday, 11:00-12:20</h3>
 	<div id = "Thursdayt11" class="session-timeslot">
 	</div>
-	<h3 class="collapsible-title collapsible" data="Thursdayt14"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Thursday, 14:00-15:20</h3>
+	<h3 class="collapsible-title collapsible" data="Thursdayt14"><span class="arrow arrow-down"></span> Thursday, 14:00-15:20</h3>
 	<div id = "Thursdayt14" class="session-timeslot">
 	</div>
 	<!--
@@ -1134,7 +1151,7 @@ $(document).ready(function(){
 	<div class="form" style="margin-top:10px;">
 	</div>
 	<br />
-	<h3 class="collapsible-title collapsible" id="similar_papers_toggle" data="similar_papers_container" value=""><span class="arrow ui-icon ui-icon-triangle-1-s"></span> People who liked this paper also liked the following papers.</h3>
+	<h3 class="collapsible-title collapsible" id="similar_papers_toggle" data="similar_papers_container" value=""><span class="arrow arrow-down"></span> People who liked this paper also liked:</h3>
 	<div id="similar_papers_container">
 	<table id="similar_papers" class="paper-container">		
 	</table>
