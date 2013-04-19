@@ -25,7 +25,7 @@ class Entity:
 
 	def __load__(self):
 		cursor = connection.cursor()
-		cursor.execute("SELECT id , authors, title, cAndB, keywords, abstract, session FROM entity;")
+		cursor.execute("SELECT id , authors, title, cAndB, keywords, abstract, session, bestPaperAward, bestPaperNominee, coreCommunities, subtype FROM entity;")
 		data = cursor.fetchall()
 		for row in data:
 			if(row[0]!=''):
@@ -35,7 +35,11 @@ class Entity:
 				keywords = unicode(row[4]).strip('"')
 				abstract = unicode(row[5]).strip('"')
 				session = unicode(row[6]).strip('"')
-				self.entities[row[0]]={'authors': authors, 'title': title, 'c_and_b': c_and_b, 'keywords': keywords, 'abstract':abstract, 'session': session}
+				award = row[7]
+				hm = row[8]
+				communities = json.loads(row[9])
+				subtype = row[10]
+				self.entities[row[0]]={'authors': authors, 'title': title, 'c_and_b': c_and_b, 'keywords': keywords, 'abstract':abstract, 'session': session, 'award':award, 'hm':hm, 'communities': communities, 'subtype':subtype}
 
 
 	def get_entities(self):
