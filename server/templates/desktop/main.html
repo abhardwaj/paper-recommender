@@ -172,8 +172,8 @@ function show_tab(tab, paper_id){
     window.scrollTo(0,0);
     $("#"+tab).show();
     if(tab == 'home'){
-    	populate_likes(starred);
-		populate_recs(recommended);
+    	setTimeout('populate_likes(starred);', 0)
+		setTimeout('populate_recs(recommended);', 0)
 		setTimeout('populate_papers(entities);', 1);
     }else if(tab == 'schedule'){
     	populate_sessions(sessions);
