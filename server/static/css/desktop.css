@@ -283,7 +283,9 @@ body {
 	font-style: italic;
 }
 
-
+.tab{
+	display: none;
+}
 
 
 table.dataTable{
