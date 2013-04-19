@@ -609,14 +609,12 @@ function load_paper(paper_id){
 } 
 
 function populate_papers(_entities){ 
-    $("#all_papers").html("")        
+    $("#all_papers").html("") 
+    var raw_html = ''       
     for(var e in _entities){
-        var raw_html = get_paper_html(e)
-        if(raw_html != null){
-            var row = $(raw_html)
-            $("#all_papers").append(row)
-        }
+        raw_html += get_paper_html(e)
     }
+    $("#all_papers").html(raw_html)
     
     $('#all_papers').dataTable({
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
@@ -642,14 +640,12 @@ function populate_papers(_entities){
 
 
 function populate_recs(_recs){ 
-    $("#recs").html("")     
+    $("#recs").html("")  
+    var raw_html = ''   
     for(var r in _recs){
-        var raw_html = get_paper_html(recommended[r].id)
-        if(raw_html != null){
-            var row = $(raw_html)
-            $("#recs").append(row)
-        }
+        raw_html += get_paper_html(recommended[r].id)
     }
+    $("#recs").html(raw_html)
    
     $('#recs').dataTable({
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
@@ -695,14 +691,12 @@ function populate_recs(_recs){
 
 function populate_likes(_likes){  
     $("#likes").html("") 
+    var raw_html = ''
     var liked_papers = Object.keys(_likes)    
     for(var i = liked_papers.length; i>=0 ; i--){
-        var raw_html = get_paper_html(liked_papers[i])
-        if(raw_html != null){
-            var row = $(raw_html)
-            $("#likes").append(row)
-        }
+       raw_html += get_paper_html(liked_papers[i])
     }
+    $("#likes").html(raw_html)
     var len = 2
     var user_mode = true
     if($("#show_more_likes").html()=='Show Less'){
