@@ -142,6 +142,12 @@ function bind_events(){
 	    }
 	});
 
+    $("#refresh_recommendations").off('click')
+    $("#refresh_recommendations").on('click', function(){
+        populate_recs(recommended)
+        update_recs(recommended)
+    })
+
 /* juho: not used anymore
 	$('.ui-state-default').hover(
 	    function(){ $(this).addClass('ui-state-hover'); }, 
@@ -167,7 +173,10 @@ var delay = (function(){
   };
 })();
 
-
+refresh_recommendations = function(){
+    populate_recs(recommended)
+    update_recs(recommended)
+}
 
 
 
@@ -635,13 +644,16 @@ function handle_star(event){
             delete starred[paper_id]
             populate_likes(starred)
             recommended = res.recs
-            populate_recs(recommended)
+            if($("#recs").dataTable().fnSettings().fnRecordsTotal() == 0){
+                populate_recs(recommended)
+            }
+            
             $('.'+obj.attr('data')).each(function(){
                 $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
                 //$(this).find('.p_star').removeClass('ui-state-active')
                 $(this).removeClass('highlight')
             })
-            update_recs()
+            //update_recs()
             update_session_view()
           }
         });
@@ -651,13 +663,15 @@ function handle_star(event){
             starred[paper_id] = true
             populate_likes(starred)
             recommended = res.recs
-            populate_recs(recommended)
+            if($("#recs").dataTable().fnSettings().fnRecordsTotal() == 0){
+                populate_recs(recommended)
+            }
             $('.'+obj.attr('data')).each(function(){
                 //$(this).find('.p_star').addClass('ui-state-active')
                 $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
                 $(this).addClass('highlight')
             })
-            update_recs()
+            //update_recs()
             update_session_view()
             
           }
@@ -763,18 +777,25 @@ function populate_recs(_recs){
 
 	});  
     bind_events() 
+    if($("#recs").dataTable().fnSettings().fnRecordsTotal() == 0){
+        $('#refresh_recommendations').hide();
+    }else{
+        $('#refresh_recommendations').show();
+    }
     if($("#recs").dataTable().fnSettings().fnRecordsTotal() <= 5){
         $('#show_more_recs').hide();
     }else{
         $('#show_more_recs').show();
+        $("#show_more_recs").html("Show More")
     }
     $('#show_more_recs').off('click')
 
     $('#show_more_recs').on('click', function(){
         if($("#recs").dataTable().fnSettings()._iDisplayLength < $("#recs").dataTable().fnSettings().fnRecordsTotal()){
             $("#recs").dataTable().fnSettings()._iDisplayLength = $("#recs").dataTable().fnSettings()._iDisplayLength + 5;
-        }else{        
-            $("#show_more_recs").hide()
+            if($("#recs").dataTable().fnSettings()._iDisplayLength >= $("#recs").dataTable().fnSettings().fnRecordsTotal()){
+                $('#show_more_recs').hide()
+            }
         }
         $("#recs").dataTable().fnDraw(true);
     });
@@ -820,6 +841,7 @@ function populate_likes(_likes){
 
 	});
     bind_events()
+    
     if($("#likes").dataTable().fnSettings().fnRecordsTotal() <= 2){
         $('#show_more_likes').hide();
     }else{
@@ -969,7 +991,7 @@ $(document).ready(function(){
 		<table id="likes" class="paper-container">		
 		</table>
         <br />
-        <a class="button" id="show_more_likes">Show All</a>
+        <a class="button" id="show_more_likes">Show All</a> 
 	</div>
 <br />
 <br />
@@ -979,7 +1001,7 @@ $(document).ready(function(){
 		<table id="recs" class="paper-container">	
 		</table>
         <br />
-        <a class="button" id="show_more_recs">Show More</a>
+        <a class="button" id="show_more_recs" style="margin-right:10px;">Show More</a><a class="button" id="refresh_recommendations">Refresh Recommendations</a>
 	</div>
 
 <br />
