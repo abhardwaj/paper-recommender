@@ -324,7 +324,7 @@ function get_paper_html(id){
 
 function get_session_html(id){
     var communities = get_communities(sessions[id]);
-    var communities_class = (communities == "") ? "" : "communities";
+    var communities_class = (communities == "") ? "" : communities;
     var award=''
     if(sessions[id].award || sessions[id].hm){
         award = 's_awardhm'
