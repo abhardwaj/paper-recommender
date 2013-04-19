@@ -425,11 +425,9 @@ function update_session_view(){
 		var session = $(this)
 		$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
 			if($(this).hasClass('ui-state-active')){
-				session.find('.timeline').children("div").eq(p_index).addClass("filled_yellow");
-                  
+				session.find('.timeline').children("div").eq(p_index).addClass("filled_yellow");                  
 			}else{
-				session.find('.timeline').children("div").eq(p_index).removeClass("filled_yellow");
-                  
+				session.find('.timeline').children("div").eq(p_index).removeClass("filled_yellow");                  
 			}
             			
 
@@ -439,8 +437,7 @@ function update_session_view(){
 			if($(this).hasClass('recommended')){
                 session.addClass('p_recommended')
 				session.find('.timeline').children("div").eq(p_index).addClass("filled_blue");
-			}else{
-                
+			}else{                
 				session.find('.timeline').children("div").eq(p_index).removeClass("filled_blue");
 			}				
 
@@ -708,7 +705,7 @@ function populate_likes(_likes){
     $('#likes').dataTable({
 		"sDom": '<"top"f<"clear">>rt<"bottom"ilp<"clear">>',
 		"bPaginate": true,
-		"bInfo": true,
+		"bInfo": false,
 		"bDestroy": true,
 		"bFilter": false,
 		"sWidth": "100%",
