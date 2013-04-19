@@ -499,11 +499,12 @@ function update_session_view(){
 	   	if($(this).find('.paper-container').find('.star-filled').length > 0){
 			  $(this).find('.session-container').find('.star').removeClass('star-open').addClass('star-filled')
 			  $(this).find('.session-container').find('tr').addClass('highlight')
+              session.addClass('p_starred')
 			  like = true
 	   	}else{
 	     	$(this).find('.session-container').find('.star').removeClass('star-filled').addClass('star-open')
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
-        session.removeClass('p_starred') 
+            session.removeClass('p_starred') 
 	   	}
 	   	
 	});
