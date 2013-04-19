@@ -357,45 +357,61 @@ function place_session(s){
     if(s.hasClass('Monday')){
         if(s.hasClass('t09')){
             $("#Mondayt09").append(s)
+            $("#Mondayt09").prev().show()
         }else if(s.hasClass('t11')){
             $("#Mondayt11").append(s)
+            $("#Mondayt11").prev().show()
         }else if(s.hasClass('t14')){
             $("#Mondayt14").append(s)
+            $("#Mondayt14").prev().show()
         }else if(s.hasClass('t16')){
             $("#Mondayt16").append(s)
+            $("#Mondayt16").prev().show()
         }
 
     }else if(s.hasClass('Tuesday')){
         if(s.hasClass('t09')){
             $("#Tuesdayt09").append(s)
+            $("#Tuesdayt09").prev().show()
         }else if(s.hasClass('t11')){
             $("#Tuesdayt11").append(s)
+            $("#Tuesdayt11").prev().show()
         }else if(s.hasClass('t14')){
             $("#Tuesdayt14").append(s)
+            $("#Tuesdayt14").prev().show()
         }else if(s.hasClass('t16')){
             $("#Tuesdayt16").append(s)
+            $("#Tuesdayt16").prev().show()
         }
 
     }else if(s.hasClass('Wednesday')){
         if(s.hasClass('t09')){
             $("#Wednesdayt09").append(s)
+            $("#Wednesdayt09").prev().show()
         }else if(s.hasClass('t11')){
             $("#Wednesdayt11").append(s)
+            $("#Wednesdayt11").prev().show()
         }else if(s.hasClass('t14')){
             $("#Wednesdayt14").append(s)
+            $("#Wednesdayt14").prev().show()
         }else if(s.hasClass('t16')){
             $("#Wednesdayt16").append(s)
+            $("#Wednesdayt16").prev().show()
         }
 
     }else if(s.hasClass('Thursday')){
         if(s.hasClass('t09')){
             $("#Thursdayt09").append(s)
+            $("#Thursdayt09").prev().show()
         }else if(s.hasClass('t11')){
             $("#Thursdayt11").append(s)
+            $("#Thursdayt11").prev().show()
         }else if(s.hasClass('t14')){
             $("#Thursdayt14").append(s)
+            $("#Thursdayt14").prev().show()
         }else if(s.hasClass('t16')){
             $("#Thursdayt16").append(s)
+            $("#Thursdayt16").prev().show()
         }
 
     }
@@ -740,7 +756,10 @@ function populate_likes(_likes){
 
 
 function populate_sessions(_sessions){
-    $(".session-timeslot").html("") 
+    $(".session-timeslot").html("")
+    $('.session-timeslot').each(function(){
+        $(this).prev().hide()
+    }); 
     for(var s in _sessions){
         var raw_html = get_session_html(s)
         var row = $(raw_html)
