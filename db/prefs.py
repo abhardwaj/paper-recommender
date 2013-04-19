@@ -52,10 +52,12 @@ class Prefs:
 				author_prefs.update({encode_paper_id(unicode(p).strip()):1.0 for p in row[5].split(',')})
 
 			self.paper_prefs[paper_id] = author_prefs
+			likes = [unicode(p).strip() for p in row[6].split(',')]
+			likes.append(row[0].strip())
 
 			# update author_likes
 			if(row[1]!='' and row[6]!=''):
-				self.author_likes[unicode(row[1]).strip()] = {'name': unicode(row[7]).strip(), 'likes':[unicode(p).strip() for p in row[6].split(',')]}
+				self.author_likes[unicode(row[1]).strip()] = {'name': unicode(row[7]).strip(), 'likes':likes}
 	
 
 	def get_paper_prefs(self):
