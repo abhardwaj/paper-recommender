@@ -307,7 +307,11 @@ function get_paper_html(id){
 }
 
 function get_session_html(id){
-    var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + ' ' + sessions[id].communities.join(' ') + '" data="' + id + '">'
+    var award=''
+    if(sessions[id].award || sessions[id].hm){
+        award = 'p_award'
+    }
+    var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + ' ' + sessions[id].communities.join(' ') + ' ' + award + '" data="' + id + '">'
     raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
@@ -420,16 +424,21 @@ function update_session_view(){
 		$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
 			if($(this).hasClass('ui-state-active')){
 				session.find('.timeline').children("div").eq(p_index).addClass("filled_yellow");
+                  
 			}else{
 				session.find('.timeline').children("div").eq(p_index).removeClass("filled_yellow");
-			}				
+                  
+			}
+            			
 
 		});
 
 		$(this).find('.paper-container tr').each(function(p_index){
 			if($(this).hasClass('recommended')){
+                session.addClass('p_recommended')
 				session.find('.timeline').children("div").eq(p_index).addClass("filled_blue");
 			}else{
+                
 				session.find('.timeline').children("div").eq(p_index).removeClass("filled_blue");
 			}				
 
@@ -441,18 +450,22 @@ function update_session_view(){
 		
 	   	if($(this).find('.paper-container').find('.recommended').length > 0){
 			$(this).find('.session-container').find('tr').addClass('recommended')
+            session.addClass('p_recommended')
 			rec = true
 	   	}else{
 	     	$(this).find('.session-container').find('tr').removeClass('recommended')
+            session.removeClass('p_recommended')
 	   	}
 	   	
 	   	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
 			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
 			$(this).find('.session-container').find('tr').addClass('highlight')
+            session.addClass('p_starred') 
 			like = true
 	   	}else{
 	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
 	     	$(this).find('.session-container').find('tr').removeClass('highlight')
+            session.removeClass('p_starred') 
 	   	}
 	   	/*
 	   	if(like || rec){
@@ -762,7 +775,8 @@ function populate_sessions(_sessions){
 
 
 function setup_filters(){
-	$('input:checkbox').die()
+	//$('input:checkbox').die()
+    $('.filter').off('click')
     //$('input:checkbox').live('change', function(){
     $('.filter').on('click', function(){
         //$('#session_recs_toggle').show()
@@ -816,12 +830,14 @@ function setup_filters(){
         var personas_classes = '.'+$('.persona.active').attr("title")
         var venues_classes = '.'+$('.venue.active').attr("title")
         var communities_classes = '.'+$('.community.active').attr("title")
+        var papers_classes = '.'+$('.p_session.active').attr("title")
         /*
         console.log(day_classes)
         console.log(time_classes)
         console.log(venues_classes)
-        console.log(personas_classes)
-        */
+        console.log(personas_classes)*/
+        console.log(papers_classes)
+        
 
         var select_class = $('.session')
         if(day_classes != '.all'){
@@ -841,6 +857,10 @@ function setup_filters(){
         }
         if(communities_classes!='.all'){             
             select_class = select_class.filter(communities_classes)              
+        }
+
+        if(papers_classes!='.all'){             
+            select_class = select_class.filter(papers_classes)              
         }
        $('.session').hide();
        $('.session-timeslot').each(function(){
@@ -952,6 +972,26 @@ $(document).ready(function(){
     </td>
 </tr>
 -->
+<tr>
+<td>
+<h4 style="display:inline-block">Papers</h4>
+</td>
+<td>
+
+<div id ="p_filter" style="display:inline-block">  
+<!--    
+    <input type="checkbox" title="Monday" class="day" /> <span class="gray">Monday</span>    
+    <input type="checkbox" title="Tuesday" class="day"/> <span class="gray">Tuesday</span>      
+    <input type="checkbox" title="Wednesday" class="day"/> <span class="gray">Wednesday</span>  
+    <input type="checkbox" title="Thursday" class="day"/> <span class="gray">Thursday</span>
+-->
+    <a href="#" title="all" class="p_session filter active" type="p_session"/>All</a>
+    <a href="#" title="p_starred" class="p_session filter" type="p_session"/>Starred</a> 
+    <a href="#" title="p_recommended" class="p_session filter" type="p_session"/>Recommended+Starred</a>   
+    <a href="#" title="p_award" class="p_session filter" type="p_session"/>Awards</a>    
+</div>
+</td>
+</tr>
 <tr>
 <td>
 <h4 style="display:inline-block">Venue</h4>  

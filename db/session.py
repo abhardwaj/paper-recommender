@@ -25,7 +25,7 @@ class Session:
 
 	def __load__(self):
 		cursor = connection.cursor()
-		cursor.execute("SELECT id ,submissions, date, time, room, personas, venue, coreCommunities, title, featuredCommunities FROM session WHERE scheduled=1;")
+		cursor.execute("SELECT id ,submissions, date, time, room, personas, venue, coreCommunities, title, featuredCommunities, hasAward, hasHonorableMention FROM session WHERE scheduled=1;")
 		data = cursor.fetchall()
 		for row in data:
 			if(row[1]!=''):
@@ -40,8 +40,10 @@ class Session:
 				personas = unicode(row[5]).strip()
 				venue = unicode(row[6]).strip()
 				communities = json.loads(row[7])
-				title = unicode(row[8]).strip()				
-				self.sessions[id]={'date': date, 'time': t, 'room': room, 'personas': personas, 'communities': communities, 'venue':venue, 's_title':title, 'submissions':submissions}
+				title = unicode(row[8]).strip()	
+				award = row[10]
+				hm = row[11]			
+				self.sessions[id]={'date': date, 'time': t, 'room': room, 'personas': personas, 'communities': communities, 'venue':venue, 's_title':title, 'submissions':submissions, 'award':award, 'hm':hm}
 
 
 	def get_sessions(self):
