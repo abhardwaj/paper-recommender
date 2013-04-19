@@ -291,7 +291,13 @@ function get_paper_html(id){
 function get_session_html(id){
     var award=''
     if(sessions[id].award || sessions[id].hm){
-        award = 'p_award'
+        award = 'p_awardhm'
+    }
+    if(sessions[id].award){
+        award += ' p_award'
+    }
+    if(sessions[id].award || sessions[id].hm){
+        award += ' p_hm'
     }
     var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + ' ' + sessions[id].communities.join(' ') + ' ' + award + '" data="' + id + '">'
     raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
@@ -905,7 +911,7 @@ $(document).ready(function(){
     <a href="#" title="all" class="p_session filter active" type="p_session"/>All</a>
     <a href="#" title="p_starred" class="p_session filter" type="p_session"/>Starred</a> 
     <a href="#" title="p_recommended" class="p_session filter" type="p_session"/>Recommended+Starred</a>   
-    <a href="#" title="p_award" class="p_session filter" type="p_session"/>Awards</a>    
+    <a href="#" title="p_awardhm" class="p_session filter" type="p_session"/>Awards</a>    
 </div>
 </td>
 </tr>
