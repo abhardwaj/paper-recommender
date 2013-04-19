@@ -39,9 +39,9 @@ class Session:
 				room = unicode(row[4]).strip()
 				personas = unicode(row[5]).strip()
 				venue = unicode(row[6]).strip()
-				communities = unicode(row[7]).strip()
+				communities = json.loads(row[7])
 				title = unicode(row[8]).strip()				
-				self.sessions[id]={'date': date, 'time': t, 'room': room, 'personas': personas, communities: communities, 'venue':venue, 's_title':title, 'submissions':submissions}
+				self.sessions[id]={'date': date, 'time': t, 'room': room, 'personas': personas, 'communities': communities, 'venue':venue, 's_title':title, 'submissions':submissions}
 
 
 	def get_sessions(self):

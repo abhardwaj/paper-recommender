@@ -307,8 +307,7 @@ function get_paper_html(id){
 }
 
 function get_session_html(id){
-    console.log(sessions[id].communities)
-    var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + '" data="' + id + '">'
+    var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' ' + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + ' ' + sessions[id].communities.join(' ') + '" data="' + id + '">'
     raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
@@ -816,6 +815,7 @@ function setup_filters(){
         var time_classes = '.'+$('.time.active').attr("title")
         var personas_classes = '.'+$('.persona.active').attr("title")
         var venues_classes = '.'+$('.venue.active').attr("title")
+        var communities_classes = '.'+$('.community.active').attr("title")
         /*
         console.log(day_classes)
         console.log(time_classes)
@@ -838,6 +838,9 @@ function setup_filters(){
 
         if(venues_classes!='.all'){             
             select_class = select_class.filter(venues_classes)              
+        }
+        if(communities_classes!='.all'){             
+            select_class = select_class.filter(communities_classes)              
         }
        $('.session').hide();
        $('.session-timeslot').each(function(){
@@ -1019,6 +1022,27 @@ $(document).ready(function(){
 </div>
 </td>
 </tr>
+<tr>
+<td>
+<h4 style="display:inline-block">Community</h4>
+</td>
+<td>
+<div id ="communities_filter" style="display:inline-block">
+    <a href="#" title="all" class="community filter active" type="tcommunity"/>All</a> 
+    <a href="#" title="ux" class="community filter" type="community"/>UX</a>   
+    <a href="#" title="design" class="community filter" type="community"/>Design</a>     
+    <a href="#" title="engineering" class="community filter" type="community"/>Engineering</a>          
+    <a href="#" title="hci4d" class="community filter" type="community"/>HCI4D</a>  
+    <a href="#" title="management" class="community filter" type="community"/>Management</a> 
+    <a href="#" title="sustainability" class="community filter" type="community"/>Sustainability</a> 
+    <a href="#" title="cci" class="community filter" type="community"/>CCI</a>  
+    <a href="#" title="games" class="community filter" type="community"/>Games</a> 
+    <a href="#" title="arts" class="community filter" type="community"/>Arts</a>  
+    <a href="#" title="health" class="community filter" type="community"/>Health</a> 
+</div>
+</td>
+</tr>
+<tr>
 <tr>
 <td style="vertical-align:top">
 <h4 style="display:inline-block">Persona</h4>
