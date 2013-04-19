@@ -30,7 +30,7 @@ class Session:
 		for row in data:
 			if(row[1]!=''):
 				id = unicode(row[0]).strip()
-				submissions = {unicode(p).strip().lower():{} for p in row[1].split(',')}
+				submissions = [unicode(p).strip().lower() for p in row[1].split(',')]
 				s_id = unicode(row[0]).strip()
 				date = unicode(row[2]).strip()
 				t = unicode(row[3]).strip()
