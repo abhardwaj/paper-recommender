@@ -288,7 +288,7 @@ function get_paper_html(id){
     raw_html += '<ul>'
     raw_html += '<li class="paper-title blue"><a href="#" onclick="show_tab(\'selected_paper\', \'' + id + '\');"><h3>'+remove_special_chars(entities[id].title)+'</h3></a></li>'
 
-    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="community-icon"></span></li>';
+    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon"></span></li>';
     raw_html += '<li class="paper-authors strong">'
     for(author in entities[id].authors){
         if(entities[id].authors[author] != null){
@@ -338,7 +338,7 @@ function get_session_html(id){
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
     raw_html += '<li><h3><span class="arrow arrow-right"></span> <span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span></h3></li>'
-    raw_html += '<li class="session-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="community-icon"></span></li>';
+    raw_html += '<li class="session-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon"></span></li>';
     raw_html += '<li class="session-info"><span class="session-venue">' + format_venue(sessions[id].venue) + '</span> <span class="session-room">Room: ' + sessions[id].room + '</span></li>'
     raw_html += '</ul>'
 
@@ -372,7 +372,7 @@ function get_selected_paper_html(id){
         return null
 
     var raw_html = '<h3>' + remove_special_chars(entities[id].title) + '</h3><br />'
-    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="community-icon"></span></li>';
+    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon"></span></li>';
     raw_html += '<span class="strong">'
     for(var author in entities[id].authors){
         if(entities[id].authors[author] != null){

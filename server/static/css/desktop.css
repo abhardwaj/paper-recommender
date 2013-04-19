@@ -28,8 +28,8 @@ a:link, a:visited {
 }
 
 #filter_schedule td{
-  line-height: 35px;
-  padding-bottom: 5px;
+  line-height: 2.1em;
+  padding-bottom: 0.4em;
   font-size: 0.9em;
 }
 
@@ -39,9 +39,9 @@ a.filter{
   border-radius: 5px;
   border: 1px solid #2B2B2B;
   text-decoration:none;
-  margin-left: 10px;
-  margin-right: 10px;
-  padding: 3px 5px 3px 5px;
+  margin-left: 0.7em;
+  margin-right: 0.7em;
+  padding: 0.2em 0.3em;
 }
 
 a.filter.active{
@@ -58,9 +58,9 @@ a:active, a:hover, .session-title:hover {
 }
 
 form{
-	margin:0px auto;
-	margin-top:30px; 
-	padding:30px; 
+	margin:0 auto;
+	margin-top:2em; 
+	padding:2em; 
 	vertical-align:top;
 	background-color: #D7ECFA;
 	max-width:310px;
@@ -69,9 +69,9 @@ form{
 }
 
 .form{
-	margin:0px auto;
-	margin-top:30px; 
-	padding:30px; 
+	margin:0 auto;
+	margin-top:2em; 
+	padding:2em; 
 	vertical-align:top;
 	background-color: #f0f4f9;
 	width:border-box;
@@ -83,31 +83,34 @@ form label{
 }
 
 form input[type="text"], input[type="password"]{
-	width:250px;
+  width: 95%;
 }
 
 
 input[type="text"], input[type="password"], select{
-	padding:5px;
+	padding:0.5em;
 	border: #2B2B2B solid thin;
-	margin-left: 0px;
+	margin: 0.5em 0;
+  font-size: 1em;
 }
+
 button, input[type="button"], input[type="submit"]{
+  font-size: 1em;
+  /*
 	background-color: #2B2B2B;
 	color: #FFF;
 	border: #2B2B2B solid thin;
-	padding:5px 10px 5px 10px;
-	margin-left: 0px;
+	padding:0.4em 0.7em;
+	margin-left: 0;
+  */
 }
-
 
 .button{
 	background-color: #F6F6F6; /* #00A8CD #00B4ED #85A5CC #69a74e;*/
 	/*background: -webkit-linear-gradient(top, #67ae55, #578843);*/
 	/*-webkit-box-shadow: inset 0 1px 1px #a4e388;*/
 	/*border-color: #3b6e22 #3b6e22 #2c5115;*/
-	padding:5px 10px 5px 10px;
-	border-radius: 5px;
+	padding:0.4em 0.7em;
   border-radius: 5px;
   border: 1px solid #2B2B2B;
 	text-decoration: none;
@@ -128,7 +131,7 @@ textarea {
 	box-sizing: border-box;         /* Opera/IE 8+ */
 	width: 100%;
 	max-width: 100%;
-	height:50px;
+	height:3.5em;
 }
 
 body {
@@ -143,16 +146,16 @@ body {
 #header {
 	margin:0 auto;
 	position: fixed;
-	top:0px;
-	height: 39px;
+	top:0;
+	height: 3em;
 	font-size:1.1em;
 	background: #2B2B2B; /*3D7AA6;*/
-	margin-bottom: 1px;
+	margin-bottom: 0.1em;
 	color: white;
 	border-bottom: 1px solid #2B2B2B;
 	width: 100%;
 	z-index: 100;
-  padding-left:20px;
+  padding-left:1.5em;
 }
 
 #wrap{
@@ -166,16 +169,16 @@ body {
 
 #headlink-right{
 	position:absolute;
-	top: 10px;
-	right:10px;
+	top: 0.7em;
+	right: 0.7em;
 	color: #F6F6F6;
-  margin-right:20px;
+  margin-right: 1.5em;
 }
 
 #headlink-left{
 	position:absolute;
-	top: 10px;
-	left:0px;
+	top: 0.7em;
+	left:0;
 	color: #F6F6F6;
 }
 
@@ -195,10 +198,10 @@ body {
 #page{
 	position: relative;
 	margin:0 auto;
-	top: 40px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
+	top: 3em;
+	right: 0;
+	bottom: 0;
+	left: 0;
 	width: 100%;
 	max-width: 1024px;
 	min-width: 600px;
@@ -213,13 +216,10 @@ body {
 
 
 #content{
-	margin-top: 20px;
-	padding-right: 20px;
-	padding-top: 20px;
-	padding-left: 20px;
-	padding-bottom: 20px;
+	margin-top: 1.5em;
+	margin-bottom: 3.5em;
+	padding: 1.5em;
 	background-color: #FFF;
-	margin-bottom: 50px;
 }
 
 
@@ -232,8 +232,8 @@ body {
 
 .arrow {
   display:inline-block !important;
-  width: 16px;
-  height: 16px;
+  width: 1.2em;
+  height: 1.2em;
   background-repeat: no-repeat;
 }
 
@@ -246,17 +246,17 @@ body {
 }
 
 .session-title{
-  font-size: 1.1em;
-  margin-left: 5px;
+  /*font-size: 1.1em;*/
+  margin-left: 0.3em;
 }
 .session-info{
 	color: #737373;
-  margin: 5px 0 10px 10px;
+  margin: 0.4em 0 0.7em 0.7em;
 }
 .session-venue{
   display:inline-block;
-  width: 100px;
-  margin-left: 15px;
+  width: 7em;
+  margin-left: 1em;
 }
 .session-room{
   
@@ -266,17 +266,17 @@ body {
 }
 
 .paper-authors{
-  margin:7px 0 0 0;
+  margin: 0.4em 0 0 0;
 }
 
 .paper-cb{
   font-size: 0.9em;
-  margin: 5px 0 0 0;  
+  margin: 0.4em 0 0 0;  
 }
 
 .paper-keywords{
   font-size: 0.9em;
-  margin: 5px 0 0 0;
+  margin: 0.4em 0 0 0;
 }
 
 
@@ -332,7 +332,7 @@ table.dataTable thead tr th {
 	color: #333;
 	font-weight: bold;
 	text-shadow: 1px 1px 1px #fff;
-	padding: 10px 15px;
+	padding: 0.7em 1em;
 	background: #D7ECFA;
 	border-bottom: #ccc solid 1px;
 	text-align:left;
@@ -343,7 +343,7 @@ table.dataTable thead tr th {
 
 table.dataTable tbody tr td {
 	vertical-align: top;
-	padding: 10px;
+	padding: 0.7em;
 	border-bottom: #ccc solid 1px; 
 }
 
@@ -355,14 +355,14 @@ table.dataTable tbody tr td {
 	
 .dataTables_filter {
 	background: #f6f6f6;
-	padding: 10px;
+	padding: 0.7em;
 	font-weight: bold;
 }
 
 
 
 .dataTables_wrapper{
-	bottom:0px; 
+	bottom:0; 
 	overflow:auto; 
 	border-top: none;
 }
@@ -379,7 +379,7 @@ table.dataTable tbody tr td {
 
 .dataTables_wrapper .bottom {
 	background: #f6f6f6;
-	padding: 10px;
+	padding: 0.7em;
 	border: #ccc solid 1px;
 	color: #999;
 	display: none;
@@ -396,19 +396,19 @@ table.dataTable tbody tr td {
 	width:25%;
 	float:right;
 	position: absolute;
-	top:20px;
+	top:1.5em;
 	right: 0;
 }
 
 
 .content{
-	padding:10px;
-	padding-bottom: 15px;
+	padding:0.7em;
+	padding-bottom: 1em;
 }
 
 .metadata{
   /*padding: 0 5px 0 5px !important;*/
-	width:60px;
+	width: 4.5em;
 	vertical-align: middle !important;
 
 }
@@ -419,7 +419,7 @@ table.dataTable tbody tr td {
 	background: #f0f4f9;
 	cursor: pointer;
 	border: 1px solid #ccc;
-	padding: 10px;
+	padding: 0.7em;
 	border-bottom: none;
 
 }
@@ -433,7 +433,7 @@ table.dataTable tbody tr td {
 	cursor: pointer;
 	border: 1px solid #ccc;
 	color: #F6F6F6;
-	padding: 10px;
+	padding: 0.7em;
 }
 
 
@@ -442,9 +442,9 @@ table.dataTable tbody tr td {
 
 .ui-state-default, .ui-state-active{
 	margin:0 auto;
-	max-width:20px;
-	max-height: 20px;
-	padding:8px;
+	max-width: 1.5em;
+	max-height: 1.5em;
+	padding: 0.5em;
 }
 
 .ui-state-default{ 
@@ -477,21 +477,21 @@ table.dataTable tbody tr td {
 
 
 .star-open{
-  height: 30px;
-  width: 30px;
-  margin-left: 15px;
+  height: 2.1em;
+  width: 2.1em;
+  margin-left: 1em;
   background-image:url(/static/img/star_open.png);
-  background-size: 30px 30px;
+  background-size: 2.1em 2.1em;
   background-repeat:no-repeat;
   cursor: pointer;
 }
 
 .star-filled{
-  height: 30px;
-  width: 30px;
-  margin-left: 15px;
+  height: 2.1em;
+  width: 2.1em;
+  margin-left: 1em;
   background-image:url(/static/img/star_yellow.png);
-  background-size: 30px 30px;
+  background-size: 2.1em 2.1em;
   background-repeat:no-repeat;
   cursor: pointer;
 }
@@ -508,11 +508,11 @@ table.dataTable tbody tr td {
 
 .search{
 	width:70%;
-	height:30px;
+	height: 2em;
 	margin: 0 auto !important;
-	margin-bottom: 15px !important;
+	margin-bottom: 1em !important;
 	display: block;
-	padding: 5px;
+	padding: 0.4em;
 }
 
 
@@ -545,20 +545,47 @@ table.dataTable tbody tr td {
 	/*background-color: #f0f4f9 !important;*/
 }
 
-.rec-icon{
+.rec-icon, .award-icon, .hm-icon, .community-icon{
   display:none;
+}
+
+.paper-icons, .session-icons {
+  margin-top: 0.3em;
+  height: 2em;
 }
 
 .recommended .rec-icon{
   display:inline-block;
+  vertical-align: top;
+  margin-top: 0.2em;
+  margin-right: 0.7em;
   background-color: #00A8CD;
   color: #fff;
-  padding: 2px;
-  width: 110px;
+  padding: 0.2em 0.5em;
+  height: 1.5em;
   text-align: center;
-  margin-top: 5px;
   font-size: 0.9em;
   font-weight: normal;
+}
+
+.session.s_award .session-icons .award-icon, .paper.p_award .paper-icons .award-icon{
+  display:inline-block;
+  margin-right: 0.7em;
+  background-image:url(/static/img/best-paper.png);
+  background-repeat: no-repeat;
+  background-size: 1.8em 1.8em;
+  width: 1.8em;
+  height: 1.8em;
+}
+
+.session.s_hm .session-icons .hm-icon, .paper.p_hm .paper-icons .hm-icon{
+  display:inline-block;
+  margin-right: 0.7em;
+  background-image:url(/static/img/nominee.png);
+  background-repeat: no-repeat;
+  background-size: 1.8em 1.8em;
+  width: 1.8em;
+  height: 1.8em;
 }
 
 .session-container .clickable{
@@ -608,7 +635,7 @@ div.timeline {
 	margin: 0.25em 0em;
 	padding: 0em;
 	width: 100%;
-	height: 10px;
+	height: 0.7em;
 	clear: right;
 	overflow: hidden;
 }
@@ -622,7 +649,7 @@ div.timeline div {
 	border-radius: 10px;
 	box-sizing: border-box;
 	height: 100%;
-	margin: 0px;
+	margin: 0;
 }
 
 div.timeline div.filled_blue {
