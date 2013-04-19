@@ -636,8 +636,7 @@ function populate_papers(_entities){
 }
 
 
-function populate_recs(_recs){ 
-    $("#recs").html("")  
+function populate_recs(_recs){  
     var raw_html = ''   
     for(var r in _recs){
         raw_html += get_paper_html(recommended[r].id)
@@ -687,7 +686,6 @@ function populate_recs(_recs){
 
 
 function populate_likes(_likes){  
-    $("#likes").html("") 
     var raw_html = ''
     var liked_papers = Object.keys(_likes)    
     for(var i = liked_papers.length; i>=0 ; i--){
