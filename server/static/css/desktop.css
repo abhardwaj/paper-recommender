@@ -5,6 +5,7 @@
 
 
 html, body, div, span, h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, address, cite, code, del, dfn, font, img, ins, kbd, q, s, samp, small, strike, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, applet, object, iframe, table, caption, tbody, tfoot, thead, tr, th, td {
+
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -20,6 +21,88 @@ ol, ul, li {
 hr{
 	background-color: #2B2B2B;
 	border: thin #2B2B2B solid;
+}
+
+
+
+/* Start by setting display:none to make this hidden.
+ *    Then we position it in relation to the viewport window
+ *       with position:fixed. Width, height, top and left speak
+ *          speak for themselves. Background we set to 80% white with
+ *             our animation centered, and no-repeating */
+.modal {
+  display:    none;
+  position:   fixed;
+  z-index:    1000;
+  background-color: rgba(255, 255, 255, .7);
+  /*border: 0.2em solid #2B2B2B;*/
+  top:        0;
+  left:       0;
+  height:     100%; 
+  width:      100%;
+  /*
+  background: rgba( 255, 255, 255, .7 ) 
+    url(/static/img/spinner.gif) 
+    48% 30%
+    no-repeat;
+  background-size: 5em 5em;
+  */
+}
+
+.modal .message{
+  margin-left: 25%;
+  margin-top: 30%;
+  border-radius: 0.5em;
+  background-color: #E9E581; /*#447EAC;*/
+  color: #2B2B2B; /*#F6F6F6;*/
+  width: 40%;
+  height: 5%;
+  text-align: center;
+  padding: 2em;
+  font-size: 2em;
+}
+
+/* When the body has the loading class, we turn
+ *    the scrollbar off with overflow:hidden */
+body.loading {
+  overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+ *    modal element will be visible */
+body.loading .modal, body.notice .alert {
+  display: block;
+}
+
+.alert{
+  display:    none;
+  position:   fixed;
+  z-index:    1000;
+  top:        0;
+  left:       0;
+  height:     100%; 
+  width:      100%;
+}
+
+.alert .message{
+  margin-left: 35%;
+  margin-top: 2.8em;
+  border-radius: 0.5em;
+  border: 0.2em solid #2B2B2B;
+  background-color: #E9E581;
+  color: #2B2B2B;
+  width: 30%;
+  /*height: 2.;*/
+  text-align: center;
+  padding: 1em;
+  font-size: 1em;
+}
+
+#header, .collapsible-title{
+    -webkit-user-select: none;  
+    -moz-user-select: none;    
+    -ms-user-select: none;      
+    user-select: none;
 }
 
 a:link, a:visited {
@@ -305,6 +388,7 @@ body {
 
 .default-search-text {
 	width:60%;
+  margin-left: 1.9em !important;
 }
 
 .default-search-text-active { 

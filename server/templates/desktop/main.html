@@ -10,13 +10,14 @@
 	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>	
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
-	<script type="text/javascript" src="/static/javascript/third-party/cufon-yui.js" type="text/javascript"></script>
-	<script type="text/javascript" src="/static/javascript/third-party/droid-sans.fonts.js" type="text/javascript"></script>
 	<script type="text/javascript" src="/static/javascript/third-party/jquery.dataTables.min.js"></script>
+<!--  
+  <script type="text/javascript" src="/static/javascript/third-party/cufon-yui.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/static/javascript/third-party/droid-sans.fonts.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	   Cufon.replace('#logo', { fontFamily: 'Droid Sans Bold' });
 	</script>
-	
+-->
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 
@@ -36,6 +37,12 @@
 
 
 <body>
+  <div class="modal">
+    <div class="message">loading...</div>
+  </div>
+  <div class="alert">
+    <div class="message"></div>
+  </div>
 <script type="text/javascript">
 
 
@@ -98,18 +105,18 @@ function bind_events(){
     $('.session-collapsible').off('click')
     $('.session-collapsible').on('click',
 	    function(event){
+        enable_loading("opening a session...");
 	    	event.stopPropagation();
 
 	    	var s = $(this).parents('div.session:first')
 
-	        s.find('.paper-container').toggle();
-	        if(s.find('.paper-container').is(':visible')){
-	            //s.find('.arrow').html('▾');
-	            s.find('.arrow').removeClass("arrow-right").addClass("arrow-down");
-	        }else{
-	            //s.find('.arrow').html('▸');
-	            s.find('.arrow').removeClass("arrow-down").addClass("arrow-right");
-	        }
+        s.find('.paper-container').toggle();
+        if(s.find('.paper-container').is(':visible')){
+            s.find('.arrow').removeClass("arrow-right").addClass("arrow-down");
+        }else{
+            s.find('.arrow').removeClass("arrow-down").addClass("arrow-right");
+        }
+        disable_loading();
 	    });
 
     $('input:text').addClass('default-search-text')
@@ -184,6 +191,7 @@ refresh_recommendations = function(){
 
 function show_tab(tab, paper_id){
     console.log(tab)
+    enable_loading("loading...");
     $(".tab").hide();
     window.scrollTo(0,0);
     $("#"+tab).show();
@@ -587,6 +595,7 @@ function update_recs(){
 
 
 function handle_session_star(event){
+    enable_alert("updating information..."); 
     event.stopPropagation();
     var obj = $(event.target).parents("td:first").find('.s_star')
     var session_id = obj.attr("data")
@@ -608,6 +617,9 @@ function handle_session_star(event){
             })
             update_recs()
             update_session_view()
+        })
+        .done(function(){
+            enable_alert("You unliked a session.");
         });
     }else{
         $.post('/like/star', {'papers': JSON.stringify(papers)}, function(res) {
@@ -624,6 +636,9 @@ function handle_session_star(event){
             })
             update_recs()
             update_session_view()
+        })
+        .done(function(){
+            enable_alert("You liked a session.");
         });
     }
     
@@ -634,6 +649,7 @@ function handle_session_star(event){
 
 
 function handle_star(event){ 
+    enable_alert("updating information..."); 
     var obj = $(event.target).parents("td:first").find('.p_star')
     var paper_id = obj.attr("data")
     console.log(paper_id)
@@ -656,6 +672,9 @@ function handle_star(event){
             //update_recs()
             update_session_view()
           }
+        })
+        .done(function(){
+            enable_alert("You unliked a paper.");
         });
     }else{
         $.post('/like/star', {'papers': JSON.stringify([paper_id])}, function(res) {
@@ -675,6 +694,9 @@ function handle_star(event){
             update_session_view()
             
           }
+        })
+        .done(function(){
+            enable_alert("You liked a paper.");
         });
 
 
@@ -717,6 +739,7 @@ function load_paper(paper_id){
 	});  
     });
 
+    $(document).trigger("loaded");
 } 
 
 function populate_papers(_entities){ 
@@ -747,6 +770,7 @@ function populate_papers(_entities){
 	});
 
     bind_events()   
+      $(document).trigger("loaded");
 }
 
 
@@ -878,6 +902,7 @@ function populate_sessions(_sessions){
     }
     bind_events()
     update_session_view()
+    $(document).trigger("loaded");
 }
 
 
@@ -889,6 +914,7 @@ function populate_sessions(_sessions){
 function setup_filters(){
     $('.filter').off('click')
     $('.filter').on('click', function(){       
+        enable_loading("applying filter...");
 
         var attr = $(this).attr("type")
         $('.'+attr).removeClass('active')
@@ -941,15 +967,34 @@ function setup_filters(){
        select_class.each(function(){
        		$(this).parent().prev().show()
        	});
+
+       disable_loading();
         
     });
 }
 
+function enable_loading(msg){
+  $("body .modal .message").text(msg);
+  $("body").addClass("loading");
+}
 
+function disable_loading(){
+  $("body").removeClass("loading");
+}
 
-
+function enable_alert(msg){
+  $("body .alert .message").text(msg);
+  $("body").addClass("notice");
+  setTimeout(function(){
+    $("body").removeClass("notice");
+  }, 5000);
+}
 
 $(document).ready(function(){
+    enable_loading("loading...");
+    $(document).on("loaded", function(){
+      disable_loading();
+    });
 
     // Handle tabs
     var tab = get_params('tab')
