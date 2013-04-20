@@ -1,4 +1,5 @@
 <!DOCTYPE HTML>
+
 <html>
 <head>
 	<title>myCHI</title>
@@ -210,8 +211,8 @@ function show_tab(tab, paper_id){
     $("#headlink-right a").removeClass("active");
     if(tab == 'home'){
     	populate_likes(starred)
-		populate_recs(recommended)
-		populate_papers(entities)
+		  populate_recs(recommended)
+		  populate_papers(entities)
         $("#nav_home").addClass("active")
     }else if(tab == 'schedule'){
     	populate_sessions(sessions)
