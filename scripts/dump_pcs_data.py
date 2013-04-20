@@ -6,7 +6,7 @@ if __name__ == "__main__":
 		sys.path.append(os.path.abspath(p+"/.."))
 	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
 
-conn = MySQLdb.connect(host="mysql.csail.mit.edu", user="cobi", passwd="su4Biha", db="cobiDev")
+conn = MySQLdb.connect(host="mysql.csail.mit.edu", user="cobi", passwd="su4Biha", db="cobi")
 cursor = conn.cursor()
 
 def dump_authors_data():
