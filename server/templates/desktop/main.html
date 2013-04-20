@@ -219,7 +219,7 @@ function show_tab(tab, paper_id){
     }else if(tab == 'selected_paper'){
     	load_paper(paper_id)
     }
-    disable_loading()  
+    disable_loading(); 
 }
 
 
@@ -750,7 +750,6 @@ function load_paper(paper_id){
 
 	}); 
     bind_events() 
-    $(document).trigger("loaded");
     });
 
     
@@ -783,8 +782,7 @@ function populate_papers(_entities){
 
 	});
 
-    bind_events()   
-      $(document).trigger("loaded");
+    bind_events()
 }
 
 
@@ -916,7 +914,6 @@ function populate_sessions(_sessions){
     }
     bind_events()
     update_session_view()
-    $(document).trigger("loaded");
 }
 
 
@@ -928,7 +925,7 @@ function populate_sessions(_sessions){
 function setup_filters(){
     $('.filter').off('click')
     $('.filter').on('click', function(){       
-        enable_loading("applying filter...");
+        //enable_loading("applying filter...");
 
         var attr = $(this).attr("type")
         $('.'+attr).removeClass('active')
@@ -982,7 +979,7 @@ function setup_filters(){
        		$(this).parent().prev().show()
        	});
 
-       disable_loading();
+       //disable_loading();
         
     });
 }
@@ -1005,6 +1002,13 @@ function enable_alert(msg){
 }
 
 $(document).ready(function(){
+    //enable_loading("loading...");
+    /*
+    $(document).on("loaded", function(){
+      disable_loading();
+    });
+    */
+
     // Handle tabs
     var tab = get_params('tab')
     var id = get_params('id')
