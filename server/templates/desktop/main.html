@@ -253,7 +253,7 @@ function get_communities(entity){
   if (typeof entity.communities === "undefined" || entity.communities == null || entity.communities == "")
     return "";
   else
-    return entity.communities.join('   ');
+    return entity.communities.join(' ');
 
 }
 
@@ -292,8 +292,13 @@ function get_paper_html(id){
     raw_html += '<ul>'
     raw_html += '<li class="paper-title blue"><a href="#" onclick="show_tab(\'selected_paper\', \'' + id + '\');"><h3>'+remove_special_chars(entities[id].title)+'</h3></a></li>'
 
-    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon '
-             + communities + '">' + communities + '</span></li>';
+    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
+    if (communities != ""){
+      $.each(entities[id].communities, function(i, v){
+        raw_html += '<span class="community-icon ' + v + '">' + v + '</span>'
+      });
+    }
+    raw_html += '</li>'
     raw_html += '<li class="paper-authors">'
     for(author in entities[id].authors){
         if(entities[id].authors[author] != null){
@@ -334,7 +339,7 @@ function get_session_html(id){
     }
     var raw_html = '<div class="session ' + id + ' ' + sessions[id].date + ' t' + sessions[id].time.substr(0,2) + ' '
               + sessions[id].venue + ' ' + sessions[id].personas.substr(0,2) + ' '
-              + communities_class + ' ' +communities + ' ' + award + '" data="' + id + '">'
+              + communities_class + ' ' + communities + ' ' + award + '" data="' + id + '">'
     raw_html += '<table class="session-container session-collapsible" data="' + id + '"><tr class="clickable">'
     
     raw_html += '<td class="metadata">'     
@@ -347,8 +352,15 @@ function get_session_html(id){
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
     raw_html += '<li><h3><span class="arrow arrow-right"></span> <span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span></h3></li>'
-    raw_html += '<li class="session-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon '
-             + communities + '">' + communities + '</span></li>';
+    raw_html += '<li class="session-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
+
+    if (communities != ""){
+      $.each(sessions[id].communities, function(i, v){
+        raw_html += '<span class="community-icon ' + v + '">' + v + '</span>'
+      });
+    }
+    
+    raw_html += '</li>';
     raw_html += '<li class="session-info"><span class="session-venue">' + format_venue(sessions[id].venue) + '</span> <span class="session-room">Room: ' + sessions[id].room + '</span></li>'
     raw_html += '</ul>'
 
@@ -411,8 +423,13 @@ function get_selected_paper_html(id){
     }
     raw_html += '">'
     raw_html += '<h3>' + remove_special_chars(entities[id].title) + '</h3>'
-    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span><span class="community-icon '
-             + communities + '">' + communities + '</span></li>';
+    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
+    if (communities != ""){
+      $.each(entities[id].communities, function(i, v){
+        raw_html += '<span class="community-icon ' + v + '">' + v + '</span>'
+      });
+    }
+    raw_html += '</li>'
     raw_html += '<li class="paper-authors">'
     for(var author in entities[id].authors){
         if(entities[id].authors[author] != null){
