@@ -23,7 +23,10 @@ body {
 
 @media (max-width: 480px) {
   body {
-    font-size:1.2em;
+    font-size: 1.2em;
+  }
+  #header {
+    font-size: 0.9em;
   }
 }
 
@@ -652,7 +655,7 @@ table.dataTable tbody tr td {
 
 .paper-icons, .session-icons {
   margin-top: 0.3em;
-  max-height: 2em;
+  max-height: 4em;
 }
 
 .recommended .rec-icon{
