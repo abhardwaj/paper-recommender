@@ -218,7 +218,8 @@ function show_tab(tab, paper_id){
         $("#nav_schedule").addClass("active")
     }else if(tab == 'selected_paper'){
     	load_paper(paper_id)
-    }  
+    }
+    disable_loading()  
 }
 
 
@@ -1004,11 +1005,6 @@ function enable_alert(msg){
 }
 
 $(document).ready(function(){
-    enable_loading("loading...");
-    $(document).on("loaded", function(){
-      disable_loading();
-    });
-
     // Handle tabs
     var tab = get_params('tab')
     var id = get_params('id')
