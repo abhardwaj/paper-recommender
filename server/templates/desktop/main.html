@@ -111,9 +111,11 @@ function bind_events(){
 	    });
 
     $('input:text').addClass('default-search-text')
-    if($('input:text').attr("title") == null || $('input:text').attr("title") == ''){
-        $('input:text').attr("title", 'Enter paper titles, authors, or keywords')
-    }
+    $('input:text').each(function(){
+        if($(this).attr("title") == null || $(this).attr("title") == ''){
+            $(this).attr("title", 'Enter paper titles, authors, or keywords')
+        }
+    });
 
   
 	$(".default-search-text").focus(
@@ -744,7 +746,7 @@ function load_paper(paper_id){
 		"bInfo": false,
 		"sWidth": "100%",
 		"oLanguage": {
-	      "sZeroRecords": "Not enough data to recommend papers similar to this."
+	      "sZeroRecords": "No paper to display."
 	    },
 		"aoColumns": [                 
 			{},
@@ -752,7 +754,7 @@ function load_paper(paper_id){
 		]
 
 	}); 
-    bind_events() 
+        bind_events() 
     });
 
     
@@ -1193,7 +1195,8 @@ $(document).ready(function(){
 </div>
 <br />
 <br />
-<input type="text" id="search_session" class="default-text search" title="Enter session titles, rooms, or keywords"></input>
+<div class="dataTables_filter" id="all_papers_filter" style="vertial-align:middle;"><label style="vertical-align:middle;">Search: </label><input type="text" id="search_session" title="Enter session titles, rooms, or keywords" style="height:15px; margin:0px !important; display:inline-block;"></input></div>
+
 
 
 <div id="program">	
