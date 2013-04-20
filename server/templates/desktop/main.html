@@ -145,6 +145,7 @@ function bind_events(){
 
     $("#refresh_recommendations").off('click')
     $("#refresh_recommendations").on('click', function(){
+        event.stopPropagation()
         populate_recs(recommended)
         update_recs(recommended)
     })
