@@ -111,6 +111,9 @@ function bind_events(){
 	    });
 
     $('input:text').addClass('default-search-text')
+    if($('input:text').attr("title") == null || $('input:text').attr("title") == ''){
+        $('input:text').attr("title", 'Enter paper titles, authors, or keywords')
+    }
 
   
 	$(".default-search-text").focus(
