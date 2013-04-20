@@ -105,33 +105,24 @@ function bind_events(){
     $('.session-collapsible').off('click')
     $('.session-collapsible').on('click',
 	    function(event){
-        enable_loading("opening a session...");
+            enable_loading("opening a session...");
 	    	event.stopPropagation();
-
 	    	var s = $(this).parents('div.session:first')
-
-        s.find('.paper-container').toggle();
-        if(s.find('.paper-container').is(':visible')){
-            s.find('.arrow').removeClass("arrow-right").addClass("arrow-down");
-        }else{
-            s.find('.arrow').removeClass("arrow-down").addClass("arrow-right");
-        }
-        disable_loading();
+            s.find('.paper-container').toggle();
+            if(s.find('.paper-container').is(':visible')){
+                s.find('.arrow').removeClass("arrow-right").addClass("arrow-down");
+            }else{
+                s.find('.arrow').removeClass("arrow-down").addClass("arrow-right");
+            }
+            disable_loading();
 	    });
 
     $('input:text').addClass('default-search-text')
     $('input:text').attr("title", "Enter paper titles, authors, or keywords")
 
-    $('input:text').each(function(){
-        if( $(this).val() == '' || $(this).val() == $(this).attr("title")){
-            $(this).blur()
-        }else{
-            $(this).focus()
-        }
-    });
   
 	$(".default-search-text").focus(
-		function(src) {
+		function() {
 	    if ($(this).val() == $(this).attr("title")) {
 	        $(this).removeClass("default-search-text-active");
 	        $(this).val("");
@@ -142,12 +133,20 @@ function bind_events(){
 
 	
 	$(".default-search-text").blur(
-		function(target) {
+		function() {
 	    if ($(this).val() == "") {
 	        $(this).addClass("default-search-text-active");
 	        $(this).val($(this).attr("title"));
 	    }
 	});
+
+    $('input:text').each(function(){
+        if( $(this).val() == '' || $(this).val() == $(this).attr("title")){
+            $(this).blur()
+        }else{
+            $(this).focus()
+        }
+    });
 
     $("#refresh_recommendations").off('click')
     $("#refresh_recommendations").on('click', function(){
@@ -155,19 +154,7 @@ function bind_events(){
         update_recs(recommended)
     })
 
-/* juho: not used anymore
-	$('.ui-state-default').hover(
-	    function(){ $(this).addClass('ui-state-hover'); }, 
-	    function(){ $(this).removeClass('ui-state-hover'); }
-	);
-*/
-	/*
 
-	$('#search_papers').keyup(function(event){
-		var str = $(this).val()
-		//console.log(str)
-		delay('search("'+str+'");', 100);
-	});*/
 }
 
 
@@ -197,19 +184,17 @@ function show_tab(tab, paper_id){
     $("#"+tab).show();
     $("#headlink-right a").removeClass("active");
     if(tab == 'home'){
-    	setTimeout('populate_likes(starred);', 0)
-		  setTimeout('populate_recs(recommended);', 0)
-		  setTimeout('populate_papers(entities);', 0);
-      $("#nav_home").addClass("active");
+    	populate_likes(starred)
+		populate_recs(recommended)
+		populate_papers(entities)
+        $("#nav_home").addClass("active")
     }else if(tab == 'schedule'){
-    	setTimeout('populate_sessions(sessions);', 0)
-    	setTimeout('setup_filters()', 0)
-      $("#nav_schedule").addClass("active");
+    	populate_sessions(sessions)
+    	setup_filters()
+        $("#nav_schedule").addClass("active")
     }else if(tab == 'selected_paper'){
-    	setTimeout('load_paper("' + paper_id + '");', 0)
-    }
-
-    setTimeout('bind_events();', 0)        
+    	load_paper(paper_id)
+    }  
 }
 
 
@@ -298,12 +283,9 @@ function get_paper_html(id){
     raw_html += '<td class="metadata">'   
     if(starred[id] == null){
         raw_html += '<div class="star star-open p_star" data="'+ id + '" onclick="handle_star(event);">'        
-        //raw_html += '<div class="ui-state-default ui-corner-all p_star" data="'+ id + '" onclick="handle_star(event);">'        
     }else{
-        raw_html += '<div class="star star-filled p_star" data="'+ id + '" onclick="handle_star(event);">'        
-        //raw_html += '<div class="ui-state-default ui-corner-all ui-state-active p_star" data="'+ id + '" onclick="handle_star(event);">'        
-    }  
-    //raw_html += '<span class="ui-icon ui-icon-star"></span>'
+        raw_html += '<div class="star star-filled p_star" data="'+ id + '" onclick="handle_star(event);">'       
+    }
     raw_html += '</div>'
     
     raw_html += '</td>'
@@ -522,8 +504,6 @@ function update_session_view(){
 	$('#session_recs').html('')
 	$( ".session" ).each(function(s_index) {
 		var session = $(this)
-		//$(this).find('.paper-container').find('.ui-state-default').each(function(p_index){
-		//	if($(this).hasClass('ui-state-active')){
 		$(this).find('.paper-container').find('.star').each(function(p_index){
 			if($(this).hasClass('star-filled')){
 				session.find('.timeline').children("div").eq(p_index).addClass("filled_yellow");
@@ -556,17 +536,7 @@ function update_session_view(){
 	     	$(this).find('.session-container').find('tr').removeClass('recommended')
             session.removeClass('s_recommended')
 	   	}
-	   	/*
-	   	if($(this).find('.paper-container').find('.ui-state-active').length > 0){
-			$(this).find('.session-container').find('.ui-state-default').addClass('ui-state-active')
-			$(this).find('.session-container').find('tr').addClass('highlight')
-            session.addClass('p_starred') 
-			like = true
-	   	}else{
-	     	$(this).find('.session-container').find('.ui-state-default').removeClass('ui-state-active')
-	     	$(this).find('.session-container').find('tr').removeClass('highlight')
-      }
-      */
+	   
 	   	if($(this).find('.paper-container').find('.star-filled').length > 0){
 			  $(this).find('.session-container').find('.star').removeClass('star-open').addClass('star-filled')
 			  $(this).find('.session-container').find('tr').addClass('highlight')
@@ -736,10 +706,12 @@ function load_paper(paper_id){
 			{}
 		]
 
-	});  
+	}); 
+    bind_events() 
+    $(document).trigger("loaded");
     });
 
-    $(document).trigger("loaded");
+    
 } 
 
 function populate_papers(_entities){ 
