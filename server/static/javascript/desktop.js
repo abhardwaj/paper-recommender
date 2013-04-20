@@ -6,7 +6,11 @@ var st = localStorage.getItem('starred')
 
 if(id == null || en == null || se == null || re == null || st == null){
     console.log('contacting server')
-    $.get('/data', function(res) {
+    $.ajax({
+        type: 'GET',
+        async: false,
+        url: '/data', 
+        success: function(res) {
         id = JSON.stringify(res.login_id)
         en = JSON.stringify(res.entities)
         se = JSON.stringify(res.sessions)
@@ -18,9 +22,14 @@ if(id == null || en == null || se == null || re == null || st == null){
         localStorage.setItem('sessions', se)
         localStorage.setItem('recommended', re)
         localStorage.setItem('starred', st)
+
+        }
     });
 
 }
+
+
+
 var login_id = JSON.parse(id)
 var entities = JSON.parse(en)
 var sessions = JSON.parse(se)
