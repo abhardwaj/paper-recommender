@@ -686,6 +686,8 @@ function handle_star(event){
             delete starred[paper_id]
             populate_likes(starred)
             recommended = res.recs
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('recommended', JSON.stringify(recommended))
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
             }
@@ -708,6 +710,8 @@ function handle_star(event){
             starred[paper_id] = true
             populate_likes(starred)
             recommended = res.recs
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('recommended', JSON.stringify(recommended))
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
             }
