@@ -1,9 +1,12 @@
+// try to first load the data from localStorage 
+
 var id = localStorage.getItem('login_id')
 var en = localStorage.getItem('entities')
 var se = localStorage.getItem('sessions')
 var re = localStorage.getItem('recommended')
 var st = localStorage.getItem('starred')
 
+// contact the server if required
 if(id == null || en == null || se == null || re == null || st == null){
     console.log('contacting server')
     $.ajax({
@@ -47,6 +50,9 @@ function get_params() {
     }
     return vars;
 }
+
+
+
 
 
 Object.size = function(obj) {
@@ -773,7 +779,13 @@ function populate_recs(){
     }
     $("#recs").html(raw_html)
 
-    $("#recs tr:gt(4)").hide()           
+    $("#recs tr:gt(4)").hide()  
+
+    if($("#recs tr:visible").length == $("#recs tr").length){
+        $('#show_recs').hide();
+    }else{
+        $('#show_recs').show();
+    }         
       
     
 }
