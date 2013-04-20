@@ -11,13 +11,7 @@
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>	
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
 	<script type="text/javascript" src="/static/javascript/third-party/jquery.dataTables.min.js"></script>
-<!--  
-  <script type="text/javascript" src="/static/javascript/third-party/cufon-yui.js" type="text/javascript"></script>
-	<script type="text/javascript" src="/static/javascript/third-party/droid-sans.fonts.js" type="text/javascript"></script>
-	<script type="text/javascript">
-	   Cufon.replace('#logo', { fontFamily: 'Droid Sans Bold' });
-	</script>
--->
+
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 
@@ -118,7 +112,6 @@ function bind_events(){
 	    });
 
     $('input:text').addClass('default-search-text')
-    $('input:text').attr("title", "Enter paper titles, authors, or keywords")
 
   
 	$(".default-search-text").focus(
@@ -155,6 +148,12 @@ function bind_events(){
     })
 
 
+    $('#search_session').keyup(function(event){
+        var str = $(this).val()
+        delay('search_session("'+str+'");', 200);
+    });
+
+
 }
 
 
@@ -167,7 +166,32 @@ var delay = (function(){
   };
 })();
 
-refresh_recommendations = function(){
+
+
+function search_session(str){
+    var s =  new RegExp(str , 'i')
+    $('.session-timeslot').each(function(){
+        $(this).prev().hide()
+    });
+
+       
+    $('.session').each(function(){
+        if($(this).text().search(s) == -1){
+            $(this).hide()
+        }else{
+            $(this).show()
+        }
+
+    });
+
+    $('.session:visible').each(function(){
+            $(this).parent().prev().show()
+    });
+    
+}
+
+
+function refresh_recommendations(){
     populate_recs(recommended)
     update_recs(recommended)
 }
@@ -997,12 +1021,6 @@ $(document).ready(function(){
 <!--- Home Page -->
 <div id="home" class="tab">
 	
-	<!--
-
-	<input type="text" id="search_papers" class="default-text search" title="Enter paper titles, authors, or keywords"></input>
-		
-	-->
-	
 	<h3 class="collapsible-title collapsible" id="likes_toggle" data="likes_container"><span class="arrow arrow-down"></span> Papers you want to see</h3>	
 	<div id="likes_container">
 		<table id="likes" class="paper-container">		
@@ -1155,6 +1173,9 @@ $(document).ready(function(){
 </div>
 <br />
 <br />
+<input type="text" id="search_session" class="default-text search" title="Enter session titles, rooms, or keywords"></input>
+
+
 <div id="program">	
 	<div id = "Monday">
 	<h3 class="collapsible-title" data="Mondayt09"><span class="arrow ui-icon ui-icon-triangle-1-s"></span> Monday, 09:00-10:20</h3>
