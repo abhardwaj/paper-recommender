@@ -465,7 +465,7 @@ function get_paper_html(id){
     }
     raw_html += '</li>'
       
-    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
+    raw_html += '<li class="paper-icons"><span class="award-icon"></span><span class="hm-icon"></span><span class="rec-icon">recommended</span>'
     if (communities != ""){
       $.each(entities[id].communities, function(i, v){
         raw_html += '<span class="community-icon ' + v + '">' + v + '</span>'
@@ -520,7 +520,7 @@ function get_session_html(id){
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
     raw_html += '<li><h3><span class="arrow arrow-right"></span> <span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span></h3></li>'
-    raw_html += '<li class="session-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
+    raw_html += '<li class="session-icons"><span class="award-icon"></span><span class="hm-icon"></span><span class="rec-icon">recommended</span>'
 
     if (communities != ""){
       $.each(sessions[id].communities, function(i, v){
@@ -610,7 +610,7 @@ function get_selected_paper_html(id){
     }
     raw_html += '</li>'
     
-    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
+    raw_html += '<li class="paper-icons"><span class="award-icon"></span><span class="hm-icon"></span><span class="rec-icon">recommended</span>'
     if (communities != ""){
       $.each(entities[id].communities, function(i, v){
         raw_html += '<span class="community-icon ' + v + '">' + v + '</span>'
