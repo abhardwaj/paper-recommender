@@ -177,7 +177,7 @@ function bind_events(){
                 $("#likes tr").show()
                 $("#show_likes").html('Show Less')
         }
-                
+        update_likes_count();         
     });
     
 
@@ -189,7 +189,7 @@ function bind_events(){
             $("#recs tr").show()
             $("#show_recs").hide()
         }
-                
+        update_recs_count();         
     });
     
 
@@ -232,6 +232,7 @@ function search_session(str){
     $('.session:visible').each(function(){
         $(this).parent().prev().show()
     });
+    update_sessions_count(); 
     
 }
 
@@ -255,7 +256,7 @@ function search_papers(str){
         }
 
     });
-    
+    update_papers_count(); 
 }
 
 
@@ -650,7 +651,7 @@ function update_session_view(){
         
     });
 
-
+  update_sessions_count();
 }
 
 
@@ -800,13 +801,32 @@ function load_paper(){
     
 } 
 
+function update_papers_count(){
+    $("#papers_toggle .count").text("(" + $("#all_papers tr:visible").length + ")");  
+}
+
+function update_recs_count(){
+    $("#recs_toggle .count").text("(" + $("#recs tr:visible").length + ")");  
+}
+
+function update_likes_count(){
+    $("#likes_toggle .count").text("(" + $("#likes tr").length + ")");  
+}
+
+function update_sessions_count(){
+    if ($("#program .session").length == $("#program .session:visible").length)
+      $("#search-results .count").text("all");
+    else
+      $("#search-results .count").text($("#program .session:visible").length);  
+}
+
 function populate_papers(){
     var raw_html = ''       
     for(var e in entities){
         raw_html += get_paper_html(e)
     }
     $("#all_papers").html(raw_html)
-   
+    update_papers_count();
 }
 
 
@@ -825,7 +845,7 @@ function populate_recs(){
         $('#show_recs').show();
     }         
       
-    
+   update_recs_count(); 
 }
 
 
@@ -845,6 +865,7 @@ function populate_likes(){
             $("#likes tr:gt(1)").hide()           
         }
     }  
+  update_likes_count();
 }
 
 
@@ -924,7 +945,7 @@ function setup_filters(){
             $(this).parent().prev().show()
         });
 
-        
+       update_sessions_count(); 
     });
 }
 
