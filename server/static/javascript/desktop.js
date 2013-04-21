@@ -221,10 +221,10 @@ function search_session(str){
 
        
     $('.session').each(function(){
-        if($(this).text().search(s) == -1){
-            $(this).hide()
+        if(s.test($(this).text())){
+            $(this).show()            
         }else{
-            $(this).show()
+            $(this).hide()
         }
 
     });
@@ -247,10 +247,11 @@ function search_papers(str){
     //console.log(s)
        
     $('#all_papers .paper').each(function(){
-        if($(this).text().search(s) == -1){
-            $(this).hide()
-        }else{
+        if(s.test($(this).text())){
             $(this).show()
+            
+        }else{
+            $(this).hide()
         }
 
     });
