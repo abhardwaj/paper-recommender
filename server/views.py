@@ -19,21 +19,16 @@ from db.authors import *
 '''
 
 
-manifest = """
-CACHE MANIFEST
-
+manifest = """CACHE MANIFEST
 /
 /main
 /schedule
 /paper
-
 /static/css/desktop.css
 /static/css/third-party/jquery-ui.css
-
 /static/javascript/third-party/jquery.min.js
 /static/javascript/third-party/jquery-ui.js
 /static/javascript/desktop.js
-
 /static/img/affiliation.svg
 /static/img/arrows.ai
 /static/img/arrows copy.ai
@@ -75,11 +70,8 @@ CACHE MANIFEST
 /static/img/sustainability.png
 /static/img/user_experience.acorn
 /static/img/user_experience.png
-
-
 NETWORK:
-*
-"""
+*"""
 
 
 r = Recommender()
