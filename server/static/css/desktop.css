@@ -25,7 +25,7 @@ body {
 @media only screen and (max-width: 640px) {
   body {
 	  width:100% !important;
-    font-size: 1.2em !important;
+    font-size: 0.9em !important;
   }
 /*
   #wrap, #page {
@@ -42,6 +42,10 @@ body {
   }
 
   #content {
+    padding: 0 !important;
+  }
+
+  #back-top {
     padding: 0 !important;
   }
 }
@@ -809,6 +813,19 @@ div.timeline div.filled_yellow {
 	background-color: #ffaa00 !important;
 }
 
+#back-top {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+	/*padding: 1.5em;*/
+  clear: both;
+  margin: 0;
+}
 
-
+#back-top a {
+  /*color: #447EAC;*/
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
 
