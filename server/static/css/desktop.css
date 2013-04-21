@@ -829,3 +829,13 @@ div.timeline div.filled_yellow {
   letter-spacing: 1px;
 }
 
+#refresh_recommendations{
+  display: inline-block;
+  float: right;
+  font-size: small;
+}
+
+#search-results {
+  margin-top: 1em;
+  font-weight: normal;
+}
