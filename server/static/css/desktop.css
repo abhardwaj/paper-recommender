@@ -49,11 +49,18 @@ body {
     padding: 0 !important;
   }
 
-  #headlink-right .button{
-    /*display: none;*/
+  #headlink-right .navitem{
+    display: none;
   }
-  #headlink-right .button.mobile-nav {
-    display: inline !important;
+
+  #headlink-right:hover .navitem{
+    display: block !important;
+    padding: 1em;
+  }
+
+  #headlink-right .mobile-nav {
+    display: inline-block !important;
+    margin-top: -0.5em;
   }
 
 }
@@ -376,6 +383,8 @@ textarea {
   width: 1.2em;
   height: 1.2em;
   background-repeat: no-repeat;
+  margin-top: 0.3em;
+  margin-bottom: 0 !important;
 }
 
 .arrow-right {
@@ -472,14 +481,14 @@ textarea {
 }
 
 .default-text-active { 
-	color: #a1a1a1; 
+	color: #737373; /*#a1a1a1; */
 	font-style: italic;
 }
 
 
 .default-search-text {
-	width:60%;
-  margin-left: 1.9em !important;
+	width:70%;
+  /*margin-left: 1.9em !important;*/
 }
 
 .default-search-text-active { 
@@ -491,6 +500,12 @@ textarea {
 	display: none;
 }
 
+#search_papers, #search_session {
+  display: inline-block;
+  height: 1.8em;
+  margin: 0 0 1em 0;
+  
+}
 
 table.dataTable{
 	width:100%;
@@ -841,9 +856,15 @@ table.dataTable tbody tr td {
   letter-spacing: 1px;
 }
 
+.collapsible-title span{
+  display: inline-block;
+  margin-bottom: 0.3em;
+}
+
 #refresh_recommendations{
   display: inline-block;
-  float: right;
+  margin-left: 2em;
+  /*float: right;*/
   font-size: small;
 }
 
@@ -851,7 +872,8 @@ table.dataTable tbody tr td {
  * Schedule View
  ************************/
 #search-results {
-  margin-top: 1em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
   font-weight: normal;
 }
 

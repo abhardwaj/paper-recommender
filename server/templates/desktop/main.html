@@ -25,9 +25,9 @@
 		<span id="headlink-right">
 			{{login_name}} &nbsp;
       <a class="button mobile-nav" href="#">Menu</a>
-			<a class="button active" href="/home">My Papers</a>
-			<a class="button" href="/schedule">My Schedule</a>
-			<a class="button" href="/logout">Log out</a>
+			<a class="button active navitem" href="/home">My Papers</a>
+			<a class="button navitem" href="/schedule">My Schedule</a>
+			<a class="button navitem" href="/logout">Log out</a>
 		</span>
 	</div>
 </div>
@@ -50,7 +50,7 @@
 <br />
 <br />
 
-	<h3 class="collapsible-title collapsible" id="recs_toggle" data="recs_container"><span class="arrow arrow-down"></span> Papers recommended for you <span class="count"></span><a class="button" id="refresh_recommendations">Refresh Recommendations</a></h3>
+<h3 class="collapsible-title collapsible" id="recs_toggle" data="recs_container"><span class="arrow arrow-down"></span><span>Papers recommended for you</span> <span class="count"></span><span class="button" id="refresh_recommendations">Refresh</span></h3>
 	<div id="recs_container">
 		<table id="recs" class="paper-container">	
 		</table>
@@ -63,12 +63,20 @@
 
 	<h3 class="collapsible-title collapsible" id="papers_toggle" data="all_papers_container"><span class="arrow arrow-down"></span> All Papers <span class="count"></span></h3>
 	<div id="all_papers_container">
-		<div class="dataTables_filter" style="vertial-align:middle;"><label style="vertical-align:middle;">Search:</label>&nbsp;&nbsp;<input type="text" id="search_papers" title="Enter paper titles, authors, or keywords" style="height:15px; margin:0px !important; display:inline-block;"></input>&nbsp;&nbsp;<a class="button" id="search_papers_btn">Search</a></div>
+    <div class="dataTables_filter" style="vertial-align:middle;">
+      <!--<label style="vertical-align:middle;">Search:</label>&nbsp;&nbsp;-->
+      <input type="text" id="search_papers" title="Enter paper titles, authors, or keywords"></input>&nbsp;&nbsp;
+      <span class="button" id="search_papers_btn">Search</span>
+    </div>
 		<table id="all_papers" class="paper-container">	
 		</table>
+        <br />
+        <a class="button" id="show_papers" style="margin-right:10px;">Show More</a>
 	</div>
 </div>
 
+<br />
+<br />
 </div> <!-- content -->
 </div> <!-- page -->
 

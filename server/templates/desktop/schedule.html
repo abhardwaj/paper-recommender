@@ -18,19 +18,19 @@
 </head>
 
 <div id="header">
-    <div id="wrap">
-        <span id="headlink-left">
-            <a id="logo" href="/">myCHI</a>
-        </span>
-        <span id="headlink-right">
-            {{login_name}} &nbsp;
-            <a class="button" href="/home">My Papers</a>
-            <a class="button active" href="/schedule">My Schedule</a>
-            <a class="button" href="/logout">Log out</a>
-        </span>
-    </div>
+	<div id="wrap">
+		<span id="headlink-left">
+			<a id="logo" href="/">myCHI</a>
+		</span>
+		<span id="headlink-right">
+			{{login_name}} &nbsp;
+      <a class="button mobile-nav" href="#">Menu</a>
+			<a class="button navitem" href="/home">My Papers</a>
+			<a class="button active navitem" href="/schedule">My Schedule</a>
+			<a class="button navitem" href="/logout">Log out</a>
+		</span>
+	</div>
 </div>
-
 
 <body>
 <div id="page">
@@ -157,8 +157,8 @@
 <br />
 <br />
 <div class="dataTables_filter" style="vertical-align:middle;">
-  <label style="vertical-align:middle;">Search:</label>&nbsp;&nbsp;
-  <input type="text" id="search_session" title="Enter session titles, rooms, or keywords" style="height:15px; margin:0px !important; display:inline-block;"></input>&nbsp;&nbsp;<a class="button" id="search_sessions_btn">Search</a>
+  <!--<label style="vertical-align:middle;">Search:</label>&nbsp;&nbsp;-->
+  <input type="text" id="search_session" title="Enter session titles, rooms, or keywords"></input>&nbsp;&nbsp;<span class="button" id="search_sessions_btn">Search</span>
   <div id="search-results">Showing <span class="count">all</span> sessions</div>
 </div>
 

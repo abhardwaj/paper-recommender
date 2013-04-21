@@ -222,6 +222,16 @@ function bind_events(){
     });
     
 
+    $('#show_papers').on('click', function(){
+        var n = $('#all_papers tr:visible').length
+        if((n+25) < $("#all_papers tr").length){
+            $('#all_papers tr:lt('+(n+25)+')').show()               
+        }else{
+            $("#all_papers tr").show()
+            $("#show_papers").hide()
+        }
+        update_papers_count();         
+    });
 }
 
 
@@ -285,7 +295,15 @@ function search_papers(str){
         }
 
     });
-    update_papers_count(); 
+
+    update_papers_visible_count(); 
+
+    if (str != ""){
+      $("#show_papers").hide();
+    } else {
+      $("#show_papers").show();
+      populate_papers();
+    }
 }
 
 
@@ -872,6 +890,14 @@ function update_papers_count(){
 }
 
 function update_papers_count_async(){
+    $("#papers_toggle .count").text("(" + $("#all_papers tr").length + ")");  
+}
+
+function update_papers_visible_count(){
+    setTimeout('update_papers_visible_count_async();', 0)
+}
+
+function update_papers_visible_count_async(){
     $("#papers_toggle .count").text("(" + $("#all_papers tr:visible").length + ")");  
 }
 
@@ -908,6 +934,13 @@ function populate_papers(){
         raw_html += get_paper_html(e)
     }
     $("#all_papers").html(raw_html)
+    $("#all_papers tr:gt(24)").hide()  
+
+    if($("#all_papers tr:visible").length == $("#all_papers tr").length){
+        $('#show_papers').hide();
+    }else{
+        $('#show_papers').show();
+    }         
     update_papers_count();
 }
 
