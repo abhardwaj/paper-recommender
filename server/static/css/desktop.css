@@ -51,13 +51,29 @@ body {
 
   #headlink-right .navitem{
     display: none;
+    /*
+    position:relative;
+    display: block !important;
+    padding: 1em;
+    */
   }
 
-  #headlink-right:hover .navitem{
+  #headlink-right .mobile-nav.toggle-nav{
+    background-color:#E9E581;
+  }
+
+  #headlink-right .navitem.toggle-nav{
+    position:relative;
     display: block !important;
     padding: 1em;
   }
-
+  /*
+  #headlink-right:hover .navitem{
+    position:relative;
+    display: block !important;
+    padding: 1em;
+  }
+*/
   #headlink-right .mobile-nav {
     display: inline-block !important;
     margin-top: -0.5em;

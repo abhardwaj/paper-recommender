@@ -93,6 +93,11 @@ function exists(recs, id){
 
 
 function bind_events(){
+    $("#headlink-right .mobile-nav").on('click',
+        function(event){
+          event.stopPropagation();
+          $("#headlink-right a").toggleClass("toggle-nav");
+        });
     $("#back-top a").click(function(){
       window.scrollTo(0,0);
     });
