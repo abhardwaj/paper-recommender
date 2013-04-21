@@ -130,7 +130,7 @@ def home(request):
 		{'login_id': request.session['id'], 
 		'login_name': request.session['name']})	
 	except KeyError:
-		return HttpResponse('/login')
+		return HttpResponseRedirect('/login')
 	except:
 		pass
 	
