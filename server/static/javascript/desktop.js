@@ -147,7 +147,6 @@ function bind_events(){
     $("#refresh_recommendations").on('click', function(){
         event.stopPropagation()
         populate_recs(recommended)
-        update_recs(recommended)
     })
 
 
@@ -599,8 +598,6 @@ function place_session(s){
 
 
 function update_session_view(){
-    $('#session_likes').html('')
-    $('#session_recs').html('')
     $( ".session" ).each(function(s_index) {
         var session = $(this)
         $(this).find('.paper-container').find('.star').each(function(p_index){
@@ -623,14 +620,11 @@ function update_session_view(){
 
         });
 
-        var id = session.attr("data")
-        var rec = false
-        var like = false
+        
         
         if($(this).find('.paper-container').find('.recommended').length > 0){
             $(this).find('.session-container').find('tr').addClass('recommended')
             session.addClass('s_recommended')
-            rec = true
         }else{
             $(this).find('.session-container').find('tr').removeClass('recommended')
             session.removeClass('s_recommended')
@@ -653,13 +647,7 @@ function update_session_view(){
 }
 
 
-function update_recs(){
-    $('.paper').removeClass('recommended')
-    for(var r in recommended){
-        $('.'+recommended[r].id).addClass('recommended')
-    }
 
-}
 
 
 function handle_session_star(event){
@@ -668,22 +656,20 @@ function handle_session_star(event){
     var obj = $(event.target).parents("td:first").find('.s_star')
     var session_id = obj.attr("data")
     var papers = sessions[session_id]['submissions']
-    //if(obj.hasClass('ui-state-active')){
+    console.log(papers)
     if(obj.hasClass('star-filled')){
         $.post('/like/unstar', {'papers': JSON.stringify(papers)}, function(res) {
             for(var paper_id in papers){
-                delete starred[paper_id]
+                delete starred[papers[paper_id]]
             }
-            populate_likes(starred)
             recommended = res.recs
-            populate_recs(recommended)
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('recommended', JSON.stringify(recommended))
             $('.'+obj.attr('data')).each(function(){
-                //$(this).find('.p_star').removeClass('ui-state-active')
                 $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
                 $(this).removeClass('highlight')
                 $(this).find('.paper').removeClass('highlight')
             })
-            update_recs()
             update_session_view()
         })
         .done(function(){
@@ -692,17 +678,15 @@ function handle_session_star(event){
     }else{
         $.post('/like/star', {'papers': JSON.stringify(papers)}, function(res) {
             for(var paper_id in papers){
-                starred[paper_id] = true
+                starred[papers[paper_id]] = true
             }
-            populate_likes(starred)
             recommended = res.recs
-            populate_recs(recommended)
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('recommended', JSON.stringify(recommended))
             $('.'+obj.attr('data')).each(function(){
-                //$(this).find('.p_star').addClass('ui-state-active')
                 $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
                 $(this).find('.paper').addClass('highlight')
             })
-            update_recs()
             update_session_view()
         })
         .done(function(){
@@ -720,11 +704,15 @@ function handle_star(event){
     enable_alert("updating information..."); 
     var obj = $(event.target).parents("td:first").find('.p_star')
     var paper_id = obj.attr("data")
-    console.log(paper_id)
-    //if(obj.hasClass('ui-state-active')){
     if(obj.hasClass('star-filled')){
         $.post('/like/unstar', {'papers': JSON.stringify([paper_id])}, function(res) {
           if(res.res[paper_id] == 'unstar'){
+            $('.'+obj.attr('data')).each(function(){
+                $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
+                //$(this).find('.p_star').removeClass('ui-state-active')
+                $(this).removeClass('highlight')
+            })
+
             delete starred[paper_id]
             populate_likes(starred)
             recommended = res.recs
@@ -732,13 +720,8 @@ function handle_star(event){
             localStorage.setItem('recommended', JSON.stringify(recommended))
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
-            }
+            }        
             
-            $('.'+obj.attr('data')).each(function(){
-                $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
-                //$(this).find('.p_star').removeClass('ui-state-active')
-                $(this).removeClass('highlight')
-            })
             //update_recs()
             update_session_view()
           }
@@ -749,6 +732,10 @@ function handle_star(event){
     }else{
         $.post('/like/star', {'papers': JSON.stringify([paper_id])}, function(res) {
           if(res.res[paper_id] == 'star'){
+            $('.'+obj.attr('data')).each(function(){
+                $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
+                $(this).addClass('highlight')
+            })
             starred[paper_id] = true
             populate_likes(starred)
             recommended = res.recs
@@ -757,11 +744,7 @@ function handle_star(event){
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
             }
-            $('.'+obj.attr('data')).each(function(){
-                //$(this).find('.p_star').addClass('ui-state-active')
-                $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
-                $(this).addClass('highlight')
-            })
+            
             //update_recs()
             update_session_view()
             
