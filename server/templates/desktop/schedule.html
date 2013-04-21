@@ -246,10 +246,11 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
-       populate_sessions()
-       setup_filters()
-       bind_events()
-        
+        enable_loading('loading...')
+        populate_sessions()
+        setup_filters()
+        bind_events()
+        disable_loading()
     });
 </script>
 <script type="text/javascript" src="/static/javascript/desktop.js"></script>

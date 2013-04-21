@@ -62,8 +62,10 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
-       load_paper()
-       bind_events()
+	enable_loading('loading...')
+    load_paper()
+    bind_events()
+    disable_loading()
         
 });
 </script>

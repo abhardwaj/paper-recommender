@@ -81,11 +81,12 @@
 <!-- Javascript -->
 <script type="text/javascript">
     $(document).ready(function(){
-       populate_likes()
-       populate_recs()
-       populate_papers()
-       bind_events()
-        
+    	enable_loading('loading...')
+		populate_likes()
+		populate_recs()
+		populate_papers()
+		bind_events()
+        disable_loading()
     });
 
 </script>
