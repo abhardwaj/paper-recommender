@@ -801,18 +801,34 @@ function load_paper(){
 } 
 
 function update_papers_count(){
+    setTimeout('update_papers_count_aync();', 0)
+}
+
+function update_papers_count_async(){
     $("#papers_toggle .count").text("(" + $("#all_papers tr:visible").length + ")");  
 }
 
 function update_recs_count(){
+    setTimeout('update_recs_count_aync();', 0)
+}
+
+function update_recs_count_async(){
     $("#recs_toggle .count").text("(" + $("#recs tr:visible").length + ")");  
 }
 
 function update_likes_count(){
+    setTimeout('update_likes_count_aync();', 0)
+}
+
+function update_likes_count_async(){
     $("#likes_toggle .count").text("(" + $("#likes tr").length + ")");  
 }
 
 function update_sessions_count(){
+    setTimeout('update_sessions_count_aync();', 0)
+}
+
+function update_sessions_count_async(){
     if ($("#program .session").length == $("#program .session:visible").length)
       $("#search-results .count").text("all");
     else
@@ -825,7 +841,7 @@ function populate_papers(){
         raw_html += get_paper_html(e)
     }
     $("#all_papers").html(raw_html)
-    update_papers_count();
+    /update_papers_count();
 }
 
 
