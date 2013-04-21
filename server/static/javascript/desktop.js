@@ -158,13 +158,13 @@ function bind_events(){
 
     $('#search_session').keyup(function(event){
         var str = $(this).val()
-        delay('search_session("'+str+'");', 300);
+        delay('search_session("'+str+'");', 200);
     });
 
 
     $('#search_papers').keyup(function(event){
         var str = $(this).val()
-        delay('search_papers("'+str+'");', 300);
+        delay('search_papers("'+str+'");', 100);
     });
 
     
