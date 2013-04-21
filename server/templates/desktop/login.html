@@ -1,11 +1,16 @@
 <!DOCTYPE HTML>
-<html>
+<html manifest="/manifest">
 <head>
     <title>myCHI</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1"/> 
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    
     <link rel="stylesheet" type="text/css" href="/static/css/desktop.css" />
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>  
+    <link href="/static/css/third-party/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="/static/javascript/third-party/jquery.min.js"></script> 
+    <script type="text/javascript" src="/static/javascript/third-party/jquery-ui.js"></script> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 
@@ -49,7 +54,7 @@ $(document).ready(function(){
 
 <div id="page">
 
-<form method="POST" action="/desktop/login">
+<form method="POST" action="/login">
     {% csrf_token %}
     <h3>Plan my CHI with myCHI</h3>
     <div class="teaser">Manage your personal schedule, <br/>get social recommendations, <br/>and navigate the program.</div>

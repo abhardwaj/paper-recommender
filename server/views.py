@@ -19,6 +19,61 @@ from db.authors import *
 '''
 
 
+manifest = """CACHE MANIFEST
+/
+/main
+/schedule
+/paper
+/static/css/desktop.css
+/static/css/third-party/jquery-ui.css
+/static/javascript/third-party/jquery.min.js
+/static/javascript/third-party/jquery-ui.js
+/static/javascript/desktop.js
+/static/img/affiliation.svg
+/static/img/arrows.ai
+/static/img/arrows copy.ai
+/static/img/arts.acorn
+/static/img/arts.png
+/static/img/authors.svg
+/static/img/best-paper.png
+/static/img/best.png
+/static/img/best.svg
+/static/img/calendar.svg
+/static/img/cci.acorn
+/static/img/cci.png
+/static/img/design.acorn
+/static/img/design.png
+/static/img/down.png
+/static/img/engineering.acorn
+/static/img/engineering.png
+/static/img/games.acorn
+/static/img/games.png
+/static/img/hci4d.acorn
+/static/img/hci4d.png
+/static/img/health.acorn
+/static/img/health.png
+/static/img/logo.png
+/static/img/logo.svg
+/static/img/management.acorn
+/static/img/management.png
+/static/img/nominee.png
+/static/img/nominee.svg
+/static/img/paper.svg
+/static/img/right.png
+/static/img/sponsors.svg
+/static/img/star_closed.svg
+/static/img/star_open.png
+/static/img/star_open.svg
+/static/img/star_yellow.png
+/static/img/star_yellow.svg
+/static/img/sustainability.acorn
+/static/img/sustainability.png
+/static/img/user_experience.acorn
+/static/img/user_experience.png
+NETWORK:
+*"""
+
+
 r = Recommender()
 e = Entity()
 p = Prefs()
@@ -27,12 +82,14 @@ s = Session()
 def init_session(email):
 	pass
 
-def login_form(request, req_url= 'desktop'):
+def login_form(request):
 	c = {}
 	c.update(csrf(request))
-	return render_to_response(req_url + '/login.html', c)
+	return render_to_response('desktop/login.html', c)
 
-def login(request, req_url='desktop'):
+
+
+def login(request):
 	if request.method == "POST":
 		try:
 			login_email = request.POST["login_email"]
@@ -46,47 +103,79 @@ def login(request, req_url='desktop'):
 				request.session['id'] = data[0][0]
 				request.session['email'] = login_email
 				request.session['name'] = data[0][1] + ' ' + data[0][2]
-				return HttpResponseRedirect('/' + req_url)
+				return HttpResponseRedirect('/home')
 			else:
-				return login_form(request, req_url)
+				return login_form(request)
 		except:
 			print sys.exc_info()
-			return login_form(request, req_url)
+			return login_form(request)
 	else:
-		return login_form(request, req_url)
+		return login_form(request)
 		
 
 
-def logout(request, req_url='desktop'):
+def logout(request):
 	request.session.flush()
-	return HttpResponseRedirect('/'+req_url)
+	return HttpResponseRedirect('/login')
+
+def manifest(request):
+	return HttpResponse(manifest, mimetype='text/cache-manifest manifest')
 
 
 
 
+def home(request):
+	try:
+		return render_to_response('desktop/main.html', 
+		{'login_id': request.session['id'], 
+		'login_name': request.session['name']})	
+	except KeyError:
+		return HttpResponse('/login')
+	except:
+		pass
+	
 
 
-def main(request, req_url='desktop'):
+def schedule(request):
 	recs = []
 	starred = {}
 	try:
-		user = request.session['id']
-		if(user in p.author_likes):
-			starred = {s:True for s in p.author_likes[user]['likes']}
-			recs = r.get_item_based_recommendations(starred)		
+		return render_to_response('desktop/schedule.html', 
+		{'login_id': request.session['id'], 
+		'login_name': request.session['name']})		
 	except KeyError:
-		return HttpResponseRedirect(req_url+'/login')
+		return HttpResponseRedirect('/login')
 	except:
 		pass
-	return render_to_response(req_url + "/main.html", 
-		{
+	
+
+def paper(request):
+	try:
+		return render_to_response('desktop/paper.html', 
+		{'login_id': request.session['id'], 
+		'login_name': request.session['name']})
+	except KeyError:
+		return HttpResponseRedirect('/login')
+	except:
+		pass
+
+
+@csrf_exempt
+def data(request):
+	user = request.session['id']
+	recs = []
+	starred = {}
+	if(user in p.author_likes):
+		starred = {s:True for s in p.author_likes[user]['likes']}
+		recs = r.get_item_based_recommendations(starred)
+	return HttpResponse(json.dumps({
 		'login_id': request.session['id'], 
 		'login_name': request.session['name'],
-		'recs':json.dumps(recs), 
-		'starred':json.dumps(starred), 
-		'entities': json.dumps(e.entities), 
-		'sessions':json.dumps(s.sessions)
-		})
+		'recs':recs, 
+		'starred':starred, 
+		'entities': e.entities, 
+		'sessions':s.sessions
+		}), mimetype="application/json")
 
 @csrf_exempt
 def get_recs(request):

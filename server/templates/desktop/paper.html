@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+
+<html manifest="/manifest">
+<head>
+	<title>myCHI</title>
+	<meta charset="utf-8">
+    
+	<meta name="HandheldFriendly" content="true" />
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="stylesheet" type="text/css" href="/static/css/desktop.css" />
+	<link href="/static/css/third-party/jquery-ui.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="/static/javascript/third-party/jquery.min.js"></script>	
+	<script type="text/javascript" src="/static/javascript/third-party/jquery-ui.js"></script>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<div id="header">
+	<div id="wrap">
+		<span id="headlink-left">
+			<a id="logo" href="/">myCHI</a>
+		</span>
+		<span id="headlink-right">
+			{{login_name}} &nbsp;
+			<a class="button active" href="/home">My Papers</a>
+            <a class="button" href="/schedule">My Schedule</a>
+            <a class="button" href="/logout">Log out</a>
+		</span>
+	</div>
+</div>
+
+
+<body>
+<div id="page">
+<div id="content">
+<!-- Selected Paper -->
+<div id="selected_paper">
+	<h3><span class="gray">Selected Paper</span></h3>
+	<div class="form">
+	</div>
+	<br />
+	<h3 class="collapsible-title collapsible" id="similar_papers_toggle" data="similar_papers_container" value=""><span class="arrow arrow-down"></span> People who liked this paper also liked:</h3>
+	<div id="similar_papers_container">
+	<table id="similar_papers" class="paper-container">		
+	</table>
+	</div>
+
+</div>  <!-- selected paper -->
+
+
+</div> <!-- content -->
+</div> <!-- page -->
+
+
+<!-- Modal Dialogs -->
+<div class="modal">
+    <div class="message">loading...</div>
+</div>
+<div class="alert">
+    <div class="message"></div>
+</div>
+<script type="text/javascript">
+
+$(document).ready(function(){
+	enable_loading('loading...')
+    load_paper()
+    bind_events()
+    disable_loading()
+        
+});
+</script>
+<script type="text/javascript" src="/static/javascript/desktop.js"></script>
+</body>
+</html>
