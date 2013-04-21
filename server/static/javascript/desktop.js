@@ -662,14 +662,14 @@ function handle_session_star(event){
             for(var paper_id in papers){
                 delete starred[papers[paper_id]]
             }
-            recommended = res.recs
-            localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('recommended', JSON.stringify(recommended))
             $('.'+obj.attr('data')).each(function(){
                 $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
                 $(this).removeClass('highlight')
                 $(this).find('.paper').removeClass('highlight')
             })
+            recommended = res.recs
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('recommended', JSON.stringify(recommended))
             update_session_view()
         })
         .done(function(){
@@ -680,13 +680,13 @@ function handle_session_star(event){
             for(var paper_id in papers){
                 starred[papers[paper_id]] = true
             }
-            recommended = res.recs
-            localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('recommended', JSON.stringify(recommended))
             $('.'+obj.attr('data')).each(function(){
                 $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
                 $(this).find('.paper').addClass('highlight')
             })
+            recommended = res.recs
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('recommended', JSON.stringify(recommended))
             update_session_view()
         })
         .done(function(){
