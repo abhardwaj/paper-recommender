@@ -257,7 +257,7 @@ textarea {
 	padding: 0;
 	width: 100%;
 	max-width: 1024px;
-	min-width: 600px;
+	/*min-width: 600px;*/
 }
 
 #headlink-right{
@@ -297,7 +297,7 @@ textarea {
 	left: 0;
 	width: 100%;
 	max-width: 1024px;
-	min-width: 600px;
+	/*min-width: 600px; */
 	background-color: #fff;
 }
 
