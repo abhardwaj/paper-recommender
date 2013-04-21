@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     
-    
     <link rel="stylesheet" type="text/css" href="/static/css/desktop.css" />
     <link href="/static/css/third-party/jquery-ui.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="/static/javascript/third-party/jquery.min.js"></script> 
@@ -57,7 +56,8 @@ $(document).ready(function(){
 
 <form method="POST" action="/login">
     {% csrf_token %}
-    <h3>Login</h3>
+    <h3>Plan my CHI with myCHI</h3>
+    <div class="teaser">Manage your personal schedule, <br/>get social recommendations, <br/>and navigate the program.</div>
     <hr />
     <label for="login_email">Email</label><br />
     {{error}}

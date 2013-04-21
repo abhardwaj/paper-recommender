@@ -79,6 +79,10 @@ function exists(recs, id){
 
 
 function bind_events(){
+    $("#back-top a").click(function(){
+      window.scrollTo(0,0);
+    });
+
     $('.collapsible').off('click')
     $('.collapsible').on('click',
         function(event){

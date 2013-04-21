@@ -21,20 +21,32 @@ body {
 	overflow: auto;
 }
 
-
+/*@media (max-width: 480px) {*/
 @media only screen and (max-width: 640px) {
-body {
-	width:100% !important;
-    font-size: 0.9em;
+  body {
+	  width:100% !important;
+    font-size: 0.9em !important;
   }
-
-  #header {
-    font-size: 0.9em;
+/*
+  #wrap, #page {
+    min-width: 0 !important;
+  }
+*/    
+  #page {
     width:100% !important;
   }
 
-  #page{
-  	width: 100% !important;
+  #header {
+    font-size: 0.9em !important;
+    width:100% !important;
+  }
+
+  #content {
+    padding: 0 !important;
+  }
+
+  #back-top {
+    padding: 0 !important;
   }
 }
 
@@ -142,6 +154,10 @@ a:link, a:visited {
   font-size: 0.9em;
 }
 
+#filter_schedule h4 {
+  display: inline-block;
+}
+
 a.filter{
   display: inline-block;
 	color: #2B2B2B !important;
@@ -149,8 +165,21 @@ a.filter{
   border-radius: 0.3em;
   border: 1px solid #2B2B2B;
   text-decoration:none;
-  margin: 0.2em 0.7em;
-  padding: 0 0.4em;
+  text-align: center;
+  margin: 0.1em 0.7em;
+  padding: 0 0.3em;
+}
+
+a.filter.aligned {
+  /*width: 7em;*/
+}
+
+a.filter.aligned-long {
+  /*width: 12em;*/
+}
+
+a.filter.aligned-short {
+  /*width: 3em;*/
 }
 
 a.filter.active{
@@ -784,6 +813,19 @@ div.timeline div.filled_yellow {
 	background-color: #ffaa00 !important;
 }
 
+#back-top {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+	/*padding: 1.5em;*/
+  clear: both;
+  margin: 0;
+}
 
-
+#back-top a {
+  /*color: #447EAC;*/
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
 
