@@ -168,7 +168,7 @@ function bind_events(){
         event.stopPropagation()
         populate_recs(recommended)
     })
-
+    
     if(!detect_mobile()){
 
         $('#search_session').keyup(function(event){
@@ -182,14 +182,16 @@ function bind_events(){
             delay('search_papers("'+str+'");', 100);
         });
     }
-
-    $('#search_sessions_btn').keyup(function(event){
+    
+    $('#search_sessions_btn').off('click')
+    $('#search_sessions_btn').on('click', function(event){
             var str = $('#search_session').val()
             search_session(str)
         });
 
 
-    $('#search_papers_btn').keyup(function(event){
+    $('#search_papers_btn').off('click')
+    $('#search_papers_btn').on('click', function(event){
         var str = $('#search_papers').val()
         search_papers(str)
     });
