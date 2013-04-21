@@ -647,6 +647,16 @@ function update_session_view(){
 }
 
 
+function update_recs(){
+      $('.paper').removeClass('recommended')
+      for(var r in recommended){
+            $('.'+recommended[r].id).each(function(){
+                $(this).addClass('recommended')
+            });
+      }
+
+}
+
 
 
 
@@ -722,7 +732,7 @@ function handle_star(event){
                 populate_recs(recommended)
             }        
             
-            //update_recs()
+            update_recs()
             update_session_view()
           }
         })
@@ -745,7 +755,7 @@ function handle_star(event){
                 populate_recs(recommended)
             }
             
-            //update_recs()
+            update_recs()
             update_session_view()
             
           }
