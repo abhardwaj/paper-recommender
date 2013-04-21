@@ -39,10 +39,12 @@ var sessions = JSON.parse(se)
 var recommended = JSON.parse(re)
 var starred = JSON.parse(st)
 
+
+
 function get_params() {
     var vars = [], hash;
     var hashes = window.location.href.slice(
-            window.location.href.indexOf('?') + 1).split('&');
+    window.location.href.indexOf('?') + 1).split('&');
     for (var i = 0; i < hashes.length; i++) {
         hash = hashes[i].split('=');
         vars.push(hash[0]);
@@ -63,9 +65,11 @@ Object.size = function(obj) {
     return size;
 };
 
-function search_rec(id){
-    for(var r in recommended){
-        if(recommended[r].id == id)
+
+
+function exists(recs, id){
+    for(var r in recs){
+        if(recs[r].id == id)
             return true
     }
     return false
@@ -307,7 +311,7 @@ function get_paper_html(id){
         return ''
     var communities = get_communities(entities[id]);
     var raw_html = '<tr class="clickable paper ' + id
-    if(search_rec(id)){
+    if(exists(recommended, id)){
         raw_html += ' recommended'
     }
     if(starred[id] != null){
@@ -454,7 +458,7 @@ function get_selected_paper_html(id){
     var communities = get_communities(entities[id]);
 
     var raw_html = '<div class="paper ';    
-    if(search_rec(id)){
+    if(exists(recommended, id)){
         raw_html += ' recommended'
     }
     if(starred[id] != null){
@@ -912,3 +916,36 @@ function enable_alert(msg){
     $("body").removeClass("notice");
   }, 5000);
 }
+
+
+
+(function($){
+  $.fn.extend({ 
+    clickTouch: function(handler) {
+       return this.each(function() {
+         var touchedWithoutScroll = false;
+         var self = $(this);
+ 
+         self.bind('touchstart', function(event) {
+           // Ignore multi-touches
+           if(event.originalEvent.touches.length > 1) {
+             return;
+           }
+           touchedWithoutScroll = true;
+         })
+         // If user starts scrolling/panning, let the touch through
+         .bind('touchmove', function(event) {
+           touchedWithoutScroll = false;
+         })
+         // If user releases without scrolling/panning/multitouching, it's a touch
+         .bind('touchend', function(event) {
+           if(touchedWithoutScroll) {
+             handler.apply(this, arguments);
+             return false;
+           }
+         })
+         .click(handler);
+       });
+    }
+  });
+})(jQuery);
