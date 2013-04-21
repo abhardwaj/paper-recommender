@@ -153,7 +153,13 @@ function bind_events(){
 
     $('#search_session').keyup(function(event){
         var str = $(this).val()
-        delay('search_session("'+str+'");', 200);
+        delay('search_session("'+str+'");', 300);
+    });
+
+
+    $('#search_papers').keyup(function(event){
+        var str = $(this).val()
+        delay('search_papers("'+str+'");', 300);
     });
 
     
@@ -198,7 +204,12 @@ var delay = (function(){
 
 
 function search_session(str){
-    var s =  new RegExp(str , 'i')
+    var regex_str = ''
+    var words = str.split(' ')
+    for (var i=0;i<words.length; i++){
+        regex_str += '(?=.*\\b'+words[i]+'.*\\b)'
+    }
+    var s =  new RegExp(regex_str , 'i')
     $('.session-timeslot').each(function(){
         $(this).prev().hide()
     });
@@ -219,6 +230,27 @@ function search_session(str){
     
 }
 
+
+function search_papers(str){
+    var regex_str = ''
+    var words = str.split(' ')
+    for (var i=0;i<words.length; i++){
+        regex_str += '(?=.*\\b'+words[i]+'.*\\b)'
+    }
+    var s =  new RegExp(regex_str , 'i')
+    
+    console.log(s)
+       
+    $('#all_papers .paper').each(function(){
+        if($(this).text().search(s) == -1){
+            $(this).hide()
+        }else{
+            $(this).show()
+        }
+
+    });
+    
+}
 
 
 
