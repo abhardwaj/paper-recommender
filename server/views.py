@@ -119,7 +119,7 @@ def logout(request):
 	return HttpResponseRedirect('/login')
 
 def manifest(request):
-	return HttpResponse(manifest, mimetype='text/cache-manifest manifest')
+	return HttpResponse(manifest, mimetype='text/cache-manifest')
 
 
 

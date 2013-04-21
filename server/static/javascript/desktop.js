@@ -40,6 +40,31 @@ var recommended = JSON.parse(re)
 var starred = JSON.parse(st)
 
 
+$("div#page").bind("touchstart", function(event) {
+        var e = event.originalEvent;
+        var x = e.targetTouches[0].pageX;
+        if (x >= ($(this).width() - RIGHT_EDGE_SIZE)) {
+            event.preventDefault();
+            shouldScroll = false;
+        }
+    });
+
+    $("body").bind("touchmove", function(event) {
+        if (!shouldScroll) {
+            event.preventDefault();
+           
+        }
+    });
+
+    $("body").bind("touchend", function(event) {
+        if (!shouldScroll) {
+            event.preventDefault();
+        }
+        shouldScroll = true;
+    });
+
+
+
 
 function get_params() {
     var vars = [], hash;
