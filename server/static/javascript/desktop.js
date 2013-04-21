@@ -40,7 +40,21 @@ var recommended = JSON.parse(re)
 var starred = JSON.parse(st)
 
 
-
+function detect_mobile() { 
+ if(navigator.userAgent.match(/Android/i)
+ || navigator.userAgent.match(/webOS/i)
+ || navigator.userAgent.match(/iPhone/i)
+ || navigator.userAgent.match(/iPad/i)
+ || navigator.userAgent.match(/iPod/i)
+ || navigator.userAgent.match(/BlackBerry/i)
+ || navigator.userAgent.match(/Windows Phone/i)
+ ){
+    return true;
+  }
+ else {
+    return false;
+  }
+}
 
 
 function get_params() {
@@ -155,16 +169,29 @@ function bind_events(){
         populate_recs(recommended)
     })
 
+    if(!detect_mobile()){
 
-    $('#search_session').keyup(function(event){
-        var str = $(this).val()
-        delay('search_session("'+str+'");', 200);
-    });
+        $('#search_session').keyup(function(event){
+            var str = $(this).val()
+            delay('search_session("'+str+'");', 200);
+        });
 
 
-    $('#search_papers').keyup(function(event){
-        var str = $(this).val()
-        delay('search_papers("'+str+'");', 100);
+        $('#search_papers').keyup(function(event){
+            var str = $(this).val()
+            delay('search_papers("'+str+'");', 100);
+        });
+    }
+
+    $('#search_sessions_btn').keyup(function(event){
+            var str = $('#search_session').val()
+            search_session(str)
+        });
+
+
+    $('#search_papers_btn').keyup(function(event){
+        var str = $('#search_papers').val()
+        search_papers(str)
     });
 
     
