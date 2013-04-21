@@ -680,6 +680,7 @@ function handle_session_star(event){
             recommended = res.recs
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('recommended', JSON.stringify(recommended))
+            update_recs()
             update_session_view()
         })
         .done(function(){
@@ -697,6 +698,7 @@ function handle_session_star(event){
             recommended = res.recs
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('recommended', JSON.stringify(recommended))
+            update_recs()
             update_session_view()
         })
         .done(function(){
