@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+
+<html manifest="/manifest">
+<head>
+	<title>myCHI</title>
+	<meta charset="utf-8">
+    
+	<meta name="HandheldFriendly" content="true" />
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="stylesheet" type="text/css" href="/static/css/desktop.css" />
+	<link href="/static/css/third-party/jquery-ui.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="/static/javascript/third-party/jquery.min.js"></script>	
+	<script type="text/javascript" src="/static/javascript/third-party/jquery-ui.js"></script>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+<div id="header">
+	<div id="wrap">
+		<span id="headlink-left">
+			<a id="logo" href="/">myCHI</a>
+		</span>
+		<span id="headlink-right">
+			{{login_name}} &nbsp;
+			<a class="button active" href="/home">My Papers</a>
+			<a class="button" href="/schedule">My Schedule</a>
+			<a class="button" href="/logout">Log out</a>
+		</span>
+	</div>
+</div>
+
+
+<body>
+<div id="page">
+<div id="content">
+
+<!--- Home Page -->
+<div id="home">
+	
+	<h3 class="collapsible-title collapsible" id="likes_toggle" data="likes_container"><span class="arrow arrow-down"></span> Papers you want to see</h3>	
+	<div id="likes_container">
+		<table id="likes" class="paper-container">		
+		</table>
+        <br />
+        <a class="button" id="show_likes">Show All</a> 
+	</div>
+<br />
+<br />
+
+	<h3 class="collapsible-title collapsible" id="recs_toggle" data="recs_container"><span class="arrow arrow-down"></span> Papers recommended for you<a class="button" id="refresh_recommendations" style="display:inline-block; float:right; font-size:small;">Refresh Recommendations</a></h3>
+	<div id="recs_container">
+		<table id="recs" class="paper-container">	
+		</table>
+        <br />
+        <a class="button" id="show_recs" style="margin-right:10px;">Show More</a>
+	</div>
+
+<br />
+<br />
+
+	<h3 class="collapsible-title collapsible" id="papers_toggle" data="all_papers_container"><span class="arrow arrow-down"></span> All Papers</h3>
+	<div id="all_papers_container">
+		<div class="dataTables_filter" style="vertial-align:middle;"><label style="vertical-align:middle;">Search:</label>&nbsp;&nbsp;<input type="text" id="search_papers" title="Enter paper titles, authors, or keywords" style="height:15px; margin:0px !important; display:inline-block;"></input></div>
+		<table id="all_papers" class="paper-container">	
+		</table>
+	</div>
+</div>
+
+</div> <!-- content -->
+</div> <!-- page -->
+
+
+<!---  Mod  -->
+<div class="modal">
+    <div class="message">loading...</div>
+</div>
+<div class="alert">
+    <div class="message"></div>
+</div>
+<div id="back-top">
+  <a href="#" class="button">Back to top</a>
+</div>
+
+<!-- Javascript -->
+<script type="text/javascript">
+    $(document).ready(function(){
+    	enable_loading('loading...')
+      populate_likes()
+      populate_recs()
+      populate_papers()
+      bind_events()
+      disable_loading()
+    });
+
+</script>
+<script type="text/javascript" src="/static/javascript/desktop.js"></script>
+</body>
+</html>
