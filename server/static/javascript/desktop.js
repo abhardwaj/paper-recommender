@@ -38,6 +38,32 @@ var entities = JSON.parse(en)
 var sessions = JSON.parse(se)
 var recommended = JSON.parse(re)
 var starred = JSON.parse(st)
+var RIGHT_EDGE_SIZE = 20;
+var shouldScroll = true;
+
+$("div#page").bind("touchstart", function(event) {
+        var e = event.originalEvent;
+        var x = e.targetTouches[0].pageX;
+        if (x >= ($(this).width() - RIGHT_EDGE_SIZE)) {
+            event.preventDefault();
+            shouldScroll = false;
+        }
+    });
+
+    $("body").bind("touchmove", function(event) {
+        if (!shouldScroll) {
+            event.preventDefault();
+           
+        }
+    });
+
+    $("body").bind("touchend", function(event) {
+        if (!shouldScroll) {
+            event.preventDefault();
+        }
+        shouldScroll = true;
+    });
+
 
 
 
