@@ -23,10 +23,16 @@ body {
 
 @media (max-width: 480px) {
   body {
-    font-size: 1.2em;
+    font-size: 1.2em !important;
+  }
+  #wrap, #page {
+    min-width: 0 !important;
   }
   #header {
-    font-size: 0.9em;
+    font-size: 0.9em !important;
+  }
+  #content {
+    padding: 0 !important;
   }
 }
 
@@ -132,6 +138,10 @@ a:link, a:visited {
   font-size: 0.9em;
 }
 
+#filter_schedule h4 {
+  display: inline-block;
+}
+
 a.filter{
   display: inline-block;
 	color: #2B2B2B !important;
@@ -139,8 +149,21 @@ a.filter{
   border-radius: 5px;
   border: 1px solid #2B2B2B;
   text-decoration:none;
-  margin: 0.2em 0.7em;
-  padding: 0 0.4em;
+  text-align: center;
+  margin: 0.1em 0.7em;
+  padding: 0 0.3em;
+}
+
+a.filter.aligned {
+  /*width: 7em;*/
+}
+
+a.filter.aligned-long {
+  /*width: 12em;*/
+}
+
+a.filter.aligned-short {
+  /*width: 3em;*/
 }
 
 a.filter.active{

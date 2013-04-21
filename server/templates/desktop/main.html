@@ -321,7 +321,7 @@ function get_paper_html(id){
     raw_html += '<ul>'
     raw_html += '<li class="paper-title blue"><a href="#" onclick="show_tab(\'selected_paper\', \'' + id + '\');"><h3>'+remove_special_chars(entities[id].title)+'</h3></a></li>'
 
-    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
+    raw_html += '<li class="paper-icons"><span class="award-icon"></span><span class="hm-icon"></span><span class="rec-icon">recommended</span>'
     if (communities != ""){
       $.each(entities[id].communities, function(i, v){
         raw_html += '<span class="community-icon ' + v + '">' + v + '</span>'
@@ -381,7 +381,7 @@ function get_session_html(id){
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
     raw_html += '<li><h3><span class="arrow arrow-right"></span> <span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span></h3></li>'
-    raw_html += '<li class="session-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
+    raw_html += '<li class="session-icons"><span class="award-icon"></span><span class="hm-icon"></span><span class="rec-icon">recommended</span>'
 
     if (communities != ""){
       $.each(sessions[id].communities, function(i, v){
@@ -452,7 +452,7 @@ function get_selected_paper_html(id){
     }
     raw_html += '">'
     raw_html += '<h3>' + remove_special_chars(entities[id].title) + '</h3>'
-    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
+    raw_html += '<li class="paper-icons"><span class="award-icon"></span><span class="hm-icon"></span><span class="rec-icon">recommended</span>'
     if (communities != ""){
       $.each(entities[id].communities, function(i, v){
         raw_html += '<span class="community-icon ' + v + '">' + v + '</span>'
@@ -1077,28 +1077,60 @@ $(document).ready(function(){
 <div id="filter_schedule">
 <table>
 <tr>
-<td style="vertical-align:top">
-<h4 style="display:inline-block">Papers</h4>
+<td>
+<h4>Papers</h4>
 </td>
 <td>
 
 <div id ="p_filter" style="display:inline-block">  
 
-    <a href="#" title="all" class="p_session filter active" type="p_session"/>All</a>
-    <a href="#" title="s_starred" class="p_session filter" type="p_session"/>Liked</a> 
-    <a href="#" title="s_recommended" class="p_session filter" type="p_session"/>Liked + Recommended</a>   
-    <a href="#" title="s_awardhm" class="p_session filter" type="p_session"/>Awards</a>    
+    <a href="#" title="all" class="p_session filter aligned active" type="p_session"/>All</a>
+    <a href="#" title="s_awardhm" class="p_session aligned filter" type="p_session"/>Awards</a>    
+    <a href="#" title="s_starred" class="p_session aligned filter" type="p_session"/>Liked</a> 
+    <a href="#" title="s_recommended" class="p_session aligned-long filter" type="p_session"/>Liked + Recommended</a>   
+</div>
+</td>
+</tr>
+
+<tr>
+<td>
+<h4>Day</h4>
+</td>
+<td>
+
+<div id ="day_filter" style="display:inline-block">  
+
+    <a href="#" title="all" class="day aligned filter active" type="day"/>All</a>
+    <a href="#" title="Monday" class="day aligned filter" type="day"/>Monday</a>    
+    <a href="#" title="Tuesday" class="day aligned filter" type="day"/>Tuesday</a>      
+    <a href="#" title="Wednesday" class="day aligned filter" type="day"/>Wednesday</a>  
+    <a href="#" title="Thursday" class="day aligned filter" type="day"/>Thursday</a>
 </div>
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top">
-<h4 style="display:inline-block">Venue</h4>  
+<td>
+<h4>Time</h4>
+</td>
+<td>
+<div id ="time_filter" style="display:inline-block">
+    
+    <a href="#" title="all" class="time aligned filter active" type="time"/>All</a> 
+    <a href="#" title="t09" class="time aligned filter" type="time"/>09:00-10:20</a>   
+    <a href="#" title="t11" class="time aligned filter" type="time"/>11:00-12:20</a>     
+    <a href="#" title="t14" class="time aligned filter" type="time"/>14:00-15:20</a>          
+    <a href="#" title="t16" class="time aligned filter" type="time"/>16:00-17:20</a>   
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<h4>Venue</h4>  
 </td>
 <td>
 <div id ="venue_filter" style="display:inline-block">
 
-    <a href="#" title="all" class="venue filter active" type="venue"/>All</a>
+    <a href="#" title="all" class="venue aligned filter active" type="venue"/>All</a>
     <a href="#" title="paper" class="venue filter" type="venue"/>Paper</a>
     <a href="#" title="casestudy" class="venue filter" type="venue"/>Case Study</a>
     <a href="#" title="altchi" class="venue filter" type="venue"/>alt.chi</a>
@@ -1111,43 +1143,12 @@ $(document).ready(function(){
 </td>
 </tr>
 <tr>
-<td style="vertical-align:top">
-<h4 style="display:inline-block">Day</h4>
-</td>
 <td>
-
-<div id ="day_filter" style="display:inline-block">  
-
-    <a href="#" title="all" class="day filter active" type="day"/>All</a>
-    <a href="#" title="Monday" class="day filter" type="day"/>Monday</a>    
-    <a href="#" title="Tuesday" class="day filter" type="day"/>Tuesday</a>      
-    <a href="#" title="Wednesday" class="day filter" type="day"/>Wednesday</a>  
-    <a href="#" title="Thursday" class="day filter" type="day"/>Thursday</a>
-</div>
-</td>
-</tr>
-<tr>
-<td style="vertical-align:top">
-<h4 style="display:inline-block">Time</h4>
-</td>
-<td>
-<div id ="time_filter" style="display:inline-block">
-    
-    <a href="#" title="all" class="time filter active" type="time"/>All</a> 
-    <a href="#" title="t09" class="time filter" type="time"/>09:00-10:20</a>   
-    <a href="#" title="t11" class="time filter" type="time"/>11:00-12:20</a>     
-    <a href="#" title="t14" class="time filter" type="time"/>14:00-15:20</a>          
-    <a href="#" title="t16" class="time filter" type="time"/>16:00-17:20</a>   
-</div>
-</td>
-</tr>
-<tr>
-<td style="vertical-align:top">
-<h4 style="display:inline-block">Community</h4>
+<h4>Community</h4>
 </td>
 <td>
 <div id ="communities_filter" style="display:inline-block">
-    <a href="#" title="all" class="community filter active" type="community"/>All</a> 
+    <a href="#" title="all" class="community aligned filter active" type="community"/>All</a> 
     <a href="#" title="ux" class="community filter" type="community"/>UX</a>   
     <a href="#" title="design" class="community filter" type="community"/>Design</a>     
     <a href="#" title="engineering" class="community filter" type="community"/>Engineering</a>          
@@ -1163,13 +1164,13 @@ $(document).ready(function(){
 </tr>
 <tr>
 <tr>
-<td style="vertical-align:top">
-<h4 style="display:inline-block">Persona</h4>
+<td>
+<h4>Persona</h4>
 </td>
 <td>
 <div id ="persona_filter" style="display:inline-block">
 
-    <a href="#" title="all" class="persona filter active" type="persona"/>All</a> 
+    <a href="#" title="all" class="persona aligned filter active" type="persona"/>All</a> 
     <a href="#" title="De" class="persona filter" type="persona"/>Design</a>          
     <a href="#" title="UI" class="persona filter" type="persona"/>UIST</a>        
     <a href="#" title="Vi" class="persona filter" type="persona"/>Visualization</a>        
@@ -1180,8 +1181,8 @@ $(document).ready(function(){
     <a href="#" title="fo" class="persona filter" type="persona"/>For a cause</a> 
     <a href="#" title="Mi" class="persona filter" type="persona"/>Misc</a>   
 
-    <a href="#" title="Se" class="persona filter" type="persona"/>Security and privacy</a>
-    <a href="#" title="Ki" class="persona filter" type="persona"/>Kids and learning </a>  
+    <a href="#" title="Se" class="persona filter" type="persona"/>Security &amp; privacy</a>
+    <a href="#" title="Ki" class="persona filter" type="persona"/>Kids &amp; learning </a>  
     <a href="#" title="He" class="persona filter" type="persona"/>Health</a> 
     <a href="#" title="On" class="persona filter" type="persona"/>Online social communities &amp; crowdsourcing</a>   
     
