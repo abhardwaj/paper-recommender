@@ -642,11 +642,10 @@ function update_session_view(){
               $(this).find('.session-container').find('.star').removeClass('star-open').addClass('star-filled')
               $(this).find('.session-container').find('tr').addClass('highlight')
               session.addClass('s_starred')
-              like = true
         }else{
             $(this).find('.session-container').find('.star').removeClass('star-filled').addClass('star-open')
             $(this).find('.session-container').find('tr').removeClass('highlight')
-            session.removeClass('s_starred') 
+            session.removeClass('s_starred')
         }
         
     });
