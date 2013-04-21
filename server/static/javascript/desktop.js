@@ -340,8 +340,29 @@ function get_communities(entity){
 }
 
 
+function get_session_info_of_paper(id){
+  var result = "";
+  var session = sessions[entities[id].session];
+  if (typeof session !== "undefined"){
+    result += session.date + " | " + session.time + " | " + session.room + " | " + session.s_title;
+  }
+  return result;
+}
 
 
+function get_paper_subtype(id){
+    var subtype = "";
+    if (typeof entities[id] !== "undefined" && entities[id].subtype != "")
+      subtype = entities[id].subtype;
+    else if (id.indexOf("tochi") > -1)
+      subtype = "TOCHI";
+    else {
+      var session = sessions[entities[id].session];
+      if (typeof session !== "undefined")
+        subtype = format_venue(session.venue);
+    }
+    return "- " + subtype;
+}
 
 
 function get_paper_html(id){
@@ -377,15 +398,12 @@ function get_paper_html(id){
     
     raw_html += '<td class="content">'    
     raw_html += '<ul>'
-    raw_html += '<li class="paper-title blue"><a href="/paper?id='+id+'"><h3>'+remove_special_chars(entities[id].title)+'</h3></a></li>'
 
-    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
-    if (communities != ""){
-      $.each(entities[id].communities, function(i, v){
-        raw_html += '<span class="community-icon ' + v + '">' + v + '</span>'
-      });
-    }
-    raw_html += '</li>'
+    raw_html += '<li class="paper-title blue"><a href="/paper?id='+id+'"><h3>'+remove_special_chars(entities[id].title) 
+    raw_html += '<span class="paper-subtype">' + get_paper_subtype(id) + '</span>'
+    raw_html += '</h3></a></li>'
+
+
     raw_html += '<li class="paper-authors">'
     for(author in entities[id].authors){
         if(entities[id].authors[author] != null){
@@ -394,6 +412,13 @@ function get_paper_html(id){
     }
     raw_html += '</li>'
       
+    raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
+    if (communities != ""){
+      $.each(entities[id].communities, function(i, v){
+        raw_html += '<span class="community-icon ' + v + '">' + v + '</span>'
+      });
+    }
+    raw_html += '</li>'
     if (entities[id].c_and_b == "null")
       raw_html += '<li class="paper-cb">'+ remove_special_chars(entities[id].abstract) + '</li>'
     else
@@ -488,8 +513,6 @@ function get_session_html(id){
 
 
 
-
-
 function get_selected_paper_html(id){
     if(entities[id] == null)
       return null
@@ -512,7 +535,28 @@ function get_selected_paper_html(id){
       raw_html += ' communities';
     }
     raw_html += '">'
-    raw_html += '<h3>' + remove_special_chars(entities[id].title) + '</h3>'
+    raw_html += '<h3>' + remove_special_chars(entities[id].title) 
+    raw_html += '<span class="paper-subtype">' + get_paper_subtype(id) + '</span>'
+    raw_html += '</h3>';
+
+    raw_html += '<li class="paper-authors">'
+    for(var author in entities[id].authors){
+        if(entities[id].authors[author] != null){
+          console.log(entities[id]);
+            //raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
+            raw_html += '<span class="author"><span class="author-name">' 
+                    + entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName 
+                    + '</span>';
+            var affiliation = entities[id].authors[author].primary; 
+            if (typeof affiliation !== "undefined" && typeof affiliation.institution !== "undefined" && typeof affiliation.country !== "undefined")
+            raw_html += '<span class="author-affiliation">'
+                    + affiliation.institution + ', ' + affiliation.country 
+                    + '</span>';
+            raw_html += '</span>';
+        }
+    }
+    raw_html += '</li>'
+    
     raw_html += '<li class="paper-icons"><span class="rec-icon">recommended</span><span class="award-icon"></span><span class="hm-icon"></span>'
     if (communities != ""){
       $.each(entities[id].communities, function(i, v){
@@ -520,13 +564,7 @@ function get_selected_paper_html(id){
       });
     }
     raw_html += '</li>'
-    raw_html += '<li class="paper-authors">'
-    for(var author in entities[id].authors){
-        if(entities[id].authors[author] != null){
-            raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
-        }
-    }
-    raw_html += '</li>'
+    raw_html += '<li class="paper-session">' + get_session_info_of_paper(id) + '</li>'
     raw_html += '<hr />'
     raw_html += '<ul>'
     raw_html += '<li>' + remove_special_chars(entities[id].abstract) + '</li>'

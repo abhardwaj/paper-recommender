@@ -48,6 +48,14 @@ body {
   #back-top {
     padding: 0 !important;
   }
+
+  #headlink-right .button{
+    /*display: none;*/
+  }
+  #headlink-right .button.mobile-nav {
+    display: inline !important;
+  }
+
 }
 
 
@@ -62,12 +70,9 @@ hr{
 }
 
 
-
-/* Start by setting display:none to make this hidden.
- *    Then we position it in relation to the viewport window
- *       with position:fixed. Width, height, top and left speak
- *          speak for themselves. Background we set to 80% white with
- *             our animation centered, and no-repeating */
+/****************************
+ * Modal Loading Display
+ ****************************/
 .modal {
   display:    none;
   position:   fixed;
@@ -201,14 +206,14 @@ form{
 	padding:2em; 
 	vertical-align:top;
 	background-color: #D7ECFA;
-	max-width:310px;
+	max-width:280px;
 	width: 100%;
 	box-shadow: 1px 0px 10px #666;
 }
 
-.form{
+#selected_paper .form{
 	margin:0 auto;
-	margin-top:2em; 
+	/*margin-top:2em; */
 	padding:2em; 
 	vertical-align:top;
 	background-color: #f0f4f9;
@@ -297,6 +302,10 @@ textarea {
 	width: 100%;
 	max-width: 1024px;
 	/*min-width: 600px;*/
+}
+
+.mobile-nav{
+  display:none;
 }
 
 #headlink-right{
@@ -400,6 +409,18 @@ textarea {
   font-weight: bold;
 }
 
+.paper-subtype {
+  display:inline-block;
+  margin-left: 0.2em;
+  /*border: 1px solid #AAAAAA;
+  background-color: #AAAAAA;*/
+  color: #737373;
+  padding: 0.1em 0.5em;
+  text-align: center;
+  font-size: 0.8em;
+  font-weight: normal;
+}
+
 .paper-cb{
   font-size: 0.9em;
   margin: 0.4em 0 0 0;  
@@ -408,6 +429,27 @@ textarea {
 .paper-keywords{
   font-size: 0.9em;
   margin: 0.3em 0 0 0;
+}
+/*************************
+ * Selected Papers
+ *************************/
+.paper-authors {
+  margin-top: 0.5em;
+}
+
+.paper-authors .author {
+  display: block;
+}
+
+.paper-authors .author .author-affiliation{
+  margin-left: 1.5em;
+  font-weight: normal;
+  font-size: 0.9em;
+  color: #737373;
+}
+
+.paper-session {
+  margin-top: 0.5em;
 }
 
 
@@ -682,12 +724,11 @@ table.dataTable tbody tr td {
   vertical-align: top;
   margin-top: 0.2em;
   margin-right: 0.7em;
-  /*background-color: #00A8CD;*/
   border: 1px solid #AAAAAA;
   background-color: #AAAAAA;
   color: #F6F6F6;
   padding: 0.2em 0.5em;
-  height: 1.5em;
+  /*height: 1.5em;*/
   text-align: center;
   font-size: 0.9em;
 }
@@ -706,7 +747,7 @@ table.dataTable tbody tr td {
   border: 1px solid #00A8CD;
   color: #fff;
   padding: 0.2em 0.5em;
-  height: 1.5em;
+  /*height: 1.5em;*/
   text-align: center;
   font-size: 0.9em;
 }
@@ -784,6 +825,36 @@ table.dataTable tbody tr td {
 	font-style: italic;
 }
 
+#back-top {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+	/*padding: 1.5em;*/
+  clear: both;
+  margin: 0;
+}
+
+#back-top a {
+  /*color: #447EAC;*/
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+#refresh_recommendations{
+  display: inline-block;
+  float: right;
+  font-size: small;
+}
+
+/************************
+ * Schedule View
+ ************************/
+#search-results {
+  margin-top: 1em;
+  font-weight: normal;
+}
+
 div.timeline {
 	margin: 0.25em 0em;
 	padding: 0em;
@@ -813,29 +884,16 @@ div.timeline div.filled_yellow {
 	background-color: #ffaa00 !important;
 }
 
-#back-top {
-  position: fixed;
-  bottom: 1em;
-  right: 1em;
-	/*padding: 1.5em;*/
-  clear: both;
-  margin: 0;
+
+/************************
+ * Login Screen
+ ************************/
+form .teaser {
+  margin: 0.5em;
+  line-height: 1.2em;
 }
 
-#back-top a {
-  /*color: #447EAC;*/
-  text-transform: uppercase;
-  text-decoration: none;
-  letter-spacing: 1px;
-}
-
-#refresh_recommendations{
-  display: inline-block;
-  float: right;
-  font-size: small;
-}
-
-#search-results {
-  margin-top: 1em;
-  font-weight: normal;
+form .description {
+  color: #737373;
+  font-size: 0.9em;
 }
