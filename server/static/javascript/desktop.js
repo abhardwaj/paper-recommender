@@ -801,7 +801,7 @@ function load_paper(){
 } 
 
 function update_papers_count(){
-    setTimeout('update_papers_count_aync();', 0)
+    setTimeout('update_papers_count_async();', 0)
 }
 
 function update_papers_count_async(){
@@ -809,7 +809,7 @@ function update_papers_count_async(){
 }
 
 function update_recs_count(){
-    setTimeout('update_recs_count_aync();', 0)
+    setTimeout('update_recs_count_async();', 0)
 }
 
 function update_recs_count_async(){
@@ -817,7 +817,7 @@ function update_recs_count_async(){
 }
 
 function update_likes_count(){
-    setTimeout('update_likes_count_aync();', 0)
+    setTimeout('update_likes_count_async();', 0)
 }
 
 function update_likes_count_async(){
@@ -825,7 +825,7 @@ function update_likes_count_async(){
 }
 
 function update_sessions_count(){
-    setTimeout('update_sessions_count_aync();', 0)
+    setTimeout('update_sessions_count_async();', 0)
 }
 
 function update_sessions_count_async(){
@@ -841,7 +841,7 @@ function populate_papers(){
         raw_html += get_paper_html(e)
     }
     $("#all_papers").html(raw_html)
-    /update_papers_count();
+    update_papers_count();
 }
 
 
