@@ -82,7 +82,7 @@ function bind_events(){
         function(event){
             event.stopPropagation();
             var target = $(this).attr("data")
-            console.log(target)
+            //console.log(target)
             $('#'+ target).toggle();
             if($('#'+target).is(':visible')){
                 //$(this).find('.arrow').html('▾');
@@ -238,7 +238,7 @@ function search_papers(str){
     }
     var s =  new RegExp(regex_str , 'i')
     
-    console.log(s)
+    //console.log(s)
        
     $('#all_papers .paper').each(function(){
         if($(this).text().search(s) == -1){
@@ -656,7 +656,7 @@ function handle_session_star(event){
     var obj = $(event.target).parents("td:first").find('.s_star')
     var session_id = obj.attr("data")
     var papers = sessions[session_id]['submissions']
-    console.log(papers)
+    //console.log(papers)
     if(obj.hasClass('star-filled')){
         $.post('/like/unstar', {'papers': JSON.stringify(papers)}, function(res) {
             for(var paper_id in papers){
