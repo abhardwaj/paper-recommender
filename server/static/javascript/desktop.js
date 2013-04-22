@@ -185,7 +185,7 @@ function bind_events(){
         $('#search_session').keyup(function(event){
             var str = $(this).val()
             if(str==""){
-                $('#.session').show()
+                $('.session').show()
                 $('.session-timeslot').each(function(){
                     $(this).prev().show()
                 });
@@ -325,7 +325,7 @@ function simple_search_session(str){
 
        
     $('.session').each(function(){
-        if($(this).text().indexOf(str)!=-1){
+        if($(this).text().toLowerCase().indexOf(str.toLowerCase())!=-1){
             $(this).show()            
         }else{
             $(this).hide()
@@ -369,7 +369,7 @@ function simple_search_papers(str){
    
        
     $('#all_papers .paper').each(function(){
-        if($(this).text().indexOf(str)!= -1){
+        if($(this).text().toLowerCase().indexOf(str.toLowerCase())!= -1){
             $(this).show()
             
         }else{
