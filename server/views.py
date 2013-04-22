@@ -1,4 +1,4 @@
-import json, sys, re
+import json, sys, re, hashlib
 
 
 from django.http import *
@@ -28,8 +28,10 @@ s = Session()
 def init_session(email):
 	pass
 
-def login_form(request):
+def login_form(request, error=None):
 	c = {}
+	if(error != None):
+		c.update(error)
 	c.update(csrf(request))
 	return render_to_response('desktop/login.html', c)
 
@@ -39,21 +41,36 @@ def login(request):
 	if request.method == "POST":
 		try:
 			login_email = request.POST["login_email"]
-
+			login_password = request.POST["login_password"].strip()
+			print 'login_password' + login_password
 			if(login_email != ""):
 				request.session.flush()
 				cursor = connection.cursor()
-				cursor.execute("""SELECT id, given_name, family_name from pcs_authors where email1 like '%s' or 
+				cursor.execute("""SELECT id, given_name, family_name, password, verified from pcs_authors where email1 like '%s' or 
 					email2 like '%s' or email3 like '%s';""" %(login_email, login_email, login_email))
 				data = cursor.fetchall()
+				if(len(data) == 0):
+					return login_form(request, error = {'error': 'Could not locate your email in PCS database. We have created an account for you and have sent a verification email. You would be able to login after verifying your email address. '})
+				password = hashlib.sha1(login_password).hexdigest()
+				print password
+				if(data[0][3]== None):
+					cursor.execute("""UPDATE pcs_authors SET password = '%s' where id = '%s';""" %(password, data[0][0]))
+				else:
+					if(data[0][3]!=password):
+						return login_form(request, error = {'error': 'Wrong password'})
+				
 				request.session['id'] = data[0][0]
 				request.session['email'] = login_email
-				request.session['name'] = data[0][1] + ' ' + data[0][2]
+				if(data[0][1] != None ):
+					request.session['name'] = data[0][1]
+				else:
+					request.session['name'] = login_email[0:login_email.index('@')]
 				return HttpResponseRedirect('/home')
 			else:
-				return login_form(request)
+				return login_form(request, error = {'error': 'No input for email.'})
 		except:
 			print sys.exc_info()
+			return login_form(request, error = {'error': 'Unknown error.'})
 			return login_form(request)
 	else:
 		return login_form(request)
