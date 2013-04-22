@@ -1204,5 +1204,5 @@ function enable_alert(msg){
   $("body").addClass("notice");
   setTimeout(function(){
     $("body").removeClass("notice");
-  }, 5000);
+  }, 2000);
 }
