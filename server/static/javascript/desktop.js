@@ -173,7 +173,7 @@ function bind_events(){
 
     $("#refresh_recommendations").off('click')
     $("#refresh_recommendations").on('click', function(){
-        event.stopPropagation()
+        event.stopImmediatePropagation();
         populate_recs(recommended)
     })
     
