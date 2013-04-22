@@ -236,7 +236,13 @@ function bind_events(){
 
         $('#search_papers').keyup(function(event){
             var str = $(this).val()
-            delay('search_papers("'+str+'");', 300);
+            if(str==""){
+                reset_all_papers()
+                $('#show_papers').show();
+            }else{
+                $('#show_papers').hide();
+                delay('search_papers("'+str+'");', 300);
+            }
         });
         
 
