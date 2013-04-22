@@ -177,21 +177,16 @@ function bind_events(){
         $('#search_papers').keyup(function(event){
             var str = $(this).val()
             if(str==""){
-                $('#all_papers tr').show()
-                $("#all_papers tr:gt(24)").hide()
+                reset_all_papers()
             }
-            update_papers_count();
+            
         });
 
 
         $('#search_session').keyup(function(event){
             var str = $(this).val()
             if(str==""){
-                $('.session').show()
-                $('.session-timeslot').each(function(){
-                    $(this).prev().show()
-                });
-                update_sessions_count(); 
+                reset_sessions()
             }
         });
 
@@ -816,7 +811,7 @@ function update_session_view(){
         
     });
 
-  update_sessions_count();
+    update_sessions_count();
 }
 
 
@@ -1008,6 +1003,30 @@ function update_sessions_count_async(){
     else
       $("#search-results .count").text($("#program .session:visible").length);  
 }
+
+
+
+function reset_all_papers(){
+    $("#all_papers tr").hide()
+    $("#all_papers tr:gt(24)").hide()  
+
+    if($("#all_papers tr:visible").length == $("#all_papers tr").length){
+        $('#show_papers').hide();
+    }else{
+        $('#show_papers').show();
+    }         
+    update_papers_count();
+}
+
+
+function reset_sessions(){
+    $('.session').show()
+    $('.session-timeslot').each(function(){
+        $(this).prev().show()
+    });
+    update_sessions_count(); 
+}
+
 
 function populate_papers(){
     var raw_html = ''       
