@@ -12,6 +12,17 @@
     <script type="text/javascript" src="/static/javascript/third-party/jquery.min.js"></script> 
     <script type="text/javascript" src="/static/javascript/third-party/jquery-ui.js"></script> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+    @media only screen and (max-width: 640px) {
+      #page{
+        top: 0 !important;
+      }
+
+      form{
+        margin-top: 0;
+      }
+    }
+    </style>
 </head>
 <!--
 <div id="header">
@@ -52,7 +63,7 @@ $(document).ready(function(){
     
 </script>
 
-<div id="page style="top:0em !important">
+<div id="page">
 <form method="POST" action="/login">
     {% csrf_token %}
     <!--<h3>Plan my CHI with myCHI</h3>-->
