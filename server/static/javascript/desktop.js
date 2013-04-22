@@ -1007,7 +1007,7 @@ function update_sessions_count_async(){
 
 
 function reset_all_papers(){
-    $("#all_papers tr").hide()
+    $("#all_papers tr").show()
     $("#all_papers tr:gt(24)").hide()  
 
     if($("#all_papers tr:visible").length == $("#all_papers tr").length){
