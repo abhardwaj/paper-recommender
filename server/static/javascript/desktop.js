@@ -50,8 +50,7 @@ function detect_mobile() {
  || navigator.userAgent.match(/Windows Phone/i)
  ){
     return true;
-  }
- else {
+  } else {
     return false;
   }
 }
@@ -174,32 +173,49 @@ function bind_events(){
         populate_recs(recommended)
     })
     
-    if(!detect_mobile()){
-
+    if(detect_mobile()){
         $('#search_session').keyup(function(event){
             var str = $(this).val()
-            delay('search_session("'+str+'");', 200);
+            delay('simple_search_session("'+str+'");', 300);
         });
 
 
         $('#search_papers').keyup(function(event){
             var str = $(this).val()
-            delay('search_papers("'+str+'");', 100);
+            delay('simple_search_papers("'+str+'");', 300);
         });
+
+        
+    }else{
+        $('#search_session').keyup(function(event){
+            var str = $(this).val()
+            delay('search_session("'+str+'");', 300);
+        });
+
+
+        $('#search_papers').keyup(function(event){
+            var str = $(this).val()
+            delay('search_papers("'+str+'");', 300);
+        });
+        /*
+
+        $('#search_sessions_btn').off('click')
+        $('#search_sessions_btn').on('click', function(event){
+                var str = $('#search_session').val()
+                delay('search_session("'+str+'");', 0);
+            });
+
+
+        $('#search_papers_btn').off('click')
+        $('#search_papers_btn').on('click', function(event){
+            var str = $('#search_papers').val()
+            delay('search_papers("'+str+'");', 0);
+        });
+        */
+
     }
     
-    $('#search_sessions_btn').off('click')
-    $('#search_sessions_btn').on('click', function(event){
-            var str = $('#search_session').val()
-            search_session(str)
-        });
-
-
-    $('#search_papers_btn').off('click')
-    $('#search_papers_btn').on('click', function(event){
-        var str = $('#search_papers').val()
-        search_papers(str)
-    });
+   
 
     
 
@@ -281,6 +297,29 @@ function search_session(str){
 }
 
 
+function simple_search_session(str){
+    
+    $('.session-timeslot').each(function(){
+        $(this).prev().hide()
+    });
+
+       
+    $('.session').each(function(){
+        if($(this).text().indexOf(str)!=-1){
+            $(this).show()            
+        }else{
+            $(this).hide()
+        }
+
+    });
+
+    $('.session:visible').each(function(){
+        $(this).parent().prev().show()
+    });
+    update_sessions_count(); 
+    
+}
+
 function search_papers(str){
     var regex_str = ''
     var words = str.split(' ')
@@ -300,15 +339,29 @@ function search_papers(str){
         }
 
     });
+    
+    
+    update_papers_visible_count(); 
+}
+
+
+function simple_search_papers(str){
+   
+       
+    $('#all_papers .paper').each(function(){
+        if($(this).text().indexOf(str)!= -1){
+            $(this).show()
+            
+        }else{
+            $(this).hide()
+        }
+
+    });
+    
+
+   
 
     update_papers_visible_count(); 
-
-    if (str != ""){
-      $("#show_papers").hide();
-    } else {
-      $("#show_papers").show();
-      populate_papers();
-    }
 }
 
 
