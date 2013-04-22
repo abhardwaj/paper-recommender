@@ -557,7 +557,7 @@ function get_paper_html(id){
 
     raw_html += '<li class="paper-title blue"><h3><a href="/paper?id='+id+'">'+remove_special_chars(entities[id].title) +'</a>'
     raw_html += '<span class="paper-subtype">' + get_paper_subtype(id) + '</span>'
-    raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/#'+codes['code'][id]+'">Video URL</a></span>'
+    raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
     raw_html += '</h3>'
     raw_html += '</li>'
 

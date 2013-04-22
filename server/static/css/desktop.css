@@ -780,6 +780,18 @@ textarea {
   width: 1.8em;
   height: 1.8em;
 }
+
+
+.play-icon{
+	display:inline-block;
+	margin-right: 0.7em;
+	background-image:url(/static/img/play.png);
+	background-repeat: no-repeat;
+	background-size: 1.2em 1.2em;
+	width: 1.2em;
+	height: 1.2em;
+
+}
 /*
 .community-icon.design{
   display:inline-block;
