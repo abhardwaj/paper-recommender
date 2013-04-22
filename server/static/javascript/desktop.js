@@ -694,7 +694,7 @@ function get_selected_paper_html(id){
     raw_html += '<li class="paper-authors">'
     for(var author in entities[id].authors){
         if(entities[id].authors[author] != null){
-          console.log(entities[id]);
+          //console.log(entities[id]);
             //raw_html += entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName + '&nbsp;&nbsp;&nbsp;&nbsp;'
             raw_html += '<span class="author"><span class="author-name">' 
                     + entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName 
