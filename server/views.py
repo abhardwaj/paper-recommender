@@ -18,7 +18,7 @@ from db.authors import *
 p = os.path.abspath(os.path.dirname(__file__))
 if(os.path.abspath(p+"/..") not in sys.path):
 	sys.path.append(os.path.abspath(p+"/.."))
-sys.path.append('/production/paper-recommender')
+sys.path.append('/production/paper-recommender/')
 
 
 '''
