@@ -1,16 +1,16 @@
 CACHE MANIFEST
 
-#/
-#/home
-#/schedule
-#/paper
+/
+/home
+/schedule
+/paper
 
-#/static/css/desktop.css
+/static/css/desktop.css
 /static/css/third-party/jquery-ui.css
 
 /static/javascript/third-party/jquery.min.js
 /static/javascript/third-party/jquery-ui.js
-#/static/javascript/desktop.js
+/static/javascript/desktop.js
 
 /static/img/affiliation.svg
 /static/img/arrows.ai
