@@ -441,6 +441,16 @@ textarea {
   font-weight: bold;
 }
 
+.video-url {
+  display:inline-block;
+  margin-left: 0.2em;
+  color: #447EAC !important;
+  padding: 0.1em 0.5em;
+  text-align: center;
+  font-size: 0.8em;
+  font-weight: normal;
+}
+
 .paper-subtype {
   display:inline-block;
   margin-left: 0.2em;

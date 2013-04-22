@@ -15,6 +15,10 @@ from db.entity import *
 from db.session import *
 from db.authors import *
 
+p = os.path.abspath(os.path.dirname(__file__))
+if(os.path.abspath(p+"/..") not in sys.path):
+	sys.path.append(os.path.abspath(p+"/.."))
+
 
 '''
 @author: Anant Bhardwaj
@@ -27,6 +31,8 @@ r = Recommender()
 e = Entity()
 p = Prefs()
 s = Session()
+
+codes = open('data/letterCodes.json').read()
 
 
 def send_email(addr, id):	
@@ -180,7 +186,8 @@ def data(request):
 		'recs':recs, 
 		'starred':starred, 
 		'entities': e.entities, 
-		'sessions':s.sessions
+		'sessions':s.sessions,
+		'codes': codes
 		}), mimetype="application/json")
 
 @csrf_exempt

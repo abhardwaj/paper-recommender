@@ -5,9 +5,10 @@ var en = localStorage.getItem('entities')
 var se = localStorage.getItem('sessions')
 var re = localStorage.getItem('recommended')
 var st = localStorage.getItem('starred')
+var co = localStorage.getItem('codes')
 
 // contact the server if required
-if(id == null || en == null || se == null || re == null || st == null){
+if(id == null || en == null || se == null || re == null || st == null || co == null){
     console.log('contacting server')
     $.ajax({
         type: 'GET',
@@ -19,12 +20,14 @@ if(id == null || en == null || se == null || re == null || st == null){
         se = JSON.stringify(res.sessions)
         re = JSON.stringify(res.recs)
         st  = JSON.stringify(res.starred)
+        co  = res.codes
         localStorage.clear()
         localStorage.setItem('login_id', id)
         localStorage.setItem('entities', en)
         localStorage.setItem('sessions', se)
         localStorage.setItem('recommended', re)
         localStorage.setItem('starred', st)
+        localStorage.setItem('codes', co)
 
         }
     });
@@ -38,6 +41,7 @@ var entities = JSON.parse(en)
 var sessions = JSON.parse(se)
 var recommended = JSON.parse(re)
 var starred = JSON.parse(st)
+var codes = JSON.parse(co)
 
 
 function detect_mobile() { 
@@ -551,9 +555,11 @@ function get_paper_html(id){
     raw_html += '<td class="content">'    
     raw_html += '<ul>'
 
-    raw_html += '<li class="paper-title blue"><a href="/paper?id='+id+'"><h3>'+remove_special_chars(entities[id].title) 
+    raw_html += '<li class="paper-title blue"><h3><a href="/paper?id='+id+'">'+remove_special_chars(entities[id].title) +'</a>'
     raw_html += '<span class="paper-subtype">' + get_paper_subtype(id) + '</span>'
-    raw_html += '</h3></a></li>'
+    raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/#'+codes['code'][id]+'">Video URL</a></span>'
+    raw_html += '</h3>'
+    raw_html += '</li>'
 
 
     raw_html += '<li class="paper-authors">'
