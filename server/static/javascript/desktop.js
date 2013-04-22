@@ -174,6 +174,26 @@ function bind_events(){
     })
     
     if(detect_mobile()){
+
+
+        var needs_scroll_update = false;
+        $(document).scroll(function(){
+            if(needs_scroll_update) {
+                setTimeout(function() {
+                    $("body").css("height", "+=1").css("height", "-=1");
+                }, 0);
+            }
+        });
+        $("input, textarea").live("focus", function(e) {
+            needs_scroll_update = true;
+        });
+
+        $("input, textarea").live("blur", function(e) {
+            needs_scroll_update = false;
+        });
+
+
+
         $('#search_papers').keyup(function(event){
             var str = $(this).val()
             if(str==""){
