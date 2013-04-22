@@ -173,7 +173,7 @@ function bind_events(){
         populate_recs(recommended)
     })
     
-    if(!detect_mobile()){
+    if(detect_mobile()){
         $('#search_papers').keyup(function(event){
             var str = $(this).val()
             if(str==""){
