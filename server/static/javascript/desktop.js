@@ -174,7 +174,7 @@ function bind_events(){
     })
     
     if(detect_mobile()){
-
+        /*
 
         var needs_scroll_update = false;
         $(document).scroll(function(){
@@ -192,7 +192,7 @@ function bind_events(){
             needs_scroll_update = false;
         });
 
-
+        */
 
         $('#search_papers').keyup(function(event){
             var str = $(this).val()
