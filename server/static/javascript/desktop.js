@@ -198,6 +198,9 @@ function bind_events(){
             var str = $(this).val()
             if(str==""){
                 reset_all_papers()
+                $('#show_papers').show();
+            }else{
+                $('#show_papers').hide();
             }
             
         });
