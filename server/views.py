@@ -36,19 +36,21 @@ codes = open('/production/paper-recommender/data/letterCodes.json').read()
 
 
 def send_email(addr, id):	
-	email_subject = "MyCHI verification"
+	email_subject = "Welcome to myCHI"
 	from_addr="mychi@csail.mit.edu"
 	to_addr = [addr]
 
 	msg_body = """
 	Dear %s,
 
-	Thanks for registering! Please click the below link to validate your email address:
+	Thanks for registering! Please click the link below to start using myCHI:
+
 	http://mychi.csail.mit.edu/verify/%s
+
 	""" %(addr, id)
 	
 	msg = MIMEMultipart()
-	msg['From'] = 'mychi@csail.mit.edu'
+	msg['From'] = 'myCHI'
 	msg['To'] = ",".join(to_addr)
 	msg['Subject'] = email_subject
 	msg.attach(MIMEText(msg_body))	
@@ -61,9 +63,16 @@ def send_email(addr, id):
 	#smtp_conn.starttls()
 	#smtp_conn.ehlo()
 	smtp_conn.login(username, password)	
-	smtp_conn.set_debuglevel(True)	
+	#smtp_conn.set_debuglevel(True)	
 	smtp_conn.sendmail(from_addr, to_addr, msg.as_string())
 	smtp_conn.close() 
+
+
+
+@csrf_exempt
+def email(request, login_email):
+	send_email(base64.b64decode(login_email), login_email)
+	return HttpResponse(json.dumps({'status':'ok'}),  mimetype="application/json")
 
 
 def init_session(email):
@@ -90,14 +99,13 @@ def login(request):
 					email2 like '%s' or email3 like '%s';""" %(login_email, login_email, login_email))
 				data = cursor.fetchall()
 				if(len(data) == 0):
-					send_email(login_email, urllib.quote(base64.b64encode(login_email)))
-					return login_form(request, error = {'error': 'Could not locate your email in PCS database. We have created an account for you and have sent a verification email. You would be able to login after verifying your email address. '})
+					return login_form(request, error = { 'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'info', 'error': 'We have sent you a verification email. Please check your mailbox.'})
 				password = hashlib.sha1(login_password).hexdigest()
 				if(data[0][3]== None):
 					cursor.execute("""UPDATE pcs_authors SET password = '%s' where id = '%s';""" %(password, data[0][0]))
 				else:
 					if(data[0][3]!=password):
-						return login_form(request, error = {'error': 'Wrong password'})
+						return login_form(request, error = {'type': 'error', 'error': 'Wrong password'})
 				
 				request.session['id'] = data[0][0]
 				request.session['email'] = login_email
@@ -107,10 +115,10 @@ def login(request):
 					request.session['name'] = login_email[0:login_email.index('@')]
 				return HttpResponseRedirect('/home')
 			else:
-				return login_form(request, error = {'error': 'No input for email.'})
+				return login_form(request, error = {'type': 'error', 'error': 'Enter an email address.'})
 		except:
 			print sys.exc_info()
-			return login_form(request, error = {'error': 'Unknown error.'})
+			return login_form(request, error = {'type':'error', 'error': 'Something went wrong. We will look into it.'})
 			return login_form(request)
 	else:
 		return login_form(request)

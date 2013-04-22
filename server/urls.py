@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 
     url(r'^login', 'server.views.login'),
     url(r'^verify/(.+)$', 'server.views.verify'),
+    url(r'^email/(.+)$', 'server.views.email'),
 
     url(r'^logout', 'server.views.logout'),
 )

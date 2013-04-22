@@ -594,7 +594,13 @@ textarea {
 }
 
 .error{
-	color: #ff0000;
+  	color: red;
+	
+}
+
+.info{
+  	color: green;
+	
 }
 
 
