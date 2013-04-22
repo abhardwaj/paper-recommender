@@ -39,9 +39,6 @@ body {
   #header {
     font-size: 0.9em !important;
     width:100% !important;
-    position: fixed !important;
-    top: 0;
-    left: 0;
   }
 
   #content {
