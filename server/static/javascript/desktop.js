@@ -237,12 +237,11 @@ function bind_events(){
         $('#search_papers').keyup(function(event){
             var str = $(this).val()
             if(str==""){
-                reset_all_papers()
                 $('#show_papers').show();
             }else{
                 $('#show_papers').hide();
-                delay('search_papers("'+str+'");', 300);
             }
+            delay('search_papers("'+str+'");', 300);
         });
         
 
