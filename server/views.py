@@ -50,7 +50,7 @@ def send_email(addr, id):
 	""" %(addr, id)
 	
 	msg = MIMEMultipart()
-	msg['From'] = 'mychi@csail.mit.edu <myCHI>'
+	msg['From'] = 'myCHI <mychi@csail.mit.edu>'
 	msg['To'] = ",".join(to_addr)
 	msg['Subject'] = email_subject
 	msg.attach(MIMEText(msg_body))	
