@@ -173,16 +173,36 @@ function bind_events(){
         populate_recs(recommended)
     })
     
-    if(detect_mobile()){
-        $('#search_session').keyup(function(event){
+    if(!detect_mobile()){
+        $('#search_papers').keyup(function(event){
             var str = $(this).val()
-            delay('simple_search_session("'+str+'");', 300);
+            if(str==""){
+                $('#all_papers .paper').show()
+            }
         });
 
 
-        $('#search_papers').keyup(function(event){
+        $('#search_session').keyup(function(event){
             var str = $(this).val()
-            delay('simple_search_papers("'+str+'");', 300);
+            if(str==""){
+                $('#.session').show()
+                $('.session-timeslot').each(function(){
+                    $(this).prev().show()
+                });
+            }
+        });
+
+        $('#search_sessions_btn').off('click')
+        $('#search_sessions_btn').on('click', function(event){
+                var str = $('#search_session').val()
+                delay('simple_search_session("'+str+'");', 0);
+            });
+
+
+        $('#search_papers_btn').off('click')
+        $('#search_papers_btn').on('click', function(event){
+            var str = $('#search_papers').val()
+            delay('simple_search_papers("'+str+'");', 0);
         });
 
         
@@ -197,7 +217,7 @@ function bind_events(){
             var str = $(this).val()
             delay('search_papers("'+str+'");', 300);
         });
-        /*
+        
 
         $('#search_sessions_btn').off('click')
         $('#search_sessions_btn').on('click', function(event){
@@ -211,7 +231,7 @@ function bind_events(){
             var str = $('#search_papers').val()
             delay('search_papers("'+str+'");', 0);
         });
-        */
+        
 
     }
     
