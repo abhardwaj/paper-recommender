@@ -29,6 +29,15 @@ class Prefs:
 
 	def __load__(self):
 		cursor = connection.cursor()
+		cursor.execute("SELECT authorId, id, givenName, familyName FROM authors;")
+		data = cursor.fetchall()
+		for row in data:
+			if(row[0].strip()==''):
+				continue
+			self.author_likes[unicode(row[0]).strip()] = {'name': unicode(row[2]).strip() + ' ' + unicode(row[3]).strip(), 'likes':[row[1].strip()]}
+
+
+
 		cursor.execute("SELECT id, authorId, great, ok, notsure, notok, interested, name FROM authorsourcing;")
 		data = cursor.fetchall()
 		for row in data:
@@ -53,11 +62,11 @@ class Prefs:
 
 			self.paper_prefs[paper_id] = author_prefs
 			likes = [unicode(p).strip() for p in row[6].split(',')]
-			likes.append(row[0].strip())
+			
 
 			# update author_likes
 			if(row[1]!='' and row[6]!=''):
-				self.author_likes[unicode(row[1]).strip()] = {'name': unicode(row[7]).strip(), 'likes':likes}
+				self.author_likes[unicode(row[1]).strip()]['likes'].extend(likes)
 	
 
 	def get_paper_prefs(self):
