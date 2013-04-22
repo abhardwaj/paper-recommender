@@ -184,11 +184,11 @@ function bind_events(){
                 }, 0);
             }
         });
-        $("input, text").live("focus", function(e) {
+        $("input, textarea").live("focus", function(e) {
             needs_scroll_update = true;
         });
 
-        $("input, text").live("blur", function(e) {
+        $("input, textarea").live("blur", function(e) {
             needs_scroll_update = false;
         });
 
