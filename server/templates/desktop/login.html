@@ -63,7 +63,7 @@ var error = '{{error}}'
 var login_email = '{{login_email}}'
 
 $(document).ready(function(){
-
+    localStorage.clear()
 
     $(".default-text").focus(function() {
         if ($(this).val() == $(this)[0].title) {
@@ -101,7 +101,7 @@ $(document).ready(function(){
     {% csrf_token %}
     <!--<h3>Plan my CHI with myCHI</h3>-->
     <h3>myCHI</h3>
-    <div class="teaser">Bookmark your favorite papers. <br/>Get social recommendations. <br/>Manage your personal schedule.</div>
+    <div class="teaser">Bookmark your favorite papers. <br/>Get social recommendations. <br/>Discover your personal schedule.</div>
     <hr />
     <label for="login_email">Email</label><br />
     <input type="text" name="login_email" autocapitalize="off" autocorrect="off" class="default-text" id="login_email" title="Enter your PCS email"/><br />
