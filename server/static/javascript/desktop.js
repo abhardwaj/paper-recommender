@@ -179,6 +179,7 @@ function bind_events(){
             if(str==""){
                 $('#all_papers .paper').show()
             }
+            update_papers_count();
         });
 
 
@@ -189,6 +190,7 @@ function bind_events(){
                 $('.session-timeslot').each(function(){
                     $(this).prev().show()
                 });
+                update_sessions_count(); 
             }
         });
 
