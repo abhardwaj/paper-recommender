@@ -7,7 +7,6 @@ urlpatterns = patterns('',
 	url(r'^paper', 'server.views.paper'),
 	
 	url(r'^data', 'server.views.data'),
-	url(r'^manifest$', 'server.views.manifest'),
     url(r'^recs', 'server.views.get_recs'),
     url(r'^like/(\w+)$', 'server.views.like'),
 
