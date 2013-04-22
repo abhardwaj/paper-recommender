@@ -177,7 +177,7 @@ function bind_events(){
         $('#search_papers').keyup(function(event){
             var str = $(this).val()
             if(str==""){
-                $('#all_papers').show()
+                $('#all_papers tr').show()
                 $("#all_papers tr:gt(24)").hide()
             }
             update_papers_count();
