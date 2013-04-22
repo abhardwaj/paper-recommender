@@ -1,10 +1,13 @@
-import json, sys, re, hashlib
+import json, sys, re, hashlib, smtplib, base64, urllib
 
 
 from django.http import *
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.core.context_processors import csrf
+
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 from algorithm.recommend import *
 from db.prefs import *
@@ -25,6 +28,38 @@ e = Entity()
 p = Prefs()
 s = Session()
 
+
+def send_email(addr, id):	
+	email_subject = "MyCHI verification"
+	from_addr="mychi@csail.mit.edu"
+	to_addr = [addr]
+
+	msg_body = """
+	Dear %s,
+
+	Thanks for registering! Please click the below link to validate your email address:
+	http://mychi.csail.mit.edu/verify/%s
+	""" %(addr, id)
+	
+	msg = MIMEMultipart()
+	msg['From'] = 'mychi@csail.mit.edu'
+	msg['To'] = ",".join(to_addr)
+	msg['Subject'] = email_subject
+	msg.attach(MIMEText(msg_body))	
+	
+	
+	username = 'anantb'
+	password = 'JcAt250486'
+	smtp_conn = smtplib.SMTP_SSL('cs.stanford.edu', 465)
+	#smtp_conn.ehlo()
+	#smtp_conn.starttls()
+	#smtp_conn.ehlo()
+	smtp_conn.login(username, password)	
+	smtp_conn.set_debuglevel(True)	
+	smtp_conn.sendmail(from_addr, to_addr, msg.as_string())
+	smtp_conn.close() 
+
+
 def init_session(email):
 	pass
 
@@ -42,7 +77,6 @@ def login(request):
 		try:
 			login_email = request.POST["login_email"]
 			login_password = request.POST["login_password"].strip()
-			print 'login_password' + login_password
 			if(login_email != ""):
 				request.session.flush()
 				cursor = connection.cursor()
@@ -50,9 +84,9 @@ def login(request):
 					email2 like '%s' or email3 like '%s';""" %(login_email, login_email, login_email))
 				data = cursor.fetchall()
 				if(len(data) == 0):
+					send_email(login_email, urllib.quote(base64.b64encode(login_email)))
 					return login_form(request, error = {'error': 'Could not locate your email in PCS database. We have created an account for you and have sent a verification email. You would be able to login after verifying your email address. '})
 				password = hashlib.sha1(login_password).hexdigest()
-				print password
 				if(data[0][3]== None):
 					cursor.execute("""UPDATE pcs_authors SET password = '%s' where id = '%s';""" %(password, data[0][0]))
 				else:
@@ -74,6 +108,19 @@ def login(request):
 			return login_form(request)
 	else:
 		return login_form(request)
+
+
+@csrf_exempt
+def verify(request, addr):
+	login_email = base64.b64decode(addr)
+	cursor = connection.cursor()
+	cursor.execute("""SELECT id from pcs_authors where email1 like '%s' or 
+					email2 like '%s' or email3 like '%s';""" %(login_email, login_email, login_email))
+	data = cursor.fetchall()
+	if(len(data) == 0):
+		cursor.execute("""INSERT into pcs_authors (id, email1) values('%s', '%s');""" %(addr, login_email))
+	
+	return login_form(request)
 		
 
 
@@ -162,6 +209,7 @@ def like(request, like_str):
 			res[paper_id] = 'unstar'
 	recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
 	return HttpResponse(json.dumps({'recs':recs, 'likes':p.author_likes[user], 'res':res}), mimetype="application/json")
+
 
 
 
