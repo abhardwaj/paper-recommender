@@ -1,14 +1,14 @@
 // try to first load the data from localStorage 
-
+/*
 var id = localStorage.getItem('login_id')
 var en = localStorage.getItem('entities')
 var se = localStorage.getItem('sessions')
 var re = localStorage.getItem('recommended')
 var st = localStorage.getItem('starred')
 var co = localStorage.getItem('codes')
-
+*/
 // contact the server if required
-if(id == null || en == null || se == null || re == null || st == null || co == null){
+//if(id == null || en == null || se == null || re == null || st == null || co == null){
     console.log('contacting server')
     $.ajax({
         type: 'GET',
@@ -32,7 +32,7 @@ if(id == null || en == null || se == null || re == null || st == null || co == n
         }
     });
 
-}
+//}
 
 
 

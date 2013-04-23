@@ -35,19 +35,10 @@ s = Session()
 codes = open('/production/paper-recommender/data/letterCodes.json').read()
 
 
-def send_email(addr, id):	
+def send_email(addr, id, msg_body):	
 	email_subject = "Welcome to myCHI"
 	from_addr="mychi@csail.mit.edu"
 	to_addr = [addr]
-
-	msg_body = """
-	Dear %s,
-
-	Thanks for registering! Please click the link below to start using myCHI:
-
-	http://mychi.csail.mit.edu/verify/%s
-
-	""" %(addr, id)
 	
 	msg = MIMEMultipart()
 	msg['From'] = 'myCHI <mychi@csail.mit.edu>'
@@ -71,6 +62,28 @@ def send_email(addr, id):
 
 @csrf_exempt
 def email(request, login_email):
+	msg_body = """
+	Dear %s,
+
+	Thanks for registering! Please click the link below to start using myCHI:
+
+	http://mychi.csail.mit.edu/verify/%s
+
+	""" %(addr, id)
+	send_email(base64.b64decode(login_email), login_email, msg_body)
+	return HttpResponse(json.dumps({'status':'ok'}),  mimetype="application/json")
+
+
+@csrf_exempt
+def reset(request, login_email):
+	msg_body = """
+	Dear %s,
+
+	Please click the link below to reset your myCHI password:
+
+	http://mychi.csail.mit.edu/verify/%s
+
+	""" %(addr, id)
 	send_email(base64.b64decode(login_email), login_email)
 	return HttpResponse(json.dumps({'status':'ok'}),  mimetype="application/json")
 
@@ -105,7 +118,7 @@ def login(request):
 					cursor.execute("""UPDATE pcs_authors SET password = '%s' where id = '%s';""" %(password, data[0][0]))
 				else:
 					if(data[0][3]!=password):
-						return login_form(request, error = {'type': 'error', 'error': 'Wrong password'})
+						return login_form(request, error = {'type': 'error', 'error': 'Wrong password.'})
 				
 				request.session['id'] = data[0][0]
 				request.session['email'] = login_email
