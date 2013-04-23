@@ -60,6 +60,10 @@ body {
     display: inline !important;
   }
 
+  .touch-device #search_label {
+      display: none !important;
+  }
+
 /*@media (max-width: 480px) {*/
 @media only screen and (max-width: 640px) {
   body {
@@ -123,9 +127,6 @@ body {
 }
 
 
-#search_label {
-    display: none !important;
-}
 
 ol, ul, li {
 	list-style: none;
@@ -605,13 +606,13 @@ textarea {
 .tab{
 	display: none;
 }
-/*
-#search_label {
-  margin-right: 1em;
-}*/
 
-#search_papers_btn, #search_sessions_btn {
-  /*display: none;*/
+.no-touch-device #search_label {
+  margin-right: 1em;
+}
+
+.no-touch-device #search_papers_btn, .no-touch-device #search_sessions_btn {
+  display: none !important;
 }
 
 #search_papers, #search_session {
