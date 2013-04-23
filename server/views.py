@@ -249,20 +249,19 @@ def get_recs(request):
 @csrf_exempt
 def like(request, like_str):
 	papers = json.loads(request.POST["papers"])
+	s = ','.join(papers)
 	user = request.session['id']
 	res = {}
+	cursor = connection.cursor()
+	cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], like_str, s))
 	if(user not in p.author_likes):
 		p.author_likes[user] = {}
 		p.author_likes[user]['likes'] = []
 	for paper_id in papers:
 		if(like_str=='star' and (paper_id not in p.author_likes[user]['likes']) and paper_id != ''):
 			p.author_likes[user]['likes'].append(paper_id)
-			cursor = connection.cursor()
-			cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], 'like', like_str))		
 		if(like_str=='unstar' and (paper_id in p.author_likes[user]['likes']) and paper_id != ''):
 			p.author_likes[user]['likes'].remove(paper_id)
-			cursor = connection.cursor()
-			cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], 'unlike', like_str))
 		if(paper_id in p.author_likes[user]['likes']):
 			res[paper_id] = 'star'
 		else:
