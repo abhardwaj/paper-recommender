@@ -261,6 +261,7 @@ def like(request, like_str):
 			res[paper_id] = 'star'
 		else:
 			res[paper_id] = 'unstar'
+	cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(user, json.dumps(p.author_likes[user]['likes'])))
 	recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
 	return HttpResponse(json.dumps({'recs':recs, 'likes':p.author_likes[user], 'res':res}), mimetype="application/json")
 
