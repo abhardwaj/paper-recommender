@@ -824,7 +824,7 @@ function get_selected_paper_html(id){
                     + entities[id].authors[author].givenName + ' ' + entities[id].authors[author].familyName 
                     + '</span>';
             var affiliation = entities[id].authors[author].primary; 
-            if (typeof affiliation !== "undefined" && typeof affiliation.institution !== "undefined" && typeof affiliation.country !== "undefined")
+            if (affiliation != null && affiliation.institution != null && affiliation.country != null)
             raw_html += '<span class="author-affiliation">'
                     + affiliation.institution + ', ' + affiliation.country 
                     + '</span>';
