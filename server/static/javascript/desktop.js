@@ -440,6 +440,10 @@ function simple_search_session(str){
 }
 
 function search_papers(str){
+    if(str==""){
+        reset_all_papers()
+        return
+    }
     var regex_str = ''
     var words = str.split(' ')
     for (var i=0;i<words.length; i++){
@@ -650,8 +654,8 @@ function get_paper_html(id){
     raw_html += '<ul>'
 
     raw_html += '<li class="paper-title blue"><h3><a href="/paper?id='+id+'">'+remove_special_chars(entities[id].title) +'</a>'
-    raw_html += '<span class="paper-subtype">' + get_paper_subtype(id) + '</span>'
-    raw_html += '<span class="paper-code">' + codes['code'][id] + '</span>'
+    raw_html += '<span class="paper-subtype">' + ' ' + get_paper_subtype(id) + '</span>'
+    raw_html += '<span class="paper-code">' +  ' ' + codes['code'][id] + '</span>'
     //raw_html += '<span class="paper-session">' + get_short_session_info_of_paper(id) + '</span>'
     if (codeExists(codes['code'][id]))
       raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'

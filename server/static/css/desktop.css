@@ -963,7 +963,7 @@ div.timeline {
 
 div.timeline div {
 	float: left;
-	border: 1px solid #FFF;
+	outline: 1px solid #FFF;
 	background-color: #DDD;
 	border-radius: 0.5em;
 	box-sizing: border-box;

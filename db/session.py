@@ -28,22 +28,24 @@ class Session:
 		cursor.execute("SELECT id ,submissions, date, time, room, personas, venue, coreCommunities, title, featuredCommunities, hasAward, hasHonorableMention FROM session WHERE scheduled=1;")
 		data = cursor.fetchall()
 		for row in data:
-			if(row[1]!=''):
-				id = unicode(row[0]).strip()
+			if(row[1]==''):
+				submissions = []
+			else:
 				submissions = [unicode(p).strip().lower() for p in row[1].split(',')]
-				s_id = unicode(row[0]).strip()
-				date = unicode(row[2]).strip()
-				t = unicode(row[3]).strip()
-				if(t[0]=='9'):
-					t = '0'+ t
-				room = unicode(row[4]).strip()
-				personas = unicode(row[5]).strip()
-				venue = unicode(row[6]).strip()
-				communities = json.loads(row[7])
-				title = unicode(row[8]).strip()	
-				award = row[10]
-				hm = row[11]			
-				self.sessions[id]={'date': date, 'time': t, 'room': room, 'personas': personas, 'communities': communities, 'venue':venue, 's_title':title, 'submissions':submissions, 'award':award, 'hm':hm}
+			id = unicode(row[0]).strip()			
+			s_id = unicode(row[0]).strip()
+			date = unicode(row[2]).strip()
+			t = unicode(row[3]).strip()
+			if(t[0]=='9'):
+				t = '0'+ t
+			room = unicode(row[4]).strip()
+			personas = unicode(row[5]).strip()
+			venue = unicode(row[6]).strip()
+			communities = json.loads(row[7])
+			title = unicode(row[8]).strip()	
+			award = row[10]
+			hm = row[11]			
+			self.sessions[id]={'date': date, 'time': t, 'room': room, 'personas': personas, 'communities': communities, 'venue':venue, 's_title':title, 'submissions':submissions, 'award':award, 'hm':hm}
 
 
 	def get_sessions(self):
