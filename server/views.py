@@ -32,6 +32,8 @@ e = Entity()
 p = Prefs()
 s = Session()
 
+likes = []
+
 codes = open('/production/paper-recommender/data/letterCodes.json').read()
 
 
@@ -225,11 +227,17 @@ def data(request):
 	recs = []
 	own_papers = []
 	starred = {}
+	cursor = connection.cursor()
+	cursor.execute("""SELECT likes from pcs_authors where id = '%s';""" %(user))
+	data = cursor.fetchall()
+	likes = data[0][0]
 	if(user in p.author_likes):
-		starred = {s:True for s in p.author_likes[user]['likes']}
+		if(likes == None and ('likes' in p.author_likes[user])):
+			likes = p.author_likes[user]['likes']
 		if('own_papers' in p.author_likes[user]):
 			own_papers = p.author_likes[user]['own_papers']
-		recs = r.get_item_based_recommendations(starred)
+			starred = {l:True for l in likes}
+		recs = r.get_item_based_recommendations(likes)
 	return HttpResponse(json.dumps({
 		'login_id': request.session['id'], 
 		'login_name': request.session['name'],
@@ -256,22 +264,20 @@ def like(request, like_str):
 	res = {}
 	cursor = connection.cursor()
 	cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], like_str, s))
-	if(user not in p.author_likes):
-		p.author_likes[user] = {}
-		p.author_likes[user]['likes'] = []
+
 	for paper_id in papers:
-		if(like_str=='star' and (paper_id not in p.author_likes[user]['likes']) and paper_id != ''):
-			p.author_likes[user]['likes'].append(paper_id)
-		if(like_str=='unstar' and (paper_id in p.author_likes[user]['likes']) and paper_id != ''):
-			p.author_likes[user]['likes'].remove(paper_id)
-		if(paper_id in p.author_likes[user]['likes']):
+		if(like_str=='star' and (paper_id not in likes) and paper_id != ''):
+			likes.append(paper_id)
+		if(like_str=='unstar' and (paper_id in likes) and paper_id != ''):
+			likes.remove(paper_id)
+		if(paper_id in likes):
 			res[paper_id] = 'star'
 		else:
 			res[paper_id] = 'unstar'
 	cursor = connection.cursor()
-	cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(p.author_likes[user]['likes']), user))
-	recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
-	return HttpResponse(json.dumps({'recs':recs, 'likes':p.author_likes[user], 'res':res}), mimetype="application/json")
+	cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(likes), user))
+	recs = r.get_item_based_recommendations(likes)
+	return HttpResponse(json.dumps({'recs':recs, 'likes':likes, 'res':res}), mimetype="application/json")
 
 
 
