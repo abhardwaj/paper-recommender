@@ -440,6 +440,10 @@ function simple_search_session(str){
 }
 
 function search_papers(str){
+    if(str==""){
+        reset_all_papers()
+        return
+    }
     var regex_str = ''
     var words = str.split(' ')
     for (var i=0;i<words.length; i++){
