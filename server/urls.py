@@ -13,7 +13,9 @@ urlpatterns = patterns('',
 
     url(r'^login', 'server.views.login'),
     url(r'^verify/(.+)$', 'server.views.verify'),
-    url(r'^email/(.+)$', 'server.views.email'),
+    url(r'^reset/(.+)$', 'server.views.reset'),
+    url(r'^verify_email/(.+)$', 'server.views.verify_email'),
+    url(r'^reset_email/(.+)$', 'server.views.reset_email'),
 
     url(r'^logout', 'server.views.logout'),
 )

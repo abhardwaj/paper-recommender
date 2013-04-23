@@ -603,7 +603,9 @@ textarea {
 
 
 
-
+.highlight{
+	background-color: #ff2;
+}
 
 
 
@@ -648,7 +650,7 @@ textarea {
 	
 }
 
-.info{
+.info, .info2{
   	color: green;
 	
 }

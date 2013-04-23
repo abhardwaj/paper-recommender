@@ -39,9 +39,10 @@ var co = localStorage.getItem('codes')
 var login_id = JSON.parse(id)
 var entities = JSON.parse(en)
 var sessions = JSON.parse(se)
-var recommended = JSON.parse(re)
+var recommended_all = JSON.parse(re)
 var starred = JSON.parse(st)
 var codes = JSON.parse(co)
+var recommended = recommended_all.splice(0,20)
 
 // codes without video preview
 var codeBlackList = [
@@ -68,6 +69,47 @@ function detect_mobile() {
     return false;
   }
 }
+
+
+
+jQuery.fn.highlight = function(pat) {
+ function innerHighlight(node, pat) {
+  var skip = 0;
+  if (node.nodeType == 3) {
+   var pos = node.data.toUpperCase().indexOf(pat);
+   if (pos >= 0) {
+    var spannode = document.createElement('span');
+    spannode.className = 'highlight';
+    var middlebit = node.splitText(pos);
+    var endbit = middlebit.splitText(pat.length);
+    var middleclone = middlebit.cloneNode(true);
+    spannode.appendChild(middleclone);
+    middlebit.parentNode.replaceChild(spannode, middlebit);
+    skip = 1;
+   }
+  }
+  else if (node.nodeType == 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
+   for (var i = 0; i < node.childNodes.length; ++i) {
+    i += innerHighlight(node.childNodes[i], pat);
+   }
+  }
+  return skip;
+ }
+ return this.each(function() {
+  innerHighlight(this, pat.toUpperCase());
+ });
+};
+
+jQuery.fn.removeHighlight = function() {
+ return this.find("span.highlight").each(function() {
+  this.parentNode.firstChild.nodeName;
+  with (this.parentNode) {
+   replaceChild(this.firstChild, this);
+   normalize();
+  }
+ }).end();
+};
+
 
 
 function get_params() {
@@ -329,6 +371,10 @@ var delay = (function(){
 
 
 function search_session(str){
+    if(str==""){
+        reset_sessions()
+        return
+    }
     var regex_str = ''
     var words = str.split(' ')
     for (var i=0;i<words.length; i++){
@@ -339,18 +385,25 @@ function search_session(str){
         $(this).prev().hide()
     });
 
-       
+      
     $('.session').each(function(){
         if(s.test($(this).text())){
-            $(this).show()            
+            $(this).show()   
+            var p = $(this).attr("data")
+            $("#"+p).show()
+            $(this).highlight(str);
+            //$(this).text().indexOf(str)        
         }else{
             $(this).hide()
+            var p = $(this).attr("data")
+            $("#"+p).hide()
         }
 
     });
 
     $('.session:visible').each(function(){
         $(this).parent().prev().show()
+        
     });
     update_sessions_count(); 
     
@@ -375,6 +428,7 @@ function simple_search_session(str){
 
     $('.session:visible').each(function(){
         $(this).parent().prev().show()
+        $('.session .paper').show()
     });
     update_sessions_count(); 
     
@@ -1039,8 +1093,12 @@ function load_paper(){
     $('#similar_papers').html('')
     $.post('recs', {'papers': JSON.stringify([paper_id])}, 
     function(res){    
-        var raw_html = ''          
-        for(var i = 0; i< res.length; i++){
+        var raw_html = '' 
+        var recs_len = 20
+        if(res.length < recs_len){
+            recs_len = res.length
+        }         
+        for(var i = 0; i< recs_len; i++){
             raw_html += get_paper_html(res[i].id)            
         } 
         $('#similar_papers').html(raw_html) 
@@ -1111,7 +1169,12 @@ function reset_all_papers(){
 function reset_sessions(){
     $('.session').show()
     $('.session-timeslot').each(function(){
-        $(this).prev().show()
+        $(this).prev().hide()
+    });  
+
+    $('.session:visible').each(function(){
+        $(this).parent().prev().show()
+        
     });
     update_sessions_count(); 
 }
