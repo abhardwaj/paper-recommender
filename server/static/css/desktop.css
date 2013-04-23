@@ -215,7 +215,7 @@ body.loading .modal, body.notice .alert {
     -ms-user-select: none;      
     user-select: none;
 }
-
+/*
 a:link, a:visited {
   color: #000;
   text-decoration:none; 
@@ -263,7 +263,7 @@ a.filter.active{
   background-color: #E9E581;
 }
 
-.no-touch-device a:active, .no-touch-device a:hover, .no-touch-device .session-title:hover {
+.no-touch-device a:active, .no-touch-device a:hover, .no-touch-device a:link, .no-touch-device a:visited, .no-touch-device .session-title:hover {
   color: #447EAC;
   text-decoration:none; 
 }
