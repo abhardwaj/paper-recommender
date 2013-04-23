@@ -35,8 +35,8 @@ s = Session()
 codes = open('/production/paper-recommender/data/letterCodes.json').read()
 
 
-def send_email(addr, msg_body):	
-	email_subject = "Welcome to myCHI"
+def send_email(addr, subject, msg_body):	
+	email_subject = subject
 	from_addr="mychi@csail.mit.edu"
 	to_addr = [addr]
 	
@@ -63,6 +63,7 @@ def send_email(addr, msg_body):
 @csrf_exempt
 def verify_email(request, login_email):
 	email_plain = base64.b64decode(login_email)
+	subject = "Welcome to myCHI"
 	email_encoded = login_email
 	msg_body = """
 	Dear %s,
@@ -72,7 +73,7 @@ def verify_email(request, login_email):
 	http://mychi.csail.mit.edu/verify/%s
 
 	""" %(email_plain, email_encoded)
-	send_email(email_plain, msg_body)
+	send_email(email_plain, subject, msg_body)
 	return HttpResponse(json.dumps({'status':'ok'}),  mimetype="application/json")
 
 
@@ -80,6 +81,7 @@ def verify_email(request, login_email):
 def reset_email(request, login_email):
 	email_plain = base64.b64decode(login_email)
 	email_encoded = login_email
+	subject = "myCHI password reset"
 	msg_body = """
 	Dear %s,
 
@@ -88,7 +90,7 @@ def reset_email(request, login_email):
 	http://mychi.csail.mit.edu/reset/%s
 
 	""" %(email_plain, email_encoded)
-	send_email(email_plain, msg_body)
+	send_email(email_plain, subject, msg_body)
 	return HttpResponse(json.dumps({'status':'ok'}),  mimetype="application/json")
 
 
@@ -167,7 +169,7 @@ def reset(request, addr):
 	cursor = connection.cursor()
 	cursor.execute("""UPDATE pcs_authors SET password = null where email1 like '%s' or 
 					email2 like '%s' or email3 like '%s';""" %(login_email, login_email, login_email))	
-	return login_form(request, error = {'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'info', 'error': 'Please enter new password.'})
+	return login_form(request, error = {'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'info', 'error': 'Please enter a new password.'})
 		
 
 

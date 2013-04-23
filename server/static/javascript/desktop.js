@@ -79,7 +79,7 @@ jQuery.fn.highlight = function(pat) {
    var pos = node.data.toUpperCase().indexOf(pat);
    if (pos >= 0) {
     var spannode = document.createElement('span');
-    spannode.className = 'highlight';
+    spannode.className = 'text-highlight';
     var middlebit = node.splitText(pos);
     var endbit = middlebit.splitText(pat.length);
     var middleclone = middlebit.cloneNode(true);
@@ -101,7 +101,7 @@ jQuery.fn.highlight = function(pat) {
 };
 
 jQuery.fn.removeHighlight = function() {
- return this.find("span.highlight").each(function() {
+ return this.find("span.text-highlight").each(function() {
   this.parentNode.firstChild.nodeName;
   with (this.parentNode) {
    replaceChild(this.firstChild, this);
@@ -387,6 +387,7 @@ function search_session(str){
 
       
     $('.session').each(function(){
+        $(this).removeHighlight()
         if(s.test($(this).text())){
             $(this).show()   
             var p = $(this).attr("data")
@@ -397,6 +398,7 @@ function search_session(str){
             $(this).hide()
             var p = $(this).attr("data")
             $("#"+p).hide()
+
         }
 
     });
@@ -1174,6 +1176,7 @@ function reset_all_papers(){
 
 function reset_sessions(){
     $('.session').show()
+    $('.session').removeHighlight()
     $('.session-timeslot').each(function(){
         $(this).prev().hide()
     });  
