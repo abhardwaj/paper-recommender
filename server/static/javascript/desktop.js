@@ -44,6 +44,16 @@ var starred = JSON.parse(st)
 var codes = JSON.parse(co)
 var recommended = recommended_all.splice(0,20)
 
+// codes without video preview
+var codeBlackList = [
+  "KOP","PHN","NDL","LDJ","PQS","PLP","PLL","CYU","LRA","PQV","NNG","PMF","PSS","PSR","NEK","PKY",
+  "PKS","PFS","PLJ","TRN","PBR","YQT","PJC","PKZ","PDS","PFR","SRJ","PHF","TUU","TZC","AZG","CZS",
+  "PQE","GYU","GDG","NMX","PAK","YHY","PQQ","LLC","NPP","TXL","CZS","TLQ","GFL","TAU","NKQ","PTS",
+  "PKL","GXS","SIA","PTU","PAE","PRH","PGG","LBR","PQZ","PTN","PRT","NGR","PEH","PGV","TGN","PSJ",
+  "PDT","PMY","NGN","PQC","PPM","PCB","SRC","PDM","PSP","GZX","PKJ","PBM","PHR","SDC","CMU","LPA",
+  "PRN","GHQ","TEC","PMR","PCD","NJT","AXZ","PEB","LSU","PMM","PMV","SGC","CMU","NHL","KSP","PKV",
+  "YYP","NFM","PTT","NCK","PQG","KCL"
+];
 
 function detect_mobile() { 
  if(navigator.userAgent.match(/Android/i)
@@ -549,6 +559,17 @@ function get_communities(entity){
 
 }
 
+function get_short_session_info_of_paper(id){
+  var result = "";
+  var session = sessions[entities[id].session];
+  var date = "";
+  if (session.date == "Monday")
+    date = "Mon";
+  if (typeof session !== "undefined"){
+    result += session.date.substring(0,3) + " " + session.time.substr(0,5) + " | " + session.room + " | " + session.s_title;
+  }
+  return result;
+}
 
 function get_session_info_of_paper(id){
   var result = "";
@@ -574,6 +595,13 @@ function get_paper_subtype(id){
     return "- " + subtype;
 }
 
+function codeExists(code){
+  // if the given code has no video preview return false
+  if ($.inArray(code, codeBlackList) > -1)
+    return false;
+  return true;
+
+}
 
 function get_paper_html(id){
     if(entities[id] == null)
@@ -611,7 +639,10 @@ function get_paper_html(id){
 
     raw_html += '<li class="paper-title blue"><h3><a href="/paper?id='+id+'">'+remove_special_chars(entities[id].title) +'</a>'
     raw_html += '<span class="paper-subtype">' + get_paper_subtype(id) + '</span>'
-    raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
+    raw_html += '<span class="paper-code">' + codes['code'][id] + '</span>'
+    raw_html += '<span class="paper-session">' + get_short_session_info_of_paper(id) + '</span>'
+    if (codeExists(codes['code'][id]))
+      raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
     raw_html += '</h3>'
     raw_html += '</li>'
 
@@ -730,7 +761,9 @@ function get_selected_paper_html(id){
       return null
     var communities = get_communities(entities[id]);
 
-    var raw_html = '<div class="paper ';    
+
+    raw_html += '<tbody>'
+    var raw_html = '<tr class="paper ' + id
     if(exists(recommended, id)){
         raw_html += ' recommended'
     }
@@ -747,8 +780,28 @@ function get_selected_paper_html(id){
       raw_html += ' communities';
     }
     raw_html += '">'
+
+
+    raw_html += '<td class="metadata">'   
+    if(starred[id] == null){
+        raw_html += '<div class="star star-open p_star" data="'+ id + '" onclick="handle_star(event);">'        
+    }else{
+        raw_html += '<div class="star star-filled p_star" data="'+ id + '" onclick="handle_star(event);">'       
+    }
+    raw_html += '</div>'
+    
+    raw_html += '</td>'
+    
+    raw_html += '<td class="content">'    
+    raw_html += '<ul>'
+
+
+
     raw_html += '<h3>' + remove_special_chars(entities[id].title) 
     raw_html += '<span class="paper-subtype">' + get_paper_subtype(id) + '</span>'
+    raw_html += '<span class="paper-code">' + codes['code'][id] + '</span>'
+    if (codeExists(codes['code'][id]))
+      raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
     raw_html += '</h3>';
 
     raw_html += '<li class="paper-authors">'
@@ -776,13 +829,15 @@ function get_selected_paper_html(id){
       });
     }
     raw_html += '</li>'
-    raw_html += '<li class="paper-session">' + get_session_info_of_paper(id) + '</li>'
+    raw_html += '<li class="paper-selected-session">' + get_session_info_of_paper(id) + '</li>'
     raw_html += '<hr />'
-    raw_html += '<ul>'
     raw_html += '<li>' + remove_special_chars(entities[id].abstract) + '</li>'
     raw_html += '<li class="paper-keywords">' + remove_special_chars(entities[id].keywords) + '</li>'
     raw_html += '</ul>'
-    raw_html += '</div>'
+    raw_html += '</td>'
+    raw_html += '</tr>'
+    raw_html += '</tbody>'
+    raw_html += '</table>'
     return raw_html
 }
 
