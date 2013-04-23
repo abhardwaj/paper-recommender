@@ -240,7 +240,7 @@ a:active, a:hover, .session-title:hover {
 form{
 	margin:0 auto;
 	margin-top:2em; 
-	padding:2em; 
+	padding:1.8em 1.8em 1em 1.8em; 
 	vertical-align:top;
 	background-color: #D7ECFA;
 	max-width:280px;
@@ -270,7 +270,7 @@ form input[type="text"], input[type="password"]{
 input[type="text"], input[type="password"], select{
 	padding:0.5em;
 	border: #2B2B2B solid thin;
-	margin: 0.5em 0;
+	margin: 0.3em 0;
   font-size: 1em;
 }
 
@@ -494,8 +494,8 @@ textarea {
   */
   display:inline-block;
   /*margin-right: 0.5em;*/
-  border: 1px solid #AAAAAA;
-  background-color: #AAAAAA;
+  border: 1px solid #2B2B2B; /*#AAAAAA;*/
+  background-color: #2B2B2B; /*#AAAAAA;*/
   font-weight: bold;
   color: #F6F6F6;
   padding: 0.1em 0.5em;
@@ -853,9 +853,10 @@ textarea {
 	margin-right: 0.7em;
 	background-image:url(/static/img/play.png);
 	background-repeat: no-repeat;
-	background-size: 1.9em 1.2em;
+	background-size: 1.9em 1.6em;
 	width: 1.9em;
-	height: 1.2em;
+	height: 1.6em;
+  margin-bottom: -0.4em;
 
 }
 /*
@@ -995,7 +996,7 @@ form .description {
 
 form .credit {
   font-size: 0.8em;
-  margin-top: 0.5em;
+  margin-top: 1.8em;
 }
 
 .credit {
