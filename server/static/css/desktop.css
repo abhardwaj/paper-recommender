@@ -59,9 +59,9 @@ body {
   }
 
   .default-search-text {
-	max-width: 90% !important;
-	min-width: 50%;
-	width: 100%;
+    max-width: 90% !important;
+    min-width: 50% !important;
+    width: 70% !important;
   /*margin-left: 1.9em !important;*/
 	}
 
@@ -86,6 +86,13 @@ body {
     margin-top: -0.5em;
   }
 
+  #search_label {
+    display: none !important;
+  }
+
+  #search_papers_btn, #search_sessions_btn {
+    display: inline !important;
+  }
 }
 
 
@@ -244,7 +251,7 @@ form{
 #selected_paper .form{
 	margin:0 auto;
 	/*margin-top:2em; */
-	padding:2em; 
+	padding:2em 2em 2em 0; 
 	vertical-align:top;
 	background-color: #f0f4f9;
 	width:border-box;
@@ -348,15 +355,23 @@ textarea {
 
 #headlink-left{
 	position:absolute;
-	top: 0.7em;
+	/*top: 0.7em;*/
+  top: 0;
 	left:0;
 	color: #F6F6F6;
+  background-image: url(/static/img/logo.png);
+  background-size: 5.67em 2.4em;
+  background-repeat: no-repeat;
 }
 
 #headlink-left a{
   text-decoration: none;
-  color: #F6F6F6
+  color: #F6F6F6;
+  width: 7em;
+  height: 2.7em;
+  display: inline-block;
 }
+
 #headlink-right a{
 	text-decoration: none;
 	color: #2B2B2B;
@@ -454,9 +469,35 @@ textarea {
 .paper-subtype {
   display:inline-block;
   margin-left: 0.2em;
+  margin-right: 0.5em;
   /*border: 1px solid #AAAAAA;
   background-color: #AAAAAA;*/
   color: #737373;
+  /*padding: 0.1em 0.5em;*/
+  text-align: center;
+  font-size: 0.8em;
+  font-weight: normal;
+}
+
+.paper-session {
+  display:inline-block;
+  color: #737373;
+  font-size: 0.8em;
+  font-weight: normal;
+}
+
+.paper-code{
+  /*
+  vertical-align: subgktop;
+  margin-top: 0.2em;
+  padding: 0.2em 0.5em;
+  */
+  display:inline-block;
+  margin-right: 0.5em;
+  border: 1px solid #AAAAAA;
+  background-color: #AAAAAA;
+  font-weight: bold;
+  color: #F6F6F6;
   padding: 0.1em 0.5em;
   text-align: center;
   font-size: 0.8em;
@@ -490,7 +531,7 @@ textarea {
   color: #737373;
 }
 
-.paper-session {
+.paper-selected-session {
   margin-top: 0.5em;
 }
 
@@ -535,6 +576,14 @@ textarea {
 	display: none;
 }
 
+#search_label {
+  margin-right: 1em;
+}
+
+#search_papers_btn, #search_sessions_btn {
+  display: none;
+}
+
 #search_papers, #search_session {
   display: inline-block;
   height: 1.8em;
@@ -545,6 +594,7 @@ textarea {
 
 	
 .search-container {
+  vertical-align: middle;
 	background: #f6f6f6;
 	padding: 0.7em;
 	font-weight: bold;
@@ -909,7 +959,8 @@ div.timeline div.filled_blue {
 }
 
 div.timeline div.filled_yellow {
-	background-color: #ffaa00 !important;
+	background-color: #FFD942 !important;
+  /* ff@00 */
 }
 
 
