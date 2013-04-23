@@ -34,7 +34,11 @@ class Prefs:
 		for row in data:
 			if(row[0].strip()==''):
 				continue
-			self.author_likes[unicode(row[0]).strip()] = {'name': unicode(row[2]).strip() + ' ' + unicode(row[3]).strip(), 'likes':[row[1].strip()]}
+			if(unicode(row[0]).strip() in self.author_likes):
+				self.author_likes[unicode(row[0]).strip()]['likes'].append(row[1].strip())
+			else:
+				self.author_likes[unicode(row[0]).strip()] = {'name': unicode(row[2]).strip() + ' ' + unicode(row[3]).strip(), 'likes':[row[1].strip()]}
+
 
 
 
