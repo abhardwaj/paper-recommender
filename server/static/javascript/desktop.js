@@ -227,9 +227,9 @@ function bind_events(){
     });
 
     $("#refresh_recommendations").off('click')
-    $("#refresh_recommendations").on('click', function(){
+    $("#refresh_recommendations").on('click', function(event){
         event.stopImmediatePropagation();
-        populate_recs(recommended)
+        populate_recs(recommended);
     })
     
     if(detect_mobile()){
