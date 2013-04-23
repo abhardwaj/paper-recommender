@@ -58,11 +58,11 @@ var codeBlackList = [
   "YYP","NFM","PTT","NCK","PQG","KCL"
 ];
 
-//|| navigator.userAgent.match(/iPad/i)
 function detect_mobile() { 
  if(navigator.userAgent.match(/Android/i)
  || navigator.userAgent.match(/webOS/i)
  || navigator.userAgent.match(/iPhone/i)
+ || navigator.userAgent.match(/iPad/i)
  || navigator.userAgent.match(/iPod/i)
  || navigator.userAgent.match(/BlackBerry/i)
  || navigator.userAgent.match(/Windows Phone/i)
@@ -233,7 +233,6 @@ function bind_events(){
     })
     
     if(detect_mobile()){
-        $("body").addClass("touch-device");
         /*
 
         var needs_scroll_update = false;
@@ -288,7 +287,6 @@ function bind_events(){
 
         
     }else{
-        $("body").addClass("no-touch-device");
         $('#search_session').keyup(function(event){
             var str = $(this).val()
             delay('search_session("'+str+'");', 300);

@@ -115,9 +115,7 @@ body {
     margin-top: -0.5em;
   }
 
-  #search_label {
-    display: none !important;
-  }
+  
 
   #search_papers_btn, #search_sessions_btn {
     display: inline !important;
@@ -125,6 +123,9 @@ body {
 }
 
 
+#search_label {
+    display: none !important;
+}
 
 ol, ul, li {
 	list-style: none;
@@ -604,13 +605,13 @@ textarea {
 .tab{
 	display: none;
 }
-
+/*
 #search_label {
   margin-right: 1em;
-}
+}*/
 
 #search_papers_btn, #search_sessions_btn {
-  display: none;
+  /*display: none;*/
 }
 
 #search_papers, #search_session {
