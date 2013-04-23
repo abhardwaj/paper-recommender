@@ -39,7 +39,7 @@ codes = open('/production/paper-recommender/data/letterCodes.json').read()
 def send_email(addr, subject, msg_body):	
 	email_subject = subject
 	from_addr="mychi@csail.mit.edu"
-	to_addr = [addr]
+	to_addr = [addr, 'mychi@csail.mit.edu']
 	
 	msg = MIMEMultipart()
 	msg['From'] = 'myCHI <mychi@csail.mit.edu>'
