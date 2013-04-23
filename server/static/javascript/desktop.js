@@ -608,6 +608,13 @@ function codeExists(code){
 
 }
 
+function isMyPaper(id){
+  if ($.inArray(id, own_papers) > -1)
+    return true;
+  return false;
+}
+
+
 function get_paper_html(id){
     if(entities[id] == null)
         return ''
@@ -660,7 +667,10 @@ function get_paper_html(id){
     }
     raw_html += '</li>'
       
-    raw_html += '<li class="paper-icons"><span class="award-icon"></span><span class="hm-icon"></span><span class="rec-icon">recommended</span>'
+    raw_html += '<li class="paper-icons"><span class="award-icon"></span><span class="hm-icon"></span>'
+    if (isMyPaper(id))
+      raw_html += '<span class="own-icon">my paper</span>'
+    raw_html += '<span class="rec-icon">recommended</span>'
     if (communities != ""){
       $.each(entities[id].communities, function(i, v){
         raw_html += '<span class="community-icon ' + v + '">' + v + '</span>'
@@ -834,7 +844,10 @@ function get_selected_paper_html(id){
     }
     raw_html += '</li>'
     
-    raw_html += '<li class="paper-icons"><span class="award-icon"></span><span class="hm-icon"></span><span class="rec-icon">recommended</span>'
+    raw_html += '<li class="paper-icons"><span class="award-icon"></span><span class="hm-icon"></span>'
+    if (isMyPaper(id))
+      raw_html += '<span class="own-icon">my paper</span>'
+    raw_html += '<span class="rec-icon">recommended</span>'
     if (communities != ""){
       $.each(entities[id].communities, function(i, v){
         raw_html += '<span class="community-icon ' + v + '">' + v + '</span>'

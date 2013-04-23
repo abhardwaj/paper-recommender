@@ -780,6 +780,20 @@ textarea {
   display:none;
 }
 
+.own-icon {
+  display:inline-block;
+  vertical-align: top;
+  margin-top: 0.2em;
+  margin-right: 0.7em;
+  border: 1px solid #0D0C5D;
+  background-color: #0D0C5D;
+  color: #F6F6F6;
+  padding: 0.2em 0.5em;
+  /*height: 1.5em;*/
+  text-align: center;
+  font-size: 0.9em;
+}
+
 .communities .community-icon{
   display:inline-block;
   vertical-align: top;
