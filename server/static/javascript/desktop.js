@@ -20,6 +20,7 @@ var co = localStorage.getItem('codes')
         se = JSON.stringify(res.sessions)
         re = JSON.stringify(res.recs)
         st  = JSON.stringify(res.starred)
+        op  = JSON.stringify(res.own_papers)
         co  = res.codes
         localStorage.clear()
         localStorage.setItem('login_id', id)
@@ -28,6 +29,7 @@ var co = localStorage.getItem('codes')
         localStorage.setItem('recommended', re)
         localStorage.setItem('starred', st)
         localStorage.setItem('codes', co)
+        localStorage.setItem('own_papers', op)
 
         }
     });
@@ -42,6 +44,7 @@ var sessions = JSON.parse(se)
 var recommended_all = JSON.parse(re)
 var starred = JSON.parse(st)
 var codes = JSON.parse(co)
+var own_papers = JSON.parse(op)
 var recommended = recommended_all.splice(0,20)
 
 // codes without video preview
