@@ -32,7 +32,6 @@ e = Entity()
 p = Prefs()
 s = Session()
 
-likes = []
 
 codes = open('/production/paper-recommender/data/letterCodes.json').read()
 
@@ -227,18 +226,21 @@ def data(request):
 	recs = []
 	own_papers = []
 	starred = {}
+	likes = []
 	cursor = connection.cursor()
 	cursor.execute("""SELECT likes from pcs_authors where id = '%s';""" %(user))
 	data = cursor.fetchall()
-	likes = json.loads(data[0][0])
-	print likes
+	if(data[0][0] != None):
+		likes.extend(json.loads(data[0][0]))
 	if(user in p.author_likes):
-		if(likes == None and ('likes' in p.author_likes[user])):
-			likes = p.author_likes[user]['likes']
-		if('own_papers' in p.author_likes[user]):
+		if((data[0][0] == None) and ('likes' in p.author_likes[user].keys())):
+			likes.extend(p.author_likes[user]['likes'])
+		if('own_papers' in p.author_likes[user].keys()):
 			own_papers = p.author_likes[user]['own_papers']
-	starred = {l:True for l in likes}
-	recs = r.get_item_based_recommendations(starred)
+			likes.extend(p.author_likes[user]['own_papers'])
+	if(len(likes)>0):
+		starred = {l:True for l in likes}
+		recs = r.get_item_based_recommendations(starred)
 	return HttpResponse(json.dumps({
 		'login_id': request.session['id'], 
 		'login_name': request.session['name'],
@@ -263,7 +265,12 @@ def like(request, like_str):
 	s = ','.join(papers)
 	user = request.session['id']
 	res = {}
+	likes = []
 	cursor = connection.cursor()
+	cursor.execute("""SELECT likes from pcs_authors where id = '%s';""" %(user))
+	data = cursor.fetchall()
+	if(data[0][0] != None):
+		likes = json.loads(data[0][0])
 	cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], like_str, s))
 
 	for paper_id in papers:
@@ -275,7 +282,6 @@ def like(request, like_str):
 			res[paper_id] = 'star'
 		else:
 			res[paper_id] = 'unstar'
-	cursor = connection.cursor()
 	cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(likes), user))
 	recs = r.get_item_based_recommendations(likes)
 	return HttpResponse(json.dumps({'recs':recs, 'likes':likes, 'res':res}), mimetype="application/json")
