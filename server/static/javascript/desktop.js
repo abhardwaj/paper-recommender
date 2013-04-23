@@ -39,9 +39,10 @@ var co = localStorage.getItem('codes')
 var login_id = JSON.parse(id)
 var entities = JSON.parse(en)
 var sessions = JSON.parse(se)
-var recommended = JSON.parse(re)
+var recommended_all = JSON.parse(re)
 var starred = JSON.parse(st)
 var codes = JSON.parse(co)
+var recommended = recommended_all.splice(0,20)
 
 
 function detect_mobile() { 
@@ -984,8 +985,12 @@ function load_paper(){
     $('#similar_papers').html('')
     $.post('recs', {'papers': JSON.stringify([paper_id])}, 
     function(res){    
-        var raw_html = ''          
-        for(var i = 0; i< res.length; i++){
+        var raw_html = '' 
+        var recs_len = 20
+        if(res.length < recs_len){
+            recs_len = res.length
+        }         
+        for(var i = 0; i< recs_len; i++){
             raw_html += get_paper_html(res[i].id)            
         } 
         $('#similar_papers').html(raw_html) 
