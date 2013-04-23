@@ -181,6 +181,8 @@ def logout(request):
 
 def home(request):
 	try:
+		cursor = connection.cursor()
+		cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], 'home', 'load'))
 		return render_to_response('desktop/main.html', 
 		{'login_id': request.session['id'], 
 		'login_name': request.session['name']})	
@@ -255,14 +257,17 @@ def like(request, like_str):
 	for paper_id in papers:
 		if(like_str=='star' and (paper_id not in p.author_likes[user]['likes']) and paper_id != ''):
 			p.author_likes[user]['likes'].append(paper_id)
+			cursor = connection.cursor()
+			cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], 'like', like_str))		
 		if(like_str=='unstar' and (paper_id in p.author_likes[user]['likes']) and paper_id != ''):
 			p.author_likes[user]['likes'].remove(paper_id)
+			cursor = connection.cursor()
+			cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], 'unlike', like_str))
 		if(paper_id in p.author_likes[user]['likes']):
 			res[paper_id] = 'star'
 		else:
 			res[paper_id] = 'unstar'
 	cursor = connection.cursor()
-	print user
 	cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(p.author_likes[user]['likes']), user))
 	recs = r.get_item_based_recommendations(p.author_likes[user]['likes'])
 	return HttpResponse(json.dumps({'recs':recs, 'likes':p.author_likes[user], 'res':res}), mimetype="application/json")
