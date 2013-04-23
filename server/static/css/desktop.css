@@ -728,7 +728,7 @@ textarea {
 }
 
 .star:hover{
-  background-image:url(/static/img/star_yellow.png);
+  /*background-image:url(/static/img/star_yellow.png);*/
 }
 
 
