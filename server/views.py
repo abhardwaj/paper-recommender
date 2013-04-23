@@ -239,7 +239,8 @@ def data(request):
 			own_papers = p.author_likes[user]['own_papers']
 			likes.extend(p.author_likes[user]['own_papers'])
 	if(data[0][0] == None):
-		cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(likes), user))
+		l = list(set(likes))
+		cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(l), user))
 	if(len(likes)>0):
 		starred = {l:True for l in likes}
 		recs = r.get_item_based_recommendations(starred)
@@ -285,7 +286,8 @@ def like(request, like_str):
 			res[paper_id] = 'star'
 		else:
 			res[paper_id] = 'unstar'
-	cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(likes), user))
+	l = list(set(likes))
+	cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(l), user))
 	recs = r.get_item_based_recommendations(likes)
 	return HttpResponse(json.dumps({'recs':recs, 'likes':likes, 'res':res}), mimetype="application/json")
 
