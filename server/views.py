@@ -230,14 +230,15 @@ def data(request):
 	cursor = connection.cursor()
 	cursor.execute("""SELECT likes from pcs_authors where id = '%s';""" %(user))
 	data = cursor.fetchall()
-	likes = data[0][0]
+	likes = json.loads(data[0][0])
+	print likes
 	if(user in p.author_likes):
 		if(likes == None and ('likes' in p.author_likes[user])):
 			likes = p.author_likes[user]['likes']
 		if('own_papers' in p.author_likes[user]):
 			own_papers = p.author_likes[user]['own_papers']
-			starred = {l:True for l in likes}
-		recs = r.get_item_based_recommendations(likes)
+	starred = {l:True for l in likes}
+	recs = r.get_item_based_recommendations(starred)
 	return HttpResponse(json.dumps({
 		'login_id': request.session['id'], 
 		'login_name': request.session['name'],
