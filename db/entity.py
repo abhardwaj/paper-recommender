@@ -30,11 +30,11 @@ class Entity:
 		for row in data:
 			if(row[0]!=''):
 				authors = json.loads(unicode(row[1]).strip())
-				title = unicode(row[2]).strip('')
-				c_and_b = unicode(row[3]).strip('')
-				keywords = unicode(row[4]).strip('')
-				abstract = unicode(row[5]).strip('')
-				session = unicode(row[6]).strip('')
+				title = unicode(row[2]).strip()
+				c_and_b = unicode(row[3]).strip('"')
+				keywords = unicode(row[4]).strip('"')
+				abstract = unicode(row[5]).strip('"')
+				session = unicode(row[6]).strip('"')
 				award = row[7]
 				hm = row[8]
 				communities = json.loads(row[9])
