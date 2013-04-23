@@ -223,7 +223,8 @@ def data(request):
 	starred = {}
 	if(user in p.author_likes):
 		starred = {s:True for s in p.author_likes[user]['likes']}
-		own_papers = p.author_likes[user]['own_papers']
+		if('own_papers' in p.author_likes[user]):
+			own_papers = p.author_likes[user]['own_papers']
 		recs = r.get_item_based_recommendations(starred)
 	return HttpResponse(json.dumps({
 		'login_id': request.session['id'], 
