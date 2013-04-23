@@ -36,8 +36,9 @@ class Prefs:
 				continue
 			if(unicode(row[0]).strip() in self.author_likes):
 				self.author_likes[unicode(row[0]).strip()]['likes'].append(row[1].strip())
+				self.author_likes[unicode(row[0]).strip()]['own_papers'].append(row[1].strip())
 			else:
-				self.author_likes[unicode(row[0]).strip()] = {'name': unicode(row[2]).strip() + ' ' + unicode(row[3]).strip(), 'likes':[row[1].strip()]}
+				self.author_likes[unicode(row[0]).strip()] = {'name': unicode(row[2]).strip() + ' ' + unicode(row[3]).strip(), 'likes':[row[1].strip()], 'own_papers':[row[1].strip()]}
 
 
 
@@ -71,6 +72,7 @@ class Prefs:
 			# update author_likes
 			if(row[1]!='' and row[6]!=''):
 				self.author_likes[unicode(row[1]).strip()]['likes'].extend(likes)
+
 	
 
 	def get_paper_prefs(self):
@@ -82,7 +84,7 @@ class Prefs:
 def main():
   p = Prefs()
   print p.get_author_likes()
-  print p.get_paper_prefs()
+  #print p.get_paper_prefs()
   
 
 if __name__ == '__main__':

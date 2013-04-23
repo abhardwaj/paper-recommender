@@ -219,15 +219,18 @@ def paper(request):
 def data(request):
 	user = request.session['id']
 	recs = []
+	own_papers = []
 	starred = {}
 	if(user in p.author_likes):
 		starred = {s:True for s in p.author_likes[user]['likes']}
+		own_papers = p.author_likes[user]['own_papers']
 		recs = r.get_item_based_recommendations(starred)
 	return HttpResponse(json.dumps({
 		'login_id': request.session['id'], 
 		'login_name': request.session['name'],
 		'recs':recs, 
 		'starred':starred, 
+		'own_papers':own_papers,
 		'entities': e.entities, 
 		'sessions':s.sessions,
 		'codes': codes
