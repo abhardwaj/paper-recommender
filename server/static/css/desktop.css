@@ -49,6 +49,16 @@ body {
 }
 */
 
+  .touch-device .default-search-text {
+    max-width: 90% !important;
+    min-width: 50% !important;
+    width: 70% !important;
+  /*margin-left: 1.9em !important;*/
+	}
+
+  .touch-device #search_papers_btn, #search_sessions_btn {
+    display: inline !important;
+  }
 
 /*@media (max-width: 480px) {*/
 @media only screen and (max-width: 640px) {
@@ -87,13 +97,6 @@ body {
     */
   }
 
-  .default-search-text {
-    max-width: 90% !important;
-    min-width: 50% !important;
-    width: 70% !important;
-  /*margin-left: 1.9em !important;*/
-	}
-
   #headlink-right .mobile-nav.toggle-nav{
     background-color:#E9E581;
   }
@@ -117,9 +120,6 @@ body {
 
   
 
-  #search_papers_btn, #search_sessions_btn {
-    display: inline !important;
-  }
 }
 
 
@@ -590,7 +590,7 @@ textarea {
 }
 
 
-.default-search-text {
+.no-touch-device .default-search-text {
 	max-width: 70%;
 	min-width: 50%;
 	width: 100%;

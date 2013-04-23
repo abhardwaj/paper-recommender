@@ -233,6 +233,7 @@ function bind_events(){
     })
     
     if(detect_mobile()){
+        $("body").addClass("touch-device");
         /*
 
         var needs_scroll_update = false;
@@ -287,6 +288,7 @@ function bind_events(){
 
         
     }else{
+        $("body").addClass("no-touch-device");
         $('#search_session').keyup(function(event){
             var str = $(this).val()
             delay('search_session("'+str+'");', 300);
