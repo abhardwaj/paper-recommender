@@ -197,6 +197,8 @@ def schedule(request):
 	recs = []
 	starred = {}
 	try:
+		cursor = connection.cursor()
+		cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], 'schedule', 'load'))
 		return render_to_response('desktop/schedule.html', 
 		{'login_id': request.session['id'], 
 		'login_name': request.session['name']})		
