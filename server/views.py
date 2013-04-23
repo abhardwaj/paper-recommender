@@ -238,6 +238,8 @@ def data(request):
 		if('own_papers' in p.author_likes[user].keys()):
 			own_papers = p.author_likes[user]['own_papers']
 			likes.extend(p.author_likes[user]['own_papers'])
+	if(data[0][0] == None):
+		cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(likes), user))
 	if(len(likes)>0):
 		starred = {l:True for l in likes}
 		recs = r.get_item_based_recommendations(starred)
@@ -269,6 +271,7 @@ def like(request, like_str):
 	cursor = connection.cursor()
 	cursor.execute("""SELECT likes from pcs_authors where id = '%s';""" %(user))
 	data = cursor.fetchall()
+	print data
 	if(data[0][0] != None):
 		likes = json.loads(data[0][0])
 	cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], like_str, s))
