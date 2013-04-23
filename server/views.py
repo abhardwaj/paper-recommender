@@ -35,7 +35,7 @@ s = Session()
 codes = open('/production/paper-recommender/data/letterCodes.json').read()
 
 
-def send_email(addr, id, msg_body):	
+def send_email(addr, msg_body):	
 	email_subject = "Welcome to myCHI"
 	from_addr="mychi@csail.mit.edu"
 	to_addr = [addr]
@@ -61,7 +61,9 @@ def send_email(addr, id, msg_body):
 
 
 @csrf_exempt
-def email(request, login_email):
+def verify_email(request, login_email):
+	email_plain = base64.b64decode(login_email)
+	email_encoded = login_email
 	msg_body = """
 	Dear %s,
 
@@ -69,22 +71,24 @@ def email(request, login_email):
 
 	http://mychi.csail.mit.edu/verify/%s
 
-	""" %(addr, id)
-	send_email(base64.b64decode(login_email), login_email, msg_body)
+	""" %(email_plain, email_encoded)
+	send_email(email_plain, msg_body)
 	return HttpResponse(json.dumps({'status':'ok'}),  mimetype="application/json")
 
 
 @csrf_exempt
-def reset(request, login_email):
+def reset_email(request, login_email):
+	email_plain = base64.b64decode(login_email)
+	email_encoded = login_email
 	msg_body = """
 	Dear %s,
 
 	Please click the link below to reset your myCHI password:
 
-	http://mychi.csail.mit.edu/verify/%s
+	http://mychi.csail.mit.edu/reset/%s
 
-	""" %(addr, id)
-	send_email(base64.b64decode(login_email), login_email)
+	""" %(email_plain, email_encoded)
+	send_email(email_plain, msg_body)
 	return HttpResponse(json.dumps({'status':'ok'}),  mimetype="application/json")
 
 
@@ -112,13 +116,16 @@ def login(request):
 					email2 like '%s' or email3 like '%s';""" %(login_email, login_email, login_email))
 				data = cursor.fetchall()
 				if(len(data) == 0):
-					return login_form(request, error = { 'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'info', 'error': 'We have sent you a verification email. Please check your mailbox.'})
+					return login_form(request, error = { 'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'info', 'verify':'yes', 'error': 'We have sent you a verification email. Please check your mailbox.'})
+				
+
+
 				password = hashlib.sha1(login_password).hexdigest()
 				if(data[0][3]== None):
 					cursor.execute("""UPDATE pcs_authors SET password = '%s' where id = '%s';""" %(password, data[0][0]))
 				else:
 					if(data[0][3]!=password):
-						return login_form(request, error = {'type': 'error', 'error': 'Wrong password.'})
+						return login_form(request, error = {'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'error', 'error': 'Wrong password.', 'wrong_password':True})
 				
 				request.session['id'] = data[0][0]
 				request.session['email'] = login_email
@@ -126,6 +133,7 @@ def login(request):
 					request.session['name'] = data[0][1]
 				else:
 					request.session['name'] = login_email[0:login_email.index('@')]
+
 				return HttpResponseRedirect('/home')
 			else:
 				return login_form(request, error = {'type': 'error', 'error': 'Enter an email address.'})
@@ -135,6 +143,8 @@ def login(request):
 			return login_form(request)
 	else:
 		return login_form(request)
+
+
 
 
 @csrf_exempt
@@ -147,7 +157,17 @@ def verify(request, addr):
 	if(len(data) == 0):
 		cursor.execute("""INSERT into pcs_authors (id, email1) values('%s', '%s');""" %(addr, login_email))
 	
-	return login_form(request)
+	return login_form(request, error = {'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'info', 'error': 'Thanks for verifying. Please enter your email and password.'})
+
+
+
+@csrf_exempt
+def reset(request, addr):
+	login_email = base64.b64decode(addr)
+	cursor = connection.cursor()
+	cursor.execute("""UPDATE pcs_authors SET password = null where email1 like '%s' or 
+					email2 like '%s' or email3 like '%s';""" %(login_email, login_email, login_email))	
+	return login_form(request, error = {'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'info', 'error': 'Please enter new password.'})
 		
 
 
