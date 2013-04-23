@@ -486,14 +486,14 @@ textarea {
   font-weight: normal;
 }
 
-.paper-code{
+.paper-code, .session-code{
   /*
   vertical-align: subgktop;
   margin-top: 0.2em;
   padding: 0.2em 0.5em;
   */
   display:inline-block;
-  margin-right: 0.5em;
+  /*margin-right: 0.5em;*/
   border: 1px solid #AAAAAA;
   background-color: #AAAAAA;
   font-weight: bold;

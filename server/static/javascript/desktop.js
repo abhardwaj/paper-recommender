@@ -645,7 +645,7 @@ function get_paper_html(id){
     raw_html += '<li class="paper-title blue"><h3><a href="/paper?id='+id+'">'+remove_special_chars(entities[id].title) +'</a>'
     raw_html += '<span class="paper-subtype">' + get_paper_subtype(id) + '</span>'
     raw_html += '<span class="paper-code">' + codes['code'][id] + '</span>'
-    raw_html += '<span class="paper-session">' + get_short_session_info_of_paper(id) + '</span>'
+    //raw_html += '<span class="paper-session">' + get_short_session_info_of_paper(id) + '</span>'
     if (codeExists(codes['code'][id]))
       raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
     raw_html += '</h3>'
@@ -714,7 +714,13 @@ function get_session_html(id){
     
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
-    raw_html += '<li><h3><span class="arrow arrow-right"></span> <span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span></h3></li>'
+    raw_html += '<li><h3><span class="arrow arrow-right"></span> <span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span>'
+    /* 
+    raw_html += '<span class="session-code">' + codes['code'][id] + '</span>'
+    if (codeExists(codes['code'][id]))
+      raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
+    */
+    raw_html += '</h3></li>'
     raw_html += '<li class="session-icons"><span class="award-icon"></span><span class="hm-icon"></span><span class="rec-icon">recommended</span>'
 
     if (communities != ""){
