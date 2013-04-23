@@ -39,6 +39,10 @@
         width: 90% !important;
       }
     }
+
+    #reset_link:link{
+        color:blue !important;
+    }
     </style>
 </head>
 <!--
@@ -93,7 +97,7 @@ $(document).ready(function(){
                 console.log(res)
             }
         });
-        $("#error").html('<span class="info">Please check you mailbox for the verification link.</span>')
+        $("#error").html('<br /><span class="info">Please check you mailbox for the verification link.</span><br />')
     }
 
 
@@ -107,7 +111,7 @@ $(document).ready(function(){
                 console.log(res)
             }
         });
-        $("#error").html('<span class="info">Please check you mailbox for the password reset link.</span>')
+        $("#error").html('<br /><span class="info">Please check you mailbox for the password reset link.</span><br />')
     });
 
 
@@ -132,7 +136,8 @@ $(document).ready(function(){
     <span class="description">If you are a first time user, we will set this as your password.</span><br />
     
     <div id="error">{% if error %} <br /> <span class="{{type}}">{{error}}</span> 
-        {% if wrong_password %}<a class="blue" id="reset_link" href="#">Reset Password</a> {% endif %} <br />{% endif %}</div>
+        {% if wrong_password %}<a class="blue" id="reset_link" href="#" style="color:blue important;">Reset your password</a> {% endif %} <br />{% endif %}
+    </div>
     
     <br />
     <input class="button" type="submit" value="Log In" />
