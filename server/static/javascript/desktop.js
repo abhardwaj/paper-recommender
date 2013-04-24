@@ -1019,7 +1019,8 @@ function handle_session_star(event){
                 $(this).removeClass('highlight')
                 $(this).find('.paper').removeClass('highlight')
             })
-            recommended = res.recs
+            recommended_all = res.recs
+            recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('recommended', JSON.stringify(recommended))
             update_recs()
@@ -1037,7 +1038,8 @@ function handle_session_star(event){
                 $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
                 $(this).find('.paper').addClass('highlight')
             })
-            recommended = res.recs
+            recommended_all = res.recs
+            recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('recommended', JSON.stringify(recommended))
             update_recs()
@@ -1069,7 +1071,8 @@ function handle_star(event){
 
             delete starred[paper_id]
             populate_likes(starred)
-            recommended = res.recs
+            recommended_all = res.recs
+            recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('recommended', JSON.stringify(recommended))
             if($("#recs tr").length == 0){
@@ -1092,7 +1095,8 @@ function handle_star(event){
             })
             starred[paper_id] = true
             populate_likes(starred)
-            recommended = res.recs
+            recommended_all = res.recs
+            recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('recommended', JSON.stringify(recommended))
             if($("#recs tr").length == 0){
