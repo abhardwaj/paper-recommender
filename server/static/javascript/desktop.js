@@ -50,12 +50,12 @@ var recommended = recommended_all.splice(0,20)
 // codes without video preview
 var codeBlackList = [
   "KOP","PHN","NDL","LDJ","PQS","PLP","PLL","CYU","LRA","PQV","NNG","PMF","PSS","PSR","NEK","PKY",
-  "PKS","PFS","PLJ","TRN","PBR","YQT","PJC","PKZ","PDS","PFR","SRJ","PHF","TUU","TZC","AZG","CZS",
-  "PQE","GYU","GDG","NMX","PAK","YHY","PQQ","LLC","NPP","TXL","CZS","TLQ","GFL","TAU","NKQ","PTS",
-  "PKL","GXS","SIA","PTU","PAE","PRH","PGG","LBR","PQZ","PTN","PRT","NGR","PEH","PGV","TGN","PSJ",
-  "PDT","PMY","NGN","PQC","PPM","PCB","SRC","PDM","PSP","GZX","PKJ","PBM","PHR","SDC","CMU","LPA",
-  "PRN","GHQ","TEC","PMR","PCD","NJT","AXZ","PEB","LSU","PMM","PMV","SGC","CMU","NHL","KSP","PKV",
-  "YYP","NFM","PTT","NCK","PQG","KCL"
+  "PKS","PFS","PLJ","TRN","PBR","YQT","PKZ","PDS","PFR","SRJ","PHF","TUU","TZC","AZG","CZS","PQE",
+  "GYU","GDG","NMX","PAK","YHY","PQQ","LLC","NPP","TXL","CZS","TLQ","GFL","TAU","NKQ","PTS","PKL",
+  "GXS","SIA","PTU","PAE","PRH","PGG","LBR","PQZ","PTN","NGR","PEH","PGV","TGN","PSJ","PMY","NGN",
+  "PQC","PPM","PCB","SRC","PDM","PSP","GZX","PKJ","PBM","PHR","SDC","CMU","LPA","PRN","GHQ","TEC",
+  "PMR","PCD","NJT","AXZ","PEB","LSU","PMM","PMV","SGC","CMU","NHL","KSP","PKV","YYP","NFM","PTT",
+  "NCK","PQG","KCL"
 ];
 
 function detect_mobile() { 
