@@ -46,6 +46,7 @@ var starred = JSON.parse(st)
 var codes = JSON.parse(co)
 var own_papers = JSON.parse(op)
 var recommended = recommended_all.splice(0,20)
+var stale =  false
 
 // codes without video preview
 var codeBlackList = [
@@ -229,7 +230,7 @@ function bind_events(){
     $("#refresh_recommendations").off('click')
     $("#refresh_recommendations").on('click', function(event){
         event.stopImmediatePropagation();
-        populate_recs(recommended);
+        refresh_recommendations()
     })
     
     if(detect_mobile()){
@@ -625,7 +626,7 @@ function get_paper_html(id){
     if(entities[id] == null)
         return ''
     var communities = get_communities(entities[id]);
-    var raw_html = '<tr class="clickable paper ' + id
+    var raw_html = '<tr data= "' + id + '" class="clickable paper ' + id
     if(exists(recommended, id)){
         raw_html += ' recommended'
     }
@@ -1061,11 +1062,14 @@ function handle_star(event){
     var obj = $(event.target).parents("td:first").find('.p_star')
     var paper_id = obj.attr("data")
     if(obj.hasClass('star-filled')){
+        $('.'+obj.attr('data')).each(function(){
+            $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
+            $(this).removeClass('highlight')
+        })
         $.post('/like/unstar', {'papers': JSON.stringify([paper_id])}, function(res) {
           if(res.res[paper_id] == 'unstar'){
             $('.'+obj.attr('data')).each(function(){
                 $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
-                //$(this).find('.p_star').removeClass('ui-state-active')
                 $(this).removeClass('highlight')
             })
 
@@ -1073,12 +1077,14 @@ function handle_star(event){
             populate_likes(starred)
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
-            localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('recommended', JSON.stringify(recommended))
+            //localStorage.setItem('starred', JSON.stringify(starred))
+            //localStorage.setItem('recommended', JSON.stringify(recommended))
+            /*
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
             }        
-            
+            */
+            append_recs()
             update_recs()
             update_session_view()
           }
@@ -1087,6 +1093,10 @@ function handle_star(event){
             enable_alert("You unliked a paper.");
         });
     }else{
+        $('.'+obj.attr('data')).each(function(){
+            $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
+            $(this).addClass('highlight')
+        })
         $.post('/like/star', {'papers': JSON.stringify([paper_id])}, function(res) {
           if(res.res[paper_id] == 'star'){
             $('.'+obj.attr('data')).each(function(){
@@ -1097,12 +1107,14 @@ function handle_star(event){
             populate_likes(starred)
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
-            localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('recommended', JSON.stringify(recommended))
+            //localStorage.setItem('starred', JSON.stringify(starred))
+            //localStorage.setItem('recommended', JSON.stringify(recommended))
+            /*
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
             }
-            
+            */
+            append_recs()
             update_recs()
             update_session_view()
             
@@ -1249,6 +1261,33 @@ function populate_recs(){
     }         
       
    update_recs_count(); 
+}
+
+
+function append_recs(){  
+    var visible_recs = []
+    $("#recs tr:visible").each(function(){
+        var d = $(this).attr("data")
+        visible_recs.push(d)
+    })
+    console.log(visible_recs)
+    var n = $("#recs tr:visible").length
+    $("#recs tr:hidden").remove()  
+    var raw_html = ''
+    for(var r in recommended){
+        if(!exists(visible_recs, recommended[r].id)){
+            raw_html += get_paper_html(recommended[r].id)
+        }
+    }
+    $("#recs").append($(raw_html))
+    $("#recs tr:gt("+(n-1)+")").hide() 
+    if($("#recs tr:visible").length == $("#recs tr").length){
+        $('#show_recs').hide();
+    }else{
+        $('#show_recs').show();
+    }   
+
+    
 }
 
 
