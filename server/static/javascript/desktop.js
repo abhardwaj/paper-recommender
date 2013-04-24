@@ -46,6 +46,7 @@ var starred = JSON.parse(st)
 var codes = JSON.parse(co)
 var own_papers = JSON.parse(op)
 var recommended = recommended_all.splice(0,20)
+var stale =  false
 
 // codes without video preview
 var codeBlackList = [
@@ -150,6 +151,15 @@ function exists(recs, id){
 }
 
 
+function in_visible_window(visible, id){
+    for(var r in visible){
+        if(visible[r] == id)
+            return true
+    }
+    return false
+}
+
+
 function bind_events(){
     $("#headlink-right .mobile-nav").on('click',
         function(event){
@@ -229,8 +239,8 @@ function bind_events(){
     $("#refresh_recommendations").off('click')
     $("#refresh_recommendations").on('click', function(event){
         event.stopImmediatePropagation();
-        populate_recs(recommended);
-        //$("#refresh_recommendations").hide();
+
+        refresh_recommendations()
     })
     
     if(detect_mobile()){
@@ -626,7 +636,7 @@ function get_paper_html(id){
     if(entities[id] == null)
         return ''
     var communities = get_communities(entities[id]);
-    var raw_html = '<tr class="clickable paper ' + id
+    var raw_html = '<tr data= "' + id + '" class="clickable paper ' + id
     if(exists(recommended, id)){
         raw_html += ' recommended'
     }
@@ -1067,11 +1077,14 @@ function handle_star(event){
     var position_delta = 0;
     //$(event.target).parents("tr").effect("highlight", {}, 5000);
     if(obj.hasClass('star-filled')){
+        $('.'+obj.attr('data')).each(function(){
+            $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
+            $(this).removeClass('highlight')
+        })
         $.post('/like/unstar', {'papers': JSON.stringify([paper_id])}, function(res) {
           if(res.res[paper_id] == 'unstar'){
             $('.'+obj.attr('data')).each(function(){
                 $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
-                //$(this).find('.p_star').removeClass('ui-state-active')
                 $(this).removeClass('highlight')
             })
 
@@ -1079,12 +1092,14 @@ function handle_star(event){
             populate_likes(starred)
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
-            localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('recommended', JSON.stringify(recommended))
+            //localStorage.setItem('starred', JSON.stringify(starred))
+            //localStorage.setItem('recommended', JSON.stringify(recommended))
+            
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
-            }        
-            
+            }else{
+                append_recs()
+            }
             update_recs()
             update_session_view()
           }
@@ -1098,6 +1113,10 @@ function handle_star(event){
               $('html, body').scrollTop(scroll_current + position_delta);
         });
     }else{
+        $('.'+obj.attr('data')).each(function(){
+            $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
+            $(this).addClass('highlight')
+        })
         $.post('/like/star', {'papers': JSON.stringify([paper_id])}, function(res) {
           if(res.res[paper_id] == 'star'){
             $('.'+obj.attr('data')).each(function(){
@@ -1108,12 +1127,14 @@ function handle_star(event){
             populate_likes(starred)
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
-            localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('recommended', JSON.stringify(recommended))
+            //localStorage.setItem('starred', JSON.stringify(starred))
+            //localStorage.setItem('recommended', JSON.stringify(recommended))
+            
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
+            }else{            
+                append_recs()
             }
-            
             update_recs()
             update_session_view()
             
@@ -1266,6 +1287,35 @@ function populate_recs(){
     }         
       
    update_recs_count(); 
+}
+
+
+function append_recs(){  
+    var visible_recs = []
+    $("#recs tr:visible").each(function(){
+        var d = $(this).attr("data")
+        visible_recs.push(d)
+    })
+    console.log(visible_recs)
+    var n = $("#recs tr:visible").length
+    $("#recs tr:hidden").remove()  
+    var raw_html = ''
+    for(var r in recommended){
+        console.log(visible_recs, recommended[r].id)
+        if(!in_visible_window(visible_recs, recommended[r].id)){
+            console.log('not exists')
+            raw_html += get_paper_html(recommended[r].id)
+        }
+    }
+    $("#recs").append($(raw_html))
+    $("#recs tr:gt("+(n-1)+")").hide() 
+    if($("#recs tr:visible").length == $("#recs tr").length){
+        $('#show_recs').hide();
+    }else{
+        $('#show_recs').show();
+    }   
+
+    
 }
 
 
