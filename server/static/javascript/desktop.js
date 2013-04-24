@@ -151,6 +151,15 @@ function exists(recs, id){
 }
 
 
+function in_visible_window(visible, id){
+    for(var r in visible){
+        if(visible[r] == id)
+            return true
+    }
+    return false
+}
+
+
 function bind_events(){
     $("#headlink-right .mobile-nav").on('click',
         function(event){
@@ -1085,12 +1094,12 @@ function handle_star(event){
             recommended = res.recs.splice(0,20)
             //localStorage.setItem('starred', JSON.stringify(starred))
             //localStorage.setItem('recommended', JSON.stringify(recommended))
-            /*
+            
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
-            }        
-            */
-            append_recs()
+            }else{
+                append_recs()
+            }
             update_recs()
             update_session_view()
           }
@@ -1120,12 +1129,12 @@ function handle_star(event){
             recommended = res.recs.splice(0,20)
             //localStorage.setItem('starred', JSON.stringify(starred))
             //localStorage.setItem('recommended', JSON.stringify(recommended))
-            /*
+            
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
+            }else{            
+                append_recs()
             }
-            */
-            append_recs()
             update_recs()
             update_session_view()
             
@@ -1292,7 +1301,9 @@ function append_recs(){
     $("#recs tr:hidden").remove()  
     var raw_html = ''
     for(var r in recommended){
-        if(!exists(visible_recs, recommended[r].id)){
+        console.log(visible_recs, recommended[r].id)
+        if(!in_visible_window(visible_recs, recommended[r].id)){
+            console.log('not exists')
             raw_html += get_paper_html(recommended[r].id)
         }
     }
