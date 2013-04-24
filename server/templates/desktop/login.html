@@ -123,7 +123,7 @@ $(document).ready(function(){
                 console.log(res)
             }
         });
-        $("#error").html('<br /><span class="info">We have sent a verification link to {{login_addr}}.</span><br />')
+        $("#error").html('<br /><span class="info">We have sent a verification link to "{{login_addr}}".</span><br />')
     }
 
     function validate_email(){
@@ -142,7 +142,7 @@ $(document).ready(function(){
         if(validate_email()){
             $("#mychi_login_form").submit()
         }else{
-            $("#error").html('<br /><span class="info">'  + $("#login_email").val() + ' doesn\'t seem to be a valid email address.</span><br />')
+            $("#error").html('<br /><span class="error">"'  + $("#login_email").val() + '"" doesn\'t seem to be a valid email address. Please try again.</span><br />')
         }
     })
 
@@ -157,7 +157,7 @@ $(document).ready(function(){
                 console.log(res)
             }
         });
-        $("#error").html('<br /><span class="info">We have sent a reset link to {{login_addr}}. Please check your mailbox.</span><br />')
+        $("#error").html('<br /><span class="info">We have sent a reset link to "{{login_addr}}". Please check your mailbox.</span><br />')
     });
 
 
