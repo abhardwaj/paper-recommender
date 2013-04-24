@@ -64,6 +64,23 @@ body {
       display: none !important;
   }
 
+  .goto-link {
+    display: none;
+  }
+
+@media only screen and (max-width: 480px) {
+  .goto-link{
+    display: block;
+    margin-bottom: 1.5em;
+    margin-top: -0.3em;
+    text-align: center;
+  }
+
+  .goto-link a{
+    margin: 0 1em 0 1em;
+  }
+}
+
 /*@media (max-width: 480px) {*/
 @media only screen and (max-width: 640px) {
   body {
