@@ -113,10 +113,11 @@ def login(request):
 			login_email = request.POST["login_email"]
 			login_password = request.POST["login_password"].strip()
 			if(login_email != ""):
+				login_email = login_email.strip()
 				request.session.flush()
 				cursor = connection.cursor()
-				cursor.execute("""SELECT id, given_name, family_name, password, verified from pcs_authors where email1 like '%s' or 
-					email2 like '%s' or email3 like '%s';""" %(login_email, login_email, login_email))
+				cursor.execute("""SELECT id, given_name, family_name, password, verified from pcs_authors where email1 = '%s' or 
+					email2 = '%s' or email3 = '%s';""" %(login_email, login_email, login_email))
 				data = cursor.fetchall()
 				if(len(data) == 0):
 					return login_form(request, error = {'login_addr': login_email ,'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'info', 'verify':'yes', 'error': 'We have sent you a verification email. Please check your mailbox.'})
