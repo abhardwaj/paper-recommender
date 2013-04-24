@@ -226,7 +226,7 @@ body.loading .modal, body.notice .alert {
   font-size: 1em;
 }
 
-#header, .collapsible-title{
+#header, .collapsible-title, .metadata{
     -webkit-user-select: none;  
     -moz-user-select: none;    
     -ms-user-select: none;      
