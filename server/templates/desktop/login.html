@@ -123,8 +123,28 @@ $(document).ready(function(){
                 console.log(res)
             }
         });
-        $("#error").html('<br /><span class="info">Please check you mailbox for the verification link.</span><br />')
+        $("#error").html('<br /><span class="info">We have sent a verification link to {{login_addr}}.</span><br />')
     }
+
+    function validate_email(){
+        var x = new RegExp('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$')
+        var y = $("#login_email").val()
+        if(x.test(y)){
+            return true
+        }else{
+            return false
+        }
+    
+    }
+
+
+    $("#mychi_login").click(function(){
+        if(validate_email()){
+            $("#mychi_login_form").submit()
+        }else{
+            $("#error").html('<br /><span class="info">'  + $("#login_email").val() + ' doesn\'t seem to be a valid email address.</span><br />')
+        }
+    })
 
 
 
@@ -137,7 +157,7 @@ $(document).ready(function(){
                 console.log(res)
             }
         });
-        $("#error").html('<br /><span class="info">Please check you mailbox for the password reset link.</span><br />')
+        $("#error").html('<br /><span class="info">We have sent a reset link to {{login_addr}}. Please check your mailbox.</span><br />')
     });
 
 
@@ -147,7 +167,7 @@ $(document).ready(function(){
 </script>
 
 <div id="page">
-<form method="POST" action="/login">
+<form method="POST" action="/login" id="mychi_login_form">
     {% csrf_token %}
     <!--<h3>Plan my CHI with myCHI</h3>-->
     <h3>myCHI</h3>
@@ -166,7 +186,7 @@ $(document).ready(function(){
     </div>
     
     <br />
-    <input class="button" type="submit" value="Log In" />
+    <input type="button" id="mychi_login" class="button" value="Log In" />
     <br />
     <div class="credit">
       Problems or comments? <a href="mailto:mychi@csail.mit.edu">mychi@csail.mit.edu</a><br/>

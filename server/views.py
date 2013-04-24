@@ -119,16 +119,14 @@ def login(request):
 					email2 like '%s' or email3 like '%s';""" %(login_email, login_email, login_email))
 				data = cursor.fetchall()
 				if(len(data) == 0):
-					return login_form(request, error = { 'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'info', 'verify':'yes', 'error': 'We have sent you a verification email. Please check your mailbox.'})
-				
-
+					return login_form(request, error = {'login_addr': login_email ,'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'info', 'verify':'yes', 'error': 'We have sent you a verification email. Please check your mailbox.'})
 
 				password = hashlib.sha1(login_password).hexdigest()
 				if(data[0][3]== None):
 					cursor.execute("""UPDATE pcs_authors SET password = '%s' where id = '%s';""" %(password, data[0][0]))
 				else:
 					if(data[0][3]!=password):
-						return login_form(request, error = {'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'error', 'error': 'Wrong password.', 'wrong_password':True})
+						return login_form(request, error = {'login_addr': login_email, 'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'error', 'error': 'Wrong password.', 'wrong_password':True})
 				
 				request.session['id'] = data[0][0]
 				request.session['email'] = login_email
