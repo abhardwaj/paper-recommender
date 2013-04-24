@@ -230,6 +230,7 @@ function bind_events(){
     $("#refresh_recommendations").off('click')
     $("#refresh_recommendations").on('click', function(event){
         event.stopImmediatePropagation();
+
         refresh_recommendations()
     })
     
@@ -1058,9 +1059,14 @@ function handle_session_star(event){
 
 
 function handle_star(event){ 
+    //$("#refresh_recommendations").show();
     enable_alert("updating information..."); 
     var obj = $(event.target).parents("td:first").find('.p_star')
     var paper_id = obj.attr("data")
+    //console.log($(window).scrollTop(), $(event.target).parents("td:first").position().top);
+    var position_old = $(event.target).parents("td:first").position().top;
+    var position_delta = 0;
+    //$(event.target).parents("tr").effect("highlight", {}, 5000);
     if(obj.hasClass('star-filled')){
         $('.'+obj.attr('data')).each(function(){
             $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
@@ -1090,7 +1096,12 @@ function handle_star(event){
           }
         })
         .done(function(){
+            //console.log($(window).scrollTop(), $(event.target).parents("td:first").position().top);
             enable_alert("You unliked a paper.");
+            var scroll_current = $(window).scrollTop();
+            position_delta = $(event.target).parents("td:first").position().top - position_old;
+            if (position_delta != 0)
+              $('html, body').scrollTop(scroll_current + position_delta);
         });
     }else{
         $('.'+obj.attr('data')).each(function(){
@@ -1120,8 +1131,14 @@ function handle_star(event){
             
           }
         })
+
         .done(function(){
+            //console.log($(window).scrollTop(), $(event.target).parents("td:first").position().top);
             enable_alert("You liked a paper.");
+            var scroll_current = $(window).scrollTop();
+            position_delta = $(event.target).parents("td:first").position().top - position_old;
+            if (position_delta != 0)
+              $('html, body').scrollTop(scroll_current + position_delta);
         });
 
 
@@ -1411,5 +1428,5 @@ function enable_alert(msg){
   $("body").addClass("notice");
   setTimeout(function(){
     $("body").removeClass("notice");
-  }, 2000);
+  }, 3000);
 }
