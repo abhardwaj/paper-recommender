@@ -387,7 +387,7 @@ function bind_events(){
 
     });
 
-    $('.send_tweet').on('click', function(){
+    $('.send_tweet').on('click', function(event){
         event.stopPropagation();
         var id = $(this).parents("tr.paper").first().attr("data");
         var url = "http://mychi.csail.mit.edu/paper?id=" + id;
@@ -403,7 +403,7 @@ function bind_events(){
             "twitter", "width=500,height=300");
     });
 
-    $('.send_session_tweet').on('click', function(){
+    $('.send_session_tweet').on('click', function(event){
         event.stopPropagation();
         var id = $(this).parents(".session").first().attr("data");
         var url = document.location;
@@ -419,7 +419,7 @@ function bind_events(){
             "twitter", "width=500,height=300");
     });
 
-    $('.send_email').on('click', function(){
+    $('.send_email').on('click', function(event){
         event.stopPropagation();
         var id = $(this).parents("tr.paper").first().attr("data");
         var url = "http://mychi.csail.mit.edu/paper?id=" + id;
@@ -437,7 +437,7 @@ function bind_events(){
     });
 
 
-    $('.send_session_email').on('click', function(){
+    $('.send_session_email').on('click', function(event){
         event.stopPropagation();
         var id = $(this).parents(".session").first().attr("data");
         var url = document.location;
