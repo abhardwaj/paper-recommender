@@ -387,6 +387,8 @@ var delay = (function(){
 
 
 function search_session(str){
+    $('.filter').removeClass('active')
+    $('.f_all').addClass('active')
     if(str==""){
         reset_sessions()
         return
@@ -429,6 +431,9 @@ function search_session(str){
 
 
 function simple_search_session(str){
+
+    $('.filter').removeClass('active')
+    $('.f_all').addClass('active')
     
     $('.session-timeslot').each(function(){
         $(this).prev().hide()
@@ -1362,7 +1367,8 @@ function setup_filters(){
     $('.filter').off('click')
     $('.filter').on('click', function(){       
         //enable_loading("applying filter...");
-
+        $("#search_session").val("")
+        $("#search_session").blur()
         var attr = $(this).attr("type")
         $('.'+attr).removeClass('active')
 
