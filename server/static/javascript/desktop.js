@@ -388,6 +388,7 @@ function bind_events(){
     });
 
     $('.send_tweet').on('click', function(){
+        event.stopPropagation();
         var id = $(this).parents("tr.paper").first().attr("data");
         var url = "http://mychi.csail.mit.edu/paper?id=" + id;
         //var title = $(this).siblings("a").text();
@@ -403,11 +404,12 @@ function bind_events(){
     });
 
     $('.send_session_tweet').on('click', function(){
-        var id = $(this).parents(".session").first().attr("data");
         event.stopPropagation();
+        var id = $(this).parents(".session").first().attr("data");
         var url = document.location;
-        var title = $(this).siblings(".session-title").text();
-        var message = "Looking forward to seeing [Session] \"" + title + "\""; 
+        //var title = $(this).siblings(".session-title").text();
+        var title = sessions[id].s_title;
+        var message = "Looking forward to seeing [Session] \"" + title + "\" " + sessions[id].date + " | " + sessions[id].time + " | " + sessions[id].room;
         window.open ("https://twitter.com/share?" + 
             //"url=" + encodeURIComponent(url) + 
             //"&counturl=" + encodeURIComponent(url) +
@@ -418,22 +420,38 @@ function bind_events(){
     });
 
     $('.send_email').on('click', function(){
+        event.stopPropagation();
         var id = $(this).parents("tr.paper").first().attr("data");
         var url = "http://mychi.csail.mit.edu/paper?id=" + id;
         var title = entities[id].title;
         var message = "Hi there!\n\nI found this interesting paper at CHI 2013 that you may be interested in:\n"
           + title + "\n" + url;
-        var link = "<a href='mailto:";
+        var link = "mailto:";
+        //var link = "<a id='email-link' href='mailto:";
         link += "?to=&subject=" + encodeURIComponent("Paper at CHI2013: " + title);
-        link += "&body=" + encodeURIComponent(message) + "'>click</a>";
-        console.log(link);
-
-        $(link).appendTo("body").click();//.remove();
-        //window.location.href = link;
+        link += "&body=" + encodeURIComponent(message);
+        //var link = $(link); 
+        //link.appendTo("#page");
+        //$("#email-link").trigger("click");//.remove();
+        window.location.href = link;
     });
 
 
     $('.send_session_email').on('click', function(){
+        event.stopPropagation();
+        var id = $(this).parents(".session").first().attr("data");
+        var url = document.location;
+        var title = sessions[id].s_title;
+        var message = "Hi there!\n\nI found this interesting session at CHI 2013 that you may be interested in:\n"
+          + title + "\n" + url + "\n" + sessions[id].date + " | " + sessions[id].time + " | " + sessions[id].room;
+        var link = "mailto:";
+        //var link = "<a id='email-link' href='mailto:";
+        link += "?to=&subject=" + encodeURIComponent("Session at CHI2013: " + title);
+        link += "&body=" + encodeURIComponent(message);
+        //var link = $(link); 
+        //link.appendTo("#page");
+        //$("#email-link").trigger("click");//.remove();
+        window.location.href = link;
     });
 }
 
