@@ -33,7 +33,9 @@ p = Prefs()
 s = Session()
 
 
+
 codes = open('/production/paper-recommender/data/letterCodes.json').read()
+sessionCodes = open('/production/paper-recommender/data/sessionCodes.json').read()
 
 
 def send_email(addr, subject, msg_body):	
@@ -251,7 +253,8 @@ def data(request):
 		'own_papers':own_papers,
 		'entities': e.entities, 
 		'sessions':s.sessions,
-		'codes': codes
+		'codes': codes,
+    'sessionCodes': sessionCodes
 		}), mimetype="application/json")
 
 @csrf_exempt

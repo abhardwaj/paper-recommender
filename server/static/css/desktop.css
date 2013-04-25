@@ -571,6 +571,32 @@ textarea {
   font-weight: normal;
 }
 
+.session-code{
+  margin-left: 0.5em;
+}
+
+.send_tweet, .send_session_tweet{
+  display: inline-block;
+  background-image:url(/static/img/w_tw.png);
+  background-repeat: no-repeat;
+  background-size: 1.9em 1.6em;
+  width: 1.9em;
+  height: 1.6em;
+  margin-bottom: -0.4em;
+  cursor: pointer;
+}
+
+.send_email, .send_session_email{
+  display: inline-block;
+  background-image:url(/static/img/w_em2.png);
+  background-repeat: no-repeat;
+  background-size: 1.9em 1.6em;
+  width: 1.9em;
+  height: 1.6em;
+  margin-bottom: -0.4em;
+  cursor: pointer;
+}
+
 .paper-cb{
   font-size: 0.9em;
   margin: 0.4em 0 0 0;  
@@ -917,7 +943,6 @@ textarea {
 
 .play-icon{
 	display:inline-block;
-	margin-right: 0.7em;
 	background-image:url(/static/img/play.png);
 	background-repeat: no-repeat;
 	background-size: 1.9em 1.6em;

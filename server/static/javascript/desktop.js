@@ -22,6 +22,7 @@ var co = localStorage.getItem('codes')
         st  = JSON.stringify(res.starred)
         op  = JSON.stringify(res.own_papers)
         co  = res.codes
+        sc  = res.sessionCodes
         localStorage.clear()
         localStorage.setItem('login_id', id)
         localStorage.setItem('entities', en)
@@ -29,6 +30,7 @@ var co = localStorage.getItem('codes')
         localStorage.setItem('recommended', re)
         localStorage.setItem('starred', st)
         localStorage.setItem('codes', co)
+        localStorage.setItem('sessionCodes', sc)
         localStorage.setItem('own_papers', op)
 
         }
@@ -44,6 +46,7 @@ var sessions = JSON.parse(se)
 var recommended_all = JSON.parse(re)
 var starred = JSON.parse(st)
 var codes = JSON.parse(co)
+var sessionCodes = JSON.parse(sc)
 var own_papers = JSON.parse(op)
 var recommended = recommended_all.splice(0,20)
 var stale =  false
@@ -73,7 +76,6 @@ function detect_mobile() {
     return false;
   }
 }
-
 
 
 jQuery.fn.highlight = function(pat) {
@@ -383,6 +385,55 @@ function bind_events(){
         $(this).addClass("expanded");
       }
 
+    });
+
+    $('.send_tweet').on('click', function(){
+        var id = $(this).parents("tr.paper").first().attr("data");
+        var url = "http://mychi.csail.mit.edu/paper?id=" + id;
+        //var title = $(this).siblings("a").text();
+        var title = entities[id].title;
+        var message = "Looking forward to seeing \"" + title + "\""; 
+        window.open ("https://twitter.com/share?" + 
+            "url=" + encodeURIComponent(url) + 
+            "&counturl=" + encodeURIComponent(url) +
+            "&text=" + encodeURIComponent(message) + 
+            "&hashtags=" + encodeURIComponent('chi2013') + 
+            "&via=" + encodeURIComponent('mychi2013'), 
+            "twitter", "width=500,height=300");
+    });
+
+    $('.send_session_tweet').on('click', function(){
+        var id = $(this).parents(".session").first().attr("data");
+        event.stopPropagation();
+        var url = document.location;
+        var title = $(this).siblings(".session-title").text();
+        var message = "Looking forward to seeing [Session] \"" + title + "\""; 
+        window.open ("https://twitter.com/share?" + 
+            //"url=" + encodeURIComponent(url) + 
+            //"&counturl=" + encodeURIComponent(url) +
+            "&text=" + encodeURIComponent(message) + 
+            "&hashtags=" + encodeURIComponent('chi2013') + 
+            "&via=" + encodeURIComponent('mychi2013'), 
+            "twitter", "width=500,height=300");
+    });
+
+    $('.send_email').on('click', function(){
+        var id = $(this).parents("tr.paper").first().attr("data");
+        var url = "http://mychi.csail.mit.edu/paper?id=" + id;
+        var title = entities[id].title;
+        var message = "Hi there!\n\nI found this interesting paper at CHI 2013 that you may be interested in:\n"
+          + title + "\n" + url;
+        var link = "<a href='mailto:";
+        link += "?to=&subject=" + encodeURIComponent("Paper at CHI2013: " + title);
+        link += "&body=" + encodeURIComponent(message) + "'>click</a>";
+        console.log(link);
+
+        $(link).appendTo("body").click();//.remove();
+        //window.location.href = link;
+    });
+
+
+    $('.send_session_email').on('click', function(){
     });
 }
 
@@ -699,6 +750,9 @@ function get_paper_html(id){
     //raw_html += '<span class="paper-session">' + get_short_session_info_of_paper(id) + '</span>'
     if (codeExists(codes['code'][id]))
       raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
+
+    raw_html += '<span class="send_tweet"></span>'
+    raw_html += '<span class="send_email"></span>'
     raw_html += '</h3>'
     raw_html += '</li>'
 
@@ -769,11 +823,15 @@ function get_session_html(id){
     raw_html += '<td class="content">'  
     raw_html += '<ul>'
     raw_html += '<li><h3><span class="arrow arrow-right"></span> <span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span>'
-    /* 
-    raw_html += '<span class="session-code">' + codes['code'][id] + '</span>'
-    if (codeExists(codes['code'][id]))
-      raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
-    */
+   
+    var s_code = sessionCodes['id'][id];
+    if (typeof s_code !== "undefined" && typeof codes['code'][s_code] !== "undefined"){
+      raw_html += '<span class="session-code">' + codes['code'][s_code] + '</span>'
+      //if (codeExists(codes['code'][s_code]))
+      //  raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][s_code]+'" target="_blank"><span class="play-icon"></span></a></span>'
+    } 
+    raw_html += '<span class="send_session_tweet"></span>'
+    raw_html += '<span class="send_session_email"></span>'
     raw_html += '</h3></li>'
     raw_html += '<li class="session-icons"><span class="award-icon"></span><span class="hm-icon"></span><span class="rec-icon">recommended</span>'
 
@@ -828,7 +886,7 @@ function get_selected_paper_html(id){
 
 
     raw_html += '<tbody>'
-    var raw_html = '<tr class="paper ' + id
+    var raw_html = '<tr data= "' + id + '" class="paper ' + id
     if(exists(recommended, id)){
         raw_html += ' recommended'
     }
@@ -867,6 +925,8 @@ function get_selected_paper_html(id){
     raw_html += '<span class="paper-code">' + codes['code'][id] + '</span>'
     if (codeExists(codes['code'][id]))
       raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
+    raw_html += '<span class="send_tweet"></span>'
+    raw_html += '<span class="send_email"></span>'
     raw_html += '</h3>';
 
     raw_html += '<li class="paper-authors">'
