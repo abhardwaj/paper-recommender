@@ -1351,8 +1351,10 @@ function reset_sessions(){
         $(this).prev().hide()
     });  
 
-    $('.session:visible').each(function(){
+    $('.session').each(function(){
         $(this).parent().prev().show()
+        var p = $(this).attr("data")
+        $("#"+p).hide()
         
     });
     update_sessions_count(); 
@@ -1469,6 +1471,7 @@ function setup_filters(){
         //enable_loading("applying filter...");
         $("#search_session").val("")
         $("#search_session").blur()
+        reset_sessions()
         var attr = $(this).attr("type")
         $('.'+attr).removeClass('active')
 
