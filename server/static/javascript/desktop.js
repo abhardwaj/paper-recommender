@@ -409,7 +409,7 @@ function bind_events(){
         var url = document.location;
         //var title = $(this).siblings(".session-title").text();
         var title = sessions[id].s_title;
-        var message = "Looking forward to seeing [Session] \"" + title + "\" " + sessions[id].date + " | " + sessions[id].time + " | " + sessions[id].room;
+        var message = "Looking forward to seeing \"" + title + "\" " + sessions[id].date + " | " + sessions[id].time + " | " + sessions[id].room;
         window.open ("https://twitter.com/share?" + 
             //"url=" + encodeURIComponent(url) + 
             //"&counturl=" + encodeURIComponent(url) +
@@ -433,7 +433,7 @@ function bind_events(){
         //var link = $(link); 
         //link.appendTo("#page");
         //$("#email-link").trigger("click");//.remove();
-        window.location.href = link;
+        window.open(link);
     });
 
 
@@ -451,7 +451,7 @@ function bind_events(){
         //var link = $(link); 
         //link.appendTo("#page");
         //$("#email-link").trigger("click");//.remove();
-        window.location.href = link;
+        window.open(link);
     });
 }
 
