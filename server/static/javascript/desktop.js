@@ -1368,12 +1368,12 @@ function setup_filters(){
 
         $(this).addClass('active')
 
-        var day_classes = '.'+$('.day.active').attr("title")
-        var time_classes = '.'+$('.time.active').attr("title")
-        var personas_classes = '.'+$('.persona.active').attr("title")
-        var venues_classes = '.'+$('.venue.active').attr("title")
-        var communities_classes = '.'+$('.community.active').attr("title")
-        var papers_classes = '.'+$('.p_session.active').attr("title")
+        var day_classes = '.'+$('.day.active').attr("data")
+        var time_classes = '.'+$('.time.active').attr("data")
+        var personas_classes = '.'+$('.persona.active').attr("data")
+        var venues_classes = '.'+$('.venue.active').attr("data")
+        var communities_classes = '.'+$('.community.active').attr("data")
+        var papers_classes = '.'+$('.p_session.active').attr("data")
         /*
         console.log(day_classes)
         console.log(time_classes)
