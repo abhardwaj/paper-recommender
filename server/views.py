@@ -35,7 +35,7 @@ s = Session()
 
 
 codes = open('/production/paper-recommender/data/letterCodes.json').read()
-sessionCodes = open('/development/paper-recommender/data/sessionCodes.json').read()
+sessionCodes = open('/production/paper-recommender/data/sessionCodes.json').read()
 
 
 def send_email(addr, subject, msg_body):	
