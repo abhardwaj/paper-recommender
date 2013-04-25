@@ -371,6 +371,19 @@ function bind_events(){
         }
         update_papers_count();         
     });
+
+    $('#show_filters').on('click', function(){
+      if ($(this).hasClass("expanded")){
+        $(".more-filters").hide();
+        $(this).text("Show More Filters");
+        $(this).removeClass("expanded");
+      } else {
+        $(".more-filters").show();
+        $(this).text("Show Less Filters");
+        $(this).addClass("expanded");
+      }
+
+    });
 }
 
 

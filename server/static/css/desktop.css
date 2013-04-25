@@ -77,7 +77,7 @@ body {
   }
 
   .goto-link a{
-    margin: 0 1em 0 1em;
+    /*margin: 0 1em 0 1em;*/
   }
 }
 
@@ -248,6 +248,18 @@ a:link, a:visited {
   display: inline-block;
 }
 
+#filter_schedule .more-filters {
+  display: none;
+}
+
+#filter_schedule .f_all { 
+  width: 5em;
+}
+/*
+#filter_schedule .f_all, #day_filter .day, #time_filter .time {
+  width: 6.5em;
+}
+*/
 a.filter{
   display: inline-block;
 	color: #2B2B2B !important;
