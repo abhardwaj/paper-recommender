@@ -492,12 +492,16 @@ function search_session(str){
             $(this).show()   
             var p = $(this).attr("data")
             $("#"+p).show()
+            $(this).find('.arrow').removeClass("arrow-right").addClass("arrow-down");
+        
+        $('> .session-collapsible').click()
             $(this).highlight(str);
             //$(this).text().indexOf(str)        
         }else{
             $(this).hide()
             var p = $(this).attr("data")
             $("#"+p).hide()
+            $(this).find('.arrow').removeClass("arrow-down").addClass("arrow-right");
 
         }
 
@@ -1355,6 +1359,7 @@ function reset_sessions(){
         $(this).parent().prev().show()
         var p = $(this).attr("data")
         $("#"+p).hide()
+        $(this).find('.arrow').removeClass("arrow-down").addClass("arrow-right");
         
     });
     update_sessions_count(); 
