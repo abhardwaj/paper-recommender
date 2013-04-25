@@ -64,6 +64,13 @@ body {
       display: none !important;
   }
 
+  .blurb {
+    background-color: #f6f6f6;
+    padding: 0.5em;
+    margin-bottom: 1em;
+  }
+  
+  
   .goto-link {
     display: none;
   }
