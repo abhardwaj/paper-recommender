@@ -433,7 +433,7 @@ function bind_events(){
         //var link = $(link); 
         //link.appendTo("#page");
         //$("#email-link").trigger("click");//.remove();
-        window.open(link);
+        window.location.href = link;
     });
 
 
@@ -451,7 +451,7 @@ function bind_events(){
         //var link = $(link); 
         //link.appendTo("#page");
         //$("#email-link").trigger("click");//.remove();
-        window.open(link);
+        window.location.href = link;
     });
 }
 
