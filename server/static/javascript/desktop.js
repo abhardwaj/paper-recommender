@@ -578,11 +578,20 @@ function format_venue(venue){
 
 
 
-function get_communities(entity){
-  if (typeof entity.communities === "undefined" || entity.communities == null || entity.communities == "")
-    return "";
-  else
-    return entity.communities.join(' ');
+function get_communities(s){
+    var communities = []
+    if (s.communities){
+        communities = s.communities
+    }
+    for(var i in s.submissions){
+        s_communities = entities[s.submissions[i]].communities
+        for(var j in s_communities){
+            if(!in_visible_window(communities, s_communities[j])){
+                communities.push(s_communities[j])
+            }
+        }
+    }
+    return communities.join(' ');
 
 }
 
