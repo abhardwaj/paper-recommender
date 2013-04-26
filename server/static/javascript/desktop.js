@@ -1,44 +1,52 @@
 // try to first load the data from localStorage 
-/*
+
 var id = localStorage.getItem('login_id')
 var en = localStorage.getItem('entities')
 var se = localStorage.getItem('sessions')
 var re = localStorage.getItem('recommended')
 var st = localStorage.getItem('starred')
+var s_st = localStorage.getItem('s_starred')
+var op = localStorage.getItem('own_papers')
 var co = localStorage.getItem('codes')
-*/
+var sc = localStorage.getItem('session_codes')
+
 // contact the server if required
-//if(id == null || en == null || se == null || re == null || st == null || co == null){
+if(id == null || en == null || se == null || re == null || st == null || s_st == null || op == null || co == null || sc == null){
     console.log('contacting server')
     $.ajax({
         type: 'GET',
         async: false,
         url: '/data', 
         success: function(res) {
-        id = JSON.stringify(res.login_id)
-        en = JSON.stringify(res.entities)
-        se = JSON.stringify(res.sessions)
-        re = JSON.stringify(res.recs)
-        st  = JSON.stringify(res.starred)
-        s_st  = JSON.stringify(res.s_starred)
-        op  = JSON.stringify(res.own_papers)
-        co  = res.codes
-        sc  = res.sessionCodes
-        localStorage.clear()
-        localStorage.setItem('login_id', id)
-        localStorage.setItem('entities', en)
-        localStorage.setItem('sessions', se)
-        localStorage.setItem('recommended', re)
-        localStorage.setItem('starred', st)
-        localStorage.setItem('s_starred', s_st)
-        localStorage.setItem('codes', co)
-        localStorage.setItem('sessionCodes', sc)
-        localStorage.setItem('own_papers', op)
+            id = JSON.stringify(res.login_id)
+            en = JSON.stringify(res.entities)
+            se = JSON.stringify(res.sessions)
+            re = JSON.stringify(res.recs)
+            st  = JSON.stringify(res.starred)
+            s_st  = JSON.stringify(res.s_starred)
+            op  = JSON.stringify(res.own_papers)
+            co  = res.codes
+            sc  = res.sessionCodes
+            localStorage.clear()
+            localStorage.setItem('login_id', id)
+            localStorage.setItem('entities', en)
+            localStorage.setItem('sessions', se)
+            localStorage.setItem('recommended', re)
+            localStorage.setItem('starred', st)
+            localStorage.setItem('s_starred', s_st)
+            localStorage.setItem('own_papers', op)
+            localStorage.setItem('codes', co)
+            localStorage.setItem('session_codes', sc)
 
         }
     });
 
-//}
+}
+
+
+function refresh(){
+
+}
 
 
 
@@ -48,9 +56,9 @@ var sessions = JSON.parse(se)
 var recommended_all = JSON.parse(re)
 var starred = JSON.parse(st)
 var s_starred = JSON.parse(s_st)
+var own_papers = JSON.parse(op)
 var codes = JSON.parse(co)
 var sessionCodes = JSON.parse(sc)
-var own_papers = JSON.parse(op)
 var recommended = recommended_all.splice(0,20)
 var stale =  false
 
@@ -1157,7 +1165,7 @@ function handle_session_star(event){
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('recommended', JSON.stringify(recommended))
+            localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
             update_recs()
             update_session_view()
             apply_filters()
@@ -1183,7 +1191,7 @@ function handle_session_star(event){
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('recommended', JSON.stringify(recommended))
+            localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
             update_recs()
             update_session_view()
             apply_filters()
@@ -1225,8 +1233,8 @@ function handle_star(event){
             populate_likes(starred)
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
-            //localStorage.setItem('starred', JSON.stringify(starred))
-            //localStorage.setItem('recommended', JSON.stringify(recommended))
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
             
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
@@ -1260,8 +1268,8 @@ function handle_star(event){
             populate_likes(starred)
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
-            //localStorage.setItem('starred', JSON.stringify(starred))
-            //localStorage.setItem('recommended', JSON.stringify(recommended))
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
             
             if($("#recs tr").length == 0){
                 populate_recs(recommended)
