@@ -20,6 +20,7 @@ var co = localStorage.getItem('codes')
         se = JSON.stringify(res.sessions)
         re = JSON.stringify(res.recs)
         st  = JSON.stringify(res.starred)
+        s_st  = JSON.stringify(res.s_starred)
         op  = JSON.stringify(res.own_papers)
         co  = res.codes
         sc  = res.sessionCodes
@@ -29,6 +30,7 @@ var co = localStorage.getItem('codes')
         localStorage.setItem('sessions', se)
         localStorage.setItem('recommended', re)
         localStorage.setItem('starred', st)
+        localStorage.setItem('s_starred', s_st)
         localStorage.setItem('codes', co)
         localStorage.setItem('sessionCodes', sc)
         localStorage.setItem('own_papers', op)
@@ -45,6 +47,7 @@ var entities = JSON.parse(en)
 var sessions = JSON.parse(se)
 var recommended_all = JSON.parse(re)
 var starred = JSON.parse(st)
+var s_starred = JSON.parse(s_st)
 var codes = JSON.parse(co)
 var sessionCodes = JSON.parse(sc)
 var own_papers = JSON.parse(op)
@@ -1107,6 +1110,11 @@ function update_session_view(){
         }
         
     });
+    
+    for(var s in s_starred){
+        $('.session.'+s_starred[s]).find('.session-container').find('.star').removeClass('star-open').addClass('star-filled')
+        $('.session.'+s_starred[s]).addClass('s_starred')
+    }
 
     update_sessions_count();
 }
@@ -1155,6 +1163,10 @@ function handle_session_star(event){
         .done(function(){
             enable_alert("You unliked a session.");
         });
+        $.post('/s_like/unstar', {'session': session_id}, function(res) {
+            s_starred = res.s_likes
+            console.log(res)
+        })
     }else{
         $('.'+obj.attr('data')).each(function(){
             $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
@@ -1178,6 +1190,9 @@ function handle_session_star(event){
         .done(function(){
             enable_alert("You liked a session.");
         });
+        $.post('/s_like/star', {'session': session_id}, function(res) {
+            s_starred = res.s_likes
+        })
     }
     
 

@@ -10,6 +10,7 @@ urlpatterns = patterns('',
 	url(r'^data', 'server.views.data'),
     url(r'^recs', 'server.views.get_recs'),
     url(r'^like/(\w+)$', 'server.views.like'),
+    url(r'^s_like/(\w+)$', 'server.views.s_like'),
 
     url(r'^login', 'server.views.login'),
     url(r'^verify/(.+)$', 'server.views.verify'),
