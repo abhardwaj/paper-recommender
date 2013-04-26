@@ -283,6 +283,7 @@ function bind_events(){
             var str = $(this).val()
             if(str==""){
                 reset_sessions()
+                apply_filters()
             }
         });
 
@@ -469,10 +470,11 @@ var delay = (function(){
 
 
 function search_session(str){
-    $('.filter').removeClass('active')
-    $('.f_all').addClass('active')
-    if(str==""){
-        reset_sessions()
+    //$('.filter').removeClass('active')
+    //$('.f_all').addClass('active')
+    reset_sessions()
+    apply_filters()
+    if(str=="" || str == $('#search_session').attr("title")){        
         return
     }
     var regex_str = ''
@@ -481,20 +483,17 @@ function search_session(str){
         regex_str += '(?=.*\\b'+words[i]+'.*\\b)'
     }
     var s =  new RegExp(regex_str , 'i')
-    $('.session-timeslot').each(function(){
-        $(this).prev().hide()
+    $('.session:visible').each(function(){
+        $(this).parent().prev().hide()
     });
 
       
-    $('.session').each(function(){
-        $(this).removeHighlight()
+    $('.session:visible').each(function(){
         if(s.test($(this).text())){
             $(this).show()   
             var p = $(this).attr("data")
             $("#"+p).show()
             $(this).find('.arrow').removeClass("arrow-right").addClass("arrow-down");
-        
-        $('> .session-collapsible').click()
             $(this).highlight(str);
             //$(this).text().indexOf(str)        
         }else{
@@ -511,6 +510,7 @@ function search_session(str){
         $(this).parent().prev().show()
         
     });
+    
     update_sessions_count(); 
     
 }
@@ -518,11 +518,14 @@ function search_session(str){
 
 function simple_search_session(str){
 
-    $('.filter').removeClass('active')
-    $('.f_all').addClass('active')
+    reset_sessions()
+    apply_filters()
+    if(str=="" || str == $('#search_session').attr("title")){        
+        return
+    }
     
-    $('.session-timeslot').each(function(){
-        $(this).prev().hide()
+    $('.session:visible').each(function(){
+        $(this).parent().prev().hide()
     });
 
        
@@ -1466,7 +1469,56 @@ function populate_sessions(){
 
 
 
+function apply_filters(){
+    var day_classes = '.'+$('.day.active').attr("data")
+    var time_classes = '.'+$('.time.active').attr("data")
+    var personas_classes = '.'+$('.persona.active').attr("data")
+    var venues_classes = '.'+$('.venue.active').attr("data")
+    var communities_classes = '.'+$('.community.active').attr("data")
+    var papers_classes = '.'+$('.p_session.active').attr("data")
+    /*
+    console.log(day_classes)
+    console.log(time_classes)
+    console.log(venues_classes)
+    console.log(personas_classes)
+    console.log(papers_classes)
+    */
 
+    var select_class = $('.session')
+    if(day_classes != '.all'){
+        select_class = select_class.filter(day_classes)
+    }
+    
+    if(time_classes!='.all'){               
+        select_class = select_class.filter(time_classes)                
+    }
+
+    if(personas_classes!='.all'){               
+        select_class = select_class.filter(personas_classes)                
+    }
+
+    if(venues_classes!='.all'){             
+        select_class = select_class.filter(venues_classes)              
+    }
+    if(communities_classes!='.all'){             
+        select_class = select_class.filter(communities_classes)              
+    }
+
+    if(papers_classes!='.all'){             
+        select_class = select_class.filter(papers_classes)              
+    }
+   $('.session').hide();
+   $('.session-timeslot').each(function(){
+        $(this).prev().hide()
+    });
+
+   select_class.show();
+   select_class.each(function(){
+        $(this).parent().prev().show()
+    });
+
+   update_sessions_count(); 
+}
 
 
 
@@ -1474,62 +1526,15 @@ function setup_filters(){
     $('.filter').off('click')
     $('.filter').on('click', function(){       
         //enable_loading("applying filter...");
-        $("#search_session").val("")
-        $("#search_session").blur()
-        reset_sessions()
+        //$("#search_session").val("")
+        //$("#search_session").blur()
+        //reset_sessions()
         var attr = $(this).attr("type")
         $('.'+attr).removeClass('active')
 
         $(this).addClass('active')
-
-        var day_classes = '.'+$('.day.active').attr("data")
-        var time_classes = '.'+$('.time.active').attr("data")
-        var personas_classes = '.'+$('.persona.active').attr("data")
-        var venues_classes = '.'+$('.venue.active').attr("data")
-        var communities_classes = '.'+$('.community.active').attr("data")
-        var papers_classes = '.'+$('.p_session.active').attr("data")
-        /*
-        console.log(day_classes)
-        console.log(time_classes)
-        console.log(venues_classes)
-        console.log(personas_classes)
-        console.log(papers_classes)
-        */
-
-        var select_class = $('.session')
-        if(day_classes != '.all'){
-            select_class = select_class.filter(day_classes)
-        }
+        $('#search_sessions_btn').click()
         
-        if(time_classes!='.all'){               
-            select_class = select_class.filter(time_classes)                
-        }
-
-        if(personas_classes!='.all'){               
-            select_class = select_class.filter(personas_classes)                
-        }
-
-        if(venues_classes!='.all'){             
-            select_class = select_class.filter(venues_classes)              
-        }
-        if(communities_classes!='.all'){             
-            select_class = select_class.filter(communities_classes)              
-        }
-
-        if(papers_classes!='.all'){             
-            select_class = select_class.filter(papers_classes)              
-        }
-       $('.session').hide();
-       $('.session-timeslot').each(function(){
-            $(this).prev().hide()
-        });
-
-       select_class.show();
-       select_class.each(function(){
-            $(this).parent().prev().show()
-        });
-
-       update_sessions_count(); 
     });
 }
 
