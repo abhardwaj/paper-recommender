@@ -268,41 +268,29 @@ def get_recs(request):
 	return HttpResponse(json.dumps(recs), mimetype="application/json")
 
 
-@csrf_exempt
-def s_like(request, like_str):
-	s = request.POST["session"]
-	user = request.session['id']
-	s_likes = []
-	cursor = connection.cursor()
-	cursor.execute("""SELECT s_likes from pcs_authors where id = '%s';""" %(user))
-	data = cursor.fetchall()
-	if(data[0][0] != None):
-		s_likes = json.loads(data[0][0])
 
-	
-	if(like_str=='star' and (s not in s_likes) and s != ''):
-		s_likes.append(s)
-	if(like_str=='unstar' and (s in s_likes) and s != ''):
-		s_likes.remove(s)
-	l = list(set(s_likes))
-	cursor.execute("""UPDATE pcs_authors SET s_likes = '%s' where id = '%s';""" %(json.dumps(l), user))
-	return HttpResponse(json.dumps({'s_likes':l}), mimetype="application/json")
 
 
 
 @csrf_exempt
 def like(request, like_str):
 	papers = json.loads(request.POST["papers"])
+	session = None
+	if('session' in request.POST):
+		session = request.POST['session']
 	s = ','.join(papers)
 	user = request.session['id']
 	res = {}
 	likes = []
+	s_likes = []
 	cursor = connection.cursor()
-	cursor.execute("""SELECT likes from pcs_authors where id = '%s';""" %(user))
+	cursor.execute("""SELECT likes, s_likes from pcs_authors where id = '%s';""" %(user))
 	data = cursor.fetchall()
 	print data
 	if(data[0][0] != None):
 		likes = json.loads(data[0][0])
+	if(data[0][1] != None):
+		s_likes = json.loads(data[0][1])
 	cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], like_str, s))
 
 	for paper_id in papers:
@@ -315,9 +303,15 @@ def like(request, like_str):
 		else:
 			res[paper_id] = 'unstar'
 	l = list(set(likes))
-	cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(l), user))
+	if(session != None):
+		if(like_str=='star' and (session not in s_likes) and session != ''):
+			s_likes.append(session)
+		if(like_str=='unstar' and (session in s_likes) and session != ''):
+			s_likes.remove(session)
+	s_l = list(set(s_likes))
+	cursor.execute("""UPDATE pcs_authors SET likes = '%s', s_likes = '%s' where id = '%s';""" %(json.dumps(l), json.dumps(s_l), user))
 	recs = r.get_item_based_recommendations(likes)
-	return HttpResponse(json.dumps({'recs':recs, 'likes':likes, 'res':res}), mimetype="application/json")
+	return HttpResponse(json.dumps({'recs':recs, 'likes':l, 's_likes':s_l, 'res':res}), mimetype="application/json")
 
 
 

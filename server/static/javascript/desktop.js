@@ -1145,7 +1145,7 @@ function handle_session_star(event){
             $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
             $(this).find('.paper').removeClass('highlight')
         })
-        $.post('/like/unstar', {'papers': JSON.stringify(papers)}, function(res) {
+        $.post('/like/unstar', {'papers': JSON.stringify(papers), 'session': session_id}, function(res) {
             for(var paper_id in papers){
                 delete starred[papers[paper_id]]
             }
@@ -1153,26 +1153,25 @@ function handle_session_star(event){
                 $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
                 $(this).find('.paper').removeClass('highlight')
             })
+            s_starred = res.s_likes
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('recommended', JSON.stringify(recommended))
             update_recs()
             update_session_view()
+            apply_filters()
         })
         .done(function(){
             enable_alert("You unliked a session.");
         });
-        $.post('/s_like/unstar', {'session': session_id}, function(res) {
-            s_starred = res.s_likes
-            console.log(res)
-        })
+       
     }else{
         $('.'+obj.attr('data')).each(function(){
             $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
             $(this).find('.paper').addClass('highlight')
         })
-        $.post('/like/star', {'papers': JSON.stringify(papers)}, function(res) {
+        $.post('/like/star', {'papers': JSON.stringify(papers), 'session': session_id}, function(res) {
             for(var paper_id in papers){
                 starred[papers[paper_id]] = true
             }
@@ -1180,19 +1179,19 @@ function handle_session_star(event){
                 $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
                 $(this).find('.paper').addClass('highlight')
             })
+            s_starred = res.s_likes
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('recommended', JSON.stringify(recommended))
             update_recs()
             update_session_view()
+            apply_filters()
         })
         .done(function(){
             enable_alert("You liked a session.");
         });
-        $.post('/s_like/star', {'session': session_id}, function(res) {
-            s_starred = res.s_likes
-        })
+        
     }
     
 
