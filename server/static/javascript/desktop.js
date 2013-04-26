@@ -1133,13 +1133,16 @@ function handle_session_star(event){
     var papers = sessions[session_id]['submissions']
     //console.log(papers)
     if(obj.hasClass('star-filled')){
+        $('.'+obj.attr('data')).each(function(){
+            $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
+            $(this).find('.paper').removeClass('highlight')
+        })
         $.post('/like/unstar', {'papers': JSON.stringify(papers)}, function(res) {
             for(var paper_id in papers){
                 delete starred[papers[paper_id]]
             }
             $('.'+obj.attr('data')).each(function(){
                 $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
-                $(this).removeClass('highlight')
                 $(this).find('.paper').removeClass('highlight')
             })
             recommended_all = res.recs
@@ -1153,6 +1156,10 @@ function handle_session_star(event){
             enable_alert("You unliked a session.");
         });
     }else{
+        $('.'+obj.attr('data')).each(function(){
+            $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
+            $(this).find('.paper').addClass('highlight')
+        })
         $.post('/like/star', {'papers': JSON.stringify(papers)}, function(res) {
             for(var paper_id in papers){
                 starred[papers[paper_id]] = true
