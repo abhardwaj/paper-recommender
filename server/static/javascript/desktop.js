@@ -210,6 +210,7 @@ function refresh(_async_){
 
 
 setInterval('refresh();', 60*1000)
+refresh()
 
 
 // codes without video preview
