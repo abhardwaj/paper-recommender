@@ -10,7 +10,7 @@ CACHE MANIFEST
 
 /static/javascript/third-party/jquery.min.js
 /static/javascript/third-party/jquery-ui.js
-#/static/javascript/desktop.js
+/static/javascript/desktop.js
 
 /static/img/affiliation.svg
 /static/img/arrows.ai
@@ -63,5 +63,5 @@ NETWORK:
 
 #/static/css/desktop.css
 
-/static/javascript/desktop.js
+#/static/javascript/desktop.js
 *
