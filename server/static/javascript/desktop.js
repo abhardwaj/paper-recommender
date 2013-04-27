@@ -12,6 +12,15 @@ var session_codes = JSON.parse(localStorage.getItem('session_codes'))
 
 
 
+var star_pending = JSON.parse(localStorage.getItem('star_pending'))
+var unstar_pending = JSON.parse(localStorage.getItem('unstar_pending'))
+var s_star_pending = JSON.parse(localStorage.getItem('s_star_pending'))
+var s_unstar_pending = JSON.parse(localStorage.getItem('s_unstar_pending'))
+
+
+
+var offline = false;
+
 
 // contact the server if required
 if(login_id == null 
@@ -40,6 +49,8 @@ if(login_id == null
             codes = JSON.parse(res.codes)
             session_codes = JSON.parse(res.session_codes)
 
+           
+
             localStorage.clear()
 
             if(login_id != null)
@@ -61,36 +72,126 @@ if(login_id == null
             if(session_codes!= null)
                 localStorage.setItem('session_codes', res.session_codes)
 
+            reset_sync()
+            
+
         }
     });
 
 }
 
+if(star_pending == null){
+    star_pending = []
+    localStorage.setItem('star_pending', JSON.stringify(star_pending))
+}
 
+if(unstar_pending == null){
+    unstar_pending = []
+    localStorage.setItem('star_pending', JSON.stringify(unstar_pending))
+}
+
+if(s_star_pending == null){
+    s_star_pending = []
+    localStorage.setItem('star_pending', JSON.stringify(s_star_pending))
+}
+
+if(s_unstar_pending == null){
+    s_unstar_pending = []
+    localStorage.setItem('s_unstar_pending', JSON.stringify(s_unstar_pending))
+}
+
+
+
+
+
+function reset_sync(){
+
+    star_pending = []
+    unstar_pending = []
+    s_star_pending = []
+    s_unstar_pending = []
+
+    localStorage.setItem('star_pending', JSON.stringify(star_pending))
+    localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
+    localStorage.setItem('s_star_pending', JSON.stringify(s_star_pending))
+    localStorage.setItem('s_unstar_pending', JSON.stringify(s_unstar_pending))
+
+}
 
 
 var recommended = recommended_all.splice(0,20)
 
 
+window.addEventListener("online", function() {
+    offline = false
+    sync()
+    refresh()
+    reset_sync()
+}, true);
+
+ 
+window.addEventListener("offline", function() {
+    offline = true
+    enable_alert('You are offline. Any activities on this device would be synced when you come online.')
+}, true);
+
+
+
+
+
+function sync(){
+    var star_pending = JSON.parse(localStorage.getItem('star_pending'))
+    var unstar_pending = JSON.parse(localStorage.getItem('unstar_pending'))
+    var s_star_pending = JSON.parse(localStorage.getItem('s_star_pending'))
+    var s_unstar_pending = JSON.parse(localStorage.getItem('s_unstar_pending'))
+
+    $.ajax({
+        type:'POST',
+        url:'/like/star',
+        async: false, 
+        data:{'papers': JSON.stringify(star_pending), 'session': JSON.stringify(s_star_pending)}, 
+        success: function(res) {
+            console.log(res)
+        }
+    });
+
+    $.ajax({
+        type:'POST',
+        url:'/like/unstar',
+        async: false, 
+        data:{'papers': JSON.stringify(unstar_pending), 'session': JSON.stringify(s_unstar_pending)}, 
+        success: function(res) {
+            console.log(res)
+        }
+    });
+
+    
+}
 
 
 function refresh(){
+    if(offline){
+        return
+    }
     $.ajax({
         type: 'GET',
         async: true,
-        url: '/sync', 
+        url: '/refresh', 
         success: function(res) {
+            console.log("synced")
             recommended_all = res.recs
             recommended = recommended_all.splice(0,20)
             starred = res.likes
             s_starred = res.s_likes
-            localStorage.setItem('recommended', JSON.stringify(recommended_all))
+            localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('s_starred', JSON.stringify(s_starred))
         }
     });
-
 }
+
+
+setInterval('refresh();', 10*1000)
 
 
 // codes without video preview
@@ -1201,57 +1302,86 @@ function handle_session_star(event){
             $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
             $(this).find('.paper').removeClass('highlight')
         })
-        $.post('/like/unstar', {'papers': JSON.stringify(papers), 'session': session_id}, function(res) {
+        if(offline){
+            enable_alert("You unliked a session. You are not online -- updating information locally.");
             for(var paper_id in papers){
                 var i =  starred.indexOf(papers[paper_id])
                 starred.splice(i, 1)
             }
-            $('.'+obj.attr('data')).each(function(){
-                $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
-                $(this).find('.paper').removeClass('highlight')
-            })
-            starred = res.likes
-            s_starred = res.s_likes
-            recommended_all = res.recs
-            recommended = res.recs.splice(0,20)
+            var s_id = s_starred.indexOf(session_id)
+            s_starred.splice(s_id, 1)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('s_starred', JSON.stringify(s_starred))
-            localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
-            update_recs()
             update_session_view()
             apply_filters()
-        })
-        .done(function(){
-            enable_alert("You unliked a session.");
-        });
+        }else{
+            $.post('/like/unstar', {'papers': JSON.stringify(papers), 'session': JSON.stringify([session_id])}, function(res) {
+                for(var paper_id in papers){
+                    var i =  starred.indexOf(papers[paper_id])
+                    starred.splice(i, 1)
+                }
+                var s_id = s_starred.indexOf(session_id)
+                s_starred.splice(s_id, 1)
+                $('.'+obj.attr('data')).each(function(){
+                    $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
+                    $(this).find('.paper').removeClass('highlight')
+                })
+                starred = res.likes
+                s_starred = res.s_likes
+                recommended_all = res.recs
+                recommended = res.recs.splice(0,20)
+                localStorage.setItem('starred', JSON.stringify(starred))
+                localStorage.setItem('s_starred', JSON.stringify(s_starred))
+                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+                update_recs()
+                update_session_view()
+                apply_filters()
+            })
+            .done(function(){
+                enable_alert("You unliked a session.");
+            });
+        }
        
     }else{
         $('.'+obj.attr('data')).each(function(){
             $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
             $(this).find('.paper').addClass('highlight')
-        })
-        $.post('/like/star', {'papers': JSON.stringify(papers), 'session': session_id}, function(res) {
-            for(var paper_id in papers){
-                starred.push(papers[paper_id])
-            }
-            $('.'+obj.attr('data')).each(function(){
-                $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
-                $(this).find('.paper').addClass('highlight')
-            })
-            starred = res.likes
-            s_starred = res.s_likes
-            recommended_all = res.recs
-            recommended = res.recs.splice(0,20)
-            localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('s_starred', JSON.stringify(s_starred))
-            localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
-            update_recs()
             update_session_view()
             apply_filters()
         })
-        .done(function(){
-            enable_alert("You liked a session.");
-        });
+        if(offline){
+            enable_alert("You liked a session. You are not online -- updating information locally.");
+            for(var paper_id in papers){
+                starred.push(papers[paper_id])
+            }
+            s_starred.push(session_id)
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('s_starred', JSON.stringify(s_starred))
+        }else{
+            $.post('/like/star', {'papers': JSON.stringify(papers), 'session': JSON.stringify([session_id])}, function(res) {
+                for(var paper_id in papers){
+                    starred.push(papers[paper_id])
+                }
+                s_starred.push(session_id)
+                $('.'+obj.attr('data')).each(function(){
+                    $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
+                    $(this).find('.paper').addClass('highlight')
+                })
+                starred = res.likes
+                s_starred = res.s_likes
+                recommended_all = res.recs
+                recommended = res.recs.splice(0,20)
+                localStorage.setItem('starred', JSON.stringify(starred))
+                localStorage.setItem('s_starred', JSON.stringify(s_starred))
+                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+                update_recs()
+                update_session_view()
+                apply_filters()
+            })
+            .done(function(){
+                enable_alert("You liked a session.");
+            });
+        }
         
     }
     
@@ -1275,77 +1405,97 @@ function handle_star(event){
             $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
             $(this).removeClass('highlight')
         })
-        $.post('/like/unstar', {'papers': JSON.stringify([paper_id])}, function(res) {
-          if(res.res[paper_id] == 'unstar'){
-            $('.'+obj.attr('data')).each(function(){
-                $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
-                $(this).removeClass('highlight')
-            })
-
+        if(offline){
+            enable_alert("You unliked a paper. You are not online -- updating information locally.");
             var i =  starred.indexOf(paper_id)
             starred.splice(i, 1)
+            var j =  star_pending.indexOf(paper_id)
+            star_pending.splice(j, 1)
             populate_likes(starred)
-            recommended_all = res.recs
-            recommended = res.recs.splice(0,20)
+            localStorage.setItem('unstar_pending', JSON.stringify(star_pending))
             localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('s_starred', JSON.stringify(s_starred))
-            localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
-            
-            if($("#recs tr").length == 0){
-                populate_recs(recommended)
-            }else{
-                append_recs()
-            }
-            update_recs()
-            update_session_view()
-          }
-        })
-        .done(function(){
-            //console.log($(window).scrollTop(), $(event.target).parents("td:first").position().top);
-            enable_alert("You unliked a paper.");
-            var scroll_current = $(window).scrollTop();
-            position_delta = $(event.target).parents("td:first").position().top - position_old;
-            if (position_delta != 0)
-              $('html, body').scrollTop(scroll_current + position_delta);
-        });
+        }else{
+            $.post('/like/unstar', {'papers': JSON.stringify([paper_id])}, function(res) {
+              if(res.res[paper_id] == 'unstar'){
+                $('.'+obj.attr('data')).each(function(){
+                    $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
+                    $(this).removeClass('highlight')
+                })
+
+                var i =  starred.indexOf(paper_id)
+                starred.splice(i, 1)
+                populate_likes(starred)
+                recommended_all = res.recs
+                recommended = res.recs.splice(0,20)
+                localStorage.setItem('starred', JSON.stringify(starred))
+                localStorage.setItem('s_starred', JSON.stringify(s_starred))
+                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+                
+                if($("#recs tr").length == 0){
+                    populate_recs(recommended)
+                }else{
+                    append_recs()
+                }
+                update_recs()
+                update_session_view()
+              }
+            })
+            .done(function(){
+                //console.log($(window).scrollTop(), $(event.target).parents("td:first").position().top);
+                enable_alert("You unliked a paper.");
+                var scroll_current = $(window).scrollTop();
+                position_delta = $(event.target).parents("td:first").position().top - position_old;
+                if (position_delta != 0)
+                  $('html, body').scrollTop(scroll_current + position_delta);
+            });
+        }
     }else{
         $('.'+obj.attr('data')).each(function(){
             $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
             $(this).addClass('highlight')
         })
-        $.post('/like/star', {'papers': JSON.stringify([paper_id])}, function(res) {
-          if(res.res[paper_id] == 'star'){
-            $('.'+obj.attr('data')).each(function(){
-                $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
-                $(this).addClass('highlight')
-            })
+        if(offline){
+            enable_alert("You liked a paper. You are not online -- updating information locally.");
             starred.push(paper_id)
+            star_pending.push(paper_id)
             populate_likes(starred)
-            recommended_all = res.recs
-            recommended = res.recs.splice(0,20)
+            localStorage.setItem('star_pending', JSON.stringify(star_pending))
             localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('s_starred', JSON.stringify(s_starred))
-            localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
-            
-            if($("#recs tr").length == 0){
-                populate_recs(recommended)
-            }else{            
-                append_recs()
-            }
-            update_recs()
-            update_session_view()
-            
-          }
-        })
+        }else{
+            $.post('/like/star', {'papers': JSON.stringify([paper_id])}, function(res) {
+              if(res.res[paper_id] == 'star'){
+                $('.'+obj.attr('data')).each(function(){
+                    $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
+                    $(this).addClass('highlight')
+                })
+                starred.push(paper_id)
+                populate_likes(starred)
+                recommended_all = res.recs
+                recommended = res.recs.splice(0,20)
+                localStorage.setItem('starred', JSON.stringify(starred))
+                localStorage.setItem('s_starred', JSON.stringify(s_starred))
+                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+                
+                if($("#recs tr").length == 0){
+                    populate_recs(recommended)
+                }else{            
+                    append_recs()
+                }
+                update_recs()
+                update_session_view()
+                
+              }
+            })
 
-        .done(function(){
-            //console.log($(window).scrollTop(), $(event.target).parents("td:first").position().top);
-            enable_alert("You liked a paper.");
-            var scroll_current = $(window).scrollTop();
-            position_delta = $(event.target).parents("td:first").position().top - position_old;
-            if (position_delta != 0)
-              $('html, body').scrollTop(scroll_current + position_delta);
-        });
+            .done(function(){
+                //console.log($(window).scrollTop(), $(event.target).parents("td:first").position().top);
+                enable_alert("You liked a paper.");
+                var scroll_current = $(window).scrollTop();
+                position_delta = $(event.target).parents("td:first").position().top - position_old;
+                if (position_delta != 0)
+                  $('html, body').scrollTop(scroll_current + position_delta);
+            });
+        }
 
 
 

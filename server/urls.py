@@ -8,6 +8,7 @@ urlpatterns = patterns('',
 
 	
 	url(r'^data', 'server.views.data'),
+    url(r'^refresh', 'server.views.refresh'),
     url(r'^recs', 'server.views.get_recs'),
     url(r'^like/(\w+)$', 'server.views.like'),
     url(r'^s_like/(\w+)$', 'server.views.s_like'),
