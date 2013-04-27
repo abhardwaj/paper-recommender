@@ -1096,3 +1096,10 @@ form .credit {
   color: #447EAC;
 }
 
+.link{
+  cursor: pointer;
+}
+
+.link:hover{
+  color: #447EAC;
+}

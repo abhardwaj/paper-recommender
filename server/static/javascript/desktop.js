@@ -287,6 +287,14 @@ function get_params() {
 }
 
 
+function get_hash() {
+    if(window.location.href.indexOf('#') != -1)
+        return window.location.href.slice(window.location.href.indexOf('#') + 1)
+    else
+        return window.location.href
+}
+
+
 
 
 
@@ -878,6 +886,16 @@ function codeExists(code){
 
 }
 
+
+function select_paper(id){
+    if(window.location.pathname == '/paper'){
+        window.location.hash = "#" + id;
+        window.location.reload(true);
+    }else{
+        window.location.href = '/paper#'+id
+    }
+}
+
 function isMyPaper(id){
   if ($.inArray(id, own_papers) > -1)
     return true;
@@ -919,7 +937,7 @@ function get_paper_html(id){
     raw_html += '<td class="content">'    
     raw_html += '<ul>'
 
-    raw_html += '<li class="paper-title blue"><h3><a href="/paper?id='+id+'">'+remove_special_chars(entities[id].title) +'</a>'
+    raw_html += '<li class="paper-title"><h3><span class="link" onclick=select_paper("'+id+'")>'+remove_special_chars(entities[id].title) +'</span>'
     raw_html += '<span class="paper-subtype">' + ' ' + get_paper_subtype(id) + '</span>'
     raw_html += '<span class="paper-code">' +  ' ' + codes['code'][id] + '</span>'
     //raw_html += '<span class="paper-session">' + get_short_session_info_of_paper(id) + '</span>'
@@ -1546,9 +1564,8 @@ function handle_star(event){
 
 
 function load_paper(){
-    var params = get_params()
-    var paper_id = params['id']
-    //console.log(paper_id)
+    var paper_id = get_hash()
+    console.log(paper_id)
     var selected_paper_html = get_selected_paper_html(paper_id)
     $('#selected_paper').find('.form').html(selected_paper_html)
     $('#similar_papers').html('')
