@@ -124,9 +124,13 @@ var recommended = recommended_all.splice(0,20)
 
 window.addEventListener("online", function() {
     offline = false
+    enable_alert('You are online. Syncing new data with the server.')
     sync()
     refresh()
     reset_sync()
+    update_recs()
+    update_session_view()
+    apply_filters()
 }, true);
 
  
@@ -1307,18 +1311,26 @@ function handle_session_star(event){
             for(var paper_id in papers){
                 var i =  starred.indexOf(papers[paper_id])
                 starred.splice(i, 1)
+                var j =  star_pending.indexOf(paper_id)
+                if( j >= 0){
+                    star_pending.splice(j, 1)
+                }else{
+                    unstar_pending.push(paper_id)
+                }
             }
             var s_id = s_starred.indexOf(session_id)
             s_starred.splice(s_id, 1)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('s_starred', JSON.stringify(s_starred))
+            localStorage.setItem('star_pending', JSON.stringify(star_pending))
+            localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
             update_session_view()
             apply_filters()
         }else{
             $.post('/like/unstar', {'papers': JSON.stringify(papers), 'session': JSON.stringify([session_id])}, function(res) {
                 for(var paper_id in papers){
                     var i =  starred.indexOf(papers[paper_id])
-                    starred.splice(i, 1)
+                    starred.splice(i, 1)                    
                 }
                 var s_id = s_starred.indexOf(session_id)
                 s_starred.splice(s_id, 1)
@@ -1353,10 +1365,19 @@ function handle_session_star(event){
             enable_alert("You liked a session. You are not online -- updating information locally.");
             for(var paper_id in papers){
                 starred.push(papers[paper_id])
+                var j =  unstar_pending.indexOf(paper_id)
+                if( j >= 0){
+                    unstar_pending.splice(j, 1)
+                }else{
+                    star_pending.push(paper_id)
+                }
             }
             s_starred.push(session_id)
+            s_star_pending.push(session_id)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('s_starred', JSON.stringify(s_starred))
+            localStorage.setItem('star_pending', JSON.stringify(star_pending))
+            localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
         }else{
             $.post('/like/star', {'papers': JSON.stringify(papers), 'session': JSON.stringify([session_id])}, function(res) {
                 for(var paper_id in papers){
@@ -1410,9 +1431,14 @@ function handle_star(event){
             var i =  starred.indexOf(paper_id)
             starred.splice(i, 1)
             var j =  star_pending.indexOf(paper_id)
-            star_pending.splice(j, 1)
+            if( j >= 0){
+                star_pending.splice(j, 1)
+            }else{
+                unstar_pending.push(paper_id)
+            }
             populate_likes(starred)
-            localStorage.setItem('unstar_pending', JSON.stringify(star_pending))
+            localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
+            localStorage.setItem('star_pending', JSON.stringify(star_pending))
             localStorage.setItem('starred', JSON.stringify(starred))
         }else{
             $.post('/like/unstar', {'papers': JSON.stringify([paper_id])}, function(res) {
@@ -1457,9 +1483,15 @@ function handle_star(event){
         if(offline){
             enable_alert("You liked a paper. You are not online -- updating information locally.");
             starred.push(paper_id)
-            star_pending.push(paper_id)
+            var j =  unstar_pending.indexOf(paper_id)
+            if( j >= 0){
+                unstar_pending.splice(j, 1)
+            }else{
+                star_pending.push(paper_id)
+            }
             populate_likes(starred)
             localStorage.setItem('star_pending', JSON.stringify(star_pending))
+            localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
             localStorage.setItem('starred', JSON.stringify(starred))
         }else{
             $.post('/like/star', {'papers': JSON.stringify([paper_id])}, function(res) {
@@ -1646,14 +1678,14 @@ function append_recs(){
         var d = $(this).attr("data")
         visible_recs.push(d)
     })
-    console.log(visible_recs)
+    //console.log(visible_recs)
     var n = $("#recs tr:visible").length
     $("#recs tr:hidden").remove()  
     var raw_html = ''
     for(var r in recommended){
         console.log(visible_recs, recommended[r].id)
         if(visible_recs.indexOf(recommended[r].id) == -1){
-            console.log('not exists')
+            //console.log('not exists')
             raw_html += get_paper_html(recommended[r].id)
         }
     }
