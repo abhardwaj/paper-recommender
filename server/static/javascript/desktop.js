@@ -890,7 +890,7 @@ function codeExists(code){
 function select_paper(id){
     if(window.location.pathname == '/paper'){
         window.location.hash = "#" + id;
-        window.location.reload(true);
+        window.location.reload(false);
     }else{
         window.location.href = '/paper#'+id
     }
