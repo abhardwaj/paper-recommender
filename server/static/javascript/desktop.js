@@ -1,3 +1,10 @@
+//check for cache update
+
+window.applicationCache.addEventListener('updateready', function(){
+        window.applicationCache.swapCache();
+}, false);
+
+
 // try to first load the data from localStorage 
 
 var login_id = JSON.parse(localStorage.getItem('login_id'))
@@ -188,7 +195,7 @@ function refresh(_async_){
         url: '/refresh', 
         success: function(res) {
             if(!res.error){
-                console.log("synced: ", res)
+                console.log("synced: ")
                 recommended_all = res.recs
                 recommended = recommended_all.splice(0,20)
                 starred = res.likes
