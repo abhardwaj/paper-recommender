@@ -748,7 +748,7 @@ function get_paper_html(id){
     if(exists(recommended, id)){
         raw_html += ' recommended'
     }
-    if(starred.indexOf(id) == -1){
+    if(starred.indexOf(id) >= 0){
         raw_html += ' highlight'
     }
     if(entities[id].hm){
@@ -762,7 +762,7 @@ function get_paper_html(id){
     raw_html += '">'
       
     raw_html += '<td class="metadata">'   
-    if(starred.indexOf(id) == -1){
+    if(starred.indexOf(id) < 0){
         raw_html += '<div class="star star-open p_star" data="'+ id + '" onclick="handle_star(event);">'        
     }else{
         raw_html += '<div class="star star-filled p_star" data="'+ id + '" onclick="handle_star(event);">'       
@@ -943,7 +943,7 @@ function get_selected_paper_html(id){
     if(exists(recommended, id)){
         raw_html += ' recommended'
     }
-    if(starred.indexOf(id) == -1){
+    if(starred.indexOf(id) >= 0){
         raw_html += ' highlight'
     }
     if(entities[id].hm){
