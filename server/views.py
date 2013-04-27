@@ -36,6 +36,7 @@ s = Session()
 
 codes = open('/production/paper-recommender/data/letterCodes.json').read()
 session_codes = open('/production/paper-recommender/data/sessionCodes.json').read()
+offline_recs = open('/production/paper-recommender/data/offline_recs.txt').read()
 
 
 def send_email(addr, subject, msg_body):	
@@ -257,6 +258,7 @@ def data(request):
 			'entities': e.entities, 
 			'sessions':s.sessions,
 			'codes': codes,
+			'offline_recs': offline_recs,
 	    	'session_codes': session_codes
 			}), mimetype="application/json")
 	except:

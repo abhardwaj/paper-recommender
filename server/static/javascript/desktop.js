@@ -8,6 +8,7 @@ var starred = JSON.parse(localStorage.getItem('starred'))
 var s_starred = JSON.parse(localStorage.getItem('s_starred'))
 var own_papers = JSON.parse(localStorage.getItem('own_papers'))
 var codes = JSON.parse(localStorage.getItem('codes'))
+var offline_recs = JSON.parse(localStorage.getItem('offline_recs'))
 var session_codes = JSON.parse(localStorage.getItem('session_codes'))
 
 
@@ -31,7 +32,9 @@ if(login_id == null
     || s_starred == null 
     || own_papers == null 
     || codes == null 
-    || session_codes == null){
+    || session_codes == null
+    || offline_recs == null
+    ){
 
     console.log('contacting server')
     $.ajax({
@@ -48,6 +51,7 @@ if(login_id == null
             own_papers = res.own_papers
             codes = JSON.parse(res.codes)
             session_codes = JSON.parse(res.session_codes)
+            offline_recs = JSON.parse(res.offline_recs)
 
            
 
@@ -71,6 +75,8 @@ if(login_id == null
                 localStorage.setItem('codes', res.codes)
             if(session_codes!= null)
                 localStorage.setItem('session_codes', res.session_codes)
+            if(offline_recs!= null)
+                localStorage.setItem('offline_recs', res.offline_recs)
 
             reset_sync()
             
@@ -1546,22 +1552,15 @@ function load_paper(){
     var selected_paper_html = get_selected_paper_html(paper_id)
     $('#selected_paper').find('.form').html(selected_paper_html)
     $('#similar_papers').html('')
-    $.post('recs', {'papers': JSON.stringify([paper_id])}, 
-    function(res){    
-        var raw_html = '' 
-        var recs_len = 20
-        if(res.length < recs_len){
-            recs_len = res.length
-        }         
-        for(var i = 0; i< recs_len; i++){
-            raw_html += get_paper_html(res[i].id)            
-        } 
-        $('#similar_papers').html(raw_html) 
-        
-    });
-
-    
+    var recs = offline_recs[paper_id]
+    var raw_html = ''
+    for(var i = 0; i< recs.length; i++){
+        raw_html += get_paper_html(recs[i].id)            
+    } 
+    $('#similar_papers').html(raw_html)     
 } 
+
+
 
 function update_papers_count(){
     setTimeout('update_papers_count_async();', 0)
