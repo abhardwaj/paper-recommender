@@ -209,7 +209,7 @@ function refresh(_async_){
 }
 
 
-setInterval('refresh();', 10*1000)
+setInterval('refresh();', 60*1000)
 
 
 // codes without video preview
