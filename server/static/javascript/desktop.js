@@ -20,7 +20,7 @@ var s_unstar_pending = JSON.parse(localStorage.getItem('s_unstar_pending'))
 
 
 
-var offline = false;
+
 
 
 // contact the server if required
@@ -129,7 +129,6 @@ var recommended = recommended_all.splice(0,20)
 
 
 window.addEventListener("online", function() {
-    offline = false
     enable_alert('You are online. Syncing new data with the server.')
     sync()
     refresh(false)
@@ -138,7 +137,6 @@ window.addEventListener("online", function() {
 
  
 window.addEventListener("offline", function() {
-    offline = true
     enable_alert('You are offline. Any activities on this device would be synced when you come online.')
 }, true);
 
@@ -177,7 +175,7 @@ function sync(){
 
 
 function refresh(_async_){
-    if(offline){
+    if(!navigator.onLine){
         return
     }
     var _async = true
@@ -1333,7 +1331,7 @@ function handle_session_star(event){
             $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
             $(this).find('.paper').removeClass('highlight')
         })
-        if(offline){
+        if(!navigator.onLine){
             enable_alert("You unliked a session. You are not online -- updating information locally.");
             for(var paper_id in papers){
                 var i =  starred.indexOf(papers[paper_id])
@@ -1388,7 +1386,7 @@ function handle_session_star(event){
             update_session_view()
             apply_filters()
         })
-        if(offline){
+        if(!navigator.onLine){
             enable_alert("You liked a session. You are not online -- updating information locally.");
             for(var paper_id in papers){
                 starred.push(papers[paper_id])
@@ -1453,7 +1451,7 @@ function handle_star(event){
             $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
             $(this).removeClass('highlight')
         })
-        if(offline){
+        if(!navigator.onLine){
             enable_alert("You unliked a paper. You are not online -- updating information locally.");
             var i =  starred.indexOf(paper_id)
             starred.splice(i, 1)
@@ -1507,7 +1505,7 @@ function handle_star(event){
             $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
             $(this).addClass('highlight')
         })
-        if(offline){
+        if(!navigator.onLine){
             enable_alert("You liked a paper. You are not online -- updating information locally.");
             starred.push(paper_id)
             var j =  unstar_pending.indexOf(paper_id)
