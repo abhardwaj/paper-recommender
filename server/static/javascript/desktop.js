@@ -128,10 +128,6 @@ window.addEventListener("online", function() {
     sync()
     refresh(false)
     reset_sync()
-    populate_likes(starred)
-    update_recs()
-    update_session_view()
-    apply_filters()
 }, true);
 
  
