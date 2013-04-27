@@ -826,7 +826,16 @@ function get_paper_html(id){
 }
 
 
-
+function getSpecialSessionCode(id){
+  var specialSessionCodes = {"s300":"LRA",
+  "s302":"SIA",
+  "s325":"IWC",
+  "s305":"SRC",
+  "s301":"LPA",
+  "s306":"SDC",
+  "s307":"SGC"};
+  return specialSessionCodes[id];
+}
 
 
 
@@ -865,7 +874,21 @@ function get_session_html(id){
       raw_html += '<span class="session-code">' + codes['code'][s_code] + '</span>'
       //if (codeExists(codes['code'][s_code]))
       //  raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][s_code]+'" target="_blank"><span class="play-icon"></span></a></span>'
-    } 
+    } else if (sessions[id].venue == "panel" || sessions[id].venue == "course" || sessions[id].venue == "SIG"){
+      var p_id = sessions[id].submissions[0];
+      if (typeof p_id !== "undefined"){
+        raw_html += '<span class="session-code">' +  ' ' + codes['code'][p_id] + '</span>'
+        if (codeExists(codes['code'][p_id]))
+          raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][p_id]+'" target="_blank"><span class="play-icon"></span></a></span>'
+      }
+    } else if (typeof getSpecialSessionCode(id) !== "undefined"){
+      var code = getSpecialSessionCode(id);
+      if (typeof code !== "undefined"){
+        raw_html += '<span class="session-code">' +  ' ' + code + '</span>'
+        if (codeExists(code))
+          raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+code+'" target="_blank"><span class="play-icon"></span></a></span>'
+      }
+    }
     raw_html += '<span class="send_session_tweet"></span>'
     raw_html += '<span class="send_session_email"></span>'
     raw_html += '</h3></li>'
