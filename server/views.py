@@ -35,7 +35,7 @@ s = Session()
 
 
 codes = open('/production/paper-recommender/data/letterCodes.json').read()
-sessionCodes = open('/production/paper-recommender/data/sessionCodes.json').read()
+session_codes = open('/production/paper-recommender/data/sessionCodes.json').read()
 
 
 def send_email(addr, subject, msg_body):	
@@ -142,13 +142,15 @@ def login(request):
 			else:
 				return login_form(request, error = {'type': 'error', 'error': 'Enter an email address.'})
 		except:
-			print sys.exc_info()
-			return login_form(request, error = {'type':'error', 'error': 'Something went wrong. We will look into it.'})
-			return login_form(request)
+			return HttpResponseRedirect('/error')
+
 	else:
 		return login_form(request)
 
 
+
+def error(request):
+	return render_to_response('desktop/error.html')
 
 
 @csrf_exempt
@@ -191,7 +193,7 @@ def home(request):
 	except KeyError:
 		return HttpResponseRedirect('/login')
 	except:
-		pass
+		return HttpResponseRedirect('/error')
 	
 
 
@@ -205,7 +207,7 @@ def schedule(request):
 	except KeyError:
 		return HttpResponseRedirect('/login')
 	except:
-		pass
+		return HttpResponseRedirect('/error')
 	
 
 def paper(request):
@@ -216,52 +218,60 @@ def paper(request):
 	except KeyError:
 		return HttpResponseRedirect('/login')
 	except:
-		pass
+		return HttpResponseRedirect('/error')
 
 
 @csrf_exempt
 def data(request):
-	user = request.session['id']
-	recs = []
-	own_papers = []
-	s_likes = []
-	likes = []
-	cursor = connection.cursor()
-	cursor.execute("""SELECT likes, s_likes from pcs_authors where id = '%s';""" %(user))
-	data = cursor.fetchall()
-	if(data[0][0] != None):
-		likes.extend(json.loads(data[0][0]))
-	if(data[0][1] != None):
-		s_likes.extend(json.loads(data[0][1]))
-	if(user in p.author_likes):
-		if((data[0][0] == None) and ('likes' in p.author_likes[user].keys())):
-			likes.extend(p.author_likes[user]['likes'])
-		if('own_papers' in p.author_likes[user].keys()):
-			own_papers = p.author_likes[user]['own_papers']
-			likes.extend(p.author_likes[user]['own_papers'])
-	if(data[0][0] == None):
-		l = list(set(likes))
-		cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(l), user))
-	if(len(likes)>0):
-		recs = r.get_item_based_recommendations(likes)
-	return HttpResponse(json.dumps({
-		'login_id': request.session['id'], 
-		'login_name': request.session['name'],
-		'recs':recs, 
-		'likes':likes, 
-		's_likes':s_likes,
-		'own_papers':own_papers,
-		'entities': e.entities, 
-		'sessions':s.sessions,
-		'codes': codes,
-    	'sessionCodes': sessionCodes
-		}), mimetype="application/json")
+	try:
+		user = request.session['id']
+		recs = []
+		own_papers = []
+		s_likes = []
+		likes = []
+		cursor = connection.cursor()
+		cursor.execute("""SELECT likes, s_likes from pcs_authors where id = '%s';""" %(user))
+		data = cursor.fetchall()
+		if(data[0][0] != None):
+			likes.extend(json.loads(data[0][0]))
+		if(data[0][1] != None):
+			s_likes.extend(json.loads(data[0][1]))
+		if(user in p.author_likes):
+			if((data[0][0] == None) and ('likes' in p.author_likes[user].keys())):
+				likes.extend(p.author_likes[user]['likes'])
+			if('own_papers' in p.author_likes[user].keys()):
+				own_papers = p.author_likes[user]['own_papers']
+				likes.extend(p.author_likes[user]['own_papers'])
+		if(data[0][0] == None):
+			l = list(set(likes))
+			cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(l), user))
+		if(len(likes)>0):
+			recs = r.get_item_based_recommendations(likes)
+		return HttpResponse(json.dumps({
+			'login_id': request.session['id'], 
+			'login_name': request.session['name'],
+			'recs':recs, 
+			'likes':likes, 
+			's_likes':s_likes,
+			'own_papers':own_papers,
+			'entities': e.entities, 
+			'sessions':s.sessions,
+			'codes': codes,
+	    	'session_codes': session_codes
+			}), mimetype="application/json")
+	except:
+		return HttpResponse(json.dumps({'error':True}), mimetype="application/json")
+
+
 
 @csrf_exempt
 def get_recs(request):
-	papers = json.loads(request.POST["papers"])
-	recs = r.get_item_based_recommendations(papers)
-	return HttpResponse(json.dumps(recs), mimetype="application/json")
+	try:
+		papers = json.loads(request.POST["papers"])
+		recs = r.get_item_based_recommendations(papers)
+		return HttpResponse(json.dumps(recs), mimetype="application/json")
+	except:
+		return HttpResponse(json.dumps({'error':True}), mimetype="application/json")
 
 
 
@@ -270,44 +280,48 @@ def get_recs(request):
 
 @csrf_exempt
 def like(request, like_str):
-	papers = json.loads(request.POST["papers"])
-	session = None
-	if('session' in request.POST):
-		session = request.POST['session']
-	s = ','.join(papers)
-	user = request.session['id']
-	res = {}
-	likes = []
-	s_likes = []
-	cursor = connection.cursor()
-	cursor.execute("""SELECT likes, s_likes from pcs_authors where id = '%s';""" %(user))
-	data = cursor.fetchall()
-	print data
-	if(data[0][0] != None):
-		likes = json.loads(data[0][0])
-	if(data[0][1] != None):
-		s_likes = json.loads(data[0][1])
-	cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], like_str, s))
+	try:
+		papers = json.loads(request.POST["papers"])
+		session = None
+		if('session' in request.POST):
+			session = request.POST['session']
+		s = ','.join(papers)
+		user = request.session['id']
+		res = {}
+		likes = []
+		s_likes = []
+		cursor = connection.cursor()
+		cursor.execute("""SELECT likes, s_likes from pcs_authors where id = '%s';""" %(user))
+		data = cursor.fetchall()
+		print data
+		if(data[0][0] != None):
+			likes = json.loads(data[0][0])
+		if(data[0][1] != None):
+			s_likes = json.loads(data[0][1])
+		cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], like_str, s))
 
-	for paper_id in papers:
-		if(like_str=='star' and (paper_id not in likes) and paper_id != ''):
-			likes.append(paper_id)
-		if(like_str=='unstar' and (paper_id in likes) and paper_id != ''):
-			likes.remove(paper_id)
-		if(paper_id in likes):
-			res[paper_id] = 'star'
-		else:
-			res[paper_id] = 'unstar'
-	l = list(set(likes))
-	if(session != None):
-		if(like_str=='star' and (session not in s_likes) and session != ''):
-			s_likes.append(session)
-		if(like_str=='unstar' and (session in s_likes) and session != ''):
-			s_likes.remove(session)
-	s_l = list(set(s_likes))
-	cursor.execute("""UPDATE pcs_authors SET likes = '%s', s_likes = '%s' where id = '%s';""" %(json.dumps(l), json.dumps(s_l), user))
-	recs = r.get_item_based_recommendations(likes)
-	return HttpResponse(json.dumps({'recs':recs, 'likes':l, 's_likes':s_l, 'res':res}), mimetype="application/json")
+		for paper_id in papers:
+			if(like_str=='star' and (paper_id not in likes) and paper_id != ''):
+				likes.append(paper_id)
+			if(like_str=='unstar' and (paper_id in likes) and paper_id != ''):
+				likes.remove(paper_id)
+			if(paper_id in likes):
+				res[paper_id] = 'star'
+			else:
+				res[paper_id] = 'unstar'
+		l = list(set(likes))
+		if(session != None):
+			if(like_str=='star' and (session not in s_likes) and session != ''):
+				s_likes.append(session)
+			if(like_str=='unstar' and (session in s_likes) and session != ''):
+				s_likes.remove(session)
+		s_l = list(set(s_likes))
+		cursor.execute("""UPDATE pcs_authors SET likes = '%s', s_likes = '%s' where id = '%s';""" %(json.dumps(l), json.dumps(s_l), user))
+		recs = r.get_item_based_recommendations(likes)
+		return HttpResponse(json.dumps({'recs':recs, 'likes':l, 's_likes':s_l, 'res':res}), mimetype="application/json")
+	except:
+		return HttpResponse(json.dumps({'error':True}), mimetype="application/json")
+
 
 
 

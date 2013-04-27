@@ -19,4 +19,5 @@ urlpatterns = patterns('',
     url(r'^reset_email/(.+)$', 'server.views.reset_email'),
 
     url(r'^logout', 'server.views.logout'),
+    url(r'^error', 'server.views.error'),
 )

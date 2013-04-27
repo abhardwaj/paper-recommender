@@ -1,42 +1,65 @@
 // try to first load the data from localStorage 
 
-var id = localStorage.getItem('login_id')
-var en = localStorage.getItem('entities')
-var se = localStorage.getItem('sessions')
-var re = localStorage.getItem('recommended')
-var st = localStorage.getItem('starred')
-var s_st = localStorage.getItem('s_starred')
-var op = localStorage.getItem('own_papers')
-var co = localStorage.getItem('codes')
-var sc = localStorage.getItem('session_codes')
+var login_id = JSON.parse(localStorage.getItem('login_id'))
+var entities = JSON.parse(localStorage.getItem('entities'))
+var sessions = JSON.parse(localStorage.getItem('sessions'))
+var recommended_all = JSON.parse(localStorage.getItem('recommended_all'))
+var starred = JSON.parse(localStorage.getItem('starred'))
+var s_starred = JSON.parse(localStorage.getItem('s_starred'))
+var own_papers = JSON.parse(localStorage.getItem('own_papers'))
+var codes = JSON.parse(localStorage.getItem('codes'))
+var session_codes = JSON.parse(localStorage.getItem('session_codes'))
+
+
+
 
 // contact the server if required
-if(id == null || en == null || se == null || re == null || st == null || s_st == null || op == null || co == null || sc == null){
+if(login_id == null 
+    || entities == null 
+    || sessions == null 
+    || recommended_all == null 
+    || starred == null 
+    || s_starred == null 
+    || own_papers == null 
+    || codes == null 
+    || session_codes == null){
+
     console.log('contacting server')
     $.ajax({
         type: 'GET',
         async: false,
         url: '/data', 
         success: function(res) {
-            id = JSON.stringify(res.login_id)
-            en = JSON.stringify(res.entities)
-            se = JSON.stringify(res.sessions)
-            re = JSON.stringify(res.recs)
-            st  = JSON.stringify(res.likes)
-            s_st  = JSON.stringify(res.s_likes)
-            op  = JSON.stringify(res.own_papers)
-            co  = res.codes
-            sc  = res.sessionCodes
+            login_id = res.login_id
+            entities = res.entities
+            sessions = res.sessions
+            recommended_all = res.recs
+            starred  = res.likes
+            s_starred  = res.s_likes
+            own_papers = res.own_papers
+            codes = JSON.parse(res.codes)
+            session_codes = JSON.parse(res.session_codes)
+
             localStorage.clear()
-            localStorage.setItem('login_id', id)
-            localStorage.setItem('entities', en)
-            localStorage.setItem('sessions', se)
-            localStorage.setItem('recommended', re)
-            localStorage.setItem('starred', st)
-            localStorage.setItem('s_starred', s_st)
-            localStorage.setItem('own_papers', op)
-            localStorage.setItem('codes', co)
-            localStorage.setItem('session_codes', sc)
+
+            if(login_id != null)
+                localStorage.setItem('login_id', JSON.stringify(login_id))
+            if(entities != null)
+                localStorage.setItem('entities', JSON.stringify(entities))
+            if(sessions != null)
+                localStorage.setItem('sessions', JSON.stringify(sessions))
+            if(recommended_all != null)
+                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+            if(starred != null)
+                localStorage.setItem('starred', JSON.stringify(starred))
+            if(s_starred != null)
+                localStorage.setItem('s_starred', JSON.stringify(s_starred))
+            if(own_papers != null)
+                localStorage.setItem('own_papers', JSON.stringify(own_papers))
+            if(codes != null)
+                localStorage.setItem('codes', res.codes)
+            if(session_codes!= null)
+                localStorage.setItem('session_codes', res.session_codes)
 
         }
     });
@@ -44,23 +67,31 @@ if(id == null || en == null || se == null || re == null || st == null || s_st ==
 }
 
 
+
+
+var recommended = recommended_all.splice(0,20)
+
+
+
+
 function refresh(){
+    $.ajax({
+        type: 'GET',
+        async: true,
+        url: '/sync', 
+        success: function(res) {
+            recommended_all = res.recs
+            recommended = recommended_all.splice(0,20)
+            starred = res.likes
+            s_starred = res.s_likes
+            localStorage.setItem('recommended', JSON.stringify(recommended_all))
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('s_starred', JSON.stringify(s_starred))
+        }
+    });
 
 }
 
-
-
-var login_id = JSON.parse(id)
-var entities = JSON.parse(en)
-var sessions = JSON.parse(se)
-var recommended_all = JSON.parse(re)
-var starred = JSON.parse(st)
-var s_starred = JSON.parse(s_st)
-var own_papers = JSON.parse(op)
-var codes = JSON.parse(co)
-var sessionCodes = JSON.parse(sc)
-var recommended = recommended_all.splice(0,20)
-var stale =  false
 
 // codes without video preview
 var codeBlackList = [
@@ -821,14 +852,14 @@ function get_paper_html(id){
 
 
 function getSpecialSessionCode(id){
-  var specialSessionCodes = {"s300":"LRA",
+  var special_session_codes = {"s300":"LRA",
   "s302":"SIA",
   "s325":"IWC",
   "s305":"SRC",
   "s301":"LPA",
   "s306":"SDC",
   "s307":"SGC"};
-  return specialSessionCodes[id];
+  return special_session_codes[id];
 }
 
 
@@ -863,7 +894,7 @@ function get_session_html(id){
     raw_html += '<ul>'
     raw_html += '<li><h3><span class="arrow arrow-right"></span> <span class="session-title">'+ remove_special_chars(sessions[id].s_title) + '</span>'
    
-    var s_code = sessionCodes['id'][id];
+    var s_code = session_codes['id'][id];
     if (typeof s_code !== "undefined" && typeof codes['code'][s_code] !== "undefined"){
       raw_html += '<span class="session-code">' + codes['code'][s_code] + '</span>'
       //if (codeExists(codes['code'][s_code]))
