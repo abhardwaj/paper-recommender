@@ -196,8 +196,6 @@ def home(request):
 
 
 def schedule(request):
-	recs = []
-	starred = {}
 	try:
 		cursor = connection.cursor()
 		cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], 'schedule', 'load'))
@@ -226,8 +224,7 @@ def data(request):
 	user = request.session['id']
 	recs = []
 	own_papers = []
-	starred = {}
-	s_starred = []
+	s_likes = []
 	likes = []
 	cursor = connection.cursor()
 	cursor.execute("""SELECT likes, s_likes from pcs_authors where id = '%s';""" %(user))
@@ -235,7 +232,7 @@ def data(request):
 	if(data[0][0] != None):
 		likes.extend(json.loads(data[0][0]))
 	if(data[0][1] != None):
-		s_starred.extend(json.loads(data[0][1]))
+		s_likes.extend(json.loads(data[0][1]))
 	if(user in p.author_likes):
 		if((data[0][0] == None) and ('likes' in p.author_likes[user].keys())):
 			likes.extend(p.author_likes[user]['likes'])
@@ -246,19 +243,18 @@ def data(request):
 		l = list(set(likes))
 		cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(l), user))
 	if(len(likes)>0):
-		starred = {l:True for l in likes}
-		recs = r.get_item_based_recommendations(starred)
+		recs = r.get_item_based_recommendations(likes)
 	return HttpResponse(json.dumps({
 		'login_id': request.session['id'], 
 		'login_name': request.session['name'],
 		'recs':recs, 
-		'starred':starred, 
-		's_starred':s_starred,
+		'likes':likes, 
+		's_likes':s_likes,
 		'own_papers':own_papers,
 		'entities': e.entities, 
 		'sessions':s.sessions,
 		'codes': codes,
-    'sessionCodes': sessionCodes
+    	'sessionCodes': sessionCodes
 		}), mimetype="application/json")
 
 @csrf_exempt

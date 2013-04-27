@@ -22,8 +22,8 @@ if(id == null || en == null || se == null || re == null || st == null || s_st ==
             en = JSON.stringify(res.entities)
             se = JSON.stringify(res.sessions)
             re = JSON.stringify(res.recs)
-            st  = JSON.stringify(res.starred)
-            s_st  = JSON.stringify(res.s_starred)
+            st  = JSON.stringify(res.likes)
+            s_st  = JSON.stringify(res.s_likes)
             op  = JSON.stringify(res.own_papers)
             co  = res.codes
             sc  = res.sessionCodes
@@ -164,13 +164,7 @@ function exists(recs, id){
 }
 
 
-function in_visible_window(visible, id){
-    for(var r in visible){
-        if(visible[r] == id)
-            return true
-    }
-    return false
-}
+
 
 
 function bind_events(){
@@ -686,7 +680,7 @@ function get_communities(s){
     for(var i in s.submissions){
         s_communities = entities[s.submissions[i]].communities
         for(var j in s_communities){
-            if(!in_visible_window(communities, s_communities[j])){
+            if(communities.indexOf(s_communities[j]) == -1){
                 communities.push(s_communities[j])
             }
         }
@@ -754,7 +748,7 @@ function get_paper_html(id){
     if(exists(recommended, id)){
         raw_html += ' recommended'
     }
-    if(starred[id] != null){
+    if(starred.indexOf(id) == -1){
         raw_html += ' highlight'
     }
     if(entities[id].hm){
@@ -768,7 +762,7 @@ function get_paper_html(id){
     raw_html += '">'
       
     raw_html += '<td class="metadata">'   
-    if(starred[id] == null){
+    if(starred.indexOf(id) == -1){
         raw_html += '<div class="star star-open p_star" data="'+ id + '" onclick="handle_star(event);">'        
     }else{
         raw_html += '<div class="star star-filled p_star" data="'+ id + '" onclick="handle_star(event);">'       
@@ -926,7 +920,7 @@ function get_selected_paper_html(id){
     if(exists(recommended, id)){
         raw_html += ' recommended'
     }
-    if(starred[id] != null){
+    if(starred.indexOf(id) == -1){
         raw_html += ' highlight'
     }
     if(entities[id].hm){
@@ -1155,16 +1149,19 @@ function handle_session_star(event){
         })
         $.post('/like/unstar', {'papers': JSON.stringify(papers), 'session': session_id}, function(res) {
             for(var paper_id in papers){
-                delete starred[papers[paper_id]]
+                var i =  starred.indexOf(papers[paper_id])
+                starred.splice(i, 1)
             }
             $('.'+obj.attr('data')).each(function(){
                 $(this).find('.p_star').removeClass('star-filled').addClass('star-open')
                 $(this).find('.paper').removeClass('highlight')
             })
+            starred = res.likes
             s_starred = res.s_likes
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('s_starred', JSON.stringify(s_starred))
             localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
             update_recs()
             update_session_view()
@@ -1181,16 +1178,18 @@ function handle_session_star(event){
         })
         $.post('/like/star', {'papers': JSON.stringify(papers), 'session': session_id}, function(res) {
             for(var paper_id in papers){
-                starred[papers[paper_id]] = true
+                starred.push(papers[paper_id])
             }
             $('.'+obj.attr('data')).each(function(){
                 $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
                 $(this).find('.paper').addClass('highlight')
             })
+            starred = res.likes
             s_starred = res.s_likes
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('s_starred', JSON.stringify(s_starred))
             localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
             update_recs()
             update_session_view()
@@ -1229,11 +1228,13 @@ function handle_star(event){
                 $(this).removeClass('highlight')
             })
 
-            delete starred[paper_id]
+            var i =  starred.indexOf(paper_id)
+            starred.splice(i, 1)
             populate_likes(starred)
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('s_starred', JSON.stringify(s_starred))
             localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
             
             if($("#recs tr").length == 0){
@@ -1264,11 +1265,12 @@ function handle_star(event){
                 $(this).find('.p_star').removeClass('star-open').addClass('star-filled')
                 $(this).addClass('highlight')
             })
-            starred[paper_id] = true
+            starred.push(paper_id)
             populate_likes(starred)
             recommended_all = res.recs
             recommended = res.recs.splice(0,20)
             localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('s_starred', JSON.stringify(s_starred))
             localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
             
             if($("#recs tr").length == 0){
@@ -1446,7 +1448,7 @@ function append_recs(){
     var raw_html = ''
     for(var r in recommended){
         console.log(visible_recs, recommended[r].id)
-        if(!in_visible_window(visible_recs, recommended[r].id)){
+        if(visible_recs.indexOf(recommended[r].id) == -1){
             console.log('not exists')
             raw_html += get_paper_html(recommended[r].id)
         }
@@ -1465,10 +1467,9 @@ function append_recs(){
 
 
 function populate_likes(){  
-    var raw_html = ''
-    var liked_papers = Object.keys(starred)    
-    for(var i = liked_papers.length; i>=0 ; i--){
-       raw_html += get_paper_html(liked_papers[i])
+    var raw_html = '' 
+    for(var i = starred.length; i>=0 ; i--){
+       raw_html += get_paper_html(starred[i])
     }
     $("#likes").html(raw_html)
     if($("#likes tr").length <= 2){
