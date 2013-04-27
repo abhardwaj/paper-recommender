@@ -126,8 +126,9 @@ window.addEventListener("online", function() {
     offline = false
     enable_alert('You are online. Syncing new data with the server.')
     sync()
-    refresh()
+    refresh(false)
     reset_sync()
+    populate_likes(starred)
     update_recs()
     update_session_view()
     apply_filters()
@@ -155,7 +156,7 @@ function sync(){
         async: false, 
         data:{'papers': JSON.stringify(star_pending), 'session': JSON.stringify(s_star_pending)}, 
         success: function(res) {
-            console.log(res)
+            //console.log(res)
         }
     });
 
@@ -165,7 +166,7 @@ function sync(){
         async: false, 
         data:{'papers': JSON.stringify(unstar_pending), 'session': JSON.stringify(s_unstar_pending)}, 
         success: function(res) {
-            console.log(res)
+            //console.log(res)
         }
     });
 
@@ -173,23 +174,29 @@ function sync(){
 }
 
 
-function refresh(){
+function refresh(_async_){
     if(offline){
         return
     }
+    var _async = true
+    if(_async_){
+        _async = _async_
+    }
     $.ajax({
         type: 'GET',
-        async: true,
+        async: _async,
         url: '/refresh', 
         success: function(res) {
-            console.log("synced")
-            recommended_all = res.recs
-            recommended = recommended_all.splice(0,20)
-            starred = res.likes
-            s_starred = res.s_likes
-            localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
-            localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('s_starred', JSON.stringify(s_starred))
+            if(!res.error){
+                console.log("synced: ", res)
+                recommended_all = res.recs
+                recommended = recommended_all.splice(0,20)
+                starred = res.likes
+                s_starred = res.s_likes
+                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+                localStorage.setItem('starred', JSON.stringify(starred))
+                localStorage.setItem('s_starred', JSON.stringify(s_starred))
+            }
         }
     });
 }
@@ -1683,7 +1690,7 @@ function append_recs(){
     $("#recs tr:hidden").remove()  
     var raw_html = ''
     for(var r in recommended){
-        console.log(visible_recs, recommended[r].id)
+        //console.log(visible_recs, recommended[r].id)
         if(visible_recs.indexOf(recommended[r].id) == -1){
             //console.log('not exists')
             raw_html += get_paper_html(recommended[r].id)
