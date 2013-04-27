@@ -547,7 +547,7 @@ function bind_events(){
     $('.send_tweet').on('click', function(event){
         event.stopPropagation();
         var id = $(this).parents("tr.paper").first().attr("data");
-        var url = "http://mychi.csail.mit.edu/paper?id=" + id;
+        var url = "http://mychi.csail.mit.edu/paper#" + id;
         //var title = $(this).siblings("a").text();
         var title = entities[id].title;
         var message = "Looking forward to seeing \"" + title + "\""; 
@@ -579,7 +579,7 @@ function bind_events(){
     $('.send_email').on('click', function(event){
         event.stopPropagation();
         var id = $(this).parents("tr.paper").first().attr("data");
-        var url = "http://mychi.csail.mit.edu/paper?id=" + id;
+        var url = "http://mychi.csail.mit.edu/paper#" + id;
         var title = entities[id].title;
         var message = "Hi there!\n\nI found this interesting paper at CHI 2013 that you may be interested in:\n"
           + title + "\n" + url;
@@ -892,6 +892,7 @@ function select_paper(id){
     }else{
         window.location.href = '/paper#'+id
     }
+    window.scrollTo(0,0)
 }
 
 function isMyPaper(id){
