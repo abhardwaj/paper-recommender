@@ -48,7 +48,7 @@ public class PaperRecommender {
           input_items.add(Long.valueOf(i)); 
         }
 		ArrayList<String> ret = new ArrayList<String>();
-		ScoredLongList recommendations = this.grec.globalRecommend(input_items, 400);
+		ScoredLongList recommendations = this.grec.globalRecommend(input_items, 20);
 		int len = recommendations.size();
 		long items[] = new long[len];
 		double scores[] = new double[len];

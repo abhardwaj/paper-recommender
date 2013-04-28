@@ -10,7 +10,7 @@ window.applicationCache.addEventListener('updateready', function(){
 var login_id = JSON.parse(localStorage.getItem('login_id'))
 var entities = JSON.parse(localStorage.getItem('entities'))
 var sessions = JSON.parse(localStorage.getItem('sessions'))
-var recommended_all = JSON.parse(localStorage.getItem('recommended_all'))
+var recommended = JSON.parse(localStorage.getItem('recommended'))
 var starred = JSON.parse(localStorage.getItem('starred'))
 var s_starred = JSON.parse(localStorage.getItem('s_starred'))
 var own_papers = JSON.parse(localStorage.getItem('own_papers'))
@@ -34,7 +34,7 @@ var s_unstar_pending = JSON.parse(localStorage.getItem('s_unstar_pending'))
 if(login_id == null 
     || entities == null 
     || sessions == null 
-    || recommended_all == null 
+    || recommended == null 
     || starred == null 
     || s_starred == null 
     || own_papers == null 
@@ -52,7 +52,7 @@ if(login_id == null
             login_id = res.login_id
             entities = res.entities
             sessions = res.sessions
-            recommended_all = res.recs
+            recommended = res.recs
             starred  = res.likes
             s_starred  = res.s_likes
             own_papers = res.own_papers
@@ -70,8 +70,8 @@ if(login_id == null
                 localStorage.setItem('entities', JSON.stringify(entities))
             if(sessions != null)
                 localStorage.setItem('sessions', JSON.stringify(sessions))
-            if(recommended_all != null)
-                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+            if(recommended != null)
+                localStorage.setItem('recommended', JSON.stringify(recommended))
             if(starred != null)
                 localStorage.setItem('starred', JSON.stringify(starred))
             if(s_starred != null)
@@ -132,7 +132,6 @@ function reset_sync(){
 }
 
 
-var recommended = recommended_all.splice(0,20)
 
 
 window.addEventListener("online", function() {
@@ -190,20 +189,13 @@ function refresh(update){
         url: '/refresh', 
         success: function(res) {
             if(!res.error){
-                console.log("synced: ")
-                recommended_all = res.recs
-                recommended = recommended_all.splice(0,20)
+                console.log("synced")
+                recommended = res.recs
                 starred = res.likes
                 s_starred = res.s_likes
-                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+                localStorage.setItem('recommended', JSON.stringify(recommended))
                 localStorage.setItem('starred', JSON.stringify(starred))
                 localStorage.setItem('s_starred', JSON.stringify(s_starred))
-                if(update == true){
-                    update_recs()
-                    update_session_view()
-                    apply_filters()
-
-                }
             }
         }
     });
@@ -211,7 +203,6 @@ function refresh(update){
 
 
 setInterval('refresh();', 60*1000)
-refresh(true)
 
 
 // codes without video preview
@@ -1375,11 +1366,10 @@ function handle_session_star(event){
                 })
                 starred = res.likes
                 s_starred = res.s_likes
-                recommended_all = res.recs
-                recommended = res.recs.splice(0,20)
+                recommended = res.recs
                 localStorage.setItem('starred', JSON.stringify(starred))
                 localStorage.setItem('s_starred', JSON.stringify(s_starred))
-                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+                localStorage.setItem('recommended', JSON.stringify(recommended))
                 update_recs()
                 update_session_view()
                 apply_filters()
@@ -1425,11 +1415,10 @@ function handle_session_star(event){
                 })
                 starred = res.likes
                 s_starred = res.s_likes
-                recommended_all = res.recs
-                recommended = res.recs.splice(0,20)
+                recommended = res.recs
                 localStorage.setItem('starred', JSON.stringify(starred))
                 localStorage.setItem('s_starred', JSON.stringify(s_starred))
-                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+                localStorage.setItem('recommended', JSON.stringify(recommended))
                 update_recs()
                 update_session_view()
                 apply_filters()
@@ -1486,11 +1475,10 @@ function handle_star(event){
                 var i =  starred.indexOf(paper_id)
                 starred.splice(i, 1)
                 populate_likes(starred)
-                recommended_all = res.recs
-                recommended = res.recs.splice(0,20)
+                recommended = res.recs
                 localStorage.setItem('starred', JSON.stringify(starred))
                 localStorage.setItem('s_starred', JSON.stringify(s_starred))
-                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+                localStorage.setItem('recommended', JSON.stringify(recommended))
                 
                 if($("#recs tr").length == 0){
                     populate_recs(recommended)
@@ -1537,11 +1525,10 @@ function handle_star(event){
                 })
                 starred.push(paper_id)
                 populate_likes(starred)
-                recommended_all = res.recs
-                recommended = res.recs.splice(0,20)
+                recommended = res.recs
                 localStorage.setItem('starred', JSON.stringify(starred))
                 localStorage.setItem('s_starred', JSON.stringify(s_starred))
-                localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
+                localStorage.setItem('recommended', JSON.stringify(recommended))
                 
                 if($("#recs tr").length == 0){
                     populate_recs(recommended)
