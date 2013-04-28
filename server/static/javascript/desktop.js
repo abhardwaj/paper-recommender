@@ -136,7 +136,6 @@ window.addEventListener("offline", function() {
 
 
 function sync(){
-    refresh_pending()
     var star_pending = JSON.parse(localStorage.getItem('star_pending'))
     var unstar_pending = JSON.parse(localStorage.getItem('unstar_pending'))
     var s_star_pending = JSON.parse(localStorage.getItem('s_star_pending'))
@@ -1329,6 +1328,8 @@ function update_recs(){
 
 
 function add_pending_unstar(paper_id){
+    var star_pending = JSON.parse(localStorage.getItem('star_pending'))
+    var unstar_pending = JSON.parse(localStorage.getItem('unstar_pending'))
     var i =  star_pending.indexOf(paper_id)
     if( i == -1){
         unstar_pending.push(paper_id)
@@ -1342,6 +1343,8 @@ function add_pending_unstar(paper_id){
 
 
 function add_pending_star(paper_id){
+    var star_pending = JSON.parse(localStorage.getItem('star_pending'))
+    var unstar_pending = JSON.parse(localStorage.getItem('unstar_pending'))
     var i =  unstar_pending.indexOf(paper_id)
     if( i == -1){
         star_pending.push(paper_id)
