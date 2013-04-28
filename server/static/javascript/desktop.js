@@ -204,6 +204,8 @@ function refresh(update){
 
 setInterval('refresh();', 60*1000)
 
+refresh()
+
 
 // codes without video preview
 var codeBlackList = [
