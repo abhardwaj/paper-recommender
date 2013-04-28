@@ -138,7 +138,7 @@ var recommended = recommended_all.splice(0,20)
 window.addEventListener("online", function() {
     enable_alert('You are online. Syncing new data with the server.')
     sync()
-    refresh(false)
+    refresh(true)
     reset_sync()
 }, true);
 
@@ -181,17 +181,12 @@ function sync(){
 }
 
 
-function refresh(_async_){
+function refresh(update){
     if(!navigator.onLine){
         return
     }
-    var _async = true
-    if(_async_){
-        _async = _async_
-    }
     $.ajax({
         type: 'GET',
-        async: _async,
         url: '/refresh', 
         success: function(res) {
             if(!res.error){
@@ -203,6 +198,13 @@ function refresh(_async_){
                 localStorage.setItem('recommended_all', JSON.stringify(recommended_all))
                 localStorage.setItem('starred', JSON.stringify(starred))
                 localStorage.setItem('s_starred', JSON.stringify(s_starred))
+                if(update == true){
+                    populate_likes(starred)
+                    update_recs()
+                    update_session_view()
+                    apply_filters()
+
+                }
             }
         }
     });
