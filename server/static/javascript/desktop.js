@@ -573,7 +573,7 @@ function bind_events(){
         var url = "http://mychi.csail.mit.edu/paper#" + id;
         //var title = $(this).siblings("a").text();
         var title = entities[id].title;
-        var message = "Looking forward to seeing \"" + title + "\""; 
+        var message = "Looking forward to seeing \"" + remove_special_chars(title) + "\""; 
         window.open ("https://twitter.com/share?" + 
             "url=" + encodeURIComponent(url) + 
             "&counturl=" + encodeURIComponent(url) +
@@ -589,7 +589,7 @@ function bind_events(){
         var url = document.location;
         //var title = $(this).siblings(".session-title").text();
         var title = sessions[id].s_title;
-        var message = "Looking forward to seeing \"" + title + "\" " + sessions[id].date + " | " + sessions[id].time + " | " + sessions[id].room;
+        var message = "Looking forward to seeing \"" + remove_special_chars(title) + "\" " + sessions[id].date + " | " + sessions[id].time + " | " + sessions[id].room;
         window.open ("https://twitter.com/share?" + 
             //"url=" + encodeURIComponent(url) + 
             //"&counturl=" + encodeURIComponent(url) +
@@ -603,7 +603,7 @@ function bind_events(){
         event.stopPropagation();
         var id = $(this).parents("tr.paper").first().attr("data");
         var url = "http://mychi.csail.mit.edu/paper#" + id;
-        var title = entities[id].title;
+        var title = remove_special_chars(entities[id].title);
         var message = "Hi there!\n\nI found this interesting paper at CHI 2013 that you may be interested in:\n"
           + title + "\n" + url;
         var link = "mailto:";
@@ -621,7 +621,7 @@ function bind_events(){
         event.stopPropagation();
         var id = $(this).parents(".session").first().attr("data");
         var url = document.location;
-        var title = sessions[id].s_title;
+        var title = remove_special_chars(sessions[id].s_title);
         var message = "Hi there!\n\nI found this interesting session at CHI 2013 that you may be interested in:\n"
           + title + "\n" + url + "\n" + sessions[id].date + " | " + sessions[id].time + " | " + sessions[id].room;
         var link = "mailto:";
