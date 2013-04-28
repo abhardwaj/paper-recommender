@@ -1,3 +1,10 @@
+/**
+@author: Anant Bhardwaj
+@date: Feb 12, 2012
+
+All front-end magic happen through this code.
+*/
+
 //check for cache update
 
 window.applicationCache.addEventListener('updateready', function(){
