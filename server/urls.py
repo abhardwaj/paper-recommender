@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^refresh', 'server.views.refresh'),
     url(r'^recs', 'server.views.get_recs'),
     url(r'^like/(\w+)$', 'server.views.like'),
+    url(r'^log/(\w+)$', 'server.views.log'),
     url(r'^s_like/(\w+)$', 'server.views.s_like'),
 
     url(r'^login', 'server.views.login'),

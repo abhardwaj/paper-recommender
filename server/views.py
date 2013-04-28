@@ -186,8 +186,6 @@ def logout(request):
 
 def home(request):
 	try:
-		cursor = connection.cursor()
-		cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], 'home', 'load'))
 		return render_to_response('desktop/main.html', 
 		{'login_id': request.session['id'], 
 		'login_name': request.session['name']})	
@@ -200,8 +198,6 @@ def home(request):
 
 def schedule(request):
 	try:
-		cursor = connection.cursor()
-		cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], 'schedule', 'load'))
 		return render_to_response('desktop/schedule.html', 
 		{'login_id': request.session['id'], 
 		'login_name': request.session['name']})		
@@ -314,6 +310,14 @@ def get_recs(request):
 
 
 
+@csrf_exempt
+def log(request, page):
+	try:
+		cursor = connection.cursor()
+		cursor.execute("""INSERT into logs (login_id, action, data) values ('%s', '%s', '%s');""" %(request.session['id'], page, 'load'))
+		return HttpResponse(json.dumps({'error':False}), mimetype="application/json")
+	except:
+		return HttpResponse(json.dumps({'error':True}), mimetype="application/json")
 
 
 

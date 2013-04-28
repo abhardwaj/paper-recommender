@@ -167,7 +167,13 @@ window.addEventListener("offline", function() {
 }, true);
 
 
+function log(page){
+    $.ajax({
+        type:'GET',
+        url:'/log/'+page, 
+    });
 
+}
 
 
 function sync(){
