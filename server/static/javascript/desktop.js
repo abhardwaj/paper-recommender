@@ -117,19 +117,7 @@ if(s_unstar_pending == null){
 
 
 
-function reset_sync(){
 
-    star_pending = []
-    unstar_pending = []
-    s_star_pending = []
-    s_unstar_pending = []
-
-    localStorage.setItem('star_pending', JSON.stringify(star_pending))
-    localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
-    localStorage.setItem('s_star_pending', JSON.stringify(s_star_pending))
-    localStorage.setItem('s_unstar_pending', JSON.stringify(s_unstar_pending))
-
-}
 
 
 
@@ -138,7 +126,6 @@ window.addEventListener("online", function() {
     enable_alert('You are online. Syncing new data with the server.')
     sync()
     refresh(true)
-    reset_sync()
 }, true);
 
  
@@ -163,6 +150,12 @@ function sync(){
         data:{'papers': JSON.stringify(star_pending), 'session': JSON.stringify(s_star_pending)}, 
         success: function(res) {
             //console.log(res)
+            star_pending = []    
+            s_star_pending = []
+
+            localStorage.setItem('star_pending', JSON.stringify(star_pending))
+            localStorage.setItem('s_star_pending', JSON.stringify(s_star_pending))
+    
         }
     });
 
@@ -173,6 +166,10 @@ function sync(){
         data:{'papers': JSON.stringify(unstar_pending), 'session': JSON.stringify(s_unstar_pending)}, 
         success: function(res) {
             //console.log(res)
+            unstar_pending = []
+            s_unstar_pending = []
+            localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))    
+            localStorage.setItem('s_unstar_pending', JSON.stringify(s_unstar_pending))
         }
     });
 
