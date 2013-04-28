@@ -1357,6 +1357,36 @@ function add_pending_star(paper_id){
 
 
 
+function add_pending_s_unstar(session_id){
+    var s_star_pending = JSON.parse(localStorage.getItem('s_star_pending'))
+    var s_unstar_pending = JSON.parse(localStorage.getItem('s_unstar_pending'))
+    var i =  s_star_pending.indexOf(session_id)
+    if( i == -1){
+        s_unstar_pending.push(session_id)
+    }else{
+        s_star_pending.splice(i, 1)
+    }
+    localStorage.setItem('s_star_pending', JSON.stringify(s_star_pending))
+    localStorage.setItem('s_unstar_pending', JSON.stringify(s_unstar_pending))
+}
+
+
+
+function add_pending_s_star(session_id){
+    var s_star_pending = JSON.parse(localStorage.getItem('s_star_pending'))
+    var s_unstar_pending = JSON.parse(localStorage.getItem('s_unstar_pending'))
+    var i =  s_unstar_pending.indexOf(session_id)
+    if( i == -1){
+        s_star_pending.push(session_id)
+    }else{
+        s_unstar_pending.splice(i, 1)
+    }
+    localStorage.setItem('s_star_pending', JSON.stringify(s_star_pending))
+    localStorage.setItem('s_unstar_pending', JSON.stringify(s_unstar_pending))
+}
+
+
+
 
 function handle_session_star(event){
     enable_alert("updating information..."); 
@@ -1379,6 +1409,7 @@ function handle_session_star(event){
             }
             var s_id = s_starred.indexOf(session_id)
             s_starred.splice(s_id, 1)
+            add_pending_s_unstar(session_id)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('s_starred', JSON.stringify(s_starred))
             update_session_view()
@@ -1424,7 +1455,7 @@ function handle_session_star(event){
                 add_pending_star(papers[paper_id])
             }
             s_starred.push(session_id)
-            s_star_pending.push(session_id)
+            add_pending_s_star(session_id)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('s_starred', JSON.stringify(s_starred))
         }else{
