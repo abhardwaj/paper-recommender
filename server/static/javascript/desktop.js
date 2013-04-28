@@ -2,6 +2,7 @@
 
 window.applicationCache.addEventListener('updateready', function(){
         window.applicationCache.swapCache();
+        window.location.reload();
 }, false);
 
 
@@ -187,12 +188,13 @@ function sync(){
 }
 
 
-function refresh(update){
+function refresh(_async_){
     if(!navigator.onLine){
         return
     }
     $.ajax({
         type: 'GET',
+        async: _async_,
         url: '/refresh', 
         success: function(res) {
             if(!res.error){
@@ -211,7 +213,7 @@ function refresh(update){
 
 setInterval('refresh();', 60*1000)
 
-refresh()
+refresh(false)
 
 
 // codes without video preview
@@ -1044,15 +1046,19 @@ function get_session_html(id){
       var p_id = sessions[id].submissions[0];
       if (typeof p_id !== "undefined"){
         raw_html += '<span class="session-code">' +  ' ' + codes['code'][p_id] + '</span>'
+        /*
         if (codeExists(codes['code'][p_id]))
           raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][p_id]+'" target="_blank"><span class="play-icon"></span></a></span>'
+        */
       }
     } else if (typeof getSpecialSessionCode(id) !== "undefined"){
       var code = getSpecialSessionCode(id);
       if (typeof code !== "undefined"){
         raw_html += '<span class="session-code">' +  ' ' + code + '</span>'
+        /*
         if (codeExists(code))
           raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+code+'" target="_blank"><span class="play-icon"></span></a></span>'
+        */
       }
     }
     raw_html += '<span class="send_session_tweet"></span>'
@@ -1148,8 +1154,10 @@ function get_selected_paper_html(id){
     raw_html += '<h3>' + remove_special_chars(entities[id].title) 
     raw_html += '<span class="paper-subtype">' + get_paper_subtype(id) + '</span>'
     raw_html += '<span class="paper-code">' + codes['code'][id] + '</span>'
+    /*
     if (codeExists(codes['code'][id]))
       raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
+    */
     raw_html += '<span class="send_tweet"></span>'
     raw_html += '<span class="send_email"></span>'
     raw_html += '</h3>';
