@@ -1130,7 +1130,7 @@ function get_selected_paper_html(id){
 
 
     raw_html += '<td class="metadata">'   
-    if(starred[id] == null){
+    if(starred.indexOf(id) == -1){
         raw_html += '<div class="star star-open p_star" data="'+ id + '" onclick="handle_star(event);">'        
     }else{
         raw_html += '<div class="star star-filled p_star" data="'+ id + '" onclick="handle_star(event);">'       
