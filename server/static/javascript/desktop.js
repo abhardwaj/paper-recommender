@@ -8,28 +8,27 @@ window.applicationCache.addEventListener('updateready', function(){
 
 // try to first load the data from localStorage 
 
-var login_id = JSON.parse(localStorage.getItem('login_id'))
+/* Global Data */
 var entities = JSON.parse(localStorage.getItem('entities'))
 var sessions = JSON.parse(localStorage.getItem('sessions'))
-var recommended = JSON.parse(localStorage.getItem('recommended'))
-var starred = JSON.parse(localStorage.getItem('starred'))
-var s_starred = JSON.parse(localStorage.getItem('s_starred'))
-var own_papers = JSON.parse(localStorage.getItem('own_papers'))
 var codes = JSON.parse(localStorage.getItem('codes'))
 var offline_recs = JSON.parse(localStorage.getItem('offline_recs'))
 var session_codes = JSON.parse(localStorage.getItem('session_codes'))
 
 
+/* Private Data */
+var login_id = JSON.parse(localStorage.getItem('login_id'))
+var starred = JSON.parse(localStorage.getItem('starred'))
+var s_starred = JSON.parse(localStorage.getItem('s_starred'))
+var own_papers = JSON.parse(localStorage.getItem('own_papers'))
+var recommended = JSON.parse(localStorage.getItem('recommended'))
+
+
 
 
 // contact the server if required
-if(login_id == null 
-    || entities == null 
+if(entities == null 
     || sessions == null 
-    || recommended == null 
-    || starred == null 
-    || s_starred == null 
-    || own_papers == null 
     || codes == null 
     || session_codes == null
     || offline_recs == null
@@ -85,6 +84,37 @@ if(login_id == null
 }
 
 
+function refresh(_async_){
+    if(!navigator.onLine){
+        return
+    }
+    $.ajax({
+        type: 'GET',
+        async: _async_,
+        url: '/refresh', 
+        success: function(res) {
+            if(!res.error){
+                console.log("synced")
+                login_id = res.login_id
+                recommended = res.recs
+                starred = res.likes
+                s_starred = res.s_likes
+                localStorage.setItem('login_id', JSON.stringify(login_id))
+                localStorage.setItem('recommended', JSON.stringify(recommended))
+                localStorage.setItem('starred', JSON.stringify(starred))
+                localStorage.setItem('s_starred', JSON.stringify(s_starred))
+            }
+        }
+    });
+}
+
+
+setInterval('refresh();', 60*1000)
+
+refresh(false)
+
+/* data structure for pending stars */
+
 function refresh_pending(){
     var star_pending = JSON.parse(localStorage.getItem('star_pending'))
     var unstar_pending = JSON.parse(localStorage.getItem('unstar_pending'))
@@ -113,10 +143,7 @@ function refresh_pending(){
 }
 
 
-
 refresh_pending()
-
-
 
 
 
@@ -186,34 +213,6 @@ function sync(){
 
     
 }
-
-
-function refresh(_async_){
-    if(!navigator.onLine){
-        return
-    }
-    $.ajax({
-        type: 'GET',
-        async: _async_,
-        url: '/refresh', 
-        success: function(res) {
-            if(!res.error){
-                console.log("synced")
-                recommended = res.recs
-                starred = res.likes
-                s_starred = res.s_likes
-                localStorage.setItem('recommended', JSON.stringify(recommended))
-                localStorage.setItem('starred', JSON.stringify(starred))
-                localStorage.setItem('s_starred', JSON.stringify(s_starred))
-            }
-        }
-    });
-}
-
-
-setInterval('refresh();', 60*1000)
-
-refresh(false)
 
 
 // codes without video preview

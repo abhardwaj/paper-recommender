@@ -293,6 +293,7 @@ def refresh(request):
 		if(len(likes)>0):
 			recs = r.get_item_based_recommendations(likes)
 		return HttpResponse(json.dumps({
+			'login_id': request.session['id'], 
 			'recs':recs, 
 			'likes':likes, 
 			's_likes':s_likes

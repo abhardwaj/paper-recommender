@@ -76,7 +76,10 @@ var type = '{{type}}'
 var error = '{{error}}'
 var login_email = '{{login_email}}'
 
-localStorage.clear()
+localStorage.removeItem('login_id')
+localStorage.removeItem('recommended')
+localStorage.removeItem('starred')
+localStorage.removeItem('s_starred')
 
 $(document).ready(function(){
     
