@@ -199,7 +199,6 @@ function refresh(update){
                 localStorage.setItem('starred', JSON.stringify(starred))
                 localStorage.setItem('s_starred', JSON.stringify(s_starred))
                 if(update == true){
-                    populate_likes(starred)
                     update_recs()
                     update_session_view()
                     apply_filters()
@@ -212,7 +211,7 @@ function refresh(update){
 
 
 setInterval('refresh();', 60*1000)
-refresh()
+refresh(true)
 
 
 // codes without video preview
