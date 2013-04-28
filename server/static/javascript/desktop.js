@@ -949,9 +949,10 @@ function get_paper_html(id){
     raw_html += '<span class="paper-subtype">' + ' ' + get_paper_subtype(id) + '</span>'
     raw_html += '<span class="paper-code">' +  ' ' + codes['code'][id] + '</span>'
     //raw_html += '<span class="paper-session">' + get_short_session_info_of_paper(id) + '</span>'
+    /*
     if (codeExists(codes['code'][id]))
       raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
-
+    */
     raw_html += '<span class="send_tweet"></span>'
     raw_html += '<span class="send_email"></span>'
     raw_html += '</h3>'
