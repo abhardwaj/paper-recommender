@@ -20,15 +20,6 @@ var session_codes = JSON.parse(localStorage.getItem('session_codes'))
 
 
 
-var star_pending = JSON.parse(localStorage.getItem('star_pending'))
-var unstar_pending = JSON.parse(localStorage.getItem('unstar_pending'))
-var s_star_pending = JSON.parse(localStorage.getItem('s_star_pending'))
-var s_unstar_pending = JSON.parse(localStorage.getItem('s_unstar_pending'))
-
-
-
-
-
 
 // contact the server if required
 if(login_id == null 
@@ -85,7 +76,6 @@ if(login_id == null
             if(offline_recs!= null)
                 localStorage.setItem('offline_recs', res.offline_recs)
 
-            reset_sync()
             
 
         }
@@ -93,29 +83,37 @@ if(login_id == null
 
 }
 
-if(star_pending == null){
-    star_pending = []
-    localStorage.setItem('star_pending', JSON.stringify(star_pending))
+
+function refresh_pending(){
+    var star_pending = JSON.parse(localStorage.getItem('star_pending'))
+    var unstar_pending = JSON.parse(localStorage.getItem('unstar_pending'))
+    var s_star_pending = JSON.parse(localStorage.getItem('s_star_pending'))
+    var s_unstar_pending = JSON.parse(localStorage.getItem('s_unstar_pending'))
+
+    if(star_pending == null){
+        star_pending = []
+        localStorage.setItem('star_pending', JSON.stringify(star_pending))
+    }
+
+    if(unstar_pending == null){
+        unstar_pending = []
+        localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
+    }
+
+    if(s_star_pending == null){
+        s_star_pending = []
+        localStorage.setItem('s_star_pending', JSON.stringify(s_star_pending))
+    }
+
+    if(s_unstar_pending == null){
+        s_unstar_pending = []
+        localStorage.setItem('s_unstar_pending', JSON.stringify(s_unstar_pending))
+    }
 }
 
-if(unstar_pending == null){
-    unstar_pending = []
-    localStorage.setItem('star_pending', JSON.stringify(unstar_pending))
-}
-
-if(s_star_pending == null){
-    s_star_pending = []
-    localStorage.setItem('star_pending', JSON.stringify(s_star_pending))
-}
-
-if(s_unstar_pending == null){
-    s_unstar_pending = []
-    localStorage.setItem('s_unstar_pending', JSON.stringify(s_unstar_pending))
-}
 
 
-
-
+refresh_pending()
 
 
 
@@ -125,7 +123,7 @@ if(s_unstar_pending == null){
 window.addEventListener("online", function() {
     enable_alert('You are online. Syncing new data with the server.')
     sync()
-    refresh(true)
+    refresh()
 }, true);
 
  
@@ -138,6 +136,7 @@ window.addEventListener("offline", function() {
 
 
 function sync(){
+    refresh_pending()
     var star_pending = JSON.parse(localStorage.getItem('star_pending'))
     var unstar_pending = JSON.parse(localStorage.getItem('unstar_pending'))
     var s_star_pending = JSON.parse(localStorage.getItem('s_star_pending'))
@@ -150,9 +149,15 @@ function sync(){
         data:{'papers': JSON.stringify(star_pending), 'session': JSON.stringify(s_star_pending)}, 
         success: function(res) {
             //console.log(res)
+            recommended = res.recs
+            starred = res.likes
+            s_starred = res.s_likes
+            localStorage.setItem('recommended', JSON.stringify(recommended))
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('s_starred', JSON.stringify(s_starred))
+
             star_pending = []    
             s_star_pending = []
-
             localStorage.setItem('star_pending', JSON.stringify(star_pending))
             localStorage.setItem('s_star_pending', JSON.stringify(s_star_pending))
     
@@ -166,6 +171,12 @@ function sync(){
         data:{'papers': JSON.stringify(unstar_pending), 'session': JSON.stringify(s_unstar_pending)}, 
         success: function(res) {
             //console.log(res)
+            recommended = res.recs
+            starred = res.likes
+            s_starred = res.s_likes
+            localStorage.setItem('recommended', JSON.stringify(recommended))
+            localStorage.setItem('starred', JSON.stringify(starred))
+            localStorage.setItem('s_starred', JSON.stringify(s_starred))
             unstar_pending = []
             s_unstar_pending = []
             localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))    
@@ -1317,6 +1328,31 @@ function update_recs(){
 }
 
 
+function add_pending_unstar(paper_id){
+    var i =  star_pending.indexOf(paper_id)
+    if( i == -1){
+        unstar_pending.push(paper_id)
+    }else{
+        star_pending.splice(i, 1)
+    }
+    localStorage.setItem('star_pending', JSON.stringify(star_pending))
+    localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
+}
+
+
+
+function add_pending_star(paper_id){
+    var i =  unstar_pending.indexOf(paper_id)
+    if( i == -1){
+        star_pending.push(paper_id)
+    }else{
+        unstar_pending.splice(i, 1)
+    }
+    localStorage.setItem('star_pending', JSON.stringify(star_pending))
+    localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
+}
+
+
 
 
 function handle_session_star(event){
@@ -1336,19 +1372,12 @@ function handle_session_star(event){
             for(var paper_id in papers){
                 var i =  starred.indexOf(papers[paper_id])
                 starred.splice(i, 1)
-                var j =  star_pending.indexOf(paper_id)
-                if( j >= 0){
-                    star_pending.splice(j, 1)
-                }else{
-                    unstar_pending.push(paper_id)
-                }
+                add_pending_unstar(papers[paper_id])
             }
             var s_id = s_starred.indexOf(session_id)
             s_starred.splice(s_id, 1)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('s_starred', JSON.stringify(s_starred))
-            localStorage.setItem('star_pending', JSON.stringify(star_pending))
-            localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
             update_session_view()
             apply_filters()
         }else{
@@ -1389,19 +1418,12 @@ function handle_session_star(event){
             enable_alert("You liked a session. You are not online -- updating information locally.");
             for(var paper_id in papers){
                 starred.push(papers[paper_id])
-                var j =  unstar_pending.indexOf(paper_id)
-                if( j >= 0){
-                    unstar_pending.splice(j, 1)
-                }else{
-                    star_pending.push(paper_id)
-                }
+                add_pending_star(papers[paper_id])
             }
             s_starred.push(session_id)
             s_star_pending.push(session_id)
             localStorage.setItem('starred', JSON.stringify(starred))
             localStorage.setItem('s_starred', JSON.stringify(s_starred))
-            localStorage.setItem('star_pending', JSON.stringify(star_pending))
-            localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
         }else{
             $.post('/like/star', {'papers': JSON.stringify(papers), 'session': JSON.stringify([session_id])}, function(res) {
                 for(var paper_id in papers){
@@ -1453,15 +1475,8 @@ function handle_star(event){
             enable_alert("You unliked a paper. You are not online -- updating information locally.");
             var i =  starred.indexOf(paper_id)
             starred.splice(i, 1)
-            var j =  star_pending.indexOf(paper_id)
-            if( j >= 0){
-                star_pending.splice(j, 1)
-            }else{
-                unstar_pending.push(paper_id)
-            }
+            add_pending_unstar(paper_id)
             populate_likes(starred)
-            localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
-            localStorage.setItem('star_pending', JSON.stringify(star_pending))
             localStorage.setItem('starred', JSON.stringify(starred))
         }else{
             $.post('/like/unstar', {'papers': JSON.stringify([paper_id])}, function(res) {
@@ -1505,15 +1520,8 @@ function handle_star(event){
         if(!navigator.onLine){
             enable_alert("You liked a paper. You are not online -- updating information locally.");
             starred.push(paper_id)
-            var j =  unstar_pending.indexOf(paper_id)
-            if( j >= 0){
-                unstar_pending.splice(j, 1)
-            }else{
-                star_pending.push(paper_id)
-            }
+            add_pending_star(paper_id)
             populate_likes(starred)
-            localStorage.setItem('star_pending', JSON.stringify(star_pending))
-            localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))
             localStorage.setItem('starred', JSON.stringify(starred))
         }else{
             $.post('/like/star', {'papers': JSON.stringify([paper_id])}, function(res) {

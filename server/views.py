@@ -262,6 +262,7 @@ def data(request):
 	    	'session_codes': session_codes
 			}), mimetype="application/json")
 	except:
+		print sys.exc_info()
 		return HttpResponse(json.dumps({'error':True}), mimetype="application/json")
 
 
