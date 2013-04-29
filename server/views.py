@@ -205,6 +205,16 @@ def schedule(request):
 		return HttpResponseRedirect('/login')
 	except:
 		return HttpResponseRedirect('/error')
+
+def meet(request):
+	try:
+		return render_to_response('desktop/meet.html', 
+		{'login_id': request.session['id'], 
+		'login_name': request.session['name']})		
+	except KeyError:
+		return HttpResponseRedirect('/login')
+	except:
+		return HttpResponseRedirect('/error')
 	
 
 def paper(request):

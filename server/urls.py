@@ -5,6 +5,7 @@ urlpatterns = patterns('',
 	url(r'^home$', 'server.views.home'),
 	url(r'^schedule$', 'server.views.schedule'),
 	url(r'^paper', 'server.views.paper'),
+    url(r'^meet', 'server.views.people'),
 
 	
 	url(r'^data', 'server.views.data'),
