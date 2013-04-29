@@ -87,7 +87,7 @@ if(entities == null
 
         }
     });
-
+    enable_alert('This device is ready for offline use.')
 }
 
 
