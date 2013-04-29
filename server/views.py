@@ -109,7 +109,7 @@ def login_form(request, error=None):
 	return render_to_response('desktop/login.html', c)
 
 
-
+@csrf_exempt
 def login(request):
 	if request.method == "POST":
 		try:
