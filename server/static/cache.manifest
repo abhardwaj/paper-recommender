@@ -1,17 +1,18 @@
 CACHE MANIFEST
-# version 1.6
+# version 1.7
 
 /
 /home
 /schedule
 /paper
+/meet
 
 /static/css/desktop.css
 /static/css/third-party/jquery-ui.css
 
 /static/javascript/third-party/jquery.min.js
 /static/javascript/third-party/jquery-ui.js
-#/static/javascript/desktop.js
+/static/javascript/desktop.js
 
 /static/img/affiliation.svg
 /static/img/arrows.ai
