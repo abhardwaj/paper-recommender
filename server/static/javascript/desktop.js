@@ -40,7 +40,7 @@ if(entities == null
     || session_codes == null
     || offline_recs == null
     ){
-
+    enable_alert('Downloading data for offline use. It might take some time.')
     console.log('contacting server')
     $.ajax({
         type: 'GET',
