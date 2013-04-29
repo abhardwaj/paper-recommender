@@ -186,26 +186,14 @@ def logout(request):
 
 
 def home(request):
-	try:
-		return render_to_response('desktop/main.html', 
-		{'login_id': request.session['id'], 
-		'login_name': request.session['name']})	
-	except KeyError:
-		return HttpResponseRedirect('/login')
-	except:
-		return HttpResponseRedirect('/error')
+	return render_to_response('desktop/main.html', 
+	
 	
 
 
 def schedule(request):
-	try:
-		return render_to_response('desktop/schedule.html', 
-		{'login_id': request.session['id'], 
-		'login_name': request.session['name']})		
-	except KeyError:
-		return HttpResponseRedirect('/login')
-	except:
-		return HttpResponseRedirect('/error')
+	return render_to_response('desktop/schedule.html', 
+	
 
 def meet(request):
 	try:
