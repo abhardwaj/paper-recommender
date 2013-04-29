@@ -23,13 +23,9 @@ import org.grouplens.lenskit.transform.normalize.BaselineSubtractingUserVectorNo
 import org.grouplens.lenskit.transform.normalize.UserVectorNormalizer;
 import py4j.GatewayServer;
 
-public class PaperRecommender {
+public class UserRecommender {
 	GlobalItemRecommender grec;
-	UserRecommender u;
-	
-	public PaperRecommender(String fileName, String fileName2) throws RecommenderBuildException{
-		u = new UserRecommender(fileName2);
-		
+	public UserRecommender(String fileName) throws RecommenderBuildException{
 		LenskitRecommenderEngineFactory factory = new LenskitRecommenderEngineFactory();
 		File f = new File(fileName);
 		factory.setDAOFactory(new SimpleFileRatingDAO.Factory(f, "\t"));
@@ -64,19 +60,17 @@ public class PaperRecommender {
 		return ret;
 	}
 	
-	public ArrayList<String> recommend_users(ArrayList<String> i_items){
-		return u.recommend(i_items);
-	}
-	
-	
 
 	public static void main(String[] args){
 		
 		try{
-			PaperRecommender p = new PaperRecommender(args[0], args[1]);
-			GatewayServer gatewayServer = new GatewayServer(p);
-	        gatewayServer.start();
-	        System.out.println("Gateway Server Started");
+			UserRecommender u = new UserRecommender("/Volumes/Workspace/projects/paper-recommender/data/data_lenskit_user.txt");
+			ArrayList<String> users = new ArrayList<String>();
+			users.add("2631");
+			ArrayList<String> ret = u.recommend(users);
+			for(String s: ret){
+				System.out.println(s);
+			}
 		}catch(RecommenderBuildException rbe){
 			rbe.printStackTrace();
 		}		

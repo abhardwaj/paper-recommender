@@ -30,9 +30,19 @@ class Recommender:
 		return res
 
 
+	def get_users_recommendations(self, authors_list):
+		j_id_list = ListConverter().convert(authors_list, self.gateway._gateway_client)
+		recs = self.gateway.entry_point.recommend_users(j_id_list)
+		res=[]
+		for rec in recs:
+			r = rec.split(',')
+			res.append({'id': r[0], 'score': float(r[1])})
+		return res
+
 def main():
 	r = Recommender()
-	res = r.get_item_based_recommendations(['pn1460'])
+	#res = r.get_item_based_recommendations(['pn1460'])
+	res = r.get_users_recommendations(['2631'])
 	print res
 
 
