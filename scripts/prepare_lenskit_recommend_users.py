@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import sys, os, json
+import sys, os, json, random
 
 if __name__ == "__main__":
 	p = os.path.abspath(os.path.dirname(__file__))
@@ -68,7 +68,7 @@ def load_data():
 	for row in data:
 		papers = json.loads(row[1])
 		for p in papers:
-			prefs[encode_paper_id(p)].update({row[0]:5.0})
+			prefs[encode_paper_id(p)].update({row[0]:5.0-random.random()})
 
 			
 	

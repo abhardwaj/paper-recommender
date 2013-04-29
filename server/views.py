@@ -119,7 +119,7 @@ def login(request):
 				login_email = login_email.strip()
 				request.session.flush()
 				cursor = connection.cursor()
-				cursor.execute("""SELECT id, given_name, family_name, password, verified from pcs_authors where email1 = '%s' or 
+				cursor.execute("""SELECT id, given_name, family_name, password, verified, auth_no from pcs_authors where email1 = '%s' or 
 					email2 = '%s' or email3 = '%s';""" %(login_email, login_email, login_email))
 				data = cursor.fetchall()
 				if(len(data) == 0):
@@ -133,6 +133,7 @@ def login(request):
 						return login_form(request, error = {'login_addr': login_email, 'login_email':urllib.quote(base64.b64encode(login_email)), 'type': 'error', 'error': 'Wrong password.', 'wrong_password':True})
 				
 				request.session['id'] = data[0][0]
+				request.session['auth_no'] = data[0][5]
 				request.session['email'] = login_email
 				if(data[0][1] != None ):
 					request.session['name'] = data[0][1]
@@ -254,6 +255,7 @@ def data(request):
 			cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(l), user))
 		if(len(likes)>0):
 			recs = r.get_item_based_recommendations(likes)
+		user_recs =  get_similar_people(request)
 		return HttpResponse(json.dumps({
 			'login_id': request.session['id'], 
 			'login_name': request.session['name'],
@@ -265,13 +267,37 @@ def data(request):
 			'sessions':s.sessions,
 			'codes': codes,
 			'offline_recs': offline_recs,
-	    	'session_codes': session_codes
+	    	'session_codes': session_codes,
+	    	'user_recs': user_recs
 			}), mimetype="application/json")
 	except:
 		print sys.exc_info()
 		return HttpResponse(json.dumps({'error':True}), mimetype="application/json")
 
 
+
+
+def get_similar_people(request):
+	user_recs=[]
+	try:
+		cursor = connection.cursor()
+		auth_no = request.session['auth_no']
+		res = r.get_users_recommendations([str(auth_no)])		
+		for rec in res:
+			cursor.execute("""SELECT id, given_name, family_name, email1, dept1, instituition1, city1, country1 from pcs_authors where auth_no = %d;""" %(int(rec['id'])))
+			data = cursor.fetchall()
+			if(len(data)>0):
+				user_recs.append({'id':data[0][0], 
+					'given_name':data[0][1],
+					'family_name':data[0][2],
+					'email':data[0][3],
+					'dept':data[0][4],
+					'inst':data[0][5],
+					'country':data[0][6]
+					})
+	except:
+		print sys.exc_info()
+	return user_recs
 
 @csrf_exempt
 def refresh(request):
@@ -298,11 +324,13 @@ def refresh(request):
 			cursor.execute("""UPDATE pcs_authors SET likes = '%s' where id = '%s';""" %(json.dumps(l), user))
 		if(len(likes)>0):
 			recs = r.get_item_based_recommendations(likes)
+		user_recs =  get_similar_people(request)
 		return HttpResponse(json.dumps({
 			'login_id': request.session['id'], 
 			'recs':recs, 
 			'likes':likes, 
-			's_likes':s_likes
+			's_likes':s_likes,
+			'user_recs': user_recs
 			}), mimetype="application/json")
 	except:
 		return HttpResponse(json.dumps({'error':True}), mimetype="application/json")

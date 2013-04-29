@@ -42,7 +42,7 @@ class Recommender:
 def main():
 	r = Recommender()
 	#res = r.get_item_based_recommendations(['pn1460'])
-	res = r.get_users_recommendations(['2631'])
+	res = r.get_users_recommendations(['13514'])
 	print res
 
 

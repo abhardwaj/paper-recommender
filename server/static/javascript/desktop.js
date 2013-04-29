@@ -29,6 +29,7 @@ var starred = JSON.parse(localStorage.getItem('starred'))
 var s_starred = JSON.parse(localStorage.getItem('s_starred'))
 var own_papers = JSON.parse(localStorage.getItem('own_papers'))
 var recommended = JSON.parse(localStorage.getItem('recommended'))
+var user_recs = JSON.parse(localStorage.getItem('user_recs'))
 
 
 
@@ -57,6 +58,7 @@ if(entities == null
             codes = JSON.parse(res.codes)
             session_codes = JSON.parse(res.session_codes)
             offline_recs = JSON.parse(res.offline_recs)
+            user_recs = res.user_recs
 
            
 
@@ -82,6 +84,8 @@ if(entities == null
                 localStorage.setItem('session_codes', res.session_codes)
             if(offline_recs!= null)
                 localStorage.setItem('offline_recs', res.offline_recs)
+            if(user_recs!= null)
+                localStorage.setItem('user_recs', JSON.stringify(res.user_recs))
 
             //enable_alert('This device is ready for offline use.')
 
@@ -106,10 +110,17 @@ function refresh(_async_){
                 recommended = res.recs
                 starred = res.likes
                 s_starred = res.s_likes
-                localStorage.setItem('login_id', JSON.stringify(login_id))
-                localStorage.setItem('recommended', JSON.stringify(recommended))
-                localStorage.setItem('starred', JSON.stringify(starred))
-                localStorage.setItem('s_starred', JSON.stringify(s_starred))
+                user_recs = res.user_recs
+                if(login_id!=null)
+                    localStorage.setItem('login_id', JSON.stringify(login_id))
+                if(recommended!=null)
+                    localStorage.setItem('recommended', JSON.stringify(recommended))
+                if(starred != null)
+                    localStorage.setItem('starred', JSON.stringify(starred))
+                if(s_starred != null)
+                    localStorage.setItem('s_starred', JSON.stringify(s_starred))
+                if(user_recs != null)
+                    localStorage.setItem('user_recs', JSON.stringify(user_recs))
             }
         }
     });
@@ -192,9 +203,12 @@ function sync(){
             recommended = res.recs
             starred = res.likes
             s_starred = res.s_likes
-            localStorage.setItem('recommended', JSON.stringify(recommended))
-            localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('s_starred', JSON.stringify(s_starred))
+            if(recommended!=null)
+                localStorage.setItem('recommended', JSON.stringify(recommended))
+            if(starred!= null)
+                localStorage.setItem('starred', JSON.stringify(starred))
+            if(s_starred!=null)
+                localStorage.setItem('s_starred', JSON.stringify(s_starred))
 
             star_pending = []    
             s_star_pending = []
@@ -214,9 +228,12 @@ function sync(){
             recommended = res.recs
             starred = res.likes
             s_starred = res.s_likes
-            localStorage.setItem('recommended', JSON.stringify(recommended))
-            localStorage.setItem('starred', JSON.stringify(starred))
-            localStorage.setItem('s_starred', JSON.stringify(s_starred))
+            if(recommended!=null)
+                localStorage.setItem('recommended', JSON.stringify(recommended))
+            if(starred!=null)
+                localStorage.setItem('starred', JSON.stringify(starred))
+            if(s_starred!=null)
+                localStorage.setItem('s_starred', JSON.stringify(s_starred))
             unstar_pending = []
             s_unstar_pending = []
             localStorage.setItem('unstar_pending', JSON.stringify(unstar_pending))    
@@ -1634,6 +1651,17 @@ function load_paper(){
     $('#similar_papers').html(raw_html)     
 } 
 
+
+/*
+
+function load_similar_people(){
+    var raw_html = ''
+    for(var i = 0; i< recs.length; i++){
+        raw_html += get_similar_peo(recs[i].id)            
+    } 
+    $('#similar_people').html(raw_html)     
+} 
+*/
 
 
 function update_papers_count(){
