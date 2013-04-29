@@ -36,7 +36,7 @@ var user_recs = JSON.parse(localStorage.getItem('user_recs'))
 
 
 // contact the server if required
-while(entities == null 
+if(entities == null 
     || sessions == null 
     || codes == null 
     || session_codes == null
