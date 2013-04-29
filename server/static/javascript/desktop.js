@@ -1652,16 +1652,29 @@ function load_paper(){
 } 
 
 
-/*
+
 
 function load_similar_people(){
     var raw_html = ''
-    for(var i = 0; i< recs.length; i++){
-        raw_html += get_similar_peo(recs[i].id)            
+    if(user_recs == null)
+        return
+    for(var i = 0; i< user_recs.length; i++){
+        raw_html += '<tr class="paper"><td class="metadata"></td><td class="content">' 
+        if(user_recs[i].email)
+            raw_html += '<h3>' + '<a href="mailto:'+user_recs[i].email+'">' + user_recs[i].email + '</a></h3>'
+        if(user_recs[i].given_name && user_recs[i].family_name)
+            raw_html += '<h4>' + user_recs[i].given_name + ' ' + user_recs[i].family_name + '</h4>'
+        if(user_recs[i].inst)
+            raw_html += user_recs[i].inst + '<br />'
+        if(user_recs[i].dept)
+            raw_html += '' + user_recs[i].dept + '<br />'
+        if(user_recs[i].country)
+            raw_html += '' + user_recs[i].country + '<br />'
+        raw_html += '</td></tr>'           
     } 
     $('#similar_people').html(raw_html)     
 } 
-*/
+
 
 
 function update_papers_count(){
