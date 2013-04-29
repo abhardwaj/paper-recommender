@@ -40,7 +40,7 @@ if(entities == null
     || session_codes == null
     || offline_recs == null
     ){
-    enable_alert('Downloading data for offline use. It might take some time.')
+    //enable_alert('Downloading data for offline use. It might take some time.')
     console.log('contacting server')
     $.ajax({
         type: 'GET',
@@ -83,7 +83,7 @@ if(entities == null
             if(offline_recs!= null)
                 localStorage.setItem('offline_recs', res.offline_recs)
 
-            enable_alert('This device is ready for offline use.')
+            //enable_alert('This device is ready for offline use.')
 
         }
     });
