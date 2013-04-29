@@ -83,11 +83,11 @@ if(entities == null
             if(offline_recs!= null)
                 localStorage.setItem('offline_recs', res.offline_recs)
 
-            
+            enable_alert('This device is ready for offline use.')
 
         }
     });
-    enable_alert('This device is ready for offline use.')
+    
 }
 
 
