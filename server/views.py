@@ -327,6 +327,7 @@ def refresh(request):
 		user_recs =  get_similar_people(request)
 		return HttpResponse(json.dumps({
 			'login_id': request.session['id'], 
+			'login_name': request.session['name'],
 			'recs':recs, 
 			'likes':likes, 
 			's_likes':s_likes,

@@ -24,7 +24,8 @@ var session_codes = JSON.parse(localStorage.getItem('session_codes'))
 
 
 /* Private Data */
-var login_id = JSON.parse(localStorage.getItem('login_id'))
+var login_id = localStorage.getItem('login_id')
+var login_name = localStorage.getItem('login_name')
 var starred = JSON.parse(localStorage.getItem('starred'))
 var s_starred = JSON.parse(localStorage.getItem('s_starred'))
 var own_papers = JSON.parse(localStorage.getItem('own_papers'))
@@ -35,59 +36,82 @@ var user_recs = JSON.parse(localStorage.getItem('user_recs'))
 
 
 // contact the server if required
-if(entities == null 
+while(entities == null 
     || sessions == null 
     || codes == null 
     || session_codes == null
     || offline_recs == null
     ){
-    //enable_alert('Downloading data for offline use. It might take some time.')
+    enable_alert('Downloading data for offline use. It might take some time.')
     console.log('contacting server')
     $.ajax({
         type: 'GET',
         async: false,
         url: '/data', 
-        success: function(res) {
-            login_id = res.login_id
-            entities = res.entities
-            sessions = res.sessions
-            recommended = res.recs
-            starred  = res.likes
-            s_starred  = res.s_likes
-            own_papers = res.own_papers
-            codes = JSON.parse(res.codes)
-            session_codes = JSON.parse(res.session_codes)
-            offline_recs = JSON.parse(res.offline_recs)
-            user_recs = res.user_recs
-
-           
+        success: function(res) {      
 
             localStorage.clear()
 
-            if(login_id != null)
-                localStorage.setItem('login_id', JSON.stringify(login_id))
-            if(entities != null)
-                localStorage.setItem('entities', JSON.stringify(entities))
-            if(sessions != null)
-                localStorage.setItem('sessions', JSON.stringify(sessions))
-            if(recommended != null)
-                localStorage.setItem('recommended', JSON.stringify(recommended))
-            if(starred != null)
-                localStorage.setItem('starred', JSON.stringify(starred))
-            if(s_starred != null)
-                localStorage.setItem('s_starred', JSON.stringify(s_starred))
-            if(own_papers != null)
-                localStorage.setItem('own_papers', JSON.stringify(own_papers))
-            if(codes != null)
-                localStorage.setItem('codes', res.codes)
-            if(session_codes!= null)
-                localStorage.setItem('session_codes', res.session_codes)
-            if(offline_recs!= null)
-                localStorage.setItem('offline_recs', res.offline_recs)
-            if(user_recs!= null)
-                localStorage.setItem('user_recs', JSON.stringify(res.user_recs))
+            if(res.login_id != null){
+                login_id = res.login_id
+                localStorage.setItem('login_id', login_id)
+            }
 
-            //enable_alert('This device is ready for offline use.')
+            if(res.login_name != null){
+                login_name = res.login_name
+                localStorage.setItem('login_name', login_name)
+            }
+
+            if(res.entities != null){
+                entities = res.entities
+                localStorage.setItem('entities', JSON.stringify(entities))
+            }
+            if(res.sessions != null){
+                sessions = res.sessions
+                localStorage.setItem('sessions', JSON.stringify(sessions))
+            }
+            if(res.recs != null){
+                recommended = res.recs
+                localStorage.setItem('recommended', JSON.stringify(recommended))
+            }
+
+            if(res.likes != null){
+                starred  = res.likes
+                localStorage.setItem('starred', JSON.stringify(starred))
+            }
+
+
+            if(res.s_likes != null){
+                s_starred  = res.s_likes
+                localStorage.setItem('s_starred', JSON.stringify(s_starred))
+            }
+
+            if(res.own_papers != null){
+                own_papers = res.own_papers
+                localStorage.setItem('own_papers', JSON.stringify(own_papers))
+            }
+
+            if(res.codes != null){
+                codes = JSON.parse(res.codes)            
+                localStorage.setItem('codes', res.codes)
+            }
+
+            if(res.session_codes!= null){
+                session_codes = JSON.parse(res.session_codes)
+                localStorage.setItem('session_codes', res.session_codes)
+            }
+
+            if(res.offline_recs!= null){
+                offline_recs = JSON.parse(res.offline_recs)
+                localStorage.setItem('offline_recs', res.offline_recs)
+            }
+
+            if(res.user_recs!= null){
+                user_recs = res.user_recs
+                localStorage.setItem('user_recs', JSON.stringify(res.user_recs))
+            }
+
+            enable_alert('This device is ready for offline use.')
 
         }
     });
@@ -105,22 +129,32 @@ function refresh(_async_){
         url: '/refresh', 
         success: function(res) {
             if(!res.error){
-                console.log("synced")
-                login_id = res.login_id
-                recommended = res.recs
-                starred = res.likes
-                s_starred = res.s_likes
-                user_recs = res.user_recs
-                if(login_id!=null)
-                    localStorage.setItem('login_id', JSON.stringify(login_id))
-                if(recommended!=null)
+                console.log("synced")               
+                
+                if(res.login_id!=null){
+                    login_id = res.login_id
+                    localStorage.setItem('login_id', login_id)
+                }
+                if(res.login_name != null){
+                    login_name = res.login_name
+                    localStorage.setItem('login_name', login_name)
+                }
+                if(res.recs!=null){
+                    recommended = res.recs
                     localStorage.setItem('recommended', JSON.stringify(recommended))
-                if(starred != null)
+                }
+                if(res.likes != null){
+                    starred = res.likes
                     localStorage.setItem('starred', JSON.stringify(starred))
-                if(s_starred != null)
+                }
+                if(res.s_likes != null){
+                    s_starred = res.s_likes
                     localStorage.setItem('s_starred', JSON.stringify(s_starred))
-                if(user_recs != null)
+                }
+                if(res.user_recs != null){
+                    user_recs = res.user_recs
                     localStorage.setItem('user_recs', JSON.stringify(user_recs))
+                }
             }
         }
     });

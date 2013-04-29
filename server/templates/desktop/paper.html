@@ -32,7 +32,7 @@ Selected Paper Page
 			<a id="logo" href="/"></a>
 		</span>
 		<span id="headlink-right">
-			{{login_name}} &nbsp;
+		<span id="logged_in_name"></span> &nbsp;
       <a class="button mobile-nav" href="#">Menu</a>
 			<a class="button active navitem" href="/home">My Papers</a>
 			<a class="button navitem" href="/schedule">My Schedule</a>
@@ -88,6 +88,7 @@ Selected Paper Page
 
 <script type="text/javascript">
 $(document).ready(function(){
+	$("#logged_in_name").html(localStorage.getItem('login_name'))
     load_paper()
     bind_events()
     log('selected_paper')
