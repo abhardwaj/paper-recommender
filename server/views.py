@@ -186,13 +186,13 @@ def logout(request):
 
 
 def home(request):
-	return render_to_response('desktop/main.html', 
+	return render_to_response('desktop/main.html')
 	
 	
 
 
 def schedule(request):
-	return render_to_response('desktop/schedule.html', 
+	return render_to_response('desktop/schedule.html')
 	
 
 def meet(request):
