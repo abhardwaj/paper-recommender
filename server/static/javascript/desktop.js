@@ -48,8 +48,13 @@ if(entities == null
         type: 'GET',
         async: false,
         url: '/data', 
-        success: function(res) {      
+        success: function(res) {
 
+            if(res.error){
+                 console.log('data/error')
+                 window.location.href = '/login'            
+            }      
+            console.log('clearing local_storage')
             localStorage.clear()
 
             if(res.login_id != null){
@@ -155,6 +160,9 @@ function refresh(_async_){
                     user_recs = res.user_recs
                     localStorage.setItem('user_recs', JSON.stringify(user_recs))
                 }
+            }else{
+                console.log('refresh/error')
+                window.location.href = '/login'
             }
         }
     });
