@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import sys, os, operator, re, subprocess
 from pybtex.database.input import bibtex
-import pycurl
 
 if __name__ == "__main__":
 	p = os.path.abspath(os.path.dirname(__file__))
@@ -20,7 +19,7 @@ from db.session import *
 
 script for preparing ACM Links and bib
 '''
-c = pycurl.Curl()
+
 
 def preapre_bib(doi):
 	e = re.findall('\d+',doi)
@@ -56,6 +55,14 @@ def reset_bib():
 	f.write(raw_bib)
 
 
-reset_bib()
+#reset_bib()
+def print_bib():
+	parser = bibtex.Parser()
+	bib_data = parser.parse_file('data/bib_raw.txt')
+	print bib_data.entries
+
+
+print_bib()
+
 
 
