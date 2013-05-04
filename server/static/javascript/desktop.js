@@ -21,6 +21,7 @@ var sessions = JSON.parse(localStorage.getItem('sessions'))
 var codes = JSON.parse(localStorage.getItem('codes'))
 var offline_recs = JSON.parse(localStorage.getItem('offline_recs'))
 var session_codes = JSON.parse(localStorage.getItem('session_codes'))
+var acm_links = JSON.parse(localStorage.getItem('acm_links'))
 
 
 /* Private Data */
@@ -41,6 +42,7 @@ if(entities == null
     || codes == null 
     || session_codes == null
     || offline_recs == null
+    || acm_links == null
     ){
     enable_alert('Downloading data for offline use. It might take some time.')
     console.log('contacting server')
@@ -114,6 +116,11 @@ if(entities == null
             if(res.user_recs!= null){
                 user_recs = res.user_recs
                 localStorage.setItem('user_recs', JSON.stringify(res.user_recs))
+            }
+
+            if(res.acm_links!= null){
+                acm_links = res.acm_links
+                localStorage.setItem('acm_links', res.acm_links)
             }
 
             enable_alert('This device is ready for offline use.')
@@ -1020,12 +1027,19 @@ function get_paper_html(id){
 
     raw_html += '<li class="paper-title"><h3><span class="link" onclick=select_paper("'+id+'")>'+remove_special_chars(entities[id].title) +'</span>'
     raw_html += '<span class="paper-subtype">' + ' ' + get_paper_subtype(id) + '</span>'
+    if(acm_links[id]!=null){
+        var url = acm_links[id]['url']
+        raw_html += '<a class="paper-subtype" href="' + url +'">ACM Link</a>'
+    }
     raw_html += '<span class="paper-code">' +  ' ' + codes['code'][id] + '</span>'
     //raw_html += '<span class="paper-session">' + get_short_session_info_of_paper(id) + '</span>'
     /*
     if (codeExists(codes['code'][id]))
       raw_html += '<span class="video-url"><a href="http://chischedule.org/2013/'+codes['code'][id]+'" target="_blank"><span class="play-icon"></span></a></span>'
+    
     */
+    
+    
     raw_html += '<span class="send_tweet"></span>'
     raw_html += '<span class="send_email"></span>'
     raw_html += '</h3>'

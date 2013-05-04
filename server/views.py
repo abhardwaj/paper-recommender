@@ -37,7 +37,9 @@ s = Session()
 codes = open('/production/paper-recommender/data/letterCodes.json').read()
 session_codes = open('/production/paper-recommender/data/sessionCodes.json').read()
 offline_recs = open('/production/paper-recommender/data/offline_recs.txt').read()
+acm_links = open('/production/paper-recommender/data/bib_final.txt').read()
 
+bib_map = json.loads(acm_links)
 
 def send_email(addr, subject, msg_body):	
 	email_subject = subject
@@ -217,6 +219,25 @@ def paper(request):
 		return HttpResponseRedirect('/error')
 
 
+def bib(request):
+	try:
+		user = request.session['id']
+		cursor = connection.cursor()
+		cursor.execute("""SELECT likes from pcs_authors where id = '%s';""" %(user))
+		data = cursor.fetchall()
+		likes = []
+		bib_text = ''
+		if(data[0][0] != None):
+			likes = json.loads(data[0][0])
+		for like in likes:
+			bib_text = bib_text + bib_map[like]['bib'] + '\n\n'
+		return HttpResponse(bib_text, mimetype="text/plain")
+		
+	except:
+		print sys.exc_info()
+		return HttpResponse(json.dumps({'error':True}), mimetype="application/json")
+
+
 @csrf_exempt
 def data(request):
 	try:
@@ -256,6 +277,7 @@ def data(request):
 			'codes': codes,
 			'offline_recs': offline_recs,
 	    	'session_codes': session_codes,
+	    	'acm_links' : acm_links,
 	    	'user_recs': user_recs
 			}), mimetype="application/json")
 	except:

@@ -1,6 +1,8 @@
 #!/usr/bin/python
-import sys, os, operator, re, subprocess
+import sys, os, operator, re, subprocess, difflib, io
 from pybtex.database.input import bibtex
+from pybtex.database.output import bibtex as bibtex2
+from pybtex.database import BibliographyData
 
 if __name__ == "__main__":
 	p = os.path.abspath(os.path.dirname(__file__))
@@ -11,6 +13,22 @@ if __name__ == "__main__":
 from django.db import connection
 from algorithm.utils import *
 from db.session import *
+from db.entity import *
+e = Entity()
+entities = e.get_entities()
+
+bib_map = {}
+
+def search(t):
+	for e in entities:
+		#print entities[e]['title'], t
+		e_t = entities[e]['title'].strip()
+		o_t = t.strip()
+		s = difflib.SequenceMatcher(None, o_t, e_t).ratio()
+		if(s>0.8):
+			return e
+	return None
+
 
 
 '''
@@ -57,12 +75,26 @@ def reset_bib():
 
 #reset_bib()
 def print_bib():
-	parser = bibtex.Parser()
-	bib_data = parser.parse_file('data/bib_raw.txt')
-	print bib_data.entries
+	data = open('data/bib_raw.txt').read().split('\n\n')
+	
+	data=filter(lambda x: x.strip()!='', data)
 
-
+	for d in data:
+		f = io.StringIO(unicode(d))
+		parser = bibtex.Parser()
+		s = parser.parse_stream(f)
+		url = s.entries[s.entries.keys()[0]].fields['url']
+		paper_id = search(s.entries[s.entries.keys()[0]].fields['title'])
+		print paper_id, url
+		
+		if(paper_id):
+			bib_map[paper_id] = {'url': url, 'bib': d}
+	
+		
 print_bib()
+
+f=open('data/bib_final.txt','w')
+f.write(json.dumps(bib_map))
 
 
 
