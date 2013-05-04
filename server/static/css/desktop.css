@@ -597,6 +597,9 @@ textarea {
   cursor: pointer;
 }
 
+
+
+
 .paper-cb{
   font-size: 0.9em;
   margin: 0.4em 0 0 0;  
@@ -951,6 +954,20 @@ textarea {
   margin-bottom: -0.4em;
 
 }
+
+
+.acm-icon{
+  display: inline-block;
+   margin-right: 0.5em;
+  background-image:url(/static/img/acm.png);
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  width: 1.5em;
+  height: 1.5em;
+  margin-bottom: -0.4em;
+  cursor: pointer;
+}
+
 /*
 .community-icon.design{
   display:inline-block;
