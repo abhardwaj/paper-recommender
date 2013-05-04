@@ -230,7 +230,8 @@ def bib(request):
 		if(data[0][0] != None):
 			likes = json.loads(data[0][0])
 		for like in likes:
-			bib_text = bib_text + bib_map[like]['bib'] + '\n\n'
+			if(like in bib_map.keys()):
+				bib_text = bib_text + bib_map[like]['bib'] + '\n\n'
 		return HttpResponse(bib_text, mimetype="text/plain")
 		
 	except:
