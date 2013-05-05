@@ -395,6 +395,7 @@ Object.size = function(obj) {
 
 
 
+
 function exists(recs, id){
     for(var r in recs){
         if(recs[r].id == id)
@@ -493,6 +494,11 @@ function bind_events(){
     $("#export_bibtex").off('click')
     $("#export_bibtex").on('click', function(event){
         event.stopImmediatePropagation();
+    })
+
+    $('.acm-icon').off('click')
+    $('.acm-icon').on('click', function(){
+        log('acm_link_' + $(this).attr('data'))
     })
     
     if(detect_mobile()){
@@ -1034,7 +1040,7 @@ function get_paper_html(id){
     raw_html += '<span class="paper-subtype">' + ' ' + get_paper_subtype(id) + '</span>'
     if(acm_links[id]!=null){
         var url = acm_links[id]['url']
-        raw_html += '<a href="' + url +'" target="_blank"><span class="acm-icon"></span></a>'
+        raw_html += '<a href="' + url +'" target="_blank"><span class="acm-icon" data="'+ id + '"></span></a>'
     }
     raw_html += '<span class="paper-code">' +  ' ' + codes['code'][id] + '</span>'
     //raw_html += '<span class="paper-session">' + get_short_session_info_of_paper(id) + '</span>'
@@ -1245,7 +1251,7 @@ function get_selected_paper_html(id){
     raw_html += '<span class="paper-subtype">' + get_paper_subtype(id) + '</span>'
     if(acm_links[id]!=null){
         var url = acm_links[id]['url']
-        raw_html += '<a href="' + url +'" target="_blank"><span class="acm-icon"></span></a>'
+        raw_html += '<a href="' + url +'" target="_blank"><span class="acm-icon" data="'+ id + '"></span></a>'
     }
     raw_html += '<span class="paper-code">' + codes['code'][id] + '</span>'
     /*
