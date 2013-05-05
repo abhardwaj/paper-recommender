@@ -197,6 +197,15 @@ def schedule(request):
 	return render_to_response('desktop/schedule.html')
 	
 
+
+def participate(request):
+	try:
+		user = request.session['id']
+		return HttpResponse("Thank you for participating", mimetype="text/plain")	
+	except KeyError:
+		return HttpResponseRedirect('/login')
+
+
 def meet(request):
 	try:
 		return render_to_response('desktop/meet.html', 
