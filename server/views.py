@@ -198,10 +198,13 @@ def schedule(request):
 	
 
 
-def participate(request):
+def participate(request, val):
 	try:
 		user = request.session['id']
-		return HttpResponse("Thank you for participating", mimetype="text/plain")	
+		if(val =='add'):
+			return HttpResponse('We have added your name to the list of partipants for Meet experiment. To remove your name, you can click on <a href="/participate/remove">this link</a>', mimetype="text/plain")	
+		else:
+			return HttpResponse('We have removed your name from the list of partipants for Meet experiment. To add your name again, you can click on <a href="/participate/add">this link</a>', mimetype="text/plain")
 	except KeyError:
 		return HttpResponseRedirect('/login')
 

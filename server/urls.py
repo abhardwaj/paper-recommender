@@ -9,7 +9,7 @@ urlpatterns = patterns('',
 
 	
 	url(r'^data', 'server.views.data'),
-    url(r'^participate', 'server.views.participate'),
+    url(r'^participate/(.+)$', 'server.views.participate'),
     url(r'^bib', 'server.views.bib'),
     url(r'^refresh', 'server.views.refresh'),
     url(r'^recs', 'server.views.get_recs'),
