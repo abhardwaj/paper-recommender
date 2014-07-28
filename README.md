@@ -1,4 +1,4 @@
-paper-recommender
+myCHI
 =================
 
-paper-recommender
+This is not maintained anymore. It has moved to confer.
